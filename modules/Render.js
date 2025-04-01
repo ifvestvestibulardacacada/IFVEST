@@ -3,7 +3,9 @@ const { Simulados } = require('../models');
 const { Topico } = require('../models');
 const { Op } = require('sequelize');
 const { Questões } = require('../models');
-const { Opcao } = require('../../../models');
+const { Opcao } = require('../models');
+
+const { Usuario } = require('../models');
 
 class Render {
     static auth = {
@@ -228,7 +230,7 @@ class Render {
 
     }
     static simulados = {
-        addQuestoes: async (req, res) => {
+        adicionarQuestoes: async (req, res) => {
             try {
                 const perfilUsuario = req.session.perfil;
                 const nomeUsuario = req.session.nomeUsuario;
@@ -331,17 +333,461 @@ class Render {
                 res.status(500).send('Erro ao carregar formulário de associação de pergunta');
             }
         },
-        criarSimulado: async (req, res) => { },
-        editarSimulado: async (req, res) => { },
-        fazerSimulado: async (req, res) => { },
-        gabarito: async (req, res) => { },
-        imprimirSimulado: async (req, res) => { },
-        meusSimulados: async () => { req, res },
-        removerQuestoes: async (req, res) => { },
-        visualizarQuestoes: async (req, res) => { },
+        criarSimulado: async (req, res) => {
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+            let errorMessage = req.session.errorMessage;
+            if (errorMessage === null) {
+                errorMessage = " ";
+            }
+
+            req.session.errorMessage = null;
+
+            res.render('simulado/criar-simulado', { errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+        },
+        editarSimulado: async (req, res) => {
+            const simuladoId = req.params.id
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+            try {
+                const simulado = await Simulados.findOne({
+                    where: { id: simuladoId },
+                });
+
+                if (!simulado) {
+                    throw new Error('Simulado não encontrado ');
+                }
+                let errorMessage = req.session.errorMessage;
+
+                if (errorMessage === null) {
+                    errorMessage = " ";
+                }
+                req.session.errorMessage = null;
+
+                res.render('simulado/editar-simulado', { simulado, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+            } catch (err) {
+                return res.status(500).json({ error: err.message });
+            }
+        },
+        fazerSimulado: async (req, res) => {
+            try {
+                const perfilUsuario = req.session.perfil;
+                const nomeUsuario = req.session.nomeUsuario;
+                const imagemPerfil = req.session.imagemPerfil;
+                const simuladoId = req.params.simuladoId;
+                let errorMessage = req.session.errorMessage;
+
+                const simulado = await Simulados.findByPk(simuladoId, {
+                    include: [{
+                        model: Questões,
+                        as: 'Questões', // Certifique-se de que este alias corresponda ao definido na associação
+                        include: [{
+                            model: Opcao,
+                            as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+                        },
+                        ]
+                    }],
+
+                });
+
+                if (errorMessage === null) {
+                    errorMessage = " ";
+                }
+
+                req.session.errorMessage = null;
+
+
+
+                res.render('prova/prova', { simulado, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                //  res.send(simulado)
+            } catch (error) {
+                console.error('Erro ao buscar perguntas da prova:', error);
+                res.status(500).send('Erro ao buscar perguntas da prova.');
+            }
+        },
+        gabarito: async (req, res) => {
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+            const userId = req.session.userId;
+            const simuladoId = req.params.simuladoId;
+            try {
+                const simulado = await Simulados.findByPk(simuladoId, {
+                    include: [{
+                        model: Questões,
+                        as: 'Questões',
+                        include: [{
+                            model: Opcao,
+                            as: 'Opcoes',
+                            // Inclui apenas as opções corretas
+                        },
+                        ]
+                    }],
+                })
+
+                if (simulado.tipo !== 'OBJETIVO') {
+                    res.redirect('/professor/manutencao')
+                }
+
+                const questoesComOpcoesCorretas = simulado.Questões;
+
+                // Consulta as respostas do usuário para cada questão
+                const respostasDoUsuario = await Resposta.findAll({
+                    where: {
+                        usuarioId: userId,
+                        questaoId: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id) }
+                    },
+                    include: [{
+                        model: Opcao,
+                        as: 'opcao',
+                        required: true
+                    }],
+                    order: [['createdAt', 'DESC']],
+                });
+
+
+                // Prepara os dados para a view
+
+                let errorMessage = req.session.errorMessage;
+
+                if (errorMessage === null) {
+                    errorMessage = " ";
+                }
+
+                req.session.errorMessage = null;
+
+                // Renderiza a view com os dados preparados
+                res.render('prova/gabarito', {
+                    questoes: questoesComOpcoesCorretas,
+                    respostasUsuario: respostasDoUsuario,
+                    simulado: simulado, errorMessage,
+                    nomeUsuario, perfilUsuario, imagemPerfil
+                });
+
+                //  res.render('prova/gabaritoProva', { simulado });
+
+            } catch (error) {
+                console.error('Erro ao buscar o gabarito da prova:', error);
+                res.status(500).send('Erro ao buscar o gabarito da prova.');
+            }
+        },
+        imprimirSimulado: async (req, res) => {
+            try {
+                const perfilUsuario = req.session.perfil;
+                const nomeUsuario = req.session.nomeUsuario;
+                const imagemPerfil = req.session.imagemPerfil;
+                const simuladoId = req.params.simuladoId;
+                // Verifique se simuladoId é um número
+                if (isNaN(simuladoId) || simuladoId <= 0) {
+                    return res.status(400).send('ID de simulado inválido');
+                }
+
+                const simulado = await Simulados.findByPk(simuladoId, {
+                    include: [{
+                        model: Questões,
+                        as: 'Questões', // Certifique-se de que este alias corresponda ao definido na associação
+                        include: [{
+                            model: Opcao,
+                            as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+                        },
+                        ]
+                    }],
+                });
+
+                res.render('prova/template-prova', { simulado, nomeUsuario, perfilUsuario, imagemPerfil });
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                res.status(500).send('Erro ao gerar o PDF');
+            }
+        },
+        meusSimulados: async (req, res) => {
+            try {
+                const perfilUsuario = req.session.perfil;
+                const nomeUsuario = req.session.nomeUsuario;
+                const imagemPerfil = req.session.imagemPerfil;
+                const { titulo } = req.query;
+                const idUsuario = req.session.userId;
+                const page = parseInt(req.query.page) || 1;
+                const limit = 10;
+                const offset = (page - 1) * limit;
+
+                let allSimulados = await Simulados.findAll({
+                    where: { usuarioId: idUsuario },
+                    order: [['createdAt', 'DESC']]
+                });
+
+                if (titulo) {
+                    const simulados = allSimulados.filter(s => s.titulo.toLowerCase().includes(titulo.toLowerCase()));
+                    allSimulados = simulados
+                }
+
+                const totalPages = Math.ceil(allSimulados.length / limit);
+                const startIndex = offset;
+                const endIndex = offset + limit;
+                const simuladosPaginated = allSimulados.slice(startIndex, endIndex);
+
+                let errorMessage = req.session.errorMessage;
+
+                if (errorMessage === null) {
+                    errorMessage = " ";
+                }
+                req.session.errorMessage = null;
+
+                res.render('simulado/meus-simulados', { simulados: simuladosPaginated, currentPage: page, totalPages, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+            } catch (error) {
+                console.error(error);
+                res.status(500).send('Ocorreu um erro ao recuperar os questionários.');
+            }
+        },
+        removerQuestoes: async (req, res) => {
+            try {
+                const perfilUsuario = req.session.perfil;
+                const nomeUsuario = req.session.nomeUsuario;
+                const imagemPerfil = req.session.imagemPerfil;
+                const simuladoId = req.params.simuladoId;
+                const { titulo } = req.query;
+                const page = parseInt(req.query.page) || 1;
+                const limit = 10;
+                const offset = (page - 1) * limit;
+
+                const simulado = await Simulados.findOne({
+                    where: { id: simuladoId },
+                    include: [
+                        {
+                            model: Questões,
+                            as: 'Questões', through: { attributes: [] }
+                        }
+                    ]
+                });
+
+                if (!simulado) {
+                    throw new Error('Simulado não encontrado');
+                }
+
+                const questaoIds = simulado.Questões && simulado.Questões.length > 0 ? simulado.Questões.map(questao => questao.id) : [];
+
+                const todasQuestoes = await Questões.findAll({
+                    where: { id: { [Op.in]: questaoIds } },
+                    include: [{
+                        model: Simulados,
+                        as: 'Simulados',
+                        where: { id: simuladoId },
+                        through: { attributes: [] }
+                    }],
+                    limit: limit,
+                    offset: offset
+                });
+
+                let questoes = todasQuestoes;
+
+                if (titulo) {
+                    questoes = todasQuestoes.filter(questao => questao.titulo.toLowerCase().includes(titulo.toLowerCase()));
+                }
+                const totalQuestoes = await Questões.count({
+                    where: { id: { [Op.in]: questaoIds } },
+                    include: [{
+                        model: Simulados,
+                        as: 'Simulados',
+                        where: { id: simuladoId },
+                        through: { attributes: [] }
+                    }]
+                });
+                const totalPages = Math.ceil(totalQuestoes / limit);
+
+                let errorMessage = req.session.errorMessage;
+
+                if (errorMessage === null) {
+                    errorMessage = " ";
+                }
+
+                req.session.errorMessage = null;
+
+                res.render('simulado/remover-questoes', { simulado: simulado, questoes: questoes, page: page, totalPages: totalPages, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+            } catch (error) {
+                console.error('Erro ao carregar o formulário de edição do simulado:', error);
+                res.status(500).send('Erro ao carregar o formulário de edição do simulado.');
+            }
+        },
+        visualizarSimulado: async (req, res) => {
+            try {
+                let simulados;
+                const perfilUsuario = req.session.perfil;
+                const nomeUsuario = req.session.nomeUsuario;
+                const imagemPerfil = req.session.imagemPerfil;
+
+                const todosSimulados = await Simulados.findAll({
+                    where: {
+                        '$Questões.id$': {
+                            [Op.not]: null
+                        },
+                        '$Usuario.perfil$': 'PROFESSOR'
+                    },
+                    include: [{
+                        model: Questões,
+                        as: 'Questões'
+                    }, {
+                        model: Usuario,
+                        as: 'Usuario',
+                        attributes: ['perfil'],
+                        where: {
+                            perfil: 'PROFESSOR'
+                        }
+                    }
+                    ]
+                });
+
+                if (!todosSimulados) {
+                    throw new Error('Simulados não encontrados');
+                }
+                simulados = todosSimulados;
+
+                const tituloBusca = req.query.titulo;
+                if (tituloBusca) {
+                    simulados = todosSimulados.filter(s => s.titulo.toLowerCase().includes(tituloBusca.toLowerCase()));
+                }
+
+                const tipo = req.query.tipo;
+                if (tipo) {
+                    simulados = todosSimulados.filter(s => s.tipo.includes(tipo));
+                }
+
+                let errorMessage = req.session.errorMessage;
+
+                if (errorMessage === null) {
+                    errorMessage = " ";
+                }
+
+                req.session.errorMessage = null;
+
+                res.render('simulado/simulados', { simulados, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+            } catch (error) {
+                console.error(error);
+                res.status(500).send('Ocorreu um erro ao recuperar os questionários.');
+            }
+        },
     }
-    static topicos = {}
-    static usuarios = {}
+    static topicos = {
+        meusTopicos: async (req, res) => {
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+            const usuarioId = req.session.userId;
+            const limit = 10; // Número de questões por página
+            const { materia } = req.query;
+            const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
+            const offset = (page - 1) * limit;
+            let topicos;
+            try {
+
+                // Dentro do bloco try da rota '/questoes'
+                const topicosCount = await Topico.count({
+                    where: {
+                        usuarioId: usuarioId,
+                    },
+                });
+
+                const totalPages = Math.ceil(topicosCount / limit);
+
+                const topicosSemFiltro = await Topico.findAll({
+                    where: {
+                        usuarioId: usuarioId,
+                    },
+                    limit: limit,
+                    offset: offset,
+                });
+
+                if (materia) {
+                    topicos = topicosSemFiltro.filter(topico => topico.materia.toLowerCase().includes(materia.toLowerCase()));
+                    console.log(topicos)
+                } else {
+                    topicos = topicosSemFiltro
+                }
+                let errorMessage = req.session.errorMessage;
+
+                if (errorMessage === null) {
+                    errorMessage = " ";
+                }
+
+                req.session.errorMessage = null;
+                res.status(200).render('professor/meus-topicos', { topicos, totalPages, page, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+
+            } catch (err) {
+                console.error(err.message)
+                req.sesssion.destroy();
+                res.status(500).redirect('/usuario/inicioLogado');
+            };
+        }
+    }
+    static usuarios = {
+        editarUsuario: async (req, res) => {
+            try {
+                let errorMessage = req.session.errorMessage;
+
+                if (!req.session.userId) {
+                    throw new Error('Você precisa estar logado para acessar esta página.');
+                }
+                const usuario = await Usuario.findByPk(req.session.userId);
+
+                if (!usuario) {
+                    throw new Error('Usuário não encontrado.');
+                }
+
+
+                if (errorMessage === null) {
+                    errorMessage = " ";
+                }
+
+                req.session.errorMessage = null;
+                res.render('usuario/editar-usuario', { usuario, session: req.session, errorMessage });
+            } catch (err) {
+                console.error(err)
+                res.redirect('/login');
+            }
+        },
+        inicioLogado: async (req, res) => {
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+            const id = req.session.userId;
+            try {
+                const usuario = await Usuario.findByPk(id);
+
+                if (!usuario) {
+                    throw new Error("Usuario nao encontrado")
+                }
+                res.status(200).render('usuario/inicio-logado', { nomeUsuario, perfilUsuario, imagemPerfil });
+            } catch (err) {
+                console.error(err)
+                req.session.destroy();
+                res.redirect('/login');
+            }
+        },
+        perfilUsuario: async (req, res) => {
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+            const id = req.session.userId;
+            try {
+                const usuario = await Usuario.findByPk(id);
+
+                if (!usuario) {
+                    throw new Error("Usuario não encontrado")
+                }
+                res.status(200).render('usuario/perfil_usuario', { usuario, nomeUsuario, perfilUsuario, imagemPerfil });
+            } catch (err) {
+                console.error(err)
+                res.redirect('/perfil');
+            }
+        },
+        sobreNos: async (req, res) => {
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+            res.status(200).render('desenvolvedores/sobreNos', {nomeUsuario, perfilUsuario, imagemPerfil});
+        }
+    }
 }
 
 // Render.auth.cadastro(req, res)

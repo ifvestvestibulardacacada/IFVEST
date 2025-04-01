@@ -1,33 +1,34 @@
 
 const { Router } = require('express');
 
-const { PageEditarSimuladoController } = require('../controllers/simulados/renders/PageEditarSimuladoController');
-const { PageCriarSimuladoController } = require('../controllers/simulados/renders/PageCriarSimuladoController');
+// const { PageEditarSimuladoController } = require('../controllers/simulados/renders/PageEditarSimuladoController');
+// const { PageCriarSimuladoController } = require('../controllers/simulados/renders/PageCriarSimuladoController');
 const { RegistrarSimuladoController } = require('../controllers/simulados/RegistrarSimuladoController');
-const { PageImprimirSimuladoController } = require('../controllers/simulados/renders/PageImprimirSimuladoController');
+// const { PageImprimirSimuladoController } = require('../controllers/simulados/renders/PageImprimirSimuladoController');
 const { EditarSimuladoController } = require('../controllers/simulados/EditarSimuladoController');
-const { PageMeusSimuladosController } = require('../controllers/simulados/renders/PageMeusSimuladosController');
-const { PageVisualizarSimuladosController } = require('../controllers/simulados/renders/PageVisualizarSimuladoController');
-const { PageRemoveQuestoesController } = require('../controllers/simulados/renders/PageRemoveQuestoesController');
-const { PageAddQuestoesController } = require('../controllers/simulados/renders/PageAddQuestoesController');
+// const { PageMeusSimuladosController } = require('../controllers/simulados/renders/PageMeusSimuladosController');
+// const { PageVisualizarSimuladosController } = require('../controllers/simulados/renders/PageVisualizarSimuladoController');
+// const { PageRemoveQuestoesController } = require('../controllers/simulados/renders/PageRemoveQuestoesController');
+// const { PageAddQuestoesController } = require('../controllers/simulados/renders/PageAddQuestoesController');
 const { AddQuestoesController } = require('../controllers/simulados/AddQuestoesController');
 const { RemoveQuestoesController } = require('../controllers/simulados/RemoveQuestoesController');
-const { PageFazerSimuladoController } = require('../controllers/simulados/renders/PageFazerSimuladoController');
-const { PageGabaritoController } = require('../controllers/simulados/renders/PageGabaritoController');
+// const { PageFazerSimuladoController } = require('../controllers/simulados/renders/PageFazerSimuladoController');
+// const { PageGabaritoController } = require('../controllers/simulados/renders/PageGabaritoController');
 const { ResponderSimuladoController } = require('../controllers/simulados/ResponderSimuladoController');
 
+const { Render } = require("../modules/Render")
 
 const roteador = Router()
 //page renders
-roteador.get('/criar-simulado', PageCriarSimuladoController);
-roteador.get('/:id/editar', PageEditarSimuladoController);
-roteador.get('/:simuladoId/imprimir', PageImprimirSimuladoController);
-roteador.get('/meus-simulados', PageMeusSimuladosController );
-roteador.get('/visualizar', PageVisualizarSimuladosController );
-roteador.get('/:simuladoId/remover-questoes', PageRemoveQuestoesController);
-roteador.get('/:simuladoId/adicionar-questoes', PageAddQuestoesController);
-roteador.get('/:simuladoId/fazer', PageFazerSimuladoController);
-roteador.get('/:simuladoId/gabarito', PageGabaritoController);
+roteador.get('/criar-simulado', Render.simulados.criarSimulado);
+roteador.get('/:id/editar', Render.simulados.editarSimulado);
+roteador.get('/:simuladoId/imprimir', Render.simulados.imprimirSimulado);
+roteador.get('/meus-simulados', Render.simulados.meusSimulados );
+roteador.get('/visualizar', Render.simulados.visualizarSimulado );
+roteador.get('/:simuladoId/remover-questoes', Render.simulados.removerQuestoes);
+roteador.get('/:simuladoId/adicionar-questoes', Render.simulados.adicionarQuestoes);
+roteador.get('/:simuladoId/fazer', Render.simulados.fazerSimulado);
+roteador.get('/:simuladoId/gabarito', Render.simulados.gabarito);
 //create 
 roteador.post('/criar-simulado', RegistrarSimuladoController);
 roteador.post('/:simuladoId/adicionar-questoes', AddQuestoesController);

@@ -1,12 +1,17 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "residentevil6",
-    "database": "ifvest2",
-    "host": "localhost",
+    "username": "neondb_owner",
+    "password": "npg_SfTwEhlR1u3s",
+    "database": "neondb",
+    "host": "ep-empty-term-acex0779.sa-east-1.aws.neon.tech",
     "dialect": "postgres",
-    "port": "5432"
-  },
+    "port": "5432",
+    "dialectOptions": {
+      "ssl": {
+        "require": true
+      }
+    }
+   },
   "test": {
     "username": "ruan177",
     "password": "0grC3HvndpJD",
