@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	  <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+
+    <title>Criar um tópico</title>
+    <link rel="stylesheet" href="/css/modalEditor.css" />
+
+    <link rel="stylesheet" href="/css/editorPaginaEdiitar.css">
+    <link rel="stylesheet" href="/css/styles.css">
+   
+
+
+  </head>
+  <body>
+    <%- include('../partials/sidebar') %>
+    <main>
+        <div class="container">
+      <div class="modal-header">
+        <h2>Criar um tópico</h2>
+      
+      </div>
+      <form action="/professor/registrar-topico" method="POST">
+        <div>
+            <label for="areaId">Selecione uma área:</label>
+            <select name="areaId" id="areaId"
+               >
+                <option value="">Selecione uma opção</option>
+                <% Areas.forEach(area=> { %>
+                    <option value="<%= area.id %>">
+                        <%= area.area %>
+                    </option>
+                    <% }); %>
+            </select>
+        </div>
+      <div class="modal-body">
+        <div id="topico-container">
+            
+            <div class="topico-item">
+                
+                <input type="text" name="topicos[]" placeholder="Digite o tópico">
+
+                <button class="remove-button" type="button"
+                    onclick="removeTopico(this)">Remover
+                    Tópico</button>
+                  
+            </div>
+            
+        </div>
+        <button type="button" class="buttonModal" onclick="addTopico()">Adicionar Novo Tópico</button>
+        <button type="submit" class="buttonModal">Registrar</button>
+      </form>
+      </div>
+    </div>
+</div>
+    <main>
+        <script >    
+        function addTopico() {
+            const container = document.getElementById("topico-container");
+            const div = document.createElement("div");
+            div.className = "topico-item";
+            div.id = "topico-item-" + new Date().getTime(); // Add a class for styling if needed
+    
+            const input = document.createElement("input");
+            input.type = "text"; // This should be "text" for the input field
+            input.name = "topicos[]";
+            input.placeholder = "Digite o tópico";
+    
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = "Remover topico";
+            button.onclick = function() {
+                div.remove();
+            };
+    
+            div.appendChild(input);
+            div.appendChild(button);
+            container.appendChild(div);
+            
+        }</script>
+  </body>
+</html>

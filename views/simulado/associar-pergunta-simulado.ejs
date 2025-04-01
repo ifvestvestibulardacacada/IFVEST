@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/professor/minhasquestoes.css">
+    <%- include('../partials/quillandUIkit') %>
+
+ 
+</head>
+
+<body>
+    <%- include('../partials/sidebar') %>
+        <!--========== CONTENTS ==========-->
+        <main>
+
+            <h1 class="uk-heading-divider">ASSOCIAR QUESTÕES</Q></h1>
+            <div>
+                <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+                    <script>
+                        window.onload = function() {
+                            alert("<%= errorMessage %>");
+                        };
+                    </script>
+                <% } %>
+                <form action="/simulados/<%= simulado.id %>/adicionar-questoes" method="GET">
+                    <!-- Campo de filtragem por título -->
+                    <input type="text" name="titulo" placeholder="Filtrar por título">
+                    <button type="submit"><i class='bx bx-search'></i>Pesquisar</button>
+
+                    <!-- Campo de seleção para áreas -->
+                    <select name="areaId">
+                        <option value="">Todas as áreas</option>
+                        <% Areas.forEach(area=> { %>
+                            <option value="<%= area.id %>">
+                                <%= area.area %>
+                            </option>
+                            <% }); %>
+                    </select>
+                    <button type="submit">Filtrar por área</button>
+
+                    <!-- Campo de seleção para tópicos -->
+                    <select name="topicosSelecionados">
+                        <option value="">Todas os tópicos</option>
+                        <% topicos.forEach(topico=> { %>
+                            <option value="<%= topico.id %>">
+                                <%= topico.materia %>
+                            </option>
+                            <% }); %>
+                    </select>
+                    <button type="submit">Filtrar por tópicos</button>
+
+
+                    <div class="container">
+                        Questões Associadas por Area:
+                        <% Object.entries(questoesPorArea).forEach(([areaId, count])=> { %>
+                            <% const area=Areas.find(area=> area.id === Number(areaId)); %>
+                                <% if (area) { %>
+                                    <span >
+                                        <%= area.area %>: <span class="uk-badge">
+                                            <%= count %>
+                                        </span>
+                                                
+                                           
+                                    </span>
+                                    <% } %>
+
+                                        <% }); %>
+                    </div>
+
+                    <div id="contador-questoes-selecionadas">Questões Selecionadas: <span
+                            id="numero-questoes-selecionadas">0</span></div>
+                </form>
+            </div>
+
+            <form action="/simulados/<%= simulado.id %>/adicionar-questoes" method="POST">
+                <div class="table-container">
+                    <table class="uk-table uk-table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Título</th>
+                         
+                                <th>Tipo</th>
+
+                                <th>Questão</th>
+
+                                <th>Tópico</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% questoes.forEach(questao=> { %>
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" id="questao-<%= questao.id %>"
+                                            name="questoesSelecionadas" value="<%= questao.id %>"
+                                            onchange="manipularCheckbox(this)">
+                                    </td>
+                                    <td>
+                                        <%= questao.titulo %>
+                                    </td>
+                    
+                                    <td>
+                                        <%= questao.tipo %>
+                                    </td>
+                                    <td>
+                                        <div class="name" data-delta='<%= questao.pergunta %>'>
+                                            <!-- O conteúdo será inserido via JavaScript -->
+                                            <span class="required">*</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <% questao.Topicos.forEach(topico=> { %>
+                                            <%= topico.materia %>
+                                                <% }); %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Dentro do formulário -->
+                <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
+                <div class="pagination-container">
+                    <% if (page> 1) { %>
+                        <a
+                            href="/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page - 1 %>">Anterior</a>
+                        <% } %>
+                            <% for (let i=1; i <=totalPages; i++) { %>
+                                <a href="/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= i %>"
+                                    class="<%= page === i ? 'active' : '' %>">
+                                    <%= i %>
+                                </a>
+                                <% } %>
+                                    <% if (page < totalPages) { %>
+                                        <a
+                                            href="/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page + 1 %>">Próximo</a>
+                                        <% } %>
+                </div>
+                <button type="submit" class="botao-associar">Associar Questões</button>
+                <input type="hidden" name="simuladoId" value="<%= simulado.id %>">
+            </form>
+
+         
+        </main>
+
+
+        <!--========== MAIN JS ==========-->
+        <script src="/js/simulado/associarpergunta.js"></script>
+        <script src="/js/main.js"></script>
+        <script src="/js/quillContentHtmlTable.js"></script>
+</body>
+
+</html>

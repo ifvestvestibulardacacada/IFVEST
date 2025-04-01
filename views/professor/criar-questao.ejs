@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="stylesheet" href="/css/professor/editordropdown.css">
+    <link rel="stylesheet" href="/css/professor/editor_equacao.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/professor/questao.css">
+
+    <%- include('../partials/quillandUIkit') %>
+        <style>
+
+        </style>
+</head>
+
+<body>
+    <%- include('../partials/sidebar') %>
+        <div class="overlay" id="overlay"></div>
+        <div class="container">
+            <div id="loading-container"
+                style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+                <div class="spinner"></div>
+                Carregando...
+            </div>
+
+
+            <h1 class="title">Criar Questão</h1>
+            <hr class="uk-divider-icon">
+            <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
+                <script>
+                    window.onload = function () {
+                        alert("<%= errorMessage %>");
+                    };
+                </script>
+                <% } %>
+                    <form action="/professor/registrar-questao/<%= tipo %>" method="POST">
+                        <div class="titulo">
+                            <label for="titulo">TITULO:</label>
+                            <input type="text" id="titulo" name="titulo" placeholder="Exemplo: Questão 32 (Enem 2022) "
+                                required>
+                        </div>
+
+
+                        <h4>Enunciado</h4>
+
+                        <button uk-tooltip="title: Clique para adicionar uma equação; pos: top-left" type="button"
+                            style="display: none;" id="editor-open-btn"> Adicionar Equação
+                        </button>
+
+                        <div id="editor-container" style="height:150px;"></div>
+
+                        <% if ( tipo==="objetiva" ) { %>
+                            <%- include('../partials/resposta_objetiva') %>
+                                <% }else{ %>
+                                    <%- include('../partials/resposta_dissertativa') %>
+                                        <% } %>
+                                            <%- include('../partials/editorEquacao') %>
+                                                <textarea id="pergunta" name="pergunta" rows="5" cols="50"
+                                                    style="display: none;"> </textarea>
+                                                <textarea id="respostasSelecionadas" name="respostasSelecionadas"
+                                                    rows="5" cols="50" style="display: none;"> </textarea>
+                                                    <textarea id="respostas" name="respota"
+                                                    rows="5" cols="50" style="display: none;"> </textarea>
+                                                <div>
+                                                    <br>
+                                                    <div uk-grid>
+                                                        <div>
+                                                            <% if ( tipo==="objetiva" ) { %>
+                                                                <label for="opcaoId">Selecione a opção correta:</label>
+                                                                <select name="correta" id="correta" required>
+                                                                    <option value="">Selecione uma opção</option>
+                                                                    <option value="A">Opção A</option>
+                                                                    <option value="B">Opção B</option>
+                                                                    <option value="C">Opção C</option>
+                                                                    <option value="D">Opção D</option>
+                                                                    <option value="E">Opção E</option>
+                                                                </select>
+                                                                <% } %>
+                                                                    <div>
+                                                                        <h4>Area e Topicos</h4>
+                                                                        <label for="areaId">Selecione uma área:</label>
+                                                                        <select name="areaId" id="areaId" required>
+                                                                            <option value="">Selecione uma opção
+                                                                            </option>
+                                                                            <% Areas.forEach(area=> { %>
+                                                                                <option value="<%= area.id %>">
+                                                                                    <%= area.area %>
+                                                                                </option>
+                                                                                <% }); %>
+                                                                        </select>
+                                                                    </div>
+                                                        </div>
+                                                        <label for="topicos">Selecione topico(s):</label>
+                                                        <div class="dropdown" style="display: none;"
+                                                            id="topicosSearchContainer">
+                                                            <input type="text" id="search" placeholder="Pesquisar...">
+
+                                                            <ul id="dropdown-list" required>
+
+                                                                <!-- Adicione mais itens conforme necessário -->
+                                                            </ul>
+
+
+                                                        </div>
+                                                        <a href="#" onclick="showCreateTopicModal()"
+                                                            id="create-topic-link">Não
+                                                            encontrou o tópico que procura? Clique aqui para criar um
+                                                            novo tópico</a>
+                                                    </div>
+                                                </div>
+
+
+
+
+                                                <div class="button-container">
+                                                    <button type="submit" class="botao-registro">Registrar</button>
+                                                </div>
+        </div>
+
+        </form>
+        <%- include('../partials/modalTopicos') %>
+            <script src="/js/professor/initializeQuill.js"></script>
+            <script src="/js/professor/editor.js"></script>
+            <script src="/js/main.js"></script>
+            <script src="/js/professor/dropdown.js"></script>
+            <script src="/js/professor/editorInputs.js"></script>
+            <script type="module" src="/js/index.js"></script>
+
+            <script>
+                // Select all input elements of type text
+                const loadingContainer = document.getElementById('loading-container');
+                const tipo = <%- JSON.stringify(tipo) %>;
+
+                const editors = [];
+
+                const quill = initializeQuill('#editor-container', 'editor-open-btn', 'Digite aqui o Enunciado da questão');
+                editors.push({ ['#editor-container']: quill });
+
+
+                // Lista de IDs dos containers dos editores (sem a vírgula inicial)
+                // Definindo constantes para os IDs dos editores
+                const EDITOR_IDS_OBJETIVA = ['A', 'B', 'C', 'D', 'E'];
+                const EDITOR_ID_RESPOSTA = 'A';
+
+                // Função para criar editores
+                function criarEditores(ids, placeholder) {
+                    ids.forEach(id => {
+                        const editorInstance = initializeQuill(`#opcao${id}`, `editor-open-btn${id}`, 'Digite aqui a alternativa'); // Adicionando o placeholder se necessário
+                        editors.push({ [`#opcao${id}`]: editorInstance }); // Corrigido para usar a sintaxe correta
+                    });
+                }
+
+                // Verificando o tipo de questão e criando os editores apropriados
+                if (tipo === 'objetiva') {
+                    criarEditores(EDITOR_IDS_OBJETIVA);
+                } else {
+                    const respostaEditor = initializeQuill(`#opcao${EDITOR_ID_RESPOSTA}`, `editor-open-btn${EDITOR_ID_RESPOSTA}`, 'Digite aqui a resposta');
+                    editors.push({ [`#opcao${EDITOR_ID_RESPOSTA}`]: respostaEditor });
+                }
+                loadingContainer.style.display = 'none';
+
+                // Função para recuperar a instância de um editor pelo ID
+                function acessarEditorPorId(editorId) {
+                    const editor = editors.find(editor => editor[editorId]);
+                    return editor ? editor[editorId] : null; // Retorna a instância do editor ou null se não encontrado
+                }
+
+                // Função para recuperar o conteúdo de todos os editores
+                function getAllContent() {
+                    const contents = {};
+                    if(tipo === 'objetiva'){
+                        EDITOR_IDS_OBJETIVA.forEach(id => {
+                        const editorInstance = acessarEditorPorId(`#opcao${id}`); // Acessa o editor pelo ID
+                        if (editorInstance) {
+                            const tamanho = editorInstance.getLength();
+
+                            if (tamanho > 1) {
+                                contents[`#opcao${id}`] = editorInstance.getContents(); // Armazena o conteúdo no objeto com o ID como chave
+                            }
+                        }
+                    });
+                }else{
+                    const editorInstance = acessarEditorPorId(`#opcao${EDITOR_ID_RESPOSTA}`); // Acessa o editor pelo ID
+                        if (editorInstance) {
+                            const tamanho = editorInstance.getLength();
+
+                            if (tamanho > 1) {
+                                contents[`#opcao${EDITOR_ID_RESPOSTA}`] = editorInstance.getContents(); // Armazena o conteúdo no objeto com o ID como chave
+                            }
+                        }
+                }
+                    if (Object.keys(contents).length === 0) {
+                        alert("Erro: Nenhum conteúdo encontrado.");
+                    }
+                    // Verifica se o objeto contents está vazio e lança um erro se estiver
+
+
+                    return contents;
+                }
+                // Testar a função de mostrar o conteúdo
+
+                function sendEditorContent() {
+                    const data = getAllContent()
+                    console.log(data)
+                    const length = quill.getLength();
+                    const pergunta = length > 1 ? quill.getContents() : alert("A pergunta não pode estar vazia.");
+                    localStorage.setItem('data', JSON.stringify(data))
+                    document.getElementById('respostasSelecionadas').value = JSON.stringify(data);
+                    document.getElementById('pergunta').value = JSON.stringify(pergunta);
+                }
+
+                document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
+
+
+            </script>
+
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"> 
+        <link rel="stylesheet" href="/css/professor/minhasquestoes.css">
+
+        <%- include('../partials/quillandUIkit') %>
+
+        <title>Remover Questões</title>
+    </head>
+    <body>
+        <%- include('../partials/sidebar') %>
+        <!--========== CONTENTS ==========-->
+
+            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+                <script>
+                    window.onload = function() {
+                        alert("<%= errorMessage %>");
+                    };
+                </script>
+            <% } %>
+
+                <h1 class="uk-heading-divider">REMOVER QUESTÕES</h1>
+               
+
+                <form action="/simulados/<%= simulado.id %>/remover-questoes" method="GET">
+                    <!-- Campo de filtragem por título -->
+                    <input type="text" name="titulo" placeholder="Filtrar por título">
+                    <button type="submit"><i class='bx bx-search'></i>Pesquisar</button>
+                </form>
+
+
+
+            <form action="/simulados/<%= simulado.id %>/remover-questoes?_method=DELETE" method="POST">
+                <table class="table-container">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Título</th>
+                            <th>Tipo</th>
+                            <th>Questão</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% questoes.forEach(questao => { %>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="questao-<%= questao.id %>" name="questoesSelecionadas" value="<%= questao.id %>">
+                                </td>
+                                <td><%= questao.titulo %></td>
+                                <td>
+                                    <%= questao.tipo %>
+                                </td>
+                                <td>
+                                    <div class="name" data-delta='<%= questao.pergunta %>'>
+                                        <!-- O conteúdo será inserido via JavaScript -->
+                                        <span class="required">*</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                   
+                </table>
+                <div class="pagination-container">
+                    <% if (page > 1) { %>
+                        <a href="?page=<%= page - 1 %>">Anterior</a>
+                    <% } %>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <a href="?page=<%= i %>" class="<%= page === i ? 'active' : '' %>"><%= i %></a>
+                    <% } %>
+                    <% if (page < totalPages) { %>
+                        <a href="?page=<%= page + 1 %>">Próximo</a>
+                    <% } %>
+                </div>
+                <input type="hidden" name="simuladoId" value="<%= simulado.id %>">
+                <button type="submit">Remover Questões</button>
+            </form>
+            
+    
+    
+       
+
+        <!--========== MAIN JS ==========-->
+
+
+
+        <script src="/js/main.js"></script>
+      
+        <script src="/js/quillContentHtmlTable.js"></script>
+    </body>
+</html>

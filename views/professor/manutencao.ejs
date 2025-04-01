@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/professor/manutencao.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Página em Manutenção</h1>
+        <p>Agradecemos sua compreensão enquanto realizamos melhorias.</p>
+        <button class="voltar-button" onclick="history.back()">Voltar</button>
+    </div>
+
+    <script>
+        // Adiciona um evento de clique ao botão para ir para trás na história do navegador
+        const voltarButton = document.querySelector('.voltar-button');
+        voltarButton.addEventListener('click', function() {
+            window.history.back();
+        });
+    </script>
+</body>
+</html>
