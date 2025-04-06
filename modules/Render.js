@@ -1,11 +1,12 @@
 const { Area } = require('../models');
 const { Simulados } = require('../models');
 const { Topico } = require('../models');
-const { Op } = require('sequelize');
 const { Questões } = require('../models');
 const { Opcao } = require('../models');
-
 const { Usuario } = require('../models');
+
+const { Op } = require('sequelize');
+
 
 class Render {
     static auth = {

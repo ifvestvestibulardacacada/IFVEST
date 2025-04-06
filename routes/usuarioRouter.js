@@ -10,6 +10,7 @@ const { DeleteUsuarioController } = require('../controllers/usuarios/DeleteUsuar
 const roteador = Router()
 
 const { Render } = require("../modules/Render")
+const { Database } = require("../modules/Database")
 
 //page renders
 roteador.get('/sobreNos', Render.usuarios.sobreNos);
@@ -18,10 +19,10 @@ roteador.get('/inicioLogado', Render.usuarios.inicioLogado);
 roteador.get('/editar', Render.usuarios.editarUsuario);
 
 //update
-roteador.patch('/editar/:id', EditarUsuarioController);
+roteador.patch('/editar/:id', Database.usuarios.edit); // ! EditarUsuarioController
 
 //delete
-roteador.delete('/:id', DeleteUsuarioController );
+roteador.delete('/:id', Database.usuarios.delete ); // ! DeleteUsuarioController
 
 module.exports = roteador;
 

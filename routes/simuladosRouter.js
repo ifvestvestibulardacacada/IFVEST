@@ -17,6 +17,7 @@ const { RemoveQuestoesController } = require('../controllers/simulados/RemoveQue
 const { ResponderSimuladoController } = require('../controllers/simulados/ResponderSimuladoController');
 
 const { Render } = require("../modules/Render")
+const { Database } = require("../modules/Database")
 
 const roteador = Router()
 //page renders
@@ -30,13 +31,13 @@ roteador.get('/:simuladoId/adicionar-questoes', Render.simulados.adicionarQuesto
 roteador.get('/:simuladoId/fazer', Render.simulados.fazerSimulado);
 roteador.get('/:simuladoId/gabarito', Render.simulados.gabarito);
 //create 
-roteador.post('/criar-simulado', RegistrarSimuladoController);
-roteador.post('/:simuladoId/adicionar-questoes', AddQuestoesController);
-roteador.post('/responder-prova/:simuladoId', ResponderSimuladoController );
+roteador.post('/criar-simulado', Database.simulados.register); // ! RegistrarSimuladoController
+roteador.post('/:simuladoId/adicionar-questoes', Database.simulados.addQuestion); // ! AddQuestoesController
+roteador.post('/responder-prova/:simuladoId', Database.simulados.submit ); // ! ResponderSimuladoController
 //update
-roteador.patch('/:simuladoId/editar', EditarSimuladoController);
+roteador.patch('/:simuladoId/editar', Database.simulados.edit); // ! EditarSimuladoController
 
 //delete
-roteador.delete('/:simuladoId/remover-questoes', RemoveQuestoesController );
+roteador.delete('/:simuladoId/remover-questoes', Database.simulados.removeQuestion ); // ! RemoveQuestoesController
 
 module.exports = roteador;
