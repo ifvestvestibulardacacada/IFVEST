@@ -26,6 +26,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use(methodOverride('_method'));
 
+app.use(async (req, res, next) => {
+    res.locals.currentPage = ''
+    next();
+});
 
 app.use('/', inicio);
 app.use(secure_pass);

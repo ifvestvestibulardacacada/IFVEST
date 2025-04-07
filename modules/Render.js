@@ -4,7 +4,6 @@ const { Topico } = require('../models');
 const { Questões } = require('../models');
 const { Opcao } = require('../models');
 const { Usuario } = require('../models');
-
 const { Op } = require('sequelize');
 
 
@@ -748,6 +747,7 @@ class Render {
             }
         },
         inicioLogado: async (req, res) => {
+            res.locals.currentPage = "inicio"
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
@@ -766,6 +766,7 @@ class Render {
             }
         },
         perfilUsuario: async (req, res) => {
+            res.locals.currentPage = "perfil"
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
@@ -783,6 +784,7 @@ class Render {
             }
         },
         sobreNos: async (req, res) => {
+            res.locals.currentPage = "sobreNos"
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;

@@ -160,7 +160,8 @@ img {
 
 .nav__logo {
   font-weight: var(--font-semi-bold);
-  margin-bottom: 2.5rem;
+  /* margin-bottom: 2.5rem; */
+  height: 10rem;
 }
 
 .nav__list, 
@@ -189,6 +190,10 @@ img {
   color: var(--text-color);
 }
 
+a.nav__link {
+  text-decoration: none;
+}
+
 .nav__link:hover {
   color: var(--first-color);
 }
@@ -208,9 +213,14 @@ img {
   margin-top: 5rem;
 }
 
-.move-right{
-  margin-left: 140px;
+/* ATIVAR ISSO VAI FAZER O H1 SE MOVER JUNTO COM A SIDEBAR (só funciona na home) 
+a.header__logo{
+  transition: all ease 0.4s;
 }
+
+.move-right a.header__logo{
+  margin-left: 140px;
+} */
 
 /* Dropdown */
 .nav__dropdown {
