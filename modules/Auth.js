@@ -28,6 +28,13 @@ class Auth{
             if (!senhaCorreta) {
                 throw new Error("Usuario ou Senha invalidos");
             }
+
+            console.log(`
+                    SESSAO DO USUARIO AQUI
+
+                    ${JSON.stringify(req.session)}
+
+                `)
     
             req.session.login = true;
             req.session.userId = usuarioEncontrado.id;

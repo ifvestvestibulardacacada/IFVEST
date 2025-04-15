@@ -291,9 +291,17 @@ class Database {
         },
         submit: async (req, res) => {
             const { questoes, respostas } = req.body;
-            const { idUsuario } = req.session;
+            const { userId } = req.session;
             const { simuladoId } = req.params;
             const respostasDissertativas = respostas;
+
+            console.log(`
+                
+                    SESSAO NA SUBMISSAO DE SIMULADO
+
+                    ${JSON.stringify(req.session)}
+                
+                `)
 
             const simulado = await Simulados.findByPk(simuladoId)
             try {
@@ -314,7 +322,7 @@ class Database {
                             resposta: "", // O ID da opção é salvo no campo resposta
                             tipo: 'OBJETIVA',
                             opcaoId: opcaoId,
-                            usuarioId: idUsuario, // Ajuste conforme necessário
+                            usuarioId: userId, // Ajuste conforme necessário
                             simuladoId: simuladoId, // Ajuste conforme necessário
                             questaoId: questaoId,
                         });
@@ -341,10 +349,10 @@ class Database {
 
                 res.status(200).redirect(`/simulados/${simulado.id}/gabarito`)
 
-
+                
             } catch (error) {
                 console.error(error);
-                req.session.errorMessage = err.message;
+                req.session.errorMessage = error.message;
                 res.redirect('back')
             }
         },
