@@ -1,12 +1,5 @@
 const { Router } = require('express');
 
-// const { LogoutController } = require('../controllers/auth/logoutController');
-// const { CadastroController } = require('../controllers/auth/CadastroController');
-// const { LoginController } = require('../controllers/auth/LoginController');
-// const { PageHomeController } = require('../controllers/auth/renders/PageHomeController');
-// const { PageCadastroController } = require('../controllers/auth/renders/PageCadastroController');
-// const { PageLoginController } = require('../controllers/auth/renders/PageLoginController');
-
 const roteador = Router()
 
 const { Render } = require("../modules/Render")

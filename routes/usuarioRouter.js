@@ -1,12 +1,5 @@
 const { Router } = require('express');
 
-// const { PagePerfilUsuarioController } = require('../controllers/usuarios/renders/PagePerfilUsuarioController');
-// const { PageInicioLogadoController } = require('../controllers/usuarios/renders/PageInicioLogadoController');
-// const { PageEditarUsuarioController } = require('../controllers/usuarios/renders/PageEditarUsuarioController');
-const { EditarUsuarioController } = require('../controllers/usuarios/EditarUsuarioController');
-const { DeleteUsuarioController } = require('../controllers/usuarios/DeleteUsuarioController');
-// const { PageSobreNosController } = require('../controllers/usuarios/renders/PageSobreNosController');
-
 const roteador = Router()
 
 const { Render } = require("../modules/Render")

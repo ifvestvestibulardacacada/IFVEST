@@ -29,6 +29,7 @@
                     </h1>
                 </div>
                 <% questoes.forEach(questao=> { %>
+
                     <div class="name-div">
                         <div class="titulo">
                             <p>
@@ -39,6 +40,7 @@
                             <!-- O conteúdo será inserido via JavaScript -->
                             <span class="required">*</span>
                         </div>
+                        <% if (questao.tipo ==="OBJETIVA" ) { %>
                         <% const respostaUsuario=respostasUsuario.find(r=> r.questaoId === questao.id); %>
                         <% 
                             // Mapeia as letras para as opções
@@ -47,6 +49,7 @@
                                 questao.Opcoes.find(opcao => opcao.alternativa.startsWith(letra))
                             ).filter(opcao => opcao); // Filtra opções que não foram encontradas
                             %>
+                        
                         <% opcoesOrdenadas.forEach(opcao=> { %>
                             
                             <div class="<%= opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-correta' : (!opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-incorreta' : '') %>">
@@ -68,6 +71,7 @@
                                     </div>
                             </div>
                             <% }) %>
+                            <% } %>
                     </div>
                     <% }) %>
         </main>

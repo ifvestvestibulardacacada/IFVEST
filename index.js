@@ -38,7 +38,7 @@ app.use('/professor', professor);
 app.use("/uploads",  uploads) 
 app.use("/simulados",  simulados) 
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 3001, () => {
     console.log('Working on port 3000!')
 });
  module.exports = {app};

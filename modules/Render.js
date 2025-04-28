@@ -4,6 +4,7 @@ const { Topico } = require('../models');
 const { Questões } = require('../models');
 const { Opcao } = require('../models');
 const { Usuario } = require('../models');
+const { Resposta } = require('../models');
 const { Op } = require('sequelize');
 
 
@@ -428,7 +429,7 @@ class Render {
                 })
 
                 if (simulado.tipo !== 'OBJETIVO') {
-                    res.redirect('/professor/manutencao')
+                   return res.redirect('/professor/manutencao')
                 }
 
                 const questoesComOpcoesCorretas = simulado.Questões;
@@ -724,23 +725,26 @@ class Render {
         editarUsuario: async (req, res) => {
             try {
                 let errorMessage = req.session.errorMessage;
-
+                const perfilUsuario = req.session.perfil;
+                const nomeUsuario = req.session.nomeUsuario;
+                const imagemPerfil = req.session.imagemPerfil;
+        
                 if (!req.session.userId) {
                     throw new Error('Você precisa estar logado para acessar esta página.');
                 }
                 const usuario = await Usuario.findByPk(req.session.userId);
-
+        
                 if (!usuario) {
                     throw new Error('Usuário não encontrado.');
                 }
-
-
+        
+        
                 if (errorMessage === null) {
                     errorMessage = " ";
                 }
-
+        
                 req.session.errorMessage = null;
-                res.render('usuario/editar-usuario', { usuario, session: req.session, errorMessage });
+                res.render('usuario/editar-usuario', { usuario, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil  });
             } catch (err) {
                 console.error(err)
                 res.redirect('/login');

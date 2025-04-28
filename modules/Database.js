@@ -338,7 +338,7 @@ class Database {
                         await Resposta.create({
                             resposta: resposta,
                             tipo: 'DISSERTATIVA',
-                            usuarioId: idUsuario, // Ajuste conforme necessário
+                            usuarioId: userId, // Ajuste conforme necessário
                             simuladoId: simuladoId, // Ajuste conforme necessário
                             questaoId: questaoId,
                         });

@@ -41,8 +41,14 @@ class Auth{
             req.session.perfil = usuarioEncontrado.perfil;
             req.session.nomeUsuario = usuarioEncontrado.usuario;
             req.session.imagemPerfil = usuarioEncontrado.imagemPerfil;
-    
-            req.session.save(); 
+            
+
+            await new Promise((resolve, reject) => {
+                req.session.save(err => {
+                    if(err) reject(err);
+                    else resolve();
+                });
+            });
     
             return res.redirect('/usuario/inicioLogado');
         } catch (err) {
@@ -51,25 +57,35 @@ class Auth{
             return res.redirect('/login');
         }
     }
-    static async logout(req, res){
-        try {
-            const sessionID = req.sessionID;
-            
-            if (!sessionID) {
+static async logout(req, res){
+    try {
+        const sessionID = req.sessionID;
+        
+        if (!sessionID) {
             return res.redirect('/usuario/login');
-            }
-        
-            store.destroy(sessionID);
-            
-            res.clearCookie("connect.sid");
-            req.session.destroy();
-            res.redirect('/usuario/login');
-        
-        } catch (error) {
-            console.error("Erro no logout:", error.message);
-            res.status(500).send("Erro interno");
         }
+
+        // Limpar o cookie antes de destruir a sessão
+        res.clearCookie("connect.sid", { path: '/' });  // Certifique-se de passar o caminho correto, se necessário
+
+        // Destruir a sessão
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("Erro ao destruir a sessão:", err.message);
+                return res.status(500).send("Erro ao destruir a sessão");
+            }
+            // Destruir a sessão no store (se necessário)
+            store.destroy(sessionID);
+
+            res.redirect('/usuario/login');
+        });
+
+    } catch (error) {
+        console.error("Erro no logout:", error.message);
+        res.status(500).send("Erro interno");
     }
+}
+
     static async cadastro(req, res){
         const { nome, usuario, senha, email, perfil } = req.body;
         try {
