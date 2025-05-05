@@ -7,6 +7,7 @@ const { Topico } = require('../models');
 const { removeFileFromUploads } = require('../utils/removeImage')
 const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const bcrypt = require('bcrypt');
+const { Op } = require('sequelize');
 
 class Database {
     static questoes = {
@@ -185,24 +186,47 @@ class Database {
                 const { simuladoId } = req.params;
                 const { selectedQuestionIds } = req.body;
 
-                const idsInteiros = selectedQuestionIds.split(',').map(Number);
+                // Verifica se há IDs selecionados
+                if (!selectedQuestionIds) {
+                    throw new Error('Nenhuma questão selecionada.');
+                }
 
+                // Converte e valida os IDs
+                const idsInteiros = selectedQuestionIds.split(',')
+                    .map(id => parseInt(id.trim()))
+                    .filter(id => !isNaN(id) && id > 0);
+
+                if (idsInteiros.length === 0) {
+                    throw new Error('IDs de questões inválidos.');
+                }
+
+                // Verifica se o simulado existe
                 const simulado = await Simulados.findByPk(simuladoId);
-
                 if (!simulado) {
                     throw new Error('Simulado não encontrado.');
                 }
-                if (!idsInteiros) {
-                    throw new Error('Questões não selecionadas.');
+
+                // Verifica se as questões existem
+                const questoesExistentes = await Questões.findAll({
+                    where: {
+                        id: {
+                            [Op.in]: idsInteiros
+                        }
+                    }
+                });
+
+                if (questoesExistentes.length !== idsInteiros.length) {
+                    throw new Error('Uma ou mais questões selecionadas não existem.');
                 }
 
+                // Adiciona as questões ao simulado
                 await simulado.addQuestões(idsInteiros);
 
                 res.redirect(`/simulados/meus-simulados`);
             } catch (error) {
-                console.error(error);
-                req.session.errorMessage = err.message;
-                res.redirect('back')
+                console.error('Erro ao adicionar questões:', error);
+                req.session.errorMessage = error.message;
+                res.redirect('back');
             }
         },
         edit: async (req, res) => {

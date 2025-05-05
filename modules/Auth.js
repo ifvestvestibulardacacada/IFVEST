@@ -66,7 +66,7 @@ static async logout(req, res){
         }
 
         // Limpar o cookie antes de destruir a sessão
-        res.clearCookie("connect.sid", { path: '/' });  // Certifique-se de passar o caminho correto, se necessário
+        res.clearCookie("connect.sid", { path: '/' });  
 
         // Destruir a sessão
         req.session.destroy((err) => {

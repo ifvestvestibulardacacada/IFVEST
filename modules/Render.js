@@ -414,6 +414,8 @@ class Render {
             const imagemPerfil = req.session.imagemPerfil;
             const userId = req.session.userId;
             const simuladoId = req.params.simuladoId;
+            let respostasDissertativas = [];
+
             try {
                 const simulado = await Simulados.findByPk(simuladoId, {
                     include: [{
@@ -428,9 +430,9 @@ class Render {
                     }],
                 })
 
-                if (simulado.tipo !== 'OBJETIVO') {
+                /*if (simulado.tipo !== 'OBJETIVO') {
                    return res.redirect('/professor/manutencao')
-                }
+                }*/
 
                 const questoesComOpcoesCorretas = simulado.Questões;
 
@@ -448,6 +450,16 @@ class Render {
                     order: [['createdAt', 'DESC']],
                 });
 
+                if (simulado.tipo !== 'OBJETIVO') {
+                    respostasDissertativas = await Resposta.findAll({
+                        where: {
+                            usuarioId: userId,
+                            questaoId: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id) },
+                            resposta: { [Op.ne]: null }
+                        },
+                        order: [['createdAt', 'DESC']],
+                    });
+                }
 
                 // Prepara os dados para a view
 
@@ -463,9 +475,16 @@ class Render {
                 res.render('prova/gabarito', {
                     questoes: questoesComOpcoesCorretas,
                     respostasUsuario: respostasDoUsuario,
+                    respostasDissertativas: respostasDissertativas,
                     simulado: simulado, errorMessage,
                     nomeUsuario, perfilUsuario, imagemPerfil
                 });
+                //res.json({
+                //    questoes: questoesComOpcoesCorretas,
+                //    respostasUsuario: respostasDoUsuario,
+                //    simulado: simulado, errorMessage,
+                //    nomeUsuario, perfilUsuario, imagemPerfil
+                //})
 
                 //  res.render('prova/gabaritoProva', { simulado });
 

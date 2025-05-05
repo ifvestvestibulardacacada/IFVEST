@@ -72,6 +72,28 @@
                             </div>
                             <% }) %>
                             <% } %>
+
+                            <% if (questao.tipo !=="OBJETIVA" ) { %>
+                            <% questao.Opcoes.forEach(opcao=> { %>
+                                <div class="opcao-correta" disabled>
+                                   
+                                    <div class="opcao-texto"  data-delta='<%= opcao.descricao %>'>
+                                                 
+                                        <span class="required">*</span>
+                              
+                                    </div>    
+                                </div>
+                                <% }) %>
+                                <% const respostaDissertativa = respostasDissertativas.find(r => r.questaoId === questao.id); %>
+                                <% if (respostaDissertativa) { %>
+                                    <div >
+                                        <div class="opcao-texto">
+                                            <%= respostaDissertativa.resposta %>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                
+                                <% } %>
                     </div>
                     <% }) %>
         </main>
