@@ -408,7 +408,7 @@ class Render {
                 res.status(500).send('Erro ao buscar perguntas da prova.');
             }
         },
-        gabarito: async (req, res) => {
+         gabarito: async (req, res) => {
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
@@ -430,13 +430,10 @@ class Render {
                     }],
                 })
 
-                /*if (simulado.tipo !== 'OBJETIVO') {
-                   return res.redirect('/professor/manutencao')
-                }*/
 
                 const questoesComOpcoesCorretas = simulado.Questões;
 
-                // Consulta as respostas do usuário para cada questão
+              
                 const respostasDoUsuario = await Resposta.findAll({
                     where: {
                         usuarioId: userId,
@@ -461,7 +458,6 @@ class Render {
                     });
                 }
 
-                // Prepara os dados para a view
 
                 let errorMessage = req.session.errorMessage;
 
@@ -471,7 +467,7 @@ class Render {
 
                 req.session.errorMessage = null;
 
-                // Renderiza a view com os dados preparados
+
                 res.render('prova/gabarito', {
                     questoes: questoesComOpcoesCorretas,
                     respostasUsuario: respostasDoUsuario,
@@ -479,14 +475,7 @@ class Render {
                     simulado: simulado, errorMessage,
                     nomeUsuario, perfilUsuario, imagemPerfil
                 });
-                //res.json({
-                //    questoes: questoesComOpcoesCorretas,
-                //    respostasUsuario: respostasDoUsuario,
-                //    simulado: simulado, errorMessage,
-                //    nomeUsuario, perfilUsuario, imagemPerfil
-                //})
 
-                //  res.render('prova/gabaritoProva', { simulado });
 
             } catch (error) {
                 console.error('Erro ao buscar o gabarito da prova:', error);

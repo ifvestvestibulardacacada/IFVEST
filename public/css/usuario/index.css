@@ -94,6 +94,8 @@ body *{
     background: #2f2841;
     border-radius: 20px;
     box-shadow: 0px 10px 40px #00000056;
+    position: relative;
+    z-index: 2;
 }
 
 .card-login > h1{
@@ -155,7 +157,17 @@ body *{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -250px; /* Aumente este valor conforme necessário */
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.infiniteLogo img {
+    width: 250px;
+    height: 250px;
+    transition: all 0.3s ease;
 }
 
 @media only screen and (max-width:950px){
@@ -167,6 +179,7 @@ body *{
 @media only screen and (max-width:600px){
     .main-login{
         flex-direction: column;
+        padding-bottom: 150px; /* Aumentado para dar mais espaço */
     }
     .left-login > h1{
         display: none;
@@ -196,9 +209,30 @@ body *{
 
     .card-login{
         width: 90%;
+        margin-bottom: 20px;
+    }
+
+    .infiniteLogo {
+        position: fixed;
+        bottom: 10px;
+    }
+
+    .infiniteLogo img {
+        width: 150px;
+        height: 150px;
+    }
+
+    .Cadastro-Login {
+        margin-bottom: 20px;
     }
 }
 
 .Cadastro-Login{
     color: white;
+    text-decoration: none;
+    display: block;
+    margin-top: 15px;
+    text-align: center;
+    position: relative;
+    z-index: 2;
 }

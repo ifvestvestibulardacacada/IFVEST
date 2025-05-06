@@ -10,9 +10,6 @@ body {
     background-color: #f5f5f5;
 }
 
-main {
-    margin: 20px;
-}
 
 h1 {
     color: #333;
@@ -107,4 +104,34 @@ form button{
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
+}
+
+/* Add responsive table container */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+}
+
+/* Adjust table for mobile */
+@media screen and (max-width: 768px) {
+    .button-container {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .button {
+        width: calc(50% - 5px);
+        justify-content: center;
+    }
+
+    table {
+        min-width: 600px; /* Ensures table doesn't get too compressed */
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
 }

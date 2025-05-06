@@ -1,19 +1,28 @@
 /*==================== SHOW NAVBAR ====================*/
-const showMenu = (headerToggle, navbarId) =>{
+const showMenu = (headerToggle, navbarId) => {
     const toggleBtn = document.getElementById(headerToggle),
-    nav = document.getElementById(navbarId)
-    
-    // Validate that variables exist
-    if(headerToggle && navbarId){
-        toggleBtn.addEventListener('click', ()=>{
-            // We add the show-menu class to the div tag with the nav__menu class
-            nav.classList.toggle('show-menu')
-            // change icon
-            toggleBtn.classList.toggle('bx-x')
-        })
+        nav = document.getElementById(navbarId);
+
+    if (toggleBtn && nav) {
+        toggleBtn.addEventListener('click', () => {
+            nav.classList.add('show-menu');
+        });
     }
-}
-showMenu('header-toggle','navbar')
+};
+
+const closeMenu = (headerClose, navbarId) => {
+    const closeBtn = document.getElementById(headerClose),
+        nav = document.getElementById(navbarId);
+
+    if (closeBtn && nav) {
+        closeBtn.addEventListener('click', () => {
+            nav.classList.remove('show-menu');
+        });
+    }
+};
+
+showMenu('header-toggle', 'navbar');
+closeMenu('header-close', 'navbar');
 const menu = document.getElementById('menu');
 const nav = document.querySelector('.nav');
 /*==================== CHANGE BACKGROUND HEADER ====================*/ 

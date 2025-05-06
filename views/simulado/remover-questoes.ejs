@@ -34,6 +34,7 @@
 
 
             <form action="/simulados/<%= simulado.id %>/remover-questoes?_method=DELETE" method="POST">
+                 <div class="table-responsive">
                 <table class="table-container">
                     <thead>
                         <tr>
@@ -64,6 +65,7 @@
                     </tbody>
                    
                 </table>
+                </div>
                 <div class="pagination-container">
                     <% if (page > 1) { %>
                         <a href="?page=<%= page - 1 %>">Anterior</a>

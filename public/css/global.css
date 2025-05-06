@@ -275,6 +275,45 @@ a.header__logo{
 .active {
   color: var(--first-color);
 }
+    #perfilImage {
+        cursor: pointer;
+    }
+
+    .nav__logo-img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .nav__link.active {
+        color: #12B886;
+        /* Altera a cor do texto para verde */
+    }
+    .header__close {
+        display: flex;
+        justify-content: flex-end;
+        padding: 1rem;
+    }
+
+    .header__close i {
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--first-color);
+        transition: .3s;
+    }
+
+    .header__close i:hover {
+        color: var(--first-color-alt);
+    }
+
+    /* Hide close button when menu is closed */
+    .nav:not(.show-menu) .header__close {
+        display: none;
+    }
+
+    /* Show close button when menu is open */
+    .nav.show-menu .header__close {
+        display: flex;
+    }
 
 /* ========== MEDIA QUERIES ==========*/
 /* For small devices reduce search*/
@@ -353,4 +392,41 @@ a.header__logo{
   .nav:hover .nav__dropdown-icon {
     opacity: 1;
   }
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+}
+
+/* Adjust table for mobile */
+@media screen and (max-width: 768px) {
+    .button-container {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .button {
+        width: calc(50% - 5px);
+        justify-content: center;
+    }
+
+    table {
+        min-width: 600px; /* Ensures table doesn't get too compressed */
+    }
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    form input[type="text"],
+    form select,
+    form button {
+        width: 100%;
+        margin-right: 0;
+    }
 }
