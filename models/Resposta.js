@@ -3,15 +3,15 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Resposta extends Model {
     static associate(models) {
-      this.belongsTo(models.Usuario, { foreignKey: 'usuarioId', as: 'usuario' });
-      this.belongsTo(models.Simulados, { foreignKey: 'simuladoId', as: 'simulado' });
-      this.belongsTo(models.Questões, { foreignKey: 'questaoId', as: 'questoes' });
-      this.belongsTo(models.Opcao, { foreignKey: 'opcaoId', as: 'opcao' }); 
+      this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'Usuario' });
+      this.belongsTo(models.Simulado, { foreignKey: 'id_simulado', as: 'Simulado' });
+      this.belongsTo(models.Questao, { foreignKey: 'id_questao', as: 'Questao' });
+      this.belongsTo(models.Opcao, { foreignKey: 'id_opcao', as: 'Opcao' }); 
     }
   }
 
   Resposta.init({
-    id: {
+    id_resposta: {
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
@@ -25,18 +25,18 @@ module.exports = (sequelize, DataTypes) => {
       values: ['DISSERTATIVA', 'OBJETIVA'],
       allowNull: false
     }),
-    usuarioId: {
+    id_usuario: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    simuladoId: {
+    id_simulado: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
   }, {
     sequelize,
     modelName: 'Resposta',
-    tableName: 'resposta'
+    tableName: 'Resposta'
   });
 
   return Resposta;

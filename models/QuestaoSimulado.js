@@ -1,16 +1,18 @@
+
+
 // models/perguntas_provas.js
 
 'use strict';
 
 module.exports = (sequelize, DataTypes) => {
-  const PerguntasProvas = sequelize.define('PerguntasProvas', {
-    id: {
+  const QuestaoSimulado = sequelize.define('QuestaoSimulado', {
+    id_questao_simulado: {
       type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true
     },
-    QuestõesId: {
+    id_questao: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -20,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
     },
-    simuladoId: {
+    id_simulado: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -42,5 +44,5 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'perguntas_provas' // Especifique o nome correto da tabela
   });
 
-  return PerguntasProvas;
+  return QuestaoSimulado;
 };
