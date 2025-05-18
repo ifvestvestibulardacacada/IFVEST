@@ -1,7 +1,7 @@
 const { Usuario } = require('../models');
-const { Questões } = require('../models');
+const { Questao } = require('../models');
 const { Opcao } = require('../models');
-const { Simulados } = require('../models');
+const { Simulado } = require('../models');
 const { Resposta } = require('../models');
 const { Topico } = require('../models');
 const { removeFileFromUploads } = require('../utils/removeImage')
@@ -16,7 +16,7 @@ class Database {
                 const { id } = req.params;
 
                 // Busca a questão pelo ID
-                const questao = await Questões.findByPk(id);
+                const questao = await Questao.findByPk(id);
 
                 if (!questao) {
                     return res.status(404).send('Questão não encontrada');
@@ -24,7 +24,7 @@ class Database {
 
                 // Exclui as opções da questão
                 await Opcao.destroy({
-                    where: { questao_id: questao.id }
+                    where: { id_questao: questao.id }
                 });
 
                 // Exclui a questão
@@ -39,7 +39,7 @@ class Database {
         },
         register: async (req, res) => {
             try {
-                const { titulo, pergunta, areaId, correta, topicosSelecionados, respostasSelecionadas } = req.body;
+                const { titulo, pergunta, id_area, correta, topicosSelecionados, respostasSelecionadas } = req.body;
                 const tipo = req.params.tipo.toUpperCase()
 
                 if (!respostasSelecionadas) {
@@ -58,32 +58,31 @@ class Database {
                     descricao: ArrayRespostas[`#opcao${alternativa}`]  // Descrição padrão se não existir
                 }));
 
-                const usuarioId = req.session.userId;
+                const id_usuario = req.session.userId;
 
                 if (!topicosSelecionados) {
                     throw new Error("Selecione pelo menos um tópico")
                 }
 
 
-                const createQuestao = await Questões.create({
-                    pergunta: pergunta,
+                const createQuestao = await Questao.create({
+                    pergunta,
                     titulo,
-                    areaId,
-                    usuarioId,
+                    id_area,
+                    id_usuario,
                     tipo // Usa o novo ID do vestibular
                 });
 
 
-                await createQuestao.addTopicos(topicosSelecionados)
+                await createQuestao.addTopico(topicosSelecionados)
 
                 for (let opcao of opcoes) {
                     let isTrue = correta === opcao.alternativa ? true : false;
                     await Opcao.create({
-                        questao_id: createQuestao.id,
+                        id_questao: createQuestao.id,
                         descricao: JSON.stringify(opcao.descricao),
                         alternativa: opcao.alternativa,
                         correta: isTrue
-
                     })
                 }
 
@@ -115,10 +114,10 @@ class Database {
 
                 await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
 
-                const questao = await Questões.findByPk(id, {
+                const questao = await Questao.findByPk(id, {
                     include: [{
                         model: Opcao,
-                        as: 'Opcoes'
+                        as: 'Opcao'
                     }
                     ]
                 });
@@ -127,14 +126,14 @@ class Database {
                     return res.status(404).send('Questão não encontrada');
                 }
 
-                await Questões.update({
+                await Questao.update({
                     titulo: titulo,
                     pergunta: pergunta,
-
-
-                }, {
-                    where: { id: id }
-                });
+                },
+                {
+                    where: { id_questao: id }
+                }
+                );
 
                 if (!opcoes) {
                     throw new Error("Selected answers cannot be empty");
@@ -152,7 +151,7 @@ class Database {
                     }
 
                     await Opcao.update(updateData, {
-                        where: { id: opcao.id }
+                        where: { id_opcao: opcao.id }
                     });
                 }
                 res.redirect('/professor/questoes');
@@ -201,15 +200,15 @@ class Database {
                 }
 
                 // Verifica se o simulado existe
-                const simulado = await Simulados.findByPk(simuladoId);
+                const simulado = await Simulado.findByPk(simuladoId);
                 if (!simulado) {
                     throw new Error('Simulado não encontrado.');
                 }
 
                 // Verifica se as questões existem
-                const questoesExistentes = await Questões.findAll({
+                const questoesExistentes = await Questao.findAll({
                     where: {
-                        id: {
+                        id_questao: {
                             [Op.in]: idsInteiros
                         }
                     }
@@ -220,7 +219,7 @@ class Database {
                 }
 
                 // Adiciona as questões ao simulado
-                await simulado.addQuestões(idsInteiros);
+                await simulado.addQuestao(idsInteiros);
 
                 res.redirect(`/simulados/meus-simulados`);
             } catch (error) {
@@ -229,7 +228,7 @@ class Database {
                 res.redirect('back');
             }
         },
-        edit: async (req, res) => {
+        edit: async (req, res) => { // ! PAREI AQUI ============================================================= ||
             try {
                 const { simuladoId } = req.params;
                 const { titulo, descricao, tipo } = req.body;
@@ -373,7 +372,7 @@ class Database {
 
                 res.status(200).redirect(`/simulados/${simulado.id}/gabarito`)
 
-                
+
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;

@@ -5,8 +5,8 @@ const { ENUM } = require('sequelize');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('usuarios', {
-      id: {
+    await queryInterface.createTable('Usuario', {
+      id_usuario: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -32,14 +32,14 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      perfil: {
+      tipo_perfil: {
         type: Sequelize.ENUM({
           values: ['USUARIO', 'PROFESSOR', 'ADMIN']
         }),
         allowNull: true,
         defaultValue: 'USUARIO'
       },
-      imagemPerfil:{
+      imagem_perfil:{
         type: Sequelize.STRING,
         allowNull: true
       },
@@ -64,7 +64,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable("usuarios");
+    await queryInterface.dropTable("Usuario");
     /**
      * Add reverting commands here.
      *

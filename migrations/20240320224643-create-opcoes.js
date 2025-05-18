@@ -2,21 +2,19 @@
 
 module.exports = {
  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('opcoes', {
-      id: {
+    await queryInterface.createTable('Opcao', {
+      id_opcao: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      questao_id: {
+      id_questao: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: {
-            tableName: 'questoes',
-          },
-          key: 'id'
+          model: 'Questao',
+          key: 'id_questao'
         }
       },
       descricao: {
@@ -49,6 +47,6 @@ module.exports = {
  },
 
  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('opcoes');
+    await queryInterface.dropTable('Opcao');
  }
 };

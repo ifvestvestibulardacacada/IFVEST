@@ -2,8 +2,8 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('resposta', {
-      id: {
+    await queryInterface.createTable('Resposta', {
+      id_resposta: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
@@ -17,32 +17,42 @@ module.exports = {
         type: Sequelize.ENUM('DISSERTATIVA', 'OBJETIVA'),
         allowNull: false,
       },
-      usuarioId: {
+      id_usuario: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'usuarios', 
-          key: 'id',
+          model: 'Usuario', 
+          key: 'id_usuario',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      simuladoId: {
+      id_simulado: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'simulados',
-          key: 'id'
+          model: 'Simulado',
+          key: 'id_simulado'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      questaoId: {
+      id_questao: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'questoes', // Certifique-se de que o nome do modelo esteja correto
-          key: 'id',
+          model: 'Questao', // Certifique-se de que o nome do modelo esteja correto
+          key: 'id_questao',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      id_opcao: {
+        type: Sequelize.INTEGER,
+        allowNull: true, // Torna o campo opcional
+        references: {
+          model: 'Opcao', // Certifique-se de que o nome do modelo esteja correto
+          key: 'id_opcao',
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -61,6 +71,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('resposta');
+    await queryInterface.dropTable('Resposta');
   },
 };
