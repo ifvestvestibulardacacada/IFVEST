@@ -1,12 +1,13 @@
 const { Area } = require('../models');
-const { Simulados } = require('../models');
+const { Simulado } = require('../models');
 const { Topico } = require('../models');
-const { Questões } = require('../models');
+const { Questao } = require('../models');
 const { Opcao } = require('../models');
 const { Usuario } = require('../models');
 const { Resposta } = require('../models');
 const { Op } = require('sequelize');
 
+// const { Database } = require('./Database') // Inativo momentâneamente
 
 class Render {
     static auth = {
@@ -50,13 +51,13 @@ class Render {
                     }]
 
                 })
-                const questao = await Questões.findByPk(id, {
+                const questao = await Questao.findByPk(id, {
                     include: [{
                         model: Opcao,
-                        as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+                        as: 'Opcao' // Certifique-se de que este alias corresponda ao definido na associação
                     }, {
                         model: Topico,
-                        as: 'Topicos'
+                        as: 'Topico'
                     }]
                 });
 
@@ -98,30 +99,30 @@ class Render {
             const imagemPerfil = req.session.imagemPerfil;
             const usuarioId = req.session.userId;
             const { titulo, areaId, topicosSelecionados, pergunta } = req.query; // Adiciona 'pergunta' aos parâmetros recuperados
-            const limit = 10; // Número de questões por página
+            const limit = 10; // Número de Questao por página
             const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
             const offset = (page - 1) * limit;
 
             try {
-                let questoes = await Questões.findAll({
+                let questoes = await Questao.findAll({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,
                     },
                     include: [{
                         model: Area,
                         as: 'Area'
                     }, {
                         model: Topico,
-                        as: 'Topicos'
+                        as: 'Topico'
                     }],
                     limit: limit,
                     offset: offset,
                 });
 
 
-                const questoesCount = await Questões.count({
+                const questoesCount = await Questao.count({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,
                     },
                 });
 
@@ -136,7 +137,7 @@ class Render {
                     }]
                 });
 
-                // Filtrar questões usando JavaScript
+                // Filtrar Questao usando JavaScript
                 let questoesFiltradas = questoes; // Use 'questoes' em vez de 'questoesDisponiveis'
                 if (titulo) {
                     questoesFiltradas = questoes.filter(questao => questao.titulo.toLowerCase().includes(titulo.toLowerCase()));
@@ -192,7 +193,7 @@ class Render {
                 })
 
 
-                // Mapeamento dos tipos de questões aos tipos de simulados
+                // Mapeamento dos tipos de Questao aos tipos de simulados
                 const tipoSimuladoMap = {
                     "objetiva": ['ALEATORIO', 'OBJETIVO'],
                     "dissertativa": ['DISSERTATIVO', 'ALEATORIO']
@@ -204,9 +205,9 @@ class Render {
                 }
 
                 // Consulta todos os simulados do usuário, filtrando por tipo
-                const simulados = await Simulados.findAll({
+                const simulados = await Simulado.findAll({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,
                         tipo: {
                             [Op.in]: tipoSimuladoMap[tipo]
                         }
@@ -242,11 +243,11 @@ class Render {
                 const limit = 10;
                 const offset = (page - 1) * limit;
 
-                const simulado = await Simulados.findOne({
-                    where: { id: simuladoId },
+                const simulado = await Simulado.findOne({
+                    where: { id_simulado: simuladoId },
                     include: [{
-                        model: Questões,
-                        as: 'Questões'
+                        model: Questao,
+                        as: 'Questao'
                     }]
                 });
 
@@ -271,18 +272,18 @@ class Render {
 
                 const whereClause = tipoQuestao ? { tipo: { [Op.eq]: tipoQuestao } } : {};
 
-                todasQuestoes = await Questões.findAll({
+                todasQuestoes = await Questao.findAll({
                     include: [
                         {
                             model: Topico,
-                            as: 'Topicos',
+                            as: 'Topico',
                             through: { attributes: [] },
                         },
                     ],
                     where: whereClause,
                 });
 
-                const questoesJaAssociadas = simulado.Questões.map(q => q.id);
+                const questoesJaAssociadas = simulado.Questao.map(q => q.id);
                 //
                 const questoesDisponiveis = todasQuestoes.filter(q => !questoesJaAssociadas.includes(q.id));
 
@@ -301,7 +302,7 @@ class Render {
                 if (topicosSelecionados && topicosSelecionados !== "") {
                     const topicosIds = Array.isArray(topicosSelecionados) ? topicosSelecionados : topicosSelecionados.split(',').map(id => parseInt(id));
                     questoesFiltradas = questoesFiltradas.filter(questao => {
-                        const topicos = Array.isArray(questao.Topicos) ? questao.Topicos : [];
+                        const topicos = Array.isArray(questao.Topico) ? questao.Topico : [];
                         return topicos.some(topico => topicosIds.includes(topico.id));
                     });
                 }
@@ -313,7 +314,7 @@ class Render {
 
                 const questoesPorArea = {};
 
-                simulado.Questões.forEach(q => {
+                simulado.Questao.forEach(q => {
                     const areaId = q.areaId;
                     if (!questoesPorArea[areaId]) {
                         questoesPorArea[areaId] = 0;
@@ -353,8 +354,8 @@ class Render {
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
             try {
-                const simulado = await Simulados.findOne({
-                    where: { id: simuladoId },
+                const simulado = await Simulado.findOne({
+                    where: { id_simulado: simuladoId },
                 });
 
                 if (!simulado) {
@@ -380,13 +381,13 @@ class Render {
                 const simuladoId = req.params.simuladoId;
                 let errorMessage = req.session.errorMessage;
 
-                const simulado = await Simulados.findByPk(simuladoId, {
+                const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
-                        model: Questões,
-                        as: 'Questões', // Certifique-se de que este alias corresponda ao definido na associação
+                        model: Questao,
+                        as: 'Questao', // Certifique-se de que este alias corresponda ao definido na associação
                         include: [{
                             model: Opcao,
-                            as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+                            as: 'Opcao' // Certifique-se de que este alias corresponda ao definido na associação
                         },
                         ]
                     }],
@@ -417,13 +418,13 @@ class Render {
             let respostasDissertativas = [];
 
             try {
-                const simulado = await Simulados.findByPk(simuladoId, {
+                const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
-                        model: Questões,
-                        as: 'Questões',
+                        model: Questao,
+                        as: 'Questao',
                         include: [{
                             model: Opcao,
-                            as: 'Opcoes',
+                            as: 'Opcao',
                             // Inclui apenas as opções corretas
                         },
                         ]
@@ -431,17 +432,17 @@ class Render {
                 })
 
 
-                const questoesComOpcoesCorretas = simulado.Questões;
+                const questoesComOpcoesCorretas = simulado.Questao;
 
               
                 const respostasDoUsuario = await Resposta.findAll({
                     where: {
-                        usuarioId: userId,
-                        questaoId: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id) }
+                        id_usuario: userId,
+                        id_questao: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id) }
                     },
                     include: [{
                         model: Opcao,
-                        as: 'opcao',
+                        as: 'Opcao',
                         required: true
                     }],
                     order: [['createdAt', 'DESC']],
@@ -450,8 +451,8 @@ class Render {
                 if (simulado.tipo !== 'OBJETIVO') {
                     respostasDissertativas = await Resposta.findAll({
                         where: {
-                            usuarioId: userId,
-                            questaoId: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id) },
+                            id_usuario: userId,
+                            id_questao: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id) },
                             resposta: { [Op.ne]: null }
                         },
                         order: [['createdAt', 'DESC']],
@@ -493,13 +494,13 @@ class Render {
                     return res.status(400).send('ID de simulado inválido');
                 }
 
-                const simulado = await Simulados.findByPk(simuladoId, {
+                const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
-                        model: Questões,
-                        as: 'Questões', // Certifique-se de que este alias corresponda ao definido na associação
+                        model: Questao,
+                        as: 'Questao', // Certifique-se de que este alias corresponda ao definido na associação
                         include: [{
                             model: Opcao,
-                            as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+                            as: 'Opcao' // Certifique-se de que este alias corresponda ao definido na associação
                         },
                         ]
                     }],
@@ -522,8 +523,8 @@ class Render {
                 const limit = 10;
                 const offset = (page - 1) * limit;
 
-                let allSimulados = await Simulados.findAll({
-                    where: { usuarioId: idUsuario },
+                let allSimulados = await Simulado.findAll({
+                    where: { id_usuario: idUsuario },
                     order: [['createdAt', 'DESC']]
                 });
 
@@ -561,12 +562,12 @@ class Render {
                 const limit = 10;
                 const offset = (page - 1) * limit;
 
-                const simulado = await Simulados.findOne({
-                    where: { id: simuladoId },
+                const simulado = await Simulado.findOne({
+                    where: { id_simulado: simuladoId },
                     include: [
                         {
-                            model: Questões,
-                            as: 'Questões', through: { attributes: [] }
+                            model: Questao,
+                            as: 'Questao', through: { attributes: [] }
                         }
                     ]
                 });
@@ -575,14 +576,14 @@ class Render {
                     throw new Error('Simulado não encontrado');
                 }
 
-                const questaoIds = simulado.Questões && simulado.Questões.length > 0 ? simulado.Questões.map(questao => questao.id) : [];
+                const questaoIds = simulado.Questao && simulado.Questao.length > 0 ? simulado.Questao.map(questao => questao.id) : [];
 
-                const todasQuestoes = await Questões.findAll({
-                    where: { id: { [Op.in]: questaoIds } },
+                const todasQuestoes = await Questao.findAll({
+                    where: { id_questao: { [Op.in]: questaoIds } },
                     include: [{
-                        model: Simulados,
-                        as: 'Simulados',
-                        where: { id: simuladoId },
+                        model: Simulado,
+                        as: 'Simulado',
+                        where: { id_simulado: simuladoId },
                         through: { attributes: [] }
                     }],
                     limit: limit,
@@ -594,12 +595,12 @@ class Render {
                 if (titulo) {
                     questoes = todasQuestoes.filter(questao => questao.titulo.toLowerCase().includes(titulo.toLowerCase()));
                 }
-                const totalQuestoes = await Questões.count({
-                    where: { id: { [Op.in]: questaoIds } },
+                const totalQuestoes = await Questao.count({
+                    where: { id_questao: { [Op.in]: questaoIds } },
                     include: [{
-                        model: Simulados,
-                        as: 'Simulados',
-                        where: { id: simuladoId },
+                        model: Simulado,
+                        as: 'Simulado',
+                        where: { id_simulado: simuladoId },
                         through: { attributes: [] }
                     }]
                 });
@@ -626,16 +627,16 @@ class Render {
                 const nomeUsuario = req.session.nomeUsuario;
                 const imagemPerfil = req.session.imagemPerfil;
 
-                const todosSimulados = await Simulados.findAll({
+                const todosSimulados = await Simulado.findAll({
                     where: {
-                        '$Questões.id$': {
+                        '$Questao.id$': {
                             [Op.not]: null
                         },
                         '$Usuario.perfil$': 'PROFESSOR'
                     },
                     include: [{
-                        model: Questões,
-                        as: 'Questões'
+                        model: Questao,
+                        as: 'Questao'
                     }, {
                         model: Usuario,
                         as: 'Usuario',
@@ -683,7 +684,7 @@ class Render {
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
             const usuarioId = req.session.userId;
-            const limit = 10; // Número de questões por página
+            const limit = 10; // Número de Questao por página
             const { materia } = req.query;
             const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
             const offset = (page - 1) * limit;
@@ -693,7 +694,7 @@ class Render {
                 // Dentro do bloco try da rota '/questoes'
                 const topicosCount = await Topico.count({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,
                     },
                 });
 
@@ -701,7 +702,7 @@ class Render {
 
                 const topicosSemFiltro = await Topico.findAll({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,
                     },
                     limit: limit,
                     offset: offset,

@@ -228,18 +228,18 @@ class Database {
                 res.redirect('back');
             }
         },
-        edit: async (req, res) => { // ! PAREI AQUI ============================================================= ||
+        edit: async (req, res) => {
             try {
                 const { simuladoId } = req.params;
                 const { titulo, descricao, tipo } = req.body;
 
-                const [updated] = await Simulados.update({
+                const [updated] = await Simulado.update({
                     titulo: titulo,
                     descricao: descricao,
                     tipo: tipo
                 }, {
                     where: {
-                        id: simuladoId
+                        id_simulado: simuladoId
                     }
                 });
 
@@ -263,10 +263,10 @@ class Database {
             }
 
             try {
-                const simulado = await Simulados.create({
+                const simulado = await Simulado.create({
                     titulo,
                     descricao,
-                    usuarioId: usuarioId,
+                    id_usuario: usuarioId,
                     tipo: tipoformatado
                 });
 
@@ -287,10 +287,10 @@ class Database {
                 const { questoesSelecionadas } = req.body;
 
                 // Primeiro, verifique se o simulado existe
-                const simulado = await Simulados.findByPk(simuladoId, {
+                const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
-                        model: Questões,
-                        as: 'Questões'
+                        model: Questao,
+                        as: 'Questao'
                     }]
                 });
 
@@ -303,7 +303,7 @@ class Database {
 
                 // Agora, remova as questões do simulado usando o método removeQuestoes
                 // Este método é fornecido pelo Sequelize para associações belongsToMany
-                await simulado.removeQuestões(questoesSelecionadas);
+                await simulado.removeQuestao(questoesSelecionadas);
 
                 res.redirect(`/simulados/`);
             } catch (error) {
@@ -326,7 +326,7 @@ class Database {
                 
                 `)
 
-            const simulado = await Simulados.findByPk(simuladoId)
+            const simulado = await Simulado.findByPk(simuladoId)
             try {
                 if (questoes && Object.keys(questoes).length > 0) {
 
@@ -344,10 +344,10 @@ class Database {
                         await Resposta.create({
                             resposta: "", // O ID da opção é salvo no campo resposta
                             tipo: 'OBJETIVA',
-                            opcaoId: opcaoId,
-                            usuarioId: userId, // Ajuste conforme necessário
-                            simuladoId: simuladoId, // Ajuste conforme necessário
-                            questaoId: questaoId,
+                            id_opcao: opcaoId,
+                            id_usuario: userId, // Ajuste conforme necessário
+                            id_simulado: simuladoId, // Ajuste conforme necessário
+                            id_questao: questaoId,
                         });
                     }
                 }
@@ -361,9 +361,9 @@ class Database {
                         await Resposta.create({
                             resposta: resposta,
                             tipo: 'DISSERTATIVA',
-                            usuarioId: userId, // Ajuste conforme necessário
-                            simuladoId: simuladoId, // Ajuste conforme necessário
-                            questaoId: questaoId,
+                            id_usuario: userId, // Ajuste conforme necessário
+                            id_simulado: simuladoId, // Ajuste conforme necessário
+                            id_questao: questaoId,
                         });
                     }
                 }
@@ -390,7 +390,7 @@ class Database {
                     return res.status(404).send('Tópico não encontrado.');
                 }
                 // Atualize o tópico com a nova matéria
-                await topico.update({ materia });
+                await topico.update({ nome: materia });
                 res.redirect('/professor/topicos');
             } catch (error) {
                 console.error(error);
@@ -410,9 +410,9 @@ class Database {
 
                 // Cria um novo tópico
                 const novoTopico = await Topico.create({
-                    materia: topico, // Supondo que cada tópico seja uma string
-                    areaId: areaIdTopico, // Corrigido para usar areaIdTopico
-                    usuarioId: usuarioId
+                    nome: topico, // Supondo que cada tópico seja uma string
+                    id_area: areaIdTopico, // Corrigido para usar areaIdTopico
+                    id_usuario: usuarioId
                 });
 
                 // Retorna o novo tópico criado como resposta JSON
@@ -429,7 +429,7 @@ class Database {
 
             try {
                 const topics = await Topico.findAll({
-                    where: { areaId: id },
+                    where: { id_area: id },
                     // Selecione apenas os atributos necessários
                 });
 
@@ -468,7 +468,7 @@ class Database {
                 }
 
                 // Atualiza o banco de dados com a nova imagem
-                await Usuario.update({ imagemPerfil: caminhoImagem }, { where: { id: idUsuario } });
+                await Usuario.update({ imagem_perfil: caminhoImagem }, { where: { id_usuario: idUsuario } });
 
                 // Atualiza a sessão com a nova imagem
                 req.session.imagemPerfil = caminhoImagem;
@@ -490,7 +490,7 @@ class Database {
 
                 await Usuario.destroy({
                     where: {
-                        id: req.params.id
+                        id_usuario: req.params.id
                     }
                 }
                 );

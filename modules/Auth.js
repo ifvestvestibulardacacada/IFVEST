@@ -37,10 +37,10 @@ class Auth{
                 `)
     
             req.session.login = true;
-            req.session.userId = usuarioEncontrado.id;
-            req.session.perfil = usuarioEncontrado.perfil;
+            req.session.userId = usuarioEncontrado.id_usuario;
+            req.session.perfil = usuarioEncontrado.tipo_perfil;
             req.session.nomeUsuario = usuarioEncontrado.usuario;
-            req.session.imagemPerfil = usuarioEncontrado.imagemPerfil;
+            req.session.imagemPerfil = usuarioEncontrado.imagem_perfil;
             
 
             await new Promise((resolve, reject) => {
@@ -95,7 +95,7 @@ static async logout(req, res){
             }
             const senhaCriptografada = await bcrypt.hash(senha, 10); // O segundo argumento é o número de "salt rounds"
     
-            await Usuario.create({ nome, usuario, senha: senhaCriptografada, email, perfil });
+            await Usuario.create({ nome, usuario, senha: senhaCriptografada, email, tipo_perfil: perfil });
     
             res.status(201).redirect('/login');
         } catch (err) {
