@@ -9,6 +9,7 @@ function addItemsToDropdown(Areas, Topicos) {
     dropdownList.innerHTML = '';
 
     topicos.forEach(function (topico) {
+        topico.id = topico.id_topico
         const listItem = document.createElement('li');
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
@@ -23,7 +24,7 @@ function addItemsToDropdown(Areas, Topicos) {
 
         let isSelected = false;
         Topicos.forEach(t => {
-            if (t.id === topico.id) {
+            if (t.id_topico === topico.id) {
                 isSelected = true;
                 return false; // Sair do loop interno
             }

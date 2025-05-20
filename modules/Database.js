@@ -14,7 +14,8 @@ class Database {
         delete: async (req, res) => {
             try {
                 const { id } = req.params;
-
+                console.log("ID DA DELEÇÃO")
+                console.log(id)
                 // Busca a questão pelo ID
                 const questao = await Questao.findByPk(id);
 
@@ -30,6 +31,8 @@ class Database {
                 // Exclui a questão
                 await questao.destroy();
 
+                console.log("Apagado")
+
                 res.status(200).redirect('/usuario/inicioLogado')
             } catch (error) {
                 console.error(error);
@@ -39,7 +42,7 @@ class Database {
         },
         register: async (req, res) => {
             try {
-                const { titulo, pergunta, id_area, correta, topicosSelecionados, respostasSelecionadas } = req.body;
+                const { titulo, pergunta, areaId, correta, topicosSelecionados, respostasSelecionadas } = req.body;
                 const tipo = req.params.tipo.toUpperCase()
 
                 if (!respostasSelecionadas) {
@@ -68,7 +71,7 @@ class Database {
                 const createQuestao = await Questao.create({
                     pergunta,
                     titulo,
-                    id_area,
+                    id_area: areaId,
                     id_usuario,
                     tipo // Usa o novo ID do vestibular
                 });
@@ -79,7 +82,7 @@ class Database {
                 for (let opcao of opcoes) {
                     let isTrue = correta === opcao.alternativa ? true : false;
                     await Opcao.create({
-                        id_questao: createQuestao.id,
+                        id_questao: createQuestao.id_questao,
                         descricao: JSON.stringify(opcao.descricao),
                         alternativa: opcao.alternativa,
                         correta: isTrue

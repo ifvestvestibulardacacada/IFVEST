@@ -17,10 +17,10 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
       throw new Error('Questão não encontrada');
     }
 
-    const topicosIdsAtuais = questao.Topicos.map(topico => topico.id);
+    const topicosIdsAtuais = questao.Topico.map(topico => topico.id);
 
     // Remover tópicos que não estão mais selecionados
-    await questao.removeTopicos(topicosIdsAtuais);
+    await questao.removeTopico(topicosIdsAtuais);
 
     // Adicionar novos tópicos selecionados
     if (areaId && areaId !== questao.areaId) {
@@ -32,7 +32,7 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
       });
     }
 
-    await questao.addTopicos(topicosSelecionados);
+    await questao.addTopico(topicosSelecionados);
   } catch (error) {
     console.error('Erro ao atualizar relação de tópicos:', error);
     throw error;

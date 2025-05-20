@@ -67,7 +67,7 @@ class Render {
 
                 const Opcoes = await Opcao.findAll({
                     where: {
-                        questao_id: questao.id
+                        id_questao: questao.id
                     },
                     order: [['alternativa', 'ASC']] // Ordena as opções pela coluna 'alternativa' em ordem ascendente
                 });
@@ -103,7 +103,7 @@ class Render {
             const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
             const offset = (page - 1) * limit;
 
-            try {
+            try {console.log(0) // ! Log temporário
                 let questoes = await Questao.findAll({
                     where: {
                         id_usuario: usuarioId,
@@ -118,45 +118,45 @@ class Render {
                     limit: limit,
                     offset: offset,
                 });
-
+                console.log(1) // ! Log temporário
 
                 const questoesCount = await Questao.count({
                     where: {
                         id_usuario: usuarioId,
                     },
                 });
-
+                console.log(2) // ! Log temporário
                 const totalPages = Math.ceil(questoesCount / limit);
-
+                console.log(3) // ! Log temporário
                 // Buscar todas as áreas para o filtro
-                const topicos = await Topico.findAll();
+                const topicos = await Topico.findAll();console.log(4) // ! Log temporário
                 const Areas = await Area.findAll({
                     include: [{
                         model: Topico,
                         as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
                     }]
                 });
-
+                console.log(5) // ! Log temporário
                 // Filtrar Questao usando JavaScript
                 let questoesFiltradas = questoes; // Use 'questoes' em vez de 'questoesDisponiveis'
                 if (titulo) {
                     questoesFiltradas = questoes.filter(questao => questao.titulo.toLowerCase().includes(titulo.toLowerCase()));
-                }
+                }console.log(6) // ! Log temporário
                 if (areaId && areaId !== "") {
-                    questoesFiltradas = questoes.filter(questao => questao.areaId === Number(areaId));
-                }
+                    questoesFiltradas = questoes.filter(questao => questao.id_area === Number(areaId));
+                }console.log(7) // ! Log temporário
                 if (topicosSelecionados && topicosSelecionados !== "") {
                     // Conversão de topicosSelecionados para Array de IDs
                     const topicosIds = Array.isArray(topicosSelecionados) ? topicosSelecionados : topicosSelecionados.split(',').map(id => parseInt(id));
                     questoesFiltradas = questoes.filter(questao => {
                         // Garante que questao.topicos seja um array
-                        const topicos = Array.isArray(questao.Topicos) ? questao.Topicos : [];
-                        return topicos.some(topico => topicosIds.includes(topico.id));
+                        const topicos = Array.isArray(questao.Topico) ? questao.Topico : [];
+                        return topicos.some(topico => topicosIds.includes(topico.id_topico));
                     });
-                }
+                }console.log(8) // ! Log temporário
                 if (pergunta) {
                     questoesFiltradas = questoes.filter(questao => questao.pergunta.toLowerCase().includes(pergunta.toLowerCase()));
-                }
+                }console.log(9) // ! Log temporário
 
                 let errorMessage = req.session.errorMessage;
 
@@ -167,6 +167,7 @@ class Render {
                 req.session.errorMessage = null;
                 res.status(200).render('professor/minhas-questoes', { questoes: questoesFiltradas, totalPages, page, Areas, topicos, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (err) {
+                console.log('ERRO NO MINHAS QUESTOES')
                 console.error(err.message)
                 req.session.destroy();
                 res.status(500).redirect('/usuario/inicioLogado');

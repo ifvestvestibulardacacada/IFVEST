@@ -50,18 +50,18 @@
                     <% topicos.forEach(topico => { %>
                         <tr>
                             <td>
-                                <span class="material-span "id="span<%= topico.id %>"><%= topico.materia %></span>
-                                <form class="hide" id="editForm<%= topico.id %>" action="/professor/editar-topico" method="POST">
+                                <span class="material-span "id="span<%= topico.id_topico %>"><%= topico.nome %></span>
+                                <form class="hide" id="editForm<%= topico.id_topico %>" action="/professor/editar-topico" method="POST">
                                     <input class="py-2 border border-black" type="text" name="materia" value="<%= topico.materia %>" >
-                                    <input type="hidden" name="id" value="<%= topico.id %>" >
+                                    <input type="hidden" name="id" value="<%= topico.id_topico %>" >
                                     <button type="submit" id="saveButton" class=" btn ">Salvar</button>
-                                    <button type="button" id="cancelButton" class=" btn " onclick="ocultarForm(<%= topico.id %>)">Cancelar</button>
+                                    <button type="button" id="cancelButton" class=" btn " onclick="ocultarForm(<%= topico.id_topico %>)">Cancelar</button>
                                 </form>
                                 
                                
                             </td>
                             <td>
-                              <a class="btn" data-id="<%= topico.id %>" onclick="exibirForm(<%= topico.id %>)"><i class="fas fa-edit"></i> Editar</a>
+                              <a class="btn" data-id="<%= topico.id_topico %>" onclick="exibirForm(<%= topico.id_topico %>)"><i class="fas fa-edit"></i> Editar</a>
                             </td>
                         </td>
                         </tr>

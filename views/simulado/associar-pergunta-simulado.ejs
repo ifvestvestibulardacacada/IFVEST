@@ -26,7 +26,7 @@
                         };
                     </script>
                 <% } %>
-                <form action="/simulados/<%= simulado.id %>/adicionar-questoes" method="GET">
+                <form action="/simulados/<%= simulado.id_simulado %>/adicionar-questoes" method="GET">
                     <!-- Campo de filtragem por título -->
                     <input type="text" name="titulo" placeholder="Filtrar por título">
                     <button type="submit"><i class='bx bx-search'></i>Pesquisar</button>
@@ -35,8 +35,8 @@
                     <select name="areaId">
                         <option value="">Todas as áreas</option>
                         <% Areas.forEach(area=> { %>
-                            <option value="<%= area.id %>">
-                                <%= area.area %>
+                            <option value="<%= area.id_area %>">
+                                <%= area.nome %>
                             </option>
                             <% }); %>
                     </select>
@@ -46,8 +46,8 @@
                     <select name="topicosSelecionados">
                         <option value="">Todas os tópicos</option>
                         <% topicos.forEach(topico=> { %>
-                            <option value="<%= topico.id %>">
-                                <%= topico.materia %>
+                            <option value="<%= topico.id_topico %>">
+                                <%= topico.nome %>
                             </option>
                             <% }); %>
                     </select>
@@ -57,10 +57,10 @@
                     <div class="container">
                         Questões Associadas por Area:
                         <% Object.entries(questoesPorArea).forEach(([areaId, count])=> { %>
-                            <% const area=Areas.find(area=> area.id === Number(areaId)); %>
+                            <% const area=Areas.find(area=> area.id_area === Number(areaId)); %>
                                 <% if (area) { %>
                                     <span >
-                                        <%= area.area %>: <span class="uk-badge">
+                                        <%= area.nome %>: <span class="uk-badge">
                                             <%= count %>
                                         </span>
                                                 
@@ -76,7 +76,7 @@
                 </form>
             </div>
 
-            <form action="/simulados/<%= simulado.id %>/adicionar-questoes" method="POST">
+            <form action="/simulados/<%= simulado.id_simulado %>/adicionar-questoes" method="POST">
                 <div class="table-container">
                     <table class="uk-table uk-table-striped">
                         <thead>
@@ -95,8 +95,8 @@
                             <% questoes.forEach(questao=> { %>
                                 <tr>
                                     <td>
-                                        <input type="checkbox" id="questao-<%= questao.id %>"
-                                            name="questoesSelecionadas" value="<%= questao.id %>"
+                                        <input type="checkbox" id="questao-<%= questao.id_questao %>"
+                                            name="questoesSelecionadas" value="<%= questao.id_questao %>"
                                             onchange="manipularCheckbox(this)">
                                     </td>
                                     <td>
@@ -113,8 +113,8 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <% questao.Topicos.forEach(topico=> { %>
-                                            <%= topico.materia %>
+                                        <% questao.Topico.forEach(topico=> { %>
+                                            <%= topico.nome %>
                                                 <% }); %>
                                     </td>
                                 </tr>
@@ -127,21 +127,21 @@
                 <div class="pagination-container">
                     <% if (page> 1) { %>
                         <a
-                            href="/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page - 1 %>">Anterior</a>
+                            href="/simulados/<%= simulado.id_simulado %>/adicionar-questoes?page=<%= page - 1 %>">Anterior</a>
                         <% } %>
                             <% for (let i=1; i <=totalPages; i++) { %>
-                                <a href="/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= i %>"
+                                <a href="/simulados/<%= simulado.id_simulado %>/adicionar-questoes?page=<%= i %>"
                                     class="<%= page === i ? 'active' : '' %>">
                                     <%= i %>
                                 </a>
                                 <% } %>
                                     <% if (page < totalPages) { %>
                                         <a
-                                            href="/simulados/<%= simulado.id %>/adicionar-questoes?page=<%= page + 1 %>">Próximo</a>
+                                            href="/simulados/<%= simulado.id_simulado %>/adicionar-questoes?page=<%= page + 1 %>">Próximo</a>
                                         <% } %>
                 </div>
                 <button type="submit" class="botao-associar">Associar Questões</button>
-                <input type="hidden" name="simuladoId" value="<%= simulado.id %>">
+                <input type="hidden" name="simuladoId" value="<%= simulado.id_simulado %>">
             </form>
 
          

@@ -87,15 +87,15 @@
                                                                             <label for="areaId">Selecione uma
                                                                                 área:</label>
                                                                             <select name="areaId" id="areaId"
-                                                                                onchange="addItemsToDropdown(<%= JSON.stringify(Areas) %>, <%= JSON.stringify(questao.Topicos) %>)">
+                                                                                onchange="addItemsToDropdown(<%= JSON.stringify(Areas) %>, <%= JSON.stringify(questao.Topico) %>)">
 
                                                                                 <% Areas.forEach(area=> { %>
-                                                                                    <option value="<%= area.id %>"
-                                                                                        <%=area.id===questao.areaId
+                                                                                    <option value="<%= area.id_area %>"
+                                                                                        <%=area.id_area===questao.areaId
                                                                                         ? 'selected' : '' %>
 
                                                                                         >
-                                                                                        <%= area.area %>
+                                                                                        <%= area.nome %>
                                                                                     </option>
                                                                                     <% }); %>
                                                                             </select>
@@ -107,13 +107,13 @@
                                                         <div class="dropdown" id="topicosSearchContainer">
                                                             <input type="text" id="search" placeholder="Pesquisar...">
                                                             <ul id="dropdown-list">
-                                                                <% questao.Topicos.forEach(topic=> { %>
+                                                                <% questao.Topico.forEach(topic=> { %>
                                                                     <li>
                                                                         <input type="checkbox"
                                                                             name="topicosSelecionados[]"
-                                                                            value="<%= topic.id %>" checked>
-                                                                        <label for="topico-<%= topic.id %>">
-                                                                            <%= topic.materia %>
+                                                                            value="<%= topic.id_topico %>" checked>
+                                                                        <label for="topico-<%= topic.id_topico %>">
+                                                                            <%= topic.nome %>
                                                                         </label>
                                                                     </li>
                                                                     <% }); %>

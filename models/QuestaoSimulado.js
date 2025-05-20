@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Questões',
-        key: 'id'
+        model: 'Questao',
+        key: 'id_questao'
       },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
@@ -26,8 +26,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'Simulados',
-        key: 'id'
+        model: 'Simulado',
+        key: 'id_simulado'
       },
       onUpdate: 'CASCADE',
       onDelete: 'CASCADE'
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   }, {
-    tableName: 'perguntas_provas' // Especifique o nome correto da tabela
+    tableName: 'QuestaoSimulado' // Especifique o nome correto da tabela
   });
 
   return QuestaoSimulado;
