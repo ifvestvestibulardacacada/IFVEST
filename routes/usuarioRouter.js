@@ -6,7 +6,7 @@ const { Render } = require("../modules/Render")
 const { Database } = require("../modules/Database")
 
 //page renders
-roteador.get('/sobreNos', Render.usuarios.sobreNos);
+roteador.get('/sobre_nos', Render.usuarios.sobreNos);
 roteador.get('/perfil', Render.usuarios.perfilUsuario);
 roteador.get('/inicioLogado', Render.usuarios.inicioLogado);
 roteador.get('/editar', Render.usuarios.editarUsuario);

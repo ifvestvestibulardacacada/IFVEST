@@ -1,7 +1,7 @@
 
 const { Router } = require('express');
 
-const upload = require('../midlewares/multerConfig');
+const upload = require('../middleware/multerConfig');
 
 const roteador = Router();
 

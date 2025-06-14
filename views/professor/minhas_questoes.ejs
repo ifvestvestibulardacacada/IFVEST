@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="/css/professor/minhasquestoes.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+    <%- include('../partials/quill_and_uikit') %>
+    <title>Minhas Questões - IFVest</title>
+</head>
+
+<body>
+    <%- include('../partials/sidebar') %>
+       
+            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+                <script>
+                    window.onload = function() {
+                        alert("<%= errorMessage %>");
+                    };
+                </script>
+            <% } %>
+
+            <h1 class="uk-heading-divider ">MINHAS QUESTÕES</h1>
+
+            <!-- Adicione isso antes da tabela na página minhas-questoes.ejs -->
+            <form action="/professor/questoes" method="GET">
+                <!-- Campo de filtragem por título -->
+                <input type="text" name="titulo" placeholder="Filtrar por título">
+                <button type="submit"><i class='bx bx-search'></i>Pesquisar</button>
+
+                <!-- Campo de seleção para áreas -->
+                <select class="uk-search"name="areaId">
+                    <option value="">Todas as áreas</option>
+                    <% Areas.forEach(area=> { %>
+                        <option value="<%= area.id_area %>">
+                            <%= area.nome %>
+                        </option>
+                        <% }); %>
+                </select>
+                <button type="submit"><i class='bx bx-filter-alt' ></i>Filtrar por área</button>
+
+                <!-- Campo de seleção para tópicos -->
+                <select name="topicosSelecionados">
+                    <option value="">Todas os tópicos</option>
+                    <% topicos.forEach(topico=> { %>
+                        <option value="<%= topico.id_topico %>">
+                            <%= topico.nome %>
+                        </option>
+                        <% }); %>
+                </select>
+                <button type="submit"><i class='bx bxs-filter-alt' ></i>Filtrar por tópicos</button>
+            </form>
+            <!-- Adicione campos de filtro no topo da página -->
+            <div class="table-responsive">
+                <table class="uk-table uk-table-striped">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+
+                            <th>Tipo</th>
+                            <th>Questão </th>
+                            <th>Tópicos</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <% questoes.forEach(questao=> { %>
+                            <tr>
+                                <td>
+                                    <%= questao.titulo %>
+                                </td>
+
+
+                                <td>
+                                    <%= questao.tipo %>
+                                </td>
+                                <td>
+                                    <div class="name" data-delta='<%= questao.pergunta %>'>
+                                        <!-- O conteúdo será inserido via JavaScript -->
+                                        <span class="required">*</span>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <%= questao.Topico.map(topico=> topico.nome).join(', ') %>
+                                </td> <!-- Exibe os tópicos separados por vírgula -->
+                                <td>
+                                    <div class="button-container">
+                                        <a href="/professor/editar_questao/<%= questao.id_questao %>" class="button">
+                                            <div class="icon-button">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </div>
+                                        </a>
+                                        <a class="button" onclick="confirmDelete(<%= questao.id_questao %>)">
+                                            <div class="icon-button">
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </div>
+                                        </a>
+                                        <form id="deleteForm<%= questao.id_questao %>"
+                                            action="/professor/excluir-questao/<%= questao.id_questao %>?_method=DELETE"
+                                            method="POST">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                        </form>
+                                    </div>
+                                    </div>
+
+
+
+                                </td>
+
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Antes do fechamento do </main> -->
+            <nav aria-label="Navegação">
+                <ul class="pagination">
+                    <% if (page> 1) { %>
+                        <li class="page-item"><a class="page-link" href="?page=1">Primeira</a></li>
+                        <li class="page-item"><a class="page-link" href="?page=<%= page - 1 %>">Anterior</a></li>
+                        <% } %>
+                            <% for(let i=1; i <=totalPages; i++) { %>
+                                <li class="page-item <%= page == i? 'active' : '' %>">
+                                    <a class="page-link" href="?page=<%= i %>">
+                                        <%= i %>
+                                    </a>
+                                </li>
+                                <% } %>
+                                    <% if (page < totalPages) { %>
+                                        <li class="page-item"><a class="page-link"
+                                                href="?page=<%= page + 1 %>">Próxima</a></li>
+                                        <li class="page-item"><a class="page-link"
+                                                href="?page=<%= totalPages %>">Última</a></li>
+                                        <% } %>
+                </ul>
+            </nav>
+
+
+            <a href="/usuario/inicioLogado">Voltar para home</a>
+            <link rel="stylesheet" href="/css/global.css">
+     
+
+        <!--========== MAIN JS ==========-->
+        <script src="/js/main.js"></script>
+        <script src="/js/quillContentHtmlTable.js"></script>
+
+        <script>
+            function confirmDelete(questaoId) {
+                if (confirm("Tem certeza que deseja excluir esta questão? Esta ação não pode ser desfeita.")) {
+                    document.getElementById(`deleteForm${questaoId}`).submit();
+                }
+            }
+
+        </script>
+</body>
+
+</html>

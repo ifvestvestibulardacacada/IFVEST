@@ -319,6 +319,23 @@ const symbolButtons = [
         button: document.querySelector('#parentheses-matrix-btn'),
         value: '\\begin{pmatrix}a & b \\\\ c & d\\end{pmatrix} '
     },
+    
+    {
+        button: document.querySelector('#matrix-3x3-btn'),
+        value: '\\begin{pmatrix}a & b & c \\\\ d & e & f \\\\ g & h & i\\end{pmatrix} '
+    },
+    {
+        button: document.querySelector('#matrix-4x4-btn'),
+        value: '\\begin{pmatrix}a & b & c & d \\\\ e & f & g & h \\\\ i & j & k & l \\\\ m & n & o & p\\end{pmatrix} '
+    },
+    {
+        button: document.querySelector('#matrix-nxn-btn'),
+        value: '\\begin{pmatrix}a_{11} & a_{12} & \\cdots & a_{1n} \\\\ a_{21} & a_{22} & \\cdots & a_{2n} \\\\ \\vdots & \\vdots & \\ddots & \\vdots \\\\ a_{n1} & a_{n2} & \\cdots & a_{nn}\\end{pmatrix} '
+    },
+    {
+        button: document.querySelector('#linear-system-btn'),
+        value: '\\begin{cases} a_{1}x + b_{1}y = c1 \\\\ a_{2}x + b_{2}y = c2\\end{cases}  '
+    },
     {
         button: document.querySelector('#sin-btn'),
         value: '\\sin '

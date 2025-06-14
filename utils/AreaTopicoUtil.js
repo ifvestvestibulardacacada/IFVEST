@@ -7,8 +7,8 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
     const questao = await Questões.findByPk(idQuestao, {
       include: [{
         model: Topico,
-        as: 'Topicos',
-        attributes: ['id']
+        as: 'Topico',
+        attributes: ['id_topico']
       }]
     });
 
@@ -17,22 +17,22 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
       throw new Error('Questão não encontrada');
     }
 
-    const topicosIdsAtuais = questao.Topicos.map(topico => topico.id);
+    const topicosIdsAtuais = questao.Topico.map(topico => topico.id_topico);
 
     // Remover tópicos que não estão mais selecionados
     await questao.removeTopicos(topicosIdsAtuais);
 
     // Adicionar novos tópicos selecionados
-    if (areaId && areaId !== questao.areaId) {
+    if (areaId && areaId !== questao.id_area) {
       // Atualizar a área da questão
       await Questões.update({
-        areaId: areaId,
+        id_area: areaId,
       }, {
-        where: { id: idQuestao }
+        where: { id_questao: idQuestao }
       });
     }
 
-    await questao.addTopicos(topicosSelecionados);
+    await questao.addTopico(topicosSelecionados);
   } catch (error) {
     console.error('Erro ao atualizar relação de tópicos:', error);
     throw error;

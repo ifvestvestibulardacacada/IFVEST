@@ -3,18 +3,16 @@
   /** @type {import('sequelize-cli').Migration} */
   module.exports = {
     async up (queryInterface, Sequelize) {
-      await queryInterface.createTable('areas', {
-        id: {
+      await queryInterface.createTable('Area', {
+        id_area: {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true,
           allowNull: false
         },
-        area: {
-          type: Sequelize.ENUM({
-            values: ['Matemática', 'Português', 'História', 'Geografia', 'Ciências', 'Artes', 'Informática', 'Química', 'Física', 'Biologia', 'Filosofia', 'Sociologia', 'Educação Física', 'Língua Estrangeira']
-          }),
-          allowNull: true,
+        nome: {
+          type: Sequelize.STRING,
+          allowNull: false,
         },
         descricao: {
           type: Sequelize.STRING,
@@ -40,7 +38,7 @@
     },
 
     async down (queryInterface, Sequelize) {
-      await queryInterface.dropTable("areas");
+      await queryInterface.dropTable("Area");
       /**
        * Add reverting commands here.
        *

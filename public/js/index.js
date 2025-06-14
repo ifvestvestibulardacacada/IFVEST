@@ -40,6 +40,8 @@ const comparisonSection = document.querySelector("#comparison-section")
 const comparisonSectionButtons = document.querySelectorAll("#comparison-section button")
 const hiddenComparisonSymbols = document.querySelector("#hidden-comparison-symbols")
 
+
+
 /// Editor event listeners ///////////////////////////////////////////////////////////////////
 equationInput.addEventListener('keyup', () => {
     equationInput.value = equationInput.value.replaceAll('*', '⋅')
@@ -219,4 +221,5 @@ symbolButtons.forEach(element => {
         MathJax.Hub.Typeset()
     })
 })
+
 

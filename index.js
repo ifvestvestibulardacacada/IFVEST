@@ -3,7 +3,7 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
-const { secure_pass } = require('./midlewares/sessionMidleware');
+const { secure_pass } = require('./middleware/sessionMidleware');
 const sessionOptions = require('./utils/sessionConfig');
 const { usuarios, simulados, inicio, professor, uploads } = require('./routes');
 const path = require('path');
@@ -15,38 +15,50 @@ app.use(bodyParser.json());
 
 app.use(session(sessionOptions));
 
-// Configuração do Helmet com CSP personalizado
-app.use(helmet({
-    contentSecurityPolicy: {
-        directives: {
-            defaultSrc: ["'self'"],
-            scriptSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                "'unsafe-eval'",
-                "https://cdn.jsdelivr.net",
-                "https://cdnjs.cloudflare.com",
-                "https://cdn-uicons.flaticon.com"
-            ],
-            styleSrc: [
-                "'self'",
-                "'unsafe-inline'",
-                "https://cdn.jsdelivr.net",
-                "https://cdnjs.cloudflare.com",
-                "https://cdn-uicons.flaticon.com"
-            ],
-            imgSrc: ["'self'", "data:", "https:"],
-            fontSrc: ["'self'", "https:", "data:"],
-            connectSrc: ["'self'"],
-            frameSrc: ["'self'"],
-            objectSrc: ["'none'"],
-            mediaSrc: ["'self'"],
-            workerSrc: ["'self'"]
-        }
-    },
-    crossOriginEmbedderPolicy: false,
-    crossOriginResourcePolicy: { policy: "cross-origin" }
-}));
+
+// app.use(helmet({
+//     contentSecurityPolicy: {
+//         directives: {
+//             defaultSrc: ["'self'"],
+//             scriptSrc: [
+//                 "'self'",
+//                 "'unsafe-inline'",
+//                 "'unsafe-eval'",
+//                 "https://cdn.jsdelivr.net",
+//                 "https://cdnjs.cloudflare.com",
+//                 "https://cdn-uicons.flaticon.com",
+//                 "https://code.jquery.com",
+//                 "https://unpkg.com",
+//                 "'self' js/"
+//             ],
+//             scriptSrcAttr: ["'self'", "'unsafe-inline'"], //
+//             styleSrc: [
+//                 "'self'",
+//                 "'unsafe-inline'",
+//                 "https://cdn.jsdelivr.net",
+//                 "https://cdnjs.cloudflare.com",
+//                 "https://cdn-uicons.flaticon.com",
+//                 "https://fonts.googleapis.com"
+//             ],
+//             fontSrc: [
+//                 "'self'",
+//                 "https:",
+//                 "data:",
+//                 "https://fonts.gstatic.com"
+//             ],
+//             imgSrc: ["'self'", "data:", "https:"],
+//             connectSrc: ["'self'"],
+//             frameSrc: ["'self'"],
+//             objectSrc: ["'none'"],
+//             mediaSrc: ["'self'"],
+//             workerSrc: ["'self'"],
+//             formAction: ["'self'"],
+//             frameAncestors: ["'self'"]
+//         }
+//     },
+//     crossOriginEmbedderPolicy: false,
+//     crossOriginResourcePolicy: { policy: "cross-origin" }
+// }));
 
 
 

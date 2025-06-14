@@ -1,7 +1,8 @@
 
 const { Router } = require('express');
 
-
+const validateRequest = require('../middleware/validateRequest');
+const { simuladoSchemas } = require('../validations/schemas');
 
 const { Render } = require("../modules/Render")
 const { Database } = require("../modules/Database")
@@ -26,5 +27,6 @@ roteador.patch('/:simuladoId/editar', Database.simulados.edit); // ! EditarSimul
 
 //delete
 roteador.delete('/:simuladoId/remover-questoes', Database.simulados.removeQuestion ); // ! RemoveQuestoesController
+roteador.delete ('/:simuladoId/excluir-simulado', Database.simulados.delete);
 
 module.exports = roteador;

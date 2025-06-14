@@ -1,7 +1,7 @@
 const { Area } = require('../models');
-const { Simulados } = require('../models');
+const { Simulado } = require('../models');
 const { Topico } = require('../models');
-const { Questões } = require('../models');
+const { Questao } = require('../models');
 const { Opcao } = require('../models');
 const { Usuario } = require('../models');
 const { Resposta } = require('../models');
@@ -50,13 +50,13 @@ class Render {
                     }]
 
                 })
-                const questao = await Questões.findByPk(id, {
+                const questao = await Questao.findByPk(id, {
                     include: [{
                         model: Opcao,
-                        as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+                        as: 'Opcao' // Certifique-se de que este alias corresponda ao definido na associação
                     }, {
                         model: Topico,
-                        as: 'Topicos'
+                        as: 'Topico'
                     }]
                 });
 
@@ -66,7 +66,7 @@ class Render {
 
                 const Opcoes = await Opcao.findAll({
                     where: {
-                        questao_id: questao.id
+                        id_questao: questao.id_questao
                     },
                     order: [['alternativa', 'ASC']] // Ordena as opções pela coluna 'alternativa' em ordem ascendente
                 });
@@ -83,7 +83,7 @@ class Render {
                 req.session.errorMessage = null;
 
                 // res.send(JSON.stringify(questao))
-                res.render('professor/editar-questao', { questao, Topicos, Areas, errorMessage, Opcoes, correta, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('professor/editar_questao', { questao, Topicos, Areas, errorMessage, Opcoes, correta, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (error) {
                 console.error(error);
                 res.status(500).send('Erro ao buscar questão');
@@ -98,30 +98,30 @@ class Render {
             const imagemPerfil = req.session.imagemPerfil;
             const usuarioId = req.session.userId;
             const { titulo, areaId, topicosSelecionados, pergunta } = req.query; // Adiciona 'pergunta' aos parâmetros recuperados
-            const limit = 10; // Número de questões por página
+            const limit = 10; // Número de Questao por página
             const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
             const offset = (page - 1) * limit;
 
             try {
-                let questoes = await Questões.findAll({
+                let questoes = await Questao.findAll({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,
                     },
                     include: [{
                         model: Area,
                         as: 'Area'
                     }, {
                         model: Topico,
-                        as: 'Topicos'
+                        as: 'Topico'
                     }],
                     limit: limit,
                     offset: offset,
                 });
 
 
-                const questoesCount = await Questões.count({
+                const questoesCount = await Questao.count({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,
                     },
                 });
 
@@ -136,21 +136,21 @@ class Render {
                     }]
                 });
 
-                // Filtrar questões usando JavaScript
+                // Filtrar Questao usando JavaScript
                 let questoesFiltradas = questoes; // Use 'questoes' em vez de 'questoesDisponiveis'
                 if (titulo) {
                     questoesFiltradas = questoes.filter(questao => questao.titulo.toLowerCase().includes(titulo.toLowerCase()));
                 }
                 if (areaId && areaId !== "") {
-                    questoesFiltradas = questoes.filter(questao => questao.areaId === Number(areaId));
+                    questoesFiltradas = questoes.filter(questao => questao.id_area === Number(areaId));
                 }
                 if (topicosSelecionados && topicosSelecionados !== "") {
                     // Conversão de topicosSelecionados para Array de IDs
                     const topicosIds = Array.isArray(topicosSelecionados) ? topicosSelecionados : topicosSelecionados.split(',').map(id => parseInt(id));
                     questoesFiltradas = questoes.filter(questao => {
                         // Garante que questao.topicos seja um array
-                        const topicos = Array.isArray(questao.Topicos) ? questao.Topicos : [];
-                        return topicos.some(topico => topicosIds.includes(topico.id));
+                        const topicos = Array.isArray(questao.Topico) ? questao.Topico : [];
+                        return topicos.some(topico => topicosIds.includes(topico.id_topico));
                     });
                 }
                 if (pergunta) {
@@ -164,7 +164,7 @@ class Render {
                 }
 
                 req.session.errorMessage = null;
-                res.status(200).render('professor/minhas-questoes', { questoes: questoesFiltradas, totalPages, page, Areas, topicos, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.status(200).render('professor/minhas_questoes', { questoes: questoesFiltradas, totalPages, page, Areas, topicos, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (err) {
                 console.error(err.message)
                 req.session.destroy();
@@ -192,7 +192,7 @@ class Render {
                 })
 
 
-                // Mapeamento dos tipos de questões aos tipos de simulados
+                // Mapeamento dos tipos de Questao aos tipos de simulados
                 const tipoSimuladoMap = {
                     "objetiva": ['ALEATORIO', 'OBJETIVO'],
                     "dissertativa": ['DISSERTATIVO', 'ALEATORIO']
@@ -204,9 +204,9 @@ class Render {
                 }
 
                 // Consulta todos os simulados do usuário, filtrando por tipo
-                const simulados = await Simulados.findAll({
+                const simulados = await Simulado.findAll({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,
                         tipo: {
                             [Op.in]: tipoSimuladoMap[tipo]
                         }
@@ -221,7 +221,7 @@ class Render {
                 req.session.errorMessage = null;
 
                 // Retorna os simulados filtrados
-                res.status(200).render('professor/criar-questao', { Areas, tipo, simulados, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.status(200).render('professor/criar_questao', { Areas, tipo, simulados, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (error) {
                 console.error(error)
 
@@ -242,11 +242,11 @@ class Render {
                 const limit = 10;
                 const offset = (page - 1) * limit;
 
-                const simulado = await Simulados.findOne({
-                    where: { id: simuladoId },
+                const simulado = await Simulado.findOne({
+                    where: { id_simulado: simuladoId },
                     include: [{
-                        model: Questões,
-                        as: 'Questões'
+                        model: Questao,
+                        as: 'Questao'
                     }]
                 });
 
@@ -271,20 +271,20 @@ class Render {
 
                 const whereClause = tipoQuestao ? { tipo: { [Op.eq]: tipoQuestao } } : {};
 
-                todasQuestoes = await Questões.findAll({
+                todasQuestoes = await Questao.findAll({
                     include: [
                         {
                             model: Topico,
-                            as: 'Topicos',
+                            as: 'Topico',
                             through: { attributes: [] },
                         },
                     ],
                     where: whereClause,
                 });
 
-                const questoesJaAssociadas = simulado.Questões.map(q => q.id);
+                const questoesJaAssociadas = simulado.Questao.map(q => q.id_questao);
                 //
-                const questoesDisponiveis = todasQuestoes.filter(q => !questoesJaAssociadas.includes(q.id));
+                const questoesDisponiveis = todasQuestoes.filter(q => !questoesJaAssociadas.includes(q.id_questao));
 
                 //filtros
                 let questoesFiltradas = questoesDisponiveis;
@@ -295,14 +295,14 @@ class Render {
                 }
                 // filtro de area
                 if (areaId && areaId !== "") {
-                    questoesFiltradas = questoesFiltradas.filter(questao => questao.areaId === Number(areaId));
+                    questoesFiltradas = questoesFiltradas.filter(questao => questao.id_area === Number(areaId));
                 }
                 // filtro de topicos
                 if (topicosSelecionados && topicosSelecionados !== "") {
-                    const topicosIds = Array.isArray(topicosSelecionados) ? topicosSelecionados : topicosSelecionados.split(',').map(id => parseInt(id));
+                    const topicosIds = Array.isArray(topicosSelecionados) ? topicosSelecionados : topicosSelecionados.split(',').map(id=> parseInt(id));
                     questoesFiltradas = questoesFiltradas.filter(questao => {
-                        const topicos = Array.isArray(questao.Topicos) ? questao.Topicos : [];
-                        return topicos.some(topico => topicosIds.includes(topico.id));
+                        const topicos = Array.isArray(questao.Topico) ? questao.Topico : [];
+                        return topicos.some(topico => topicosIds.includes(topico.id_topico));
                     });
                 }
 
@@ -313,8 +313,8 @@ class Render {
 
                 const questoesPorArea = {};
 
-                simulado.Questões.forEach(q => {
-                    const areaId = q.areaId;
+                simulado.Questao.forEach(q => {
+                    const areaId = q.id_area;
                     if (!questoesPorArea[areaId]) {
                         questoesPorArea[areaId] = 0;
                     }
@@ -328,7 +328,7 @@ class Render {
 
                 req.session.errorMessage = null;
 
-                res.render('simulado/associar-pergunta-simulado', { simulado, questoes, page, totalPages, Areas, topicos, questoesPorArea, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('simulado/associar_pergunta_simulado', { simulado, questoes, page, totalPages, Areas, topicos, questoesPorArea, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (error) {
                 console.error(error);
                 res.status(500).send('Erro ao carregar formulário de associação de pergunta');
@@ -345,7 +345,7 @@ class Render {
 
             req.session.errorMessage = null;
 
-            res.render('simulado/criar-simulado', { errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+            res.render('simulado/criar_simulado', { errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
         },
         editarSimulado: async (req, res) => {
             const simuladoId = req.params.id
@@ -353,8 +353,8 @@ class Render {
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
             try {
-                const simulado = await Simulados.findOne({
-                    where: { id: simuladoId },
+                const simulado = await Simulado.findOne({
+                    where: { id_simulado: simuladoId },
                 });
 
                 if (!simulado) {
@@ -367,7 +367,7 @@ class Render {
                 }
                 req.session.errorMessage = null;
 
-                res.render('simulado/editar-simulado', { simulado, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('simulado/editar_simulado', { simulado, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (err) {
                 return res.status(500).json({ error: err.message });
             }
@@ -380,13 +380,13 @@ class Render {
                 const simuladoId = req.params.simuladoId;
                 let errorMessage = req.session.errorMessage;
 
-                const simulado = await Simulados.findByPk(simuladoId, {
+                const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
-                        model: Questões,
-                        as: 'Questões', // Certifique-se de que este alias corresponda ao definido na associação
+                        model: Questao,
+                        as: 'Questao', // Certifique-se de que este alias corresponda ao definido na associação
                         include: [{
                             model: Opcao,
-                            as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+                            as: 'Opcao' // Certifique-se de que este alias corresponda ao definido na associação
                         },
                         ]
                     }],
@@ -408,7 +408,7 @@ class Render {
                 res.status(500).send('Erro ao buscar perguntas da prova.');
             }
         },
-         gabarito: async (req, res) => {
+        gabarito: async (req, res) => {
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
@@ -417,13 +417,13 @@ class Render {
             let respostasDissertativas = [];
 
             try {
-                const simulado = await Simulados.findByPk(simuladoId, {
+                const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
-                        model: Questões,
-                        as: 'Questões',
+                        model: Questao,
+                        as: 'Questao',
                         include: [{
                             model: Opcao,
-                            as: 'Opcoes',
+                            as: 'Opcao',
                             // Inclui apenas as opções corretas
                         },
                         ]
@@ -431,27 +431,26 @@ class Render {
                 })
 
 
-                const questoesComOpcoesCorretas = simulado.Questões;
+                const questoesComOpcoesCorretas = simulado.Questao;
 
-              
+
                 const respostasDoUsuario = await Resposta.findAll({
                     where: {
-                        usuarioId: userId,
-                        questaoId: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id) }
+                        id_usuario: userId,
+                        id_questao: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id_questao) }
                     },
                     include: [{
                         model: Opcao,
-                        as: 'opcao',
+                        as: 'Opcao',
                         required: true
                     }],
                     order: [['createdAt', 'DESC']],
                 });
-
-                if (simulado.tipo !== 'OBJETIVO') {
+              if (simulado.tipo !== 'OBJETIVO') {
                     respostasDissertativas = await Resposta.findAll({
                         where: {
-                            usuarioId: userId,
-                            questaoId: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id) },
+                            id_usuario: userId,
+                            id_questao: { [Op.in]: questoesComOpcoesCorretas.map(q => q.id_questao) },
                             resposta: { [Op.ne]: null }
                         },
                         order: [['createdAt', 'DESC']],
@@ -493,19 +492,19 @@ class Render {
                     return res.status(400).send('ID de simulado inválido');
                 }
 
-                const simulado = await Simulados.findByPk(simuladoId, {
+                const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
-                        model: Questões,
-                        as: 'Questões', // Certifique-se de que este alias corresponda ao definido na associação
+                        model: Questao,
+                        as: 'Questao', // Certifique-se de que este alias corresponda ao definido na associação
                         include: [{
                             model: Opcao,
-                            as: 'Opcoes' // Certifique-se de que este alias corresponda ao definido na associação
+                            as: 'Opcao' // Certifique-se de que este alias corresponda ao definido na associação
                         },
                         ]
                     }],
                 });
 
-                res.render('prova/template-prova', { simulado, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('prova/template_prova', { simulado, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (error) {
                 console.error('Erro ao gerar PDF:', error);
                 res.status(500).send('Erro ao gerar o PDF');
@@ -522,8 +521,8 @@ class Render {
                 const limit = 10;
                 const offset = (page - 1) * limit;
 
-                let allSimulados = await Simulados.findAll({
-                    where: { usuarioId: idUsuario },
+                let allSimulados = await Simulado.findAll({
+                    where: { id_usuario: idUsuario },
                     order: [['createdAt', 'DESC']]
                 });
 
@@ -544,7 +543,7 @@ class Render {
                 }
                 req.session.errorMessage = null;
 
-                res.render('simulado/meus-simulados', { simulados: simuladosPaginated, currentPage: page, totalPages, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('simulado/meus_simulados', { simulados: simuladosPaginated, currentPage: page, totalPages, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (error) {
                 console.error(error);
                 res.status(500).send('Ocorreu um erro ao recuperar os questionários.');
@@ -561,12 +560,12 @@ class Render {
                 const limit = 10;
                 const offset = (page - 1) * limit;
 
-                const simulado = await Simulados.findOne({
-                    where: { id: simuladoId },
+                const simulado = await Simulado.findOne({
+                    where: { id_simulado: simuladoId },
                     include: [
                         {
-                            model: Questões,
-                            as: 'Questões', through: { attributes: [] }
+                            model: Questao,
+                            as: 'Questao', through: { attributes: [] }
                         }
                     ]
                 });
@@ -575,14 +574,14 @@ class Render {
                     throw new Error('Simulado não encontrado');
                 }
 
-                const questaoIds = simulado.Questões && simulado.Questões.length > 0 ? simulado.Questões.map(questao => questao.id) : [];
+                const questaoIds = simulado.Questao && simulado.Questao.length > 0 ? simulado.Questao.map(questao => questao.id_questao) : [];
 
-                const todasQuestoes = await Questões.findAll({
-                    where: { id: { [Op.in]: questaoIds } },
+                const todasQuestoes = await Questao.findAll({
+                    where: { id_questao: { [Op.in]: questaoIds } },
                     include: [{
-                        model: Simulados,
-                        as: 'Simulados',
-                        where: { id: simuladoId },
+                        model: Simulado,
+                        as: 'Simulado',
+                        where: { id_simulado: simuladoId },
                         through: { attributes: [] }
                     }],
                     limit: limit,
@@ -594,12 +593,12 @@ class Render {
                 if (titulo) {
                     questoes = todasQuestoes.filter(questao => questao.titulo.toLowerCase().includes(titulo.toLowerCase()));
                 }
-                const totalQuestoes = await Questões.count({
-                    where: { id: { [Op.in]: questaoIds } },
+                const totalQuestoes = await Questao.count({
+                    where: { id_questao: { [Op.in]: questaoIds } },
                     include: [{
-                        model: Simulados,
-                        as: 'Simulados',
-                        where: { id: simuladoId },
+                        model: Simulado,
+                        as: 'Simulado',
+                        where: { id_simulado: simuladoId },
                         through: { attributes: [] }
                     }]
                 });
@@ -613,7 +612,7 @@ class Render {
 
                 req.session.errorMessage = null;
 
-                res.render('simulado/remover-questoes', { simulado: simulado, questoes: questoes, page: page, totalPages: totalPages, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('simulado/remover_questoes', { simulado: simulado, questoes: questoes, page: page, totalPages: totalPages, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (error) {
                 console.error('Erro ao carregar o formulário de edição do simulado:', error);
                 res.status(500).send('Erro ao carregar o formulário de edição do simulado.');
@@ -626,16 +625,16 @@ class Render {
                 const nomeUsuario = req.session.nomeUsuario;
                 const imagemPerfil = req.session.imagemPerfil;
 
-                const todosSimulados = await Simulados.findAll({
+                const todosSimulados = await Simulado.findAll({
                     where: {
-                        '$Questões.id$': {
+                        '$Questao.id_questao$': {
                             [Op.not]: null
                         },
-                        '$Usuario.perfil$': 'PROFESSOR'
+                        '$Usuario.tipo_perfil$': 'PROFESSOR'
                     },
                     include: [{
-                        model: Questões,
-                        as: 'Questões'
+                        model: Questao,
+                        as: 'Questao'
                     }, {
                         model: Usuario,
                         as: 'Usuario',
@@ -683,7 +682,7 @@ class Render {
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
             const usuarioId = req.session.userId;
-            const limit = 10; // Número de questões por página
+            const limit = 10; // Número de Questao por página
             const { materia } = req.query;
             const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
             const offset = (page - 1) * limit;
@@ -693,7 +692,7 @@ class Render {
                 // Dentro do bloco try da rota '/questoes'
                 const topicosCount = await Topico.count({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,
                     },
                 });
 
@@ -701,17 +700,17 @@ class Render {
 
                 const topicosSemFiltro = await Topico.findAll({
                     where: {
-                        usuarioId: usuarioId,
+                        id_usuario: usuarioId,  
                     },
                     limit: limit,
                     offset: offset,
                 });
 
                 if (materia) {
-                    topicos = topicosSemFiltro.filter(topico => topico.materia.toLowerCase().includes(materia.toLowerCase()));
-                    console.log(topicos)
+                    topicos = topicosSemFiltro.filter(topico => topico.nome.toLowerCase().includes(materia.toLowerCase()));
+                    
                 } else {
-                    topicos = topicosSemFiltro
+                    topicos = topicosSemFiltro;
                 }
                 let errorMessage = req.session.errorMessage;
 
@@ -720,8 +719,29 @@ class Render {
                 }
 
                 req.session.errorMessage = null;
-                res.status(200).render('professor/meus-topicos', { topicos, totalPages, page, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.status(200).render('professor/meus_topicos', { topicos, totalPages, page, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
 
+            } catch (err) {
+                console.error(err.message)
+                req.sesssion.destroy();
+                res.status(500).redirect('/usuario/inicioLogado');
+            };
+        },
+        criarTopico: async (req, res) => {
+            try {
+                let errorMessage = req.session.errorMessage;
+                const perfilUsuario = req.session.perfil;
+                const nomeUsuario = req.session.nomeUsuario;
+                const imagemPerfil = req.session.imagemPerfil;
+
+                const Areas = await Area.findAll({
+                    include: [{
+                        model: Topico,
+                        as: 'Topico' // Ajuste conforme necessário, dependendo de como você configurou a associação
+                    }]
+                });
+
+                res.status(200).render('professor/criar_topicos', { Areas, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (err) {
                 console.error(err.message)
                 req.sesssion.destroy();
@@ -736,23 +756,23 @@ class Render {
                 const perfilUsuario = req.session.perfil;
                 const nomeUsuario = req.session.nomeUsuario;
                 const imagemPerfil = req.session.imagemPerfil;
-        
+
                 if (!req.session.userId) {
                     throw new Error('Você precisa estar logado para acessar esta página.');
                 }
                 const usuario = await Usuario.findByPk(req.session.userId);
-        
+
                 if (!usuario) {
                     throw new Error('Usuário não encontrado.');
                 }
-        
-        
+
+
                 if (errorMessage === null) {
                     errorMessage = " ";
                 }
-        
+
                 req.session.errorMessage = null;
-                res.render('usuario/editar-usuario', { usuario, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil  });
+                res.render('usuario/editar_usuario', { usuario, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (err) {
                 console.error(err)
                 res.redirect('/login');
@@ -764,13 +784,16 @@ class Render {
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
             const id = req.session.userId;
+
+            console.log(id)
             try {
                 const usuario = await Usuario.findByPk(id);
+                console.log(usuario)
 
                 if (!usuario) {
                     throw new Error("Usuario nao encontrado")
                 }
-                res.status(200).render('usuario/inicio-logado', { nomeUsuario, perfilUsuario, imagemPerfil });
+                res.status(200).render('usuario/inicio_logado', { nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (err) {
                 console.error(err)
                 req.session.destroy();
@@ -800,7 +823,7 @@ class Render {
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
-            res.status(200).render('desenvolvedores/sobreNos', {nomeUsuario, perfilUsuario, imagemPerfil});
+            res.status(200).render('desenvolvedores/sobre_nos', { nomeUsuario, perfilUsuario, imagemPerfil });
         }
     }
 }

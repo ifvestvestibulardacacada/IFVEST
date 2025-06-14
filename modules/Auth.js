@@ -29,18 +29,12 @@ class Auth{
                 throw new Error("Usuario ou Senha invalidos");
             }
 
-            console.log(`
-                    SESSAO DO USUARIO AQUI
-
-                    ${JSON.stringify(req.session)}
-
-                `)
     
             req.session.login = true;
-            req.session.userId = usuarioEncontrado.id;
-            req.session.perfil = usuarioEncontrado.perfil;
+            req.session.userId = usuarioEncontrado.id_usuario;
+            req.session.perfil = usuarioEncontrado.tipo_perfil;
             req.session.nomeUsuario = usuarioEncontrado.usuario;
-            req.session.imagemPerfil = usuarioEncontrado.imagemPerfil;
+            req.session.imagemPerfil = usuarioEncontrado.imagem_perfil;
             
 
             await new Promise((resolve, reject) => {

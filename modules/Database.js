@@ -1,7 +1,7 @@
 const { Usuario } = require('../models');
-const { Questões } = require('../models');
+const { Questao } = require('../models');
 const { Opcao } = require('../models');
-const { Simulados } = require('../models');
+const { Simulado } = require('../models');
 const { Resposta } = require('../models');
 const { Topico } = require('../models');
 const { removeFileFromUploads } = require('../utils/removeImage')
@@ -16,7 +16,7 @@ class Database {
                 const { id } = req.params;
 
                 // Busca a questão pelo ID
-                const questao = await Questões.findByPk(id);
+                const questao = await Questao.findByPk(id);
 
                 if (!questao) {
                     return res.status(404).send('Questão não encontrada');
@@ -24,17 +24,17 @@ class Database {
 
                 // Exclui as opções da questão
                 await Opcao.destroy({
-                    where: { questao_id: questao.id }
+                    where: { id_questao: questao.id_questao }
                 });
 
                 // Exclui a questão
                 await questao.destroy();
 
-                res.status(200).redirect('/usuario/inicioLogado')
+                res.status(200).redirect('/professor/questoes')
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         },
         register: async (req, res) => {
@@ -42,10 +42,14 @@ class Database {
                 const { titulo, pergunta, areaId, correta, topicosSelecionados, respostasSelecionadas } = req.body;
                 const tipo = req.params.tipo.toUpperCase()
 
+                // validar se o usuario é professor
+                if (req.session.perfil !== 'PROFESSOR') {
+                    throw new Error("Usuario invalido")
+                }
+
                 if (!respostasSelecionadas) {
                     throw new Error("Respostas não pode ser vazio")
                 }
-
 
                 const ArrayRespostas = JSON.parse(respostasSelecionadas);
 
@@ -58,32 +62,31 @@ class Database {
                     descricao: ArrayRespostas[`#opcao${alternativa}`]  // Descrição padrão se não existir
                 }));
 
-                const usuarioId = req.session.userId;
+                const id_usuario = req.session.userId;
+
+                console.log(topicosSelecionados)
 
                 if (!topicosSelecionados) {
                     throw new Error("Selecione pelo menos um tópico")
                 }
 
-
-                const createQuestao = await Questões.create({
-                    pergunta: pergunta,
+                const createQuestao = await Questao.create({
+                    pergunta,
                     titulo,
-                    areaId,
-                    usuarioId,
+                    id_area: areaId,
+                    id_usuario,
                     tipo // Usa o novo ID do vestibular
                 });
 
-
-                await createQuestao.addTopicos(topicosSelecionados)
+                await createQuestao.addTopico(topicosSelecionados)
 
                 for (let opcao of opcoes) {
                     let isTrue = correta === opcao.alternativa ? true : false;
                     await Opcao.create({
-                        questao_id: createQuestao.id,
+                        id_questao: createQuestao.id_questao,
                         descricao: JSON.stringify(opcao.descricao),
                         alternativa: opcao.alternativa,
                         correta: isTrue
-
                     })
                 }
 
@@ -91,13 +94,15 @@ class Database {
             } catch (err) {
                 console.error(err);
                 req.session.errorMessage = err.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         },
         edit: async (req, res) => { // ! Antigo UpdateQuestaoController
             try {
                 const { id, titulo, pergunta, correta, respostasSelecionadas } = req.body;
                 const { areaId, topicosSelecionados } = req.body;
+
+                
 
                 const ArrayRespostas = JSON.parse(respostasSelecionadas)
 
@@ -115,10 +120,10 @@ class Database {
 
                 await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
 
-                const questao = await Questões.findByPk(id, {
+                const questao = await Questao.findByPk(id, {
                     include: [{
                         model: Opcao,
-                        as: 'Opcoes'
+                        as: 'Opcao'
                     }
                     ]
                 });
@@ -127,13 +132,13 @@ class Database {
                     return res.status(404).send('Questão não encontrada');
                 }
 
-                await Questões.update({
+                await Questao.update({
                     titulo: titulo,
                     pergunta: pergunta,
 
 
                 }, {
-                    where: { id: id }
+                    where: { id_questao: id }
                 });
 
                 if (!opcoes) {
@@ -152,14 +157,14 @@ class Database {
                     }
 
                     await Opcao.update(updateData, {
-                        where: { id: opcao.id }
+                        where: { id_opcao: opcao.id_opcao }
                     });
                 }
                 res.redirect('/professor/questoes');
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         },
         addImage: async (req, res) => { // ? Antigo uploads/editorImageUploadController.js
@@ -186,45 +191,22 @@ class Database {
                 const { simuladoId } = req.params;
                 const { selectedQuestionIds } = req.body;
 
-                // Verifica se há IDs selecionados
-                if (!selectedQuestionIds) {
-                    throw new Error('Nenhuma questão selecionada.');
-                }
+                const idsInteiros = selectedQuestionIds.split(',').map(Number);
 
-                // Converte e valida os IDs
-                const idsInteiros = selectedQuestionIds.split(',')
-                    .map(id => parseInt(id.trim()))
-                    .filter(id => !isNaN(id) && id > 0);
+                const simulado = await Simulado.findByPk(simuladoId);
 
-                if (idsInteiros.length === 0) {
-                    throw new Error('IDs de questões inválidos.');
-                }
-
-                // Verifica se o simulado existe
-                const simulado = await Simulados.findByPk(simuladoId);
                 if (!simulado) {
                     throw new Error('Simulado não encontrado.');
                 }
-
-                // Verifica se as questões existem
-                const questoesExistentes = await Questões.findAll({
-                    where: {
-                        id: {
-                            [Op.in]: idsInteiros
-                        }
-                    }
-                });
-
-                if (questoesExistentes.length !== idsInteiros.length) {
-                    throw new Error('Uma ou mais questões selecionadas não existem.');
+                if (!idsInteiros) {
+                    throw new Error('Questões não selecionadas.');
                 }
 
-                // Adiciona as questões ao simulado
-                await simulado.addQuestões(idsInteiros);
+                await simulado.addQuestao(idsInteiros);
 
                 res.redirect(`/simulados/meus-simulados`);
             } catch (error) {
-                console.error('Erro ao adicionar questões:', error);
+                console.error(error);
                 req.session.errorMessage = error.message;
                 res.redirect('back');
             }
@@ -234,13 +216,13 @@ class Database {
                 const { simuladoId } = req.params;
                 const { titulo, descricao, tipo } = req.body;
 
-                const [updated] = await Simulados.update({
+                const [updated] = await Simulado.update({
                     titulo: titulo,
                     descricao: descricao,
                     tipo: tipo
                 }, {
                     where: {
-                        id: simuladoId
+                        id_simulado: simuladoId
                     }
                 });
 
@@ -251,7 +233,7 @@ class Database {
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = err.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         },
         register: async (req, res) => {
@@ -264,10 +246,10 @@ class Database {
             }
 
             try {
-                const simulado = await Simulados.create({
+                const simulado = await Simulado.create({
                     titulo,
                     descricao,
-                    usuarioId: usuarioId,
+                    id_usuario: usuarioId,
                     tipo: tipoformatado
                 });
 
@@ -275,11 +257,11 @@ class Database {
                     throw new Error("Simulado não criado!!! ")
                 }
 
-                res.redirect(`/simulados/${simulado.id}/adicionar-questoes`);
+                res.redirect(`/simulados/${simulado.id_simulado}/adicionar-questoes`);
             } catch (err) {
                 console.error(err);
                 req.session.errorMessage = err.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         },
         removeQuestion: async (req, res) => {
@@ -288,10 +270,10 @@ class Database {
                 const { questoesSelecionadas } = req.body;
 
                 // Primeiro, verifique se o simulado existe
-                const simulado = await Simulados.findByPk(simuladoId, {
+                const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
-                        model: Questões,
-                        as: 'Questões'
+                        model: Questao,
+                        as: 'Questao'
                     }]
                 });
 
@@ -306,11 +288,41 @@ class Database {
                 // Este método é fornecido pelo Sequelize para associações belongsToMany
                 await simulado.removeQuestões(questoesSelecionadas);
 
-                res.redirect(`/simulados/`);
+                res.redirect(`/simulados/meus-simulados`);
             } catch (error) {
                 console.error(error);
-                req.session.errorMessage = err.message;
-                res.redirect('back')
+                req.session.errorMessage = error.message;
+                res.redirect('back');
+            }
+        },
+        delete: async (req, res) => {
+            try {
+                const { simuladoId } = req.params;
+
+                // Primeiro, verifique se o simulado existe
+                const simulado = await Simulado.findByPk(simuladoId, {
+                    include: [{
+                        model: Questao,
+                        as: 'Questao'
+                    }]
+                });
+
+                if (!simulado) {
+                    return res.status(404).send('Simulado não encontrado.');
+                }
+
+
+                // Agora, remova as questões do simulado usando o método removeQuestoes
+                // Este método é fornecido pelo Sequelize para associações belongsToMany
+
+
+                await simulado.destroy()
+
+                res.redirect(`/simulados/meus-simulados`);
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                res.redirect('back');
             }
         },
         submit: async (req, res) => {
@@ -319,15 +331,8 @@ class Database {
             const { simuladoId } = req.params;
             const respostasDissertativas = respostas;
 
-            console.log(`
-                
-                    SESSAO NA SUBMISSAO DE SIMULADO
 
-                    ${JSON.stringify(req.session)}
-                
-                `)
-
-            const simulado = await Simulados.findByPk(simuladoId)
+            const simulado = await Simulado.findByPk(simuladoId)
             try {
                 if (questoes && Object.keys(questoes).length > 0) {
 
@@ -373,30 +378,30 @@ class Database {
 
                 res.status(200).redirect(`/simulados/${simulado.id}/gabarito`)
 
-                
+
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         },
     }
     static topicos = {
         edit: async (req, res) => {
             try {
-                const { id, materia } = req.body;
+                const { id, nome } = req.body;
                 // Encontre o tópico pelo ID
                 const topico = await Topico.findByPk(id);
                 if (!topico) {
                     return res.status(404).send('Tópico não encontrado.');
                 }
                 // Atualize o tópico com a nova matéria
-                await topico.update({ materia });
+                await topico.update({ nome });
                 res.redirect('/professor/topicos');
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         },
         register: async (req, res) => {
@@ -411,9 +416,9 @@ class Database {
 
                 // Cria um novo tópico
                 const novoTopico = await Topico.create({
-                    materia: topico, // Supondo que cada tópico seja uma string
-                    areaId: areaIdTopico, // Corrigido para usar areaIdTopico
-                    usuarioId: usuarioId
+                    nome: topico, // Supondo que cada tópico seja uma string
+                    id_area: areaIdTopico, // Corrigido para usar areaIdTopico
+                    id_usuario: usuarioId
                 });
 
                 // Retorna o novo tópico criado como resposta JSON
@@ -422,7 +427,7 @@ class Database {
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         },
         getAll: async (req, res) => {
@@ -430,7 +435,7 @@ class Database {
 
             try {
                 const topics = await Topico.findAll({
-                    where: { areaId: id },
+                    where: { id_area: id },
                     // Selecione apenas os atributos necessários
                 });
 
@@ -459,8 +464,8 @@ class Database {
                 const usuario = await Usuario.findByPk(idUsuario);
 
                 // Remove a imagem antiga se existir
-                if (usuario.imagemPerfil) {
-                    removeFileFromUploads(usuario.imagemPerfil);
+                if (usuario.imagem_perfil) {
+                    removeFileFromUploads(usuario.imagem_perfil);
                 }
 
                 // Verifica se uma nova imagem foi recebida
@@ -469,10 +474,18 @@ class Database {
                 }
 
                 // Atualiza o banco de dados com a nova imagem
-                await Usuario.update({ imagemPerfil: caminhoImagem }, { where: { id: idUsuario } });
+                await Usuario.update({ imagemPerfil: caminhoImagem }, { where: { id_usuario: idUsuario } });
 
                 // Atualiza a sessão com a nova imagem
                 req.session.imagemPerfil = caminhoImagem;
+
+
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
 
                 // Redireciona para a página de perfil
                 res.status(200).redirect(`/usuario/perfil`);
@@ -491,7 +504,7 @@ class Database {
 
                 await Usuario.destroy({
                     where: {
-                        id: req.params.id
+                        id_usuario: req.params.id
                     }
                 }
                 );
@@ -500,7 +513,7 @@ class Database {
             } catch (err) {
                 console.log(err)
                 req.session.errorMessage = err.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         },
         edit: async (req, res) => {
@@ -508,16 +521,28 @@ class Database {
                 const id = req.session.userId;
                 const idUsuarioParaEditar = Number(req.params.id);
 
+                // Verifica se o usuário está tentando editar seu próprio perfil
                 if (id !== idUsuarioParaEditar) {
                     req.session.destroy();
+                    return res.redirect('/usuario/login');
                 }
 
                 const { senha, nome, usuario, email, novasenha } = req.body;
 
-                if (!nome & !usuario & !email) {
-                    throw new Error('Um dos campos deve ser preenchido.');
+                // Verifica se pelo menos um campo foi preenchido
+                if (!nome && !usuario && !email && !senha && !novasenha) {
+                    throw new Error('Pelo menos um campo deve ser preenchido.');
                 }
 
+                // Objeto para armazenar os campos a serem atualizados
+                const updateFields = {};
+
+                // Flag para verificar se a senha foi alterada
+                let senhaAlterada = false;
+
+                console.log(senha)
+                console.log(novasenha)
+                // Atualização de senha se fornecida
                 if (senha && novasenha) {
                     const usuarioAtual = await Usuario.findByPk(idUsuarioParaEditar);
 
@@ -528,29 +553,51 @@ class Database {
                     const senhaCorreta = await bcrypt.compare(senha, usuarioAtual.senha);
 
                     if (!senhaCorreta) {
-                        throw new Error('A senha ou usuario atual está incorreto.');
+                        throw new Error('A senha atual está incorreta.');
                     }
 
-                    const novaSenhaHash = await bcrypt.hash(novasenha, 10); // Hash da nova senha
+                    updateFields.senha = await bcrypt.hash(novasenha, 10);
 
-                    if (!novaSenhaHash) {
-                        throw new Error('Senha não alterada.');
+                    if (!updateFields.senha) {
+                        throw new Error('Erro ao processar nova senha.');
                     }
 
-                    await Usuario.update({ senha: novaSenhaHash }, { where: { id: idUsuarioParaEditar } });
+                    senhaAlterada = true;
                 }
 
+                // Adiciona campos não vazios ao objeto de atualização
+                if (nome) updateFields.nome = nome;
+                if (usuario) updateFields.usuario = usuario;
+                if (email) updateFields.email = email;
 
-                nome ? await Usuario.update({ nome: nome }, { where: { id: idUsuarioParaEditar } }) : "";
-                usuario ? await Usuario.update({ usuario: usuario }, { where: { id: idUsuarioParaEditar } }) : "";
-                email ? await Usuario.update({ email: email }, { where: { id: idUsuarioParaEditar } }) : "";
+                // Realiza a atualização em uma única chamada se houver campos para atualizar
+                if (Object.keys(updateFields).length > 0) {
+                    await Usuario.update(updateFields, {
+                        where: { id_usuario: idUsuarioParaEditar }
+                    });
 
+                    // Atualiza a sessão com os novos dados
+                    if (nome) {
+                        req.session.nomeUsuario = nome;
+                    }
+                    if (usuario) {
+                        req.session.nomeUsuario = usuario;
+                    }
+                    // Força a sessão a salvar as alterações
+                    await new Promise((resolve) => req.session.save(resolve));
+                }
+
+                // Se a senha foi alterada, desloga o usuário
+                if (senhaAlterada) {
+                    req.session.destroy();
+                    return res.status(200).redirect('/usuario/login?msg=senha-alterada');
+                }
 
                 res.status(200).redirect(`/usuario/perfil`);
             } catch (err) {
                 console.error(err);
                 req.session.errorMessage = err.message;
-                res.redirect('back')
+                res.redirect('back');
             }
         }
     }

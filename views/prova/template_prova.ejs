@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Tamplete gerarPDF - IFVest</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Adicione aqui os links para os estilos CSS necessários -->
+
+   <%- include('../partials/quill_and_uikit') %>
+    <link rel="stylesheet" href="/css/prova/templateprova.css">
+
+</head>
+
+<body>
+    <main>
+        <div class="uk-flex uk-flex-between">
+            <button  id="generate-pdf" class="bbutton">
+                <i class="fas fa-print"></i> Gerar PDF
+          </button>
+            <button type="button" onclick="fecharModal()" aria-label="Close" uk-close ></button>
+ 
+        </div>
+       
+
+        <div class="title-div">
+            <h4><b></b>Teste de questões <%= simulado.tipo %>
+            </h4>
+           
+        </div>
+
+        <form id="questionario" class="form" action="/simulados/responder-prova/<%= simulado.id_simulado %>"
+            method="POST">
+            <div class="questoes-container">
+                <% simulado.Questões.forEach(questao=> { %>
+                    <div class="name-div">
+                        <div class="titulo">
+                            <p>
+                                <%= questao.titulo %>
+
+                            </p>
+                        </div>
+
+                        <div class="name" data-delta='<%= questao.pergunta %>'>
+                            <!-- O conteúdo será inserido via JavaScript -->
+                            <span class="required">*</span>
+                        </div>
+
+                        <% if (questao.tipo==="OBJETIVA" ) { %>
+                           
+                            <% questao.Opcao.forEach((opcao, index)=> { %>
+                                <div class="opcao">
+                                    <label class="letra" for="opcao<%= opcao.id_opcao %>">
+                                        <%= opcao.alternativa %>
+                                    </label>
+                                    <input class="radio-input" type="radio" id="opcao<%= opcao.id_opcao %>"
+                                        name="questoes[<%= questao.id_questao %>]"
+                                        value="<%= questao.id_questao %>-<%= opcao.id_opcao %>">
+                                            <div class="name" data-delta='<%= opcao.descricao %>'>
+                                                  <span class="required">*</span>
+                                            </div>                    
+                                </div>
+                                <% }) %>
+                                    <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
+                                        <textarea name="respostas[questao_<%= questao.id_questao %>]"
+                                            placeholder="Sua resposta"></textarea>
+                                        <% } %>
+                </div>
+                <% }) %>
+            </div>
+        </form>
+
+    </main>
+
+    <!-- Adicione aqui os scripts JS necessários -->
+    <script src="/js/main.js"></script>
+    <script src="/js/quillContentHTML.js"></script>
+    <script>
+        function fecharModal() {
+            parent.document.getElementById('modal-imprimir').style.display = 'none';
+        }
+    </script>
+</body>
+
+
+
+</html>

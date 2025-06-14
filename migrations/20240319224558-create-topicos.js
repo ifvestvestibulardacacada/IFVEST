@@ -3,16 +3,32 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await queryInterface.createTable('topicos', {
-      id: {
+    await queryInterface.createTable('Topico', {
+      id_topico: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
       },
-      materia: {
+      nome: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      id_area: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references:{
+          model: 'Area',
+          key: 'id_area'
+        }
+      },
+      id_usuario: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Usuario', // Nome da tabela referenciada
+          key: 'id_usuario'
+        },
       },
       createdAt:{
         type: Sequelize.DATE,
@@ -34,7 +50,7 @@ module.exports = {
   },
 
   async down (queryInterface, Sequelize) {
-    await queryInterface.dropTable("topicos");
+    await queryInterface.dropTable("Topico");
     /**
      * Add reverting commands here.
      *

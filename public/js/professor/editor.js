@@ -96,7 +96,7 @@ function updateTopicos(Areas) {
 
         const label = document.createElement('label');
         label.htmlFor = 'topico-' + topico.id;
-        label.textContent = topico.materia;
+        label.textContent = topico.nome;
 
         topicosContainer.appendChild(checkbox);
         topicosContainer.appendChild(label);

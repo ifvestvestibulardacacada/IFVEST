@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/prova/googlef2.css">
     <link rel="stylesheet" href="/css/prova/gabarito.css">
-    <%- include('../partials/quillandUIkit') %>
+    <%- include('../partials/quill_and_uikit') %>
 </head>
 
 <body>
@@ -41,23 +41,23 @@
                             <span class="required">*</span>
                         </div>
                         <% if (questao.tipo ==="OBJETIVA" ) { %>
-                        <% const respostaUsuario=respostasUsuario.find(r=> r.questaoId === questao.id); %>
+                        <% const respostaUsuario=respostasUsuario.find(r=> r.id_questao === questao.id_questao); %>
                         <% 
                             // Mapeia as letras para as opções
                             const letras = ['A', 'B', 'C', 'D', 'E'];
                             const opcoesOrdenadas = letras.map(letra => 
-                                questao.Opcoes.find(opcao => opcao.alternativa.startsWith(letra))
+                                questao.Opcao.find(opcao => opcao.alternativa.startsWith(letra))
                             ).filter(opcao => opcao); // Filtra opções que não foram encontradas
                             %>
                         
                         <% opcoesOrdenadas.forEach(opcao=> { %>
                             
-                            <div class="<%= opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-correta' : (!opcao.correta && opcao.id ===  respostaUsuario.opcao.id? 'opcao-incorreta' : '') %>">
+                            <div class="<%= opcao.correta && opcao.id_opcao ===  respostaUsuario.opcao.id_opcao? 'opcao-correta' : (!opcao.correta && opcao.id_opcao ===  respostaUsuario.opcao.id_opcao? 'opcao-incorreta' : '') %>">
                                 <div class="opcao" >
-                                    <label class="letra" for="opcao<%= opcao.id %>">
+                                    <label class="letra" for="opcao<%= opcao.id_opcao %>">
                                         <%= opcao.alternativa %>
                                     </label>
-                                <% if (opcao.id ===  respostaUsuario.opcao.id) { %>
+                                <% if (opcao.id_opcao ===  respostaUsuario.opcao.id_opcao) { %>
                                     <input type="radio" checked>
                                     <% } else { %>
                                         <input type="radio" disabled>
@@ -74,7 +74,7 @@
                             <% } %>
 
                             <% if (questao.tipo !=="OBJETIVA" ) { %>
-                            <% questao.Opcoes.forEach(opcao=> { %>
+                            <% questao.Opcao.forEach(opcao=> { %>
                                 <div class="opcao-correta" disabled>
                                    
                                     <div class="opcao-texto"  data-delta='<%= opcao.descricao %>'>
@@ -84,7 +84,7 @@
                                     </div>    
                                 </div>
                                 <% }) %>
-                                <% const respostaDissertativa = respostasDissertativas.find(r => r.questaoId === questao.id); %>
+                                <% const respostaDissertativa = respostasDissertativas.find(r => r.id_questao === questao.id_questao); %>
                                 <% if (respostaDissertativa) { %>
                                     <div >
                                         <div class="opcao-texto">

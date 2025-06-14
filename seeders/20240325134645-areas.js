@@ -4,32 +4,33 @@ module.exports = {
  up: async (queryInterface, Sequelize) => {
     // Definindo as áreas de estudo para o ENEM e suas descrições
     const areas = [
-      { area: 'Matemática', descricao: 'Descrição para Matemática' },
-      { area: 'Português', descricao: 'Descrição para Português' },
-      { area: 'História', descricao: 'Descrição para História' },
-      { area: 'Geografia', descricao: 'Descrição para Geografia' },
-      { area: 'Ciências', descricao: 'Descrição para Ciências' },
-      { area: 'Artes', descricao: 'Descrição para Artes' },
-      { area: 'Informática', descricao: 'Descrição para Informática' },
-      { area: 'Química', descricao: 'Descrição para Química' },
-      { area: 'Física', descricao: 'Descrição para Física' },
-      { area: 'Biologia', descricao: 'Descrição para Biologia' },
-      { area: 'Filosofia', descricao: 'Descrição para Filosofia' },
-      { area: 'Sociologia', descricao: 'Descrição para Sociologia' },
-      { area: 'Educação Física', descricao: 'Descrição para Educação Física' },
-      { area: 'Língua Estrangeira', descricao: 'Descrição para Língua Estrangeira' }
+      { nome: 'Matemática', descricao: 'Descrição para Matemática' },
+      { nome: 'Português', descricao: 'Descrição para Português' },
+      { nome: 'História', descricao: 'Descrição para História' },
+      { nome: 'Geografia', descricao: 'Descrição para Geografia' },
+      { nome: 'Ciências', descricao: 'Descrição para Ciências' },
+      { nome: 'Artes', descricao: 'Descrição para Artes' },
+      { nome: 'Informática', descricao: 'Descrição para Informática' },
+      { nome: 'Química', descricao: 'Descrição para Química' },
+      { nome: 'Física', descricao: 'Descrição para Física' },
+      { nome: 'Biologia', descricao: 'Descrição para Biologia' },
+      { nome: 'Filosofia', descricao: 'Descrição para Filosofia' },
+      { nome: 'Sociologia', descricao: 'Descrição para Sociologia' },
+      { nome: 'Educação Física', descricao: 'Descrição para Educação Física' },
+      { nome: 'Língua Estrangeira', descricao: 'Descrição para Língua Estrangeira' }
     ];
 
     // Inserindo as áreas no banco de dados usando query raw
     for (const area of areas) {
       await queryInterface.sequelize.query(
-        `INSERT INTO "areas" ("area", "descricao", "createdAt", "updatedAt") VALUES ('${area.area}', '${area.descricao}', NOW(), NOW())`
+        "INSERT INTO `Area` (`nome`, `descricao`, `createdAt`, `updatedAt`) VALUES (?, ?, NOW(), NOW())",
+        { replacements: [area.nome, area.descricao] }
       );
     }
  },
 
  down: async (queryInterface, Sequelize) => {
     // Removendo as áreas inseridas pelo seed
-    await queryInterface.sequelize.query(`DELETE FROM "areas"`);
+    await queryInterface.sequelize.query("DELETE FROM `area`");
  }
 };

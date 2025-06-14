@@ -23,19 +23,22 @@
                     <h1>CADASTRO</h1>
                     <div class="textfield">
                         <label for="usuario">Usuário</label>
-                        <input type="text" name="usuario" placeholder="Usuário">
+                        <input type="text" name="usuario" placeholder="Usuário" maxlength="20">
                     </div>
                     <div class="textfield">
                         <label for="nome">Nome</label>
-                        <input type="text" name="nome" placeholder="Nome">
+                        <input type="text" name="nome" placeholder="Nome" maxlength="50">
                     </div>
                     <div class="textfield">
                         <label for="email">E-mail</label>
-                        <input type="email" name="email" placeholder="e-mail">
+                        <input type="email" name="email" placeholder="e-mail" maxlength="100">
                     </div>
                     <div class="textfield">
                         <label for="senha">Senha</label>
-                        <input type="password" name="senha" placeholder="Senha">
+                        <input type="password" name="senha" id="senha" placeholder="Senha" maxlength="50">
+                        <!-- <div id="password-strength-container" style="margin-top: 10px; height: 8px; background-color: #e0e0e0; border-radius: 4px; width: 100%; overflow: hidden;">
+                            <div id="password-strength" style="height: 100%; width: 0%; border-radius: 4px; transition: all 0.3s ease;"></div>
+                        </div> -->
                     </div>
                     <div class="textfield">
                         <label for="perfil">Perfil</label>
@@ -49,15 +52,18 @@
                             </div>
                             <% } %>
                     </div>
-                    <button class="btn-login">Cadastro</button>
+                    <button class="btn-login" id="btn-cadastro" >Cadastro</button>
                     <a href="/login" class="Cadastro-Login">Já possui cadastro? clique aqui</a>
                 </div>
             </div>
         </form>
     </div>
+    <script src="/js/validate.js"></script>
+    <!-- <script src="/js/usuario/cadastro.js">      -->
+    </script>
+
+  
 
 </body>
-
-
 
 </html>

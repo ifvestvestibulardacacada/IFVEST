@@ -1,6 +1,3 @@
-
-
-
 document.getElementById('areaId').addEventListener('change', function () {
     var searchContainer = document.getElementById('topicosSearchContainer');
     if (this.value === '') {
@@ -41,6 +38,96 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+// Função para inicializar os editores de edição
+// function initializeEditQuestionEditors(questao, opcoes) {
+//     const loadingContainer = document.getElementById('loading-container');
+//     const editors = [];
+//     const opcoesIds = [];
+//     const tipo = questao.tipo;
+
+//     const parsedContent = questao.pergunta;
+//     const parsedOpcoes = opcoes;
+//     const deltaContent = JSON.parse(parsedContent);
+
+//     const EDITOR_IDS_OBJETIVA = ['#opcaoA', '#opcaoB', '#opcaoC', '#opcaoD', '#opcaoE'];
+
+//     const quill = initializeQuill('#editor-container', 'editor-open-btn');
+//     quill.setContents(deltaContent);
+
+//     editors.push(quill);
+//     const editorIds = (tipo === 'OBJETIVA') ? ['A', 'B', 'C', 'D', 'E'] : ['A'];
+    
+//     editorIds.forEach(id => {
+//         // Encontre a opção correspondente em parsedOpcoes
+//         const opcao = parsedOpcoes.find(op => op.alternativa === id);
+
+//         // Verifique se a opção foi encontrada
+//         const editorInstance = initializeQuill(`#opcao${id}`, `editor-open-btn${id}`);
+//         if (opcao) {
+//             editorInstance.setContents(JSON.parse(opcao.descricao));
+//             editors.push({ [`#opcao${id}`]: editorInstance });
+//             opcoesIds.push({ [`#opcao${id}`]: opcao.id });
+//         } else {
+//             console.warn(`Opção não encontrada para o ID: ${id}`);
+//         }
+//     });
+
+//     // Função para acessar editores por ID
+//     function acessarEditoresPorId(editorId) {
+//         const editor = editors.find(editor => editor[editorId]);
+//         return editor ? editor[editorId] : null;
+//     }
+//     window.acessarEditorPorId = acessarEditoresPorId;
+//     loadingContainer.style.display = 'none';
+
+//     // Função para recuperar o conteúdo de todos os editores
+//     function getAllContent() {
+//         const contents = {};
+//         editorIds.forEach(id => {
+//             const opcaoId = opcoesIds.find((opcao => opcao[`#opcao${id}`]));
+
+//             const editorInstance = acessarEditorPorId(`#opcao${id}`);
+//             if (editorInstance) {
+//                 const tamanho = editorInstance.getLength();
+//                 if (tamanho > 1) {
+//                     contents[`#opcao${id}`] = { 
+//                         content: editorInstance.getContents(), 
+//                         id: opcaoId[`#opcao${id}`] 
+//                     };
+//                 }
+//             }
+//         });
+
+//         if (Object.keys(contents).length === 0) {
+//             alert("Erro: Nenhum conteúdo encontrado.");
+//         }
+
+//         return contents;
+//     }
+
+//     // Função para enviar o conteúdo do editor
+//     function sendEditorContent() {
+//         const data = getAllContent();
+//         const length = quill.getLength();
+//         const pergunta = length > 1 ? quill.getContents() : alert("A pergunta não pode estar vazia.");
+
+//         if(!data){
+//             alert("A pergunta não pode estar vazia.")
+//         }else{
+//             localStorage.setItem('data', JSON.stringify(data));
+//             document.getElementById('respostasSelecionadas').value = JSON.stringify(data);
+//             document.getElementById('pergunta').value = JSON.stringify(pergunta);
+//         }
+        
+
+//     }
+
+//     // Adicionar event listener ao botão de registro
+//     document.querySelector('.botao-registro').addEventListener('click', sendEditorContent);
+// }
+
+// // Exportar a função para uso global
+// window.initializeEditQuestionEditors = initializeEditQuestionEditors;
 
 
 // Exemplo de uso:
