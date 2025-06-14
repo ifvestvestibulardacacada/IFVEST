@@ -102,10 +102,19 @@ class Database {
                 const { id, titulo, pergunta, correta, respostasSelecionadas } = req.body;
                 const { areaId, topicosSelecionados } = req.body;
 
-                
+                if (!respostasSelecionadas) {
+                    throw new Error("Respostas selecionadas não podem estar vazias");
+                }
 
-                const ArrayRespostas = JSON.parse(respostasSelecionadas)
-
+                let ArrayRespostas;
+                try {
+                    ArrayRespostas = JSON.parse(respostasSelecionadas);
+                    if (typeof ArrayRespostas !== 'object' || ArrayRespostas === null) {
+                        throw new Error("Formato de respostas inválido");
+                    }
+                } catch (parseError) {
+                    throw new Error("Erro ao processar respostas: formato JSON inválido");
+                }
 
                 const numOpcoes = Object.keys(ArrayRespostas).length;
 
@@ -142,7 +151,7 @@ class Database {
                 });
 
                 if (!opcoes) {
-                    throw new Error("Selected answers cannot be empty");
+                    throw new Error("Opcoes selecionadas não pode ser vazia");
                 }
                 for (let opcao of opcoes) {
                     // Inicializa o objeto de atualização
@@ -157,7 +166,7 @@ class Database {
                     }
 
                     await Opcao.update(updateData, {
-                        where: { id_opcao: opcao.id_opcao }
+                        where: { id_opcao: opcao.id }
                     });
                 }
                 res.redirect('/professor/questoes');

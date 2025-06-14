@@ -1,10 +1,10 @@
 const { Topico } = require('../models');
-const { Questões } = require('../models');
+const { Questao } = require('../models');
 
 
 async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
   try {
-    const questao = await Questões.findByPk(idQuestao, {
+    const questao = await Questao.findByPk(idQuestao, {
       include: [{
         model: Topico,
         as: 'Topico',
@@ -20,12 +20,12 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
     const topicosIdsAtuais = questao.Topico.map(topico => topico.id_topico);
 
     // Remover tópicos que não estão mais selecionados
-    await questao.removeTopicos(topicosIdsAtuais);
+    await questao.removeTopico(topicosIdsAtuais);
 
     // Adicionar novos tópicos selecionados
     if (areaId && areaId !== questao.id_area) {
       // Atualizar a área da questão
-      await Questões.update({
+      await Questao.update({
         id_area: areaId,
       }, {
         where: { id_questao: idQuestao }
