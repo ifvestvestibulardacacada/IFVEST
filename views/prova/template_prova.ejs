@@ -32,7 +32,7 @@
         <form id="questionario" class="form" action="/simulados/responder-prova/<%= simulado.id_simulado %>"
             method="POST">
             <div class="questoes-container">
-                <% simulado.Questões.forEach(questao=> { %>
+                <% simulado.Questao.forEach(questao=> { %>
                     <div class="name-div">
                         <div class="titulo">
                             <p>

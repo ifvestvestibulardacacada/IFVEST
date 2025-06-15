@@ -27,7 +27,6 @@ roteador.post('/login',
 	 limiter,
  Auth.login);
 roteador.post('/cadastro', 
-	 
 	Auth.cadastro);
 
 module.exports = roteador;

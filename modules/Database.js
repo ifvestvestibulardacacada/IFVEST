@@ -295,7 +295,7 @@ class Database {
 
                 // Agora, remova as questões do simulado usando o método removeQuestoes
                 // Este método é fornecido pelo Sequelize para associações belongsToMany
-                await simulado.removeQuestões(questoesSelecionadas);
+                await simulado.removeQuestao(questoesSelecionadas);
 
                 res.redirect(`/simulados/meus-simulados`);
             } catch (error) {
@@ -417,6 +417,7 @@ class Database {
             try {
                 const { topico, areaIdTopico } = req.body;
                 const usuarioId = req.session.userId;
+                const referer = req.headers.referer || '';
 
                 // Verifica se os campos obrigatórios estão preenchidos
                 if (!topico || !areaIdTopico || !usuarioId) {
@@ -425,13 +426,20 @@ class Database {
 
                 // Cria um novo tópico
                 const novoTopico = await Topico.create({
-                    nome: topico, // Supondo que cada tópico seja uma string
-                    id_area: areaIdTopico, // Corrigido para usar areaIdTopico
+                    nome: topico,
+                    id_area: areaIdTopico,
                     id_usuario: usuarioId
                 });
 
-                // Retorna o novo tópico criado como resposta JSON
-                return res.status(201).json(novoTopico); // Status 201 para criação bem-sucedida
+                // Verifica a URL de origem e responde adequadamente
+                if (referer.includes('/professor/topicos/criar')) {
+                    return res.redirect('/professor/topicos');
+                } else if (referer.includes('/professor/questoes')) {
+                    return res.status(201).json(novoTopico);
+                }
+
+                // Fallback para qualquer outra origem
+                return res.status(201).json(novoTopico);
 
             } catch (error) {
                 console.error(error);

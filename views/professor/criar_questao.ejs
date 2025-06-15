@@ -44,7 +44,7 @@
                         <button uk-tooltip="title: Clique para adicionar uma equação; pos: top-left" type="button"
                             style="display: none;" id="editor-open-btn"> Adicionar Equação
                         </button>
-
+                        <%- include('../partials/editor_equacao') %>
                         <div id="editor-container" ></div>
 
                         <% if ( tipo==="objetiva" ) { %>
@@ -52,7 +52,7 @@
                                 <% }else{ %>
                                     <%- include('../partials/resposta_dissertativa') %>
                                         <% } %>
-                                            <%- include('../partials/editor_equacao') %>
+                                           
                                                 <textarea id="pergunta" name="pergunta" rows="5" cols="50"
                                                     style="display: none;"> </textarea>
                                                 <textarea id="respostasSelecionadas" name="respostasSelecionadas"

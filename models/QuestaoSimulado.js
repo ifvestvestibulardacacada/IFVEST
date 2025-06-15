@@ -1,5 +1,3 @@
-
-
 // models/perguntas_provas.js
 
 'use strict';
@@ -34,14 +32,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     createdAt: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      defaultValue: sequelize.fn('NOW')
     },
     updatedAt: {
       allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      defaultValue: sequelize.fn('NOW')
     }
   }, {
-    tableName: 'QuestaoSimulado' // Especifique o nome correto da tabela
+    tableName: 'QuestaoSimulado', // Especifique o nome correto da tabela
+    timestamps: true // Adiciona gerenciamento automático de timestamps
   });
 
   return QuestaoSimulado;
