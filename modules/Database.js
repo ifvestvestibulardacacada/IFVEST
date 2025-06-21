@@ -86,9 +86,7 @@ class Database {
                     throw new Error(`Número de opções deve ser entre ${MIN_OPCOES} e ${MAX_OPCOES}`);
                 }
 
-                if (!alternativas.includes(correta)) {
-                    throw new Error('Alternativa correta inválida');
-                }
+    
                 if ((tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
                     (tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))) {
                     throw new Error(`Número de opções INVÁLIDO`);
