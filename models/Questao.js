@@ -22,10 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     titulo: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     pergunta: {
-      type: DataTypes.STRING
+      type: DataTypes.TEXT
     },
     tipo: {
       type: DataTypes.ENUM({

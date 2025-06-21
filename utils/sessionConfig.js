@@ -21,25 +21,6 @@ const sessionOptions = {
 
 };
 
-// Production
-// const sessionOptions = {
-//   name: 'your-custom-session-name', 
-//   secret: 'seuSegredoUltraSecreto', 
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: {
-//     httpOnly: true,        
-//     secure: process.env.NODE_ENV === 'production', 
-//     sameSite: 'lax',      
-//     maxAge: 1000 * 60 * 60, 
-//     path: '/',           
-//     domain: 'seusite.com',
-//     // expires: new Date(Date.now() + 60 * 60 * 1000) 
-//   }
-// };
-
-// module.exports = sessionOptions;
-
 
 
 

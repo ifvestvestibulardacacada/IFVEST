@@ -19,9 +19,7 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
 
     const topicosIdsAtuais = questao.Topico.map(topico => topico.id_topico);
 
-    // Remover tópicos que não estão mais selecionados
-    await questao.removeTopico(topicosIdsAtuais);
-
+    const idTopicos = topicosSelecionados.filter(item => !isNaN(item) && item !== '');
     // Adicionar novos tópicos selecionados
     if (areaId && areaId !== questao.id_area) {
       // Atualizar a área da questão
@@ -32,13 +30,21 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
       });
     }
 
-    await questao.addTopico(topicosSelecionados);
+    await questao.addTopico(idTopicos);
+    await questao.removeTopico(topicosIdsAtuais);
   } catch (error) {
-    console.error('Erro ao atualizar relação de tópicos:', error);
-    throw error;
+    console.error(error);
+    req.session.errorMessage = error.message;
+    await new Promise((resolve, reject) => {
+      req.session.save(err => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+    return res.redirect(req.get('referer') || req.originalUrl);
   }
 }
 
-  module.exports = {
-    atualizarRelacaoTopicos
-  };
+module.exports = {
+  atualizarRelacaoTopicos
+};

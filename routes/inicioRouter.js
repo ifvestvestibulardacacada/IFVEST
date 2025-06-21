@@ -1,7 +1,9 @@
 const { Router } = require('express');
 const { rateLimit } = require('express-rate-limit')
 const { Render } = require("../modules/Render")
-const { Auth } = require("../modules/Auth")
+const { Auth } = require("../modules/Auth");
+const validateRequest = require('../middleware/validateRequest');
+const { authSchemas } = require('../validations/schemas');
 
 const roteador = Router()
 
@@ -25,8 +27,10 @@ roteador.get('/login',  Render.auth.login);
 roteador.post('/logoff', Auth.logout);
 roteador.post('/login',
 	 limiter,
+	 validateRequest(authSchemas.login), //teste schema zod
  Auth.login);
-roteador.post('/cadastro', 
+roteador.post('/cadastro',
+	validateRequest(authSchemas.cadastro), 
 	Auth.cadastro);
 
 module.exports = roteador;

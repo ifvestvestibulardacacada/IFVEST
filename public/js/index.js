@@ -46,7 +46,9 @@ const hiddenComparisonSymbols = document.querySelector("#hidden-comparison-symbo
 equationInput.addEventListener('keyup', () => {
     equationInput.value = equationInput.value.replaceAll('*', '⋅')
     equationPreview.innerHTML = `\\(${equationInput.value}\\)`
-    MathJax.Hub.Typeset()
+    // MathJax.Hub.Typeset()
+    katex.render(equationInput.value, equationPreview, { throwOnError: false })
+
     equationInput.focus();
 
     // MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
@@ -55,7 +57,7 @@ equationInput.addEventListener('keyup', () => {
 clearBtn.addEventListener('click', () => {
     equationPreview.innerHTML = equationInput.value = '';
     equationInput.focus();
-    
+
 })
 
 symbolsBoxBtn.addEventListener('click', () => {
@@ -74,8 +76,8 @@ editorBtn.addEventListener('click', () => {
     symbolsBox.classList.remove('hide');
     equationInput.focus();
     document.getElementById('overlay').style.display = 'block';
-        equationPreview.innerHTML = equationInput.value = '';
-    
+    equationPreview.innerHTML = equationInput.value = '';
+
 })
 opcaoBtnA.addEventListener('click', () => {
     editorId = "#opcaoA"
@@ -83,8 +85,8 @@ opcaoBtnA.addEventListener('click', () => {
     symbolsBox.classList.remove('hide');
     equationInput.focus();
     document.getElementById('overlay').style.display = 'block';
-        equationPreview.innerHTML = equationInput.value = '';
-    
+    equationPreview.innerHTML = equationInput.value = '';
+
 })
 opcaoBtnB.addEventListener('click', () => {
     editorId = "#opcaoB"
@@ -92,8 +94,8 @@ opcaoBtnB.addEventListener('click', () => {
     symbolsBox.classList.remove('hide');
     equationInput.focus();
     document.getElementById('overlay').style.display = 'block';
-        equationPreview.innerHTML = equationInput.value = '';
-    
+    equationPreview.innerHTML = equationInput.value = '';
+
 })
 opcaoBtnC.addEventListener('click', () => {
     editorId = "#opcaoC"
@@ -101,8 +103,8 @@ opcaoBtnC.addEventListener('click', () => {
     symbolsBox.classList.remove('hide');
     equationInput.focus();
     document.getElementById('overlay').style.display = 'block';
-        equationPreview.innerHTML = equationInput.value = '';
-    
+    equationPreview.innerHTML = equationInput.value = '';
+
 })
 opcaoBtnD.addEventListener('click', () => {
     editorId = "#opcaoD"
@@ -110,8 +112,8 @@ opcaoBtnD.addEventListener('click', () => {
     symbolsBox.classList.remove('hide');
     equationInput.focus();
     document.getElementById('overlay').style.display = 'block';
-        equationPreview.innerHTML = equationInput.value = '';
-    
+    equationPreview.innerHTML = equationInput.value = '';
+
 })
 opcaoBtnE.addEventListener('click', () => {
     editorId = "#opcaoE"
@@ -120,7 +122,7 @@ opcaoBtnE.addEventListener('click', () => {
     equationInput.focus();
     document.getElementById('overlay').style.display = 'block';
     equationPreview.innerHTML = equationInput.value = '';
-    
+
 })
 
 /// Sections event listeners //////////////////////////////////////////////////////////////////
@@ -190,15 +192,12 @@ comparisonSection.addEventListener('mouseout', () => {
 })
 
 insertBtn.addEventListener('click', () => {
-    
+
     let editor = acessarEditorPorId(editorId)
-    console.log(editor)
-    var latex = equationPreview.outerHTML;
+    var latex = equationInput.value;
     var range = editor.getSelection(true);
-    editor.deleteText(range.index, range.length);
-    editor.insertEmbed(range.index, 'mathjax', latex);
-    editor.insertText(range.index + range.length + 1, ' ');
-    editor.setSelection(range.index + range.length + 1);
+    editor.insertEmbed(range.index, 'formula', latex, Quill.sources.USER);
+    editor.setSelection(range.index + 1, Quill.sources.SILENT);
     symbolsBox.classList.add('hide');
     editorContainer.classList.add('hide');
     document.getElementById('overlay').style.display = 'none';
@@ -218,8 +217,8 @@ symbolButtons.forEach(element => {
         equationInput.value = `${equationInput.value.substring(0, start_position)}${element.value}${equationInput.value.substring(end_position, equationInput.value.length)}`
         equationInput.focus()
         equationPreview.innerHTML = `\\(${equationInput.value}\\)`
-        MathJax.Hub.Typeset()
+        katex.render(equationInput.value, equationPreview, { throwOnError: false })
+        // MathJax.Hub.Typeset()
     })
 })
-
 

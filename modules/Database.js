@@ -15,56 +15,89 @@ class Database {
             try {
                 const { id } = req.params;
 
-                // Busca a questão pelo ID
                 const questao = await Questao.findByPk(id);
 
                 if (!questao) {
-                    return res.status(404).send('Questão não encontrada');
+                    throw new Error("Questão nao encontrada");
                 }
 
-                // Exclui as opções da questão
                 await Opcao.destroy({
                     where: { id_questao: questao.id_questao }
                 });
 
-                // Exclui a questão
                 await questao.destroy();
 
                 res.status(200).redirect('/professor/questoes')
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         register: async (req, res) => {
+            const {
+                titulo,
+                pergunta,
+                areaId,
+                correta,
+                topicosSelecionados,
+                respostasSelecionadas
+            } = req.body;
+
+            const tipo = req.params.tipo.toUpperCase()
+
+            let arrayRespostas;
+
+            const MIN_OPCOES = 1;
+            const MAX_OPCOES = 5;
+
+            const id_usuario = req.session.userId;
+
+            const alternativas = ['A', 'B', 'C', 'D', 'E'];
+
             try {
-                const { titulo, pergunta, areaId, correta, topicosSelecionados, respostasSelecionadas } = req.body;
-                const tipo = req.params.tipo.toUpperCase()
-
-                // validar se o usuario é professor
-                if (req.session.perfil !== 'PROFESSOR') {
-                    throw new Error("Usuario invalido")
+                if (!pergunta) {
+                    throw new Error("Pergunta não pode ser vazio")
                 }
-
                 if (!respostasSelecionadas) {
                     throw new Error("Respostas não pode ser vazio")
                 }
+                if (!topicosSelecionados) {
+                    throw new Error("Selecione pelo menos um topico");
+                }
 
-                const ArrayRespostas = JSON.parse(respostasSelecionadas);
+                try {
+                    arrayRespostas = JSON.parse(respostasSelecionadas);
+                    if (typeof arrayRespostas !== 'object' || arrayRespostas === null) {
+                        throw new Error("Formato de respostas inválido");
+                    }
+                } catch (parseError) {
+                    throw new Error("Erro ao processar respostas: formato JSON inválido");
+                }
 
-                const numOpcoes = Object.keys(ArrayRespostas).length;
+                const numOpcoes = Object.keys(arrayRespostas).length;
+                if (numOpcoes < MIN_OPCOES || numOpcoes > MAX_OPCOES) {
+                    throw new Error(`Número de opções deve ser entre ${MIN_OPCOES} e ${MAX_OPCOES}`);
+                }
 
-                const alternativas = ['A', 'B', 'C', 'D', 'E'];
+                if (!alternativas.includes(correta)) {
+                    throw new Error('Alternativa correta inválida');
+                }
+                if ((tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
+                    (tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))) {
+                    throw new Error(`Número de opções INVÁLIDO`);
+                }
 
                 const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
                     alternativa,
-                    descricao: ArrayRespostas[`#opcao${alternativa}`]  // Descrição padrão se não existir
+                    descricao: arrayRespostas[`#opcao${alternativa}`]  // Descrição padrão se não existir
                 }));
-
-                const id_usuario = req.session.userId;
-
-                console.log(topicosSelecionados)
 
                 if (!topicosSelecionados) {
                     throw new Error("Selecione pelo menos um tópico")
@@ -77,6 +110,10 @@ class Database {
                     id_usuario,
                     tipo // Usa o novo ID do vestibular
                 });
+
+                if (!topicosSelecionados) {
+                    throw new Error("Erro ao criar questao")
+                }
 
                 await createQuestao.addTopico(topicosSelecionados)
 
@@ -91,43 +128,52 @@ class Database {
                 }
 
                 res.status(201).redirect('/usuario/inicioLogado');
-            } catch (err) {
-                console.error(err);
-                req.session.errorMessage = err.message;
-                res.redirect('back');
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         edit: async (req, res) => { // ! Antigo UpdateQuestaoController
-            try {
-                const { id, titulo, pergunta, correta, respostasSelecionadas } = req.body;
-                const { areaId, topicosSelecionados } = req.body;
+            const { id,
+                titulo,
+                pergunta,
+                correta,
+                respostasSelecionadas,
+                areaId,
+                topicosSelecionados
+            } = req.body;
+
+            let arrayRespostas;
+
+            const alternativas = ['A', 'B', 'C', 'D', 'E'];
+
+            const MIN_OPCOES = 1;
+            const MAX_OPCOES = 5;
+            console.log(topicosSelecionados)
+
+             try {
 
                 if (!respostasSelecionadas) {
                     throw new Error("Respostas selecionadas não podem estar vazias");
                 }
 
-                let ArrayRespostas;
                 try {
-                    ArrayRespostas = JSON.parse(respostasSelecionadas);
-                    if (typeof ArrayRespostas !== 'object' || ArrayRespostas === null) {
+                    arrayRespostas = JSON.parse(respostasSelecionadas);
+                    if (typeof arrayRespostas !== 'object' || arrayRespostas === null) {
                         throw new Error("Formato de respostas inválido");
                     }
                 } catch (parseError) {
                     throw new Error("Erro ao processar respostas: formato JSON inválido");
                 }
 
-                const numOpcoes = Object.keys(ArrayRespostas).length;
-
-                const alternativas = ['A', 'B', 'C', 'D', 'E'];
-
-                const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
-                    alternativa,
-                    descricao: ArrayRespostas[`#opcao${alternativa}`].content,
-                    id: ArrayRespostas[`#opcao${alternativa}`].id// Descrição padrão se não existir
-                }));
-
-
-                await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
+                const numOpcoes = Object.keys(arrayRespostas).length;
 
                 const questao = await Questao.findByPk(id, {
                     include: [{
@@ -137,15 +183,32 @@ class Database {
                     ]
                 });
 
-                if (!questao) {
-                    return res.status(404).send('Questão não encontrada');
+                if (numOpcoes < MIN_OPCOES || numOpcoes > MAX_OPCOES) {
+                    throw new Error(`Número de opções deve ser entre ${MIN_OPCOES} e ${MAX_OPCOES}`);
                 }
+
+
+                if ((questao.tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
+                    (questao.tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))) {
+                    throw new Error(`Número de opções INVÁLIDO`);
+                }
+
+
+                const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
+                    alternativa,
+                    descricao: arrayRespostas[`#opcao${alternativa}`].content,
+                    id: arrayRespostas[`#opcao${alternativa}`].id// Descrição padrão se não existir
+                }));
+
+                if (!questao) {
+                    throw new Error('Questão não encontrada');
+                }
+
+                await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
 
                 await Questao.update({
                     titulo: titulo,
                     pergunta: pergunta,
-
-
                 }, {
                     where: { id_questao: id }
                 });
@@ -153,27 +216,32 @@ class Database {
                 if (!opcoes) {
                     throw new Error("Opcoes selecionadas não pode ser vazia");
                 }
+
                 for (let opcao of opcoes) {
-                    // Inicializa o objeto de atualização
                     const updateData = {
                         descricao: JSON.stringify(opcao.descricao),
                         alternativa: opcao.alternativa,
                     };
-
-
                     if (correta) {
                         updateData.correta = correta === opcao.alternativa;
                     }
-
                     await Opcao.update(updateData, {
                         where: { id_opcao: opcao.id }
                     });
                 }
+
                 res.redirect('/professor/questoes');
+
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         addImage: async (req, res) => { // ? Antigo uploads/editorImageUploadController.js
@@ -185,21 +253,32 @@ class Database {
 
                 const url = `/uploads/${req.file.filename}`;
 
-                // Retorna a URL da imagem como JSON
+                if (!url) {
+                    throw new Error('Erro no upload da imagem');
+                }
+
                 res.status(200).json(url);
+
             } catch (error) {
+
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         }
     }
     static simulados = {
         addQuestion: async (req, res) => {
-            try {
-                const { simuladoId } = req.params;
-                const { selectedQuestionIds } = req.body;
+            const { simuladoId } = req.params;
+            const { selectedQuestionIds } = req.body;
 
+            try {
                 const idsInteiros = selectedQuestionIds.split(',').map(Number);
 
                 const simulado = await Simulado.findByPk(simuladoId);
@@ -217,13 +296,23 @@ class Database {
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         edit: async (req, res) => {
+            const { simuladoId } = req.params;
+            const { titulo, descricao, tipo } = req.body;
+
             try {
-                const { simuladoId } = req.params;
-                const { titulo, descricao, tipo } = req.body;
+                if (!titulo || !descricao || !tipo) {
+                    throw new Error("Dados Invalidos !!! ")
+                }
 
                 const [updated] = await Simulado.update({
                     titulo: titulo,
@@ -241,20 +330,28 @@ class Database {
                 res.redirect("/simulados/meus-simulados")
             } catch (error) {
                 console.error(error);
-                req.session.errorMessage = err.message;
-                res.redirect('back');
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         register: async (req, res) => {
-            const { titulo, descricao, tipo } = req.body;
+            const { titulo, descricao, tipo,  } = req.body;
+            // const {selectedQuestionIds} = req.body
             const usuarioId = req.session.userId;
             const tipoformatado = tipo.toUpperCase()
 
-            if (!titulo || !descricao || !tipo) {
-                throw new Error("Dados Invalidos !!! ")
-            }
 
             try {
+
+                if (!titulo || !descricao || !tipo) {
+                    throw new Error("Dados Invalidos !!! ")
+                }
                 const simulado = await Simulado.create({
                     titulo,
                     descricao,
@@ -263,21 +360,38 @@ class Database {
                 });
 
                 if (!simulado) {
-                    throw new Error("Simulado não criado!!! ")
+                    throw new Error("Erro ao criar simulado!!! ")
                 }
 
-                res.redirect(`/simulados/${simulado.id_simulado}/adicionar-questoes`);
-            } catch (err) {
-                console.error(err);
-                req.session.errorMessage = err.message;
-                res.redirect('back');
+                // const idsInteiros = selectedQuestionIds.split(',').map(Number);
+
+
+                // if (!idsInteiros) {
+                //     throw new Error('Questões não selecionadas.');
+                // }
+
+                // await simulado.addQuestao(idsInteiros);
+
+                // res.redirect(`/simulados/meus-simulados`);
+                res.redirect('/simulados/meus-simulados')
+
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         removeQuestion: async (req, res) => {
-            try {
-                const { simuladoId } = req.params;
-                const { questoesSelecionadas } = req.body;
+            const { simuladoId } = req.params;
+            const { questoesSelecionadas } = req.body;
 
+            try {
                 // Primeiro, verifique se o simulado existe
                 const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
@@ -287,28 +401,31 @@ class Database {
                 });
 
                 if (!simulado) {
-                    return res.status(404).send('Simulado não encontrado.');
+                    throw new Error('Simulado não encontrado.');
                 }
                 if (!questoesSelecionadas || questoesSelecionadas.length === 0) {
-                    return res.status(404).send('Questões não selecionadas.');
+                    throw new Error('Questões não selecionadas.');
                 }
 
-                // Agora, remova as questões do simulado usando o método removeQuestoes
-                // Este método é fornecido pelo Sequelize para associações belongsToMany
                 await simulado.removeQuestao(questoesSelecionadas);
 
                 res.redirect(`/simulados/meus-simulados`);
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         delete: async (req, res) => {
-            try {
-                const { simuladoId } = req.params;
+            const { simuladoId } = req.params;
 
-                // Primeiro, verifique se o simulado existe
+            try {
                 const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
                         model: Questao,
@@ -317,13 +434,8 @@ class Database {
                 });
 
                 if (!simulado) {
-                    return res.status(404).send('Simulado não encontrado.');
+                    throw new Error('Simulado não encontrado.');
                 }
-
-
-                // Agora, remova as questões do simulado usando o método removeQuestoes
-                // Este método é fornecido pelo Sequelize para associações belongsToMany
-
 
                 await simulado.destroy()
 
@@ -331,7 +443,13 @@ class Database {
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         submit: async (req, res) => {
@@ -340,9 +458,13 @@ class Database {
             const { simuladoId } = req.params;
             const respostasDissertativas = respostas;
 
-
-            const simulado = await Simulado.findByPk(simuladoId)
             try {
+                const simulado = await Simulado.findByPk(simuladoId)
+
+                if (!simulado) {
+                    throw new Error('Simulado nao encontrado.');
+                }
+
                 if (questoes && Object.keys(questoes).length > 0) {
 
                     const questoesObj = questoes.reduce((acc, item) => {
@@ -359,10 +481,10 @@ class Database {
                         await Resposta.create({
                             resposta: "", // O ID da opção é salvo no campo resposta
                             tipo: 'OBJETIVA',
-                            opcaoId: opcaoId,
-                            usuarioId: userId, // Ajuste conforme necessário
-                            simuladoId: simuladoId, // Ajuste conforme necessário
-                            questaoId: questaoId,
+                            id_opcao: opcaoId,
+                            id_usuario: userId, // Ajuste conforme necessário
+                            id_simulado: simuladoId, // Ajuste conforme necessário
+                            id_questao: questaoId,
                         });
                     }
                 }
@@ -376,55 +498,74 @@ class Database {
                         await Resposta.create({
                             resposta: resposta,
                             tipo: 'DISSERTATIVA',
-                            usuarioId: userId, // Ajuste conforme necessário
-                            simuladoId: simuladoId, // Ajuste conforme necessário
-                            questaoId: questaoId,
+                            id_usuario: userId, // Ajuste conforme necessário
+                            id_simulado: simuladoId, // Ajuste conforme necessário
+                            id_questao: questaoId,
                         });
                     }
                 }
+
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
 
-                res.status(200).redirect(`/simulados/${simulado.id}/gabarito`)
+                res.status(200).redirect(`/simulados/${simulado.id_simulado}/gabarito`)
 
 
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
     }
     static topicos = {
         edit: async (req, res) => {
+            const { id, nome } = req.body;
             try {
-                const { id, nome } = req.body;
                 // Encontre o tópico pelo ID
                 const topico = await Topico.findByPk(id);
+
                 if (!topico) {
-                    return res.status(404).send('Tópico não encontrado.');
+                    throw new Error('Tópico não encontrado.');
                 }
-                // Atualize o tópico com a nova matéria
+
+                if (!nome) {
+                    throw new Error('Nome não pode ser vazio.');
+                }
+
                 await topico.update({ nome });
+
                 res.redirect('/professor/topicos');
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         register: async (req, res) => {
+            const { topico, areaIdTopico } = req.body;
+            const usuarioId = req.session.userId;
+            const referer = req.headers.referer || '';
+
             try {
-                const { topico, areaIdTopico } = req.body;
-                const usuarioId = req.session.userId;
-                const referer = req.headers.referer || '';
 
                 // Verifica se os campos obrigatórios estão preenchidos
                 if (!topico || !areaIdTopico || !usuarioId) {
                     throw new Error('Os campos tópico e areaId são obrigatórios.');
                 }
 
-                // Cria um novo tópico
                 const novoTopico = await Topico.create({
                     nome: topico,
                     id_area: areaIdTopico,
@@ -444,22 +585,35 @@ class Database {
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         getAll: async (req, res) => {
             const { id } = req.params;
 
             try {
+
                 const topics = await Topico.findAll({
                     where: { id_area: id },
-                    // Selecione apenas os atributos necessários
                 });
 
                 res.status(200).json(topics);
             } catch (error) {
                 console.error(error);
-                res.status(500).json({ message: 'Erro ao buscar tópicos' });
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
     }
@@ -496,7 +650,6 @@ class Database {
                 // Atualiza a sessão com a nova imagem
                 req.session.imagemPerfil = caminhoImagem;
 
-
                 await new Promise((resolve, reject) => {
                     req.session.save(err => {
                         if (err) reject(err);
@@ -509,7 +662,13 @@ class Database {
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         delete: async (req, res) => {
@@ -527,16 +686,22 @@ class Database {
                 );
                 req.session.destroy();
                 res.status(200).redirect('/usuario/login');
-            } catch (err) {
-                console.log(err)
-                req.session.errorMessage = err.message;
-                res.redirect('back');
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         },
         edit: async (req, res) => {
+            const id = req.session.userId;
+            const idUsuarioParaEditar = Number(req.params.id);
             try {
-                const id = req.session.userId;
-                const idUsuarioParaEditar = Number(req.params.id);
 
                 // Verifica se o usuário está tentando editar seu próprio perfil
                 if (id !== idUsuarioParaEditar) {
@@ -557,9 +722,7 @@ class Database {
                 // Flag para verificar se a senha foi alterada
                 let senhaAlterada = false;
 
-                console.log(senha)
-                console.log(novasenha)
-                // Atualização de senha se fornecida
+
                 if (senha && novasenha) {
                     const usuarioAtual = await Usuario.findByPk(idUsuarioParaEditar);
 
@@ -611,10 +774,16 @@ class Database {
                 }
 
                 res.status(200).redirect(`/usuario/perfil`);
-            } catch (err) {
-                console.error(err);
-                req.session.errorMessage = err.message;
-                res.redirect('back');
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.redirect(req.get('referer') || req.originalUrl);
             }
         }
     }

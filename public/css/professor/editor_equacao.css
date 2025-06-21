@@ -287,61 +287,7 @@
     }
 
 }
- #matrix-3x3-btn, #matrix-4x4-btn, #matrix-nxn-btn, #linear-system-btn {
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px 10px;
-    margin: 2px;
-    font-size: 12px;
-    color: #333;
-    transition: all 0.3s ease;
-}
 
-#matrix-2x2-btn:hover, #matrix-3x3-btn:hover, #matrix-4x4-btn:hover, #matrix-nxn-btn:hover, #linear-system-btn:hover {
-    background-color: #e0e0e0;
-    cursor: pointer;
-    transform: scale(1.05);
-}
 
-/* Estilo específico para o botão de sistema linear */
-#linear-system-btn {
-    background-color: #e8f4ff;
-    border-color: #b3d7ff;
-}
 
-#linear-system-btn:hover {
-    background-color: #d1e9ff;
-}
 
-/* Ajuste para a seção de matrizes */
-#hidden-matrix-section {
-    min-width: 200px;
-    z-index: 1001;
-}
-
-#hidden-matrix-section div {
-    display: flex;
-    gap: 5px;
-    margin: 5px 0;
-}
-
-#matrix-3x3-btn img{
-    width: 36px; /* ou o tamanho que preferir */
-    height: 36px;
-}
-
-#matrix-4x4-btn img{
-    width: 40px; /* ou o tamanho que preferir */
-    height: 36px;
-}
-
-#matrix-nxn-btn img{
-    width: 50px; /* ou o tamanho que preferir */
-    height: 36px;
-}
-
-#linear-system-btn img {
-    width: 60px; /* ou o tamanho que preferir */
-    height: 36px;
-}

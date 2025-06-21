@@ -270,33 +270,3 @@ main {
     transform: translateX(-50%);
     /* Centraliza horizontalmente */
 }
-.editor-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-
-@media (max-width: 768px) {
-  .editor-grid {
-    grid-template-columns: 1fr;
-  }
-}
-#editor-container {
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  #editor-container {
-    width: 80%;
-  }
-}
-#editor-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  #editor-container {
-    flex-direction: column;
-  }
-}

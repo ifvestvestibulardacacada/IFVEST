@@ -129,4 +129,8 @@ function initializeEditQuestionEditors(questao, opcoes) {
 window.initializeEditQuestionEditors = initializeEditQuestionEditors;
 
 
+// Exemplo de uso:
 
+
+// Inserindo no Quill editor
+// Wait for the DOM to load completely
