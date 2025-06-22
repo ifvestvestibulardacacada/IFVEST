@@ -105,8 +105,14 @@ const simuladoSchemas = {
       .regex(patterns.textPattern, "Invalid description format")
       .refine(val => !patterns.sqlPattern.test(val), { message: "Invalid description format" }),
 
-    tipo: z.enum(['Objetivo', 'Dissertativo', 'Aleatorio'])
+    tipo: z.enum(['Objetivo', 'Dissertativo', 'Aleatorio']), 
+
+
+    selectedQuestionIds: z
+      .array(z.string().regex(/^\d+$/, { message: 'ID de questão deve ser um número válido.' }))
+      .min(1, { message: 'Pelo menos uma questão deve ser selecionada.' }),
   }),
+
 
   edit: z.object({
     titulo: z.string()

@@ -44,12 +44,13 @@
                                     <% const respostaUsuario=respostasUsuario.find(r=> r.id_questao ===
                                         questao.id_questao); %>
                                         <% questao.Opcao.forEach((opcao, index)=> { %>
-                                            <div>
-                                                <div class="opcao">
+                                            <div class=>
+                                                  <div class="opcao <%= opcao.correta === true ? 'opcao-correta' : (respostaUsuario && opcao.id_opcao === respostaUsuario.Opcao.id_opcao ? 'opcao-incorreta' : '') %>">
                                                     <label class="letra" for="opcao<%= index + 1 %>">
-                                                        <%= index + 1 %>
+                                           
+                                                        <%= opcao.alternativa %>
                                                     </label>
-                                                    <% if (opcao.id_opcao===respostaUsuario?.Opcao?.id_opcao) { %>
+                                                    <% if (opcao.id_opcao===respostaUsuario.Opcao.id_opcao) { %>
                                                         <input type="radio"
                                                             class="<%= opcao.correta === 1 ? 'correct' : 'incorrect' %>"
                                                             checked>
@@ -67,10 +68,12 @@
                                             <% }); %>
                                                 <% } else { %>
                                                     <% questao.Opcao.forEach(opcao=> { %>
-                                                        <div class="opcao-correta" disabled>
+                                                        <label class="resposta-label">Resposta Oficial</label>
+                                                        <div class="opcao-dissertativa" disabled>
 
                                                             <div class="opcao-texto"
                                                                 data-delta='<%= opcao.descricao %>'>
+                                                                
 
                                                                 <span class="required">*</span>
 
@@ -81,11 +84,12 @@
                                                                 respostaDissertativa=respostasDissertativas.find(r=>
                                                                 r.id_questao === questao.id_questao); %>
                                                                 <% if (respostaDissertativa) { %>
-                                                                    <div>
-                                                                        <div class="opcao-texto">
-                                                                            <%= respostaDissertativa.resposta %>
-                                                                        </div>
-                                                                    </div>
+                                                    <div>
+                                                        <label class="resposta-label">Sua Resposta</label>
+                                        <div class="resposta-do-usuario">
+                                            <%= respostaDissertativa.resposta %>
+                                        </div>
+                                    </div>
                                                                     <% } %>
 
                                                                         <% } %>

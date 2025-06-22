@@ -9,6 +9,7 @@ const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 
+
 class Database {
     static questoes = {
         delete: async (req, res) => {
@@ -86,9 +87,10 @@ class Database {
                     throw new Error(`Número de opções deve ser entre ${MIN_OPCOES} e ${MAX_OPCOES}`);
                 }
 
-                if (!alternativas.includes(correta)) {
+                if (tipo === 'OBJETIVA' && !alternativas.includes(correta)) {
                     throw new Error('Alternativa correta inválida');
                 }
+
                 if ((tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
                     (tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))) {
                     throw new Error(`Número de opções INVÁLIDO`);
@@ -158,7 +160,7 @@ class Database {
             const MAX_OPCOES = 5;
             console.log(topicosSelecionados)
 
-             try {
+            try {
 
                 if (!respostasSelecionadas) {
                     throw new Error("Respostas selecionadas não podem estar vazias");
@@ -341,39 +343,53 @@ class Database {
             }
         },
         register: async (req, res) => {
-            const { titulo, descricao, tipo,  } = req.body;
-            // const {selectedQuestionIds} = req.body
+            const { titulo, descricao, tipo, modo, selectedQuestionIds } = req.body;
             const usuarioId = req.session.userId;
-            const tipoformatado = tipo.toUpperCase()
-
-
             try {
 
-                if (!titulo || !descricao || !tipo) {
-                    throw new Error("Dados Invalidos !!! ")
+                if (!titulo || !descricao || !tipo ) {
+                    return res.status(400).json({ message: 'Dados inválidos: título, descrição, tipo e modo são obrigatórios.' });
                 }
+
+
+                if (!usuarioId) {
+                    return res.status(401).json({ message: 'Usuário não autenticado.' });
+                }
+
+                if (!selectedQuestionIds || !Array.isArray(selectedQuestionIds) || selectedQuestionIds.length === 0) {
+                    return res.status(400).json({ message: 'Nenhuma questão selecionada.' });
+                }
+
+                // Format tipo to uppercase
+                const tipoFormatado = tipo.toUpperCase();
+
+                // Convert selectedQuestionIds to integers and filter out invalid IDs
+                const idsInteiros = selectedQuestionIds
+                    .map(id => parseInt(id, 10))
+                    .filter(id => !isNaN(id));
+
+                if (idsInteiros.length === 0) {
+                    return res.status(400).json({ message: 'IDs de questões inválidos.' });
+                }
+
+                // Create simulado
                 const simulado = await Simulado.create({
                     titulo,
                     descricao,
                     id_usuario: usuarioId,
-                    tipo: tipoformatado
+                    tipo: tipoFormatado,
+                    modo, // Include modo if your model supports it
                 });
 
                 if (!simulado) {
-                    throw new Error("Erro ao criar simulado!!! ")
+                    return res.status(500).json({ message: 'Erro ao criar simulado.' });
                 }
 
-                // const idsInteiros = selectedQuestionIds.split(',').map(Number);
+                // Associate questions with simulado
+                await simulado.addQuestao(idsInteiros);
 
-
-                // if (!idsInteiros) {
-                //     throw new Error('Questões não selecionadas.');
-                // }
-
-                // await simulado.addQuestao(idsInteiros);
-
-                // res.redirect(`/simulados/meus-simulados`);
-                res.redirect('/simulados/meus-simulados')
+                // Send success response
+                return res.status(201).json({ message: 'Simulado criado com sucesso!' });
 
             } catch (error) {
                 console.error(error);
