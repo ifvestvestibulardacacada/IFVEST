@@ -82,46 +82,6 @@
     transition:  0.3s ease-in-out;
 }
 
-/* Estilos para os botões de matriz */
-/* #matrix-2x2-btn, #matrix-3x3-btn, #matrix-4x4-btn, #matrix-nxn-btn, #linear-system-btn {
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px 10px;
-    margin: 2px;
-    font-size: 12px;
-    color: #333;
-    transition: all 0.3s ease;
-}
-
-#matrix-2x2-btn:hover, #matrix-3x3-btn:hover, #matrix-4x4-btn:hover, #matrix-nxn-btn:hover, #linear-system-btn:hover {
-    background-color: #e0e0e0;
-    cursor: pointer;
-    transform: scale(1.05);
-}
-
-
-#linear-system-btn {
-    background-color: #e8f4ff;
-    border-color: #b3d7ff;
-}
-
-#linear-system-btn:hover {
-    background-color: #d1e9ff;
-}
-
-
-#hidden-matrix-section {
-    min-width: 200px;
-    z-index: 1001;
-}
-
-#hidden-matrix-section div {
-    display: flex;
-    gap: 5px;
-    margin: 5px 0;
-} */
-
 .hidden-symbols{
     display: flex;
     justify-content: center;

@@ -62,7 +62,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.redirect(req.get('referer') || req.originalUrl);
+            return res.redirect(req.session.lastGetUrl || '/');
         }
     }
     static async logout(req, res) {
@@ -94,7 +94,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.redirect(req.get('referer') || req.originalUrl);
+            return res.redirect(req.session.lastGetUrl || '/');
         }
     }
 
@@ -107,7 +107,7 @@ class Auth {
         const senhaCriptografada = await bcrypt.hash(senha, 10);
         
         try {
-            await Usuario.create({ nome, usuario, senha: senhaCriptografada, email, perfil });
+            await Usuario.create({ nome, usuario, senha: senhaCriptografada, email, tipo_perfil:perfil });
 
             res.status(201).redirect('/login');
         } catch (err) {
@@ -119,7 +119,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.redirect(req.get('referer') || req.originalUrl);
+            return res.redirect(req.session.lastGetUrl || '/');
         }
     }
 }

@@ -11,7 +11,7 @@
         
         <div class="topic-group">
             <label for="areaIdTopico" class="label">Selecione uma área:</label>
-            <select name="areaIdTopico" id="areaIdTopico" class="select" required>
+            <select name="areaIdTopico" id="areaIdTopico" class="select" >
                 <option value="" disabled selected>Selecione uma opção</option>
                 <% Areas.forEach(area => { %>
                     <option value="<%= area.id_area %>">
@@ -23,7 +23,7 @@
         <div id="topico-container">
             <div class="flex-col-gap-2">
                 <label for="topico" class="label">Digite um novo Tópico:</label>
-                <input type="text" name="topico" id="topico" placeholder="Digite o tópico" class="topic-input" required disabled>
+                <input type="text" name="topico" id="topico" placeholder="Digite o tópico" class="topic-input"  disabled>
             </div>
         </div>
         <div class="button-group">
@@ -39,10 +39,14 @@
         searchContainer.style.display = 'none';
         let select = document.getElementById("areaId");
         select.selectedIndex = 0;
+         document.getElementById('areaIdTopico').setAttribute('required', '');
+        document.getElementById('topico').setAttribute('required', '');
     }
 
     function closeCreateTopicModal() {
         document.getElementById('modal-create-topic').style.display = 'none';
+                document.getElementById('areaIdTopico').removeAttribute('required');
+        document.getElementById('topico').removeAttribute('required');
     }
 
     // Event listener para o link
@@ -69,10 +73,6 @@
         const areaIdTopico = document.getElementById('areaIdTopico').value;
         const topico = document.getElementById('topico').value;
 
-        if (!areaIdTopico || !topico) {
-            alert('Por favor, preencha todos os campos obrigatórios.');
-            return;
-        }
 
         try {
             const response = await fetch('/professor/registrar-topico', {

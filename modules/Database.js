@@ -38,7 +38,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         register: async (req, res) => {
@@ -138,7 +138,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         edit: async (req, res) => { // ! Antigo UpdateQuestaoController
@@ -242,7 +242,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         addImage: async (req, res) => { // ? Antigo uploads/editorImageUploadController.js
@@ -270,7 +270,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         }
     }
@@ -303,7 +303,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         edit: async (req, res) => {
@@ -338,7 +338,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         register: async (req, res) => {
@@ -399,7 +399,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         removeQuestion: async (req, res) => {
@@ -434,7 +434,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         delete: async (req, res) => {
@@ -464,7 +464,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         submit: async (req, res) => {
@@ -535,7 +535,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
     }
@@ -566,7 +566,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         register: async (req, res) => {
@@ -606,7 +606,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         getAll: async (req, res) => {
@@ -628,13 +628,10 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
     }
-    // static uploads = { // ! Inutilizado
-
-    // }
     static usuarios = {
         changeImg: async (req, res) => { // ? Antigo uploads/profileImageUploadControllers.js
             try {
@@ -660,7 +657,7 @@ class Database {
                 }
 
                 // Atualiza o banco de dados com a nova imagem
-                await Usuario.update({ imagemPerfil: caminhoImagem }, { where: { id_usuario: idUsuario } });
+                await Usuario.update({ imagem_perfil: caminhoImagem }, { where: { id_usuario: idUsuario } });
 
                 // Atualiza a sessão com a nova imagem
                 req.session.imagemPerfil = caminhoImagem;
@@ -683,7 +680,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         delete: async (req, res) => {
@@ -710,7 +707,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         },
         edit: async (req, res) => {
@@ -798,7 +795,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.get('referer') || req.originalUrl);
+                return res.redirect(req.session.lastGetUrl || '/');
             }
         }
     }

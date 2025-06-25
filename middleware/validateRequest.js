@@ -5,8 +5,6 @@ const validateRequest = (schema) => {
     try {
       // Validate request body against schema
 
-      console.log(typeof req.body.questoes)
-      console.log(typeof req.body.respostas)
       const validatedData = await schema.parseAsync(req.body);
 
       // Replace req.body with validated data
@@ -33,13 +31,13 @@ const validateRequest = (schema) => {
           });
         });
 
-        return res.redirect(req.get('referer') || req.originalUrl);
+    return res.redirect(req.session.lastGetUrl || '/');
       }
 
       // Handle other types of errors
       console.error('Validation error:', error);
       req.session.errorMessage = 'Invalid request data';
-      return res.redirect(req.get('referer') || req.originalUrl);
+      return res.redirect(req.session.lastGetUrl || '/');
     }
   };
 };

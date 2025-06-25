@@ -39,14 +39,7 @@
                                 required maxlength="100">
                         </div>
 
-
-                        <h4>Enunciado</h4>
-
-                        <button uk-tooltip="title: Clique para adicionar uma equação; pos: top-left" type="button"
-                            style="display: none;" id="editor-open-btn"> Adicionar Equação
-                        </button>
-                        <%- include('../partials/editor_equacao') %>
-                        <div id="editor-container" ></div>
+   <%- include('../partials/editor_equacao') %>
 
                         <% if ( tipo==="objetiva" ) { %>
                             <%- include('../partials/resposta_objetiva') %>
@@ -130,6 +123,7 @@
             <script>
                 // Inicializar os editores com o tipo da questão
                 initializeQuestionEditors(<%- JSON.stringify(tipo) %>);
+    
             </script>
 
 

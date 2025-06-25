@@ -20,11 +20,11 @@ const symbolButtons = [
         button: document.querySelector('#summation-btn'),
         value: '\\sum_{i}^{k} '
     },
-    {
-        name: "Direct Limit",
-        button: document.querySelector('#direct-limit-btn'),
-        value: '\\sum_{i}^{k} '
-    },
+{
+    name: "Direct Limit",
+    button: document.querySelector('#direct-limit-btn'),
+    value: '\\varinjlim_{i} '
+},
     {
         name: "Integral With Variables",
         button: document.querySelector('#var-integral-btn'),
@@ -35,6 +35,11 @@ const symbolButtons = [
         button: document.querySelector('#coproductory-btn'),
         value: '\\coprod '
     },
+    {
+    name: "Inverse Limit",
+    button: document.querySelector('#inverse-limit-btn'),
+    value: '\\varprojlim_{i} '
+},
     {
         name: "Surface Integral",
         button: document.querySelector('#surface-integral-btn'),
@@ -303,6 +308,22 @@ const symbolButtons = [
         button: document.querySelector('#greater-greater-btn'),
         value: '\\ll '
     },
+        {
+        button: document.querySelector('#brackets-matrix-btn'),
+        value: '\\begin{bmatrix}a & b \\\\ c & d\\end{bmatrix} '
+    },
+    {
+        button:  document.querySelector('#braces-matrix-btn'),
+        value: '\\begin{Bmatrix}a & b \\\\ c & d\\end{Bmatrix} ',
+    },
+    {
+        button: document.querySelector('#pipes-matrix-btn'),
+        value: '\\begin{vmatrix}a & b \\\\ c & d\\end{vmatrix} '
+    },
+    {
+        button: document.querySelector('#parentheses-matrix-btn'),
+        value: '\\begin{pmatrix}a & b \\\\ c & d\\end{pmatrix} '
+    },
 {
         button: document.querySelector('#brackets-matrix-nxn-btn'),
         value: '\\begin{bmatrix} a_{11} & a_{12} & \\cdots & a_{1n} \\\\ a_{21} & a_{22} & \\cdots & a_{2n} \\\\ \\vdots & \\vdots & \\ddots & \\vdots \\\\ a_{n1} & a_{n2} & \\cdots & a_{nn} \\end{bmatrix}'
@@ -322,7 +343,7 @@ const symbolButtons = [
     
     {
         button: document.querySelector('#linear-system-btn'),
-        value: '\\begin{cases} a_{1}x + b_{1}y = c1 \\\\ a_{2}x + b_{2}y = c2\\end{cases}  '
+        value: '\\begin{cases} a_{1}x + b_{1}y = c1 \\end{cases}  '
     },
     {
         button: document.querySelector('#sin-btn'),

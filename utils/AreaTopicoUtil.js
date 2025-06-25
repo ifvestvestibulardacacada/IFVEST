@@ -17,21 +17,16 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
       throw new Error('Questão não encontrada');
     }
 
-    const topicosIdsAtuais = questao.Topico.map(topico => topico.id_topico);
-
     const idTopicos = topicosSelecionados.filter(item => !isNaN(item) && item !== '');
-    // Adicionar novos tópicos selecionados
+  
+    // // Adicionar novos tópicos selecionados
     if (areaId && areaId !== questao.id_area) {
-      // Atualizar a área da questão
-      await Questao.update({
-        id_area: areaId,
-      }, {
-        where: { id_questao: idQuestao }
-      });
+      // Usando o método update da própria instância
+      await questao.update({ id_area: areaId });
     }
 
-    await questao.addTopico(idTopicos);
-    await questao.removeTopico(topicosIdsAtuais);
+    await questao.setTopico(idTopicos);
+
   } catch (error) {
     console.error(error);
     req.session.errorMessage = error.message;
@@ -41,7 +36,7 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
         else resolve();
       });
     });
-    return res.redirect(req.get('referer') || req.originalUrl);
+    return res.redirect(req.session.lastGetUrl || '/');
   }
 }
 

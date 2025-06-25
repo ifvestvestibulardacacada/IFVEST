@@ -9,6 +9,9 @@
 
    <%- include('../partials/quill_and_uikit') %>
     <link rel="stylesheet" href="/css/prova/templateprova.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    </style>
 
 </head>
 
@@ -33,6 +36,7 @@
             method="POST">
             <div class="questoes-container">
                 <% simulado.Questao.forEach(questao=> { %>
+                    <div class="questao-wrapper">
                     <div class="name-div">
                         <div class="titulo">
                             <p>
@@ -66,6 +70,7 @@
                                             placeholder="Sua resposta" disabled></textarea>
                                         <% } %>
                 </div>
+                </div>
                 <% }) %>
             </div>
         </form>
@@ -74,7 +79,8 @@
 
     <!-- Adicione aqui os scripts JS necessários -->
     <script src="/js/main.js"></script>
-    <script src="/js/quillContentHTML.js"></script>
+    <script src="/js/prova/quillContentHTML.js"></script>
+          <script src="/js/prova/gerarPDF.js"></script>
     <script>
         function fecharModal() {
             parent.document.getElementById('modal-imprimir').style.display = 'none';
