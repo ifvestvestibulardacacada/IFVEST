@@ -26,7 +26,6 @@ roteador.get('/login',  Render.auth.login);
 
 roteador.post('/logoff', Auth.logout);
 roteador.post('/login',
-	 limiter,
 	 validateRequest(authSchemas.login), //teste schema zod
  Auth.login);
 roteador.post('/cadastro',

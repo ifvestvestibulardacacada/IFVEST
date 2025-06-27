@@ -782,7 +782,7 @@ class Database {
                 // Se a senha foi alterada, desloga o usuário
                 if (senhaAlterada) {
                     req.session.destroy();
-                    return res.status(200).redirect('/usuario/login?msg=senha-alterada');
+                    return res.status(200).redirect('/usuario/login');
                 }
 
                 res.status(200).redirect(`/usuario/perfil`);

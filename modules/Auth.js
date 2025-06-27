@@ -54,7 +54,7 @@ class Auth {
 
             return res.redirect('/usuario/inicioLogado');
         } catch (error) {
-            ArcanaFlow.loadHeader() 
+            
             req.session.errorMessage = error.message;
             await new Promise((resolve, reject) => {
                 req.session.save(err => {
