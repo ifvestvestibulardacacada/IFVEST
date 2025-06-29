@@ -32,13 +32,14 @@ const validateRequest = (schema) => {
         });
 
     return res.redirect(req.session.lastGetUrl || '/');
-      }
+      } else {
 
       // Handle other types of errors
       console.error('Validation error:', error);
       req.session.errorMessage = 'Invalid request data';
       return res.redirect(req.session.lastGetUrl || '/');
     }
+  }
   };
 };
 

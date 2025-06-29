@@ -145,17 +145,12 @@ const topicoSchemas = {
 const userSchemas = {
   edit: z.object({
     nome: z.string()
-      .max(100)
-      .regex(patterns.textPattern, "Formato de nome inválido")
       .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de nome inválido" })
       .optional(),
     usuario: z.string()
-      .max(30)
-      .regex(patterns.usernamePattern, "Formato de nome de usuário inválido")
-      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de nome de usuário inválido" })
+       .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de nome de usuário inválido" })
       .optional(),
     email: z.string()
-      .email("Formato de e-mail inválido")
       .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de e-mail inválido" })
       .optional(),
     senha: z.string()
@@ -164,7 +159,7 @@ const userSchemas = {
     novasenha: z.string()
       .regex(patterns.passwordPattern, "A senha deve conter pelo menos 8 caracteres com um número e uma letra")
       .optional()
-  }).refine(val => !patterns.sqlPattern.test(val), { message: "Formato de e-mail inválido" })
+  }).partial()
 };
 
 module.exports = {
