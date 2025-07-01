@@ -11,10 +11,8 @@
           allowNull: false
         },
         nome: {
-          type: Sequelize.ENUM({
-            values: ['Matemática', 'Português', 'História', 'Geografia', 'Ciências', 'Artes', 'Informática', 'Química', 'Física', 'Biologia', 'Filosofia', 'Sociologia', 'Educação Física', 'Língua Estrangeira']
-          }),
-          allowNull: true,
+          type: Sequelize.STRING ,
+          allowNull: false,
         },
         descricao: {
           type: Sequelize.STRING,

@@ -9,6 +9,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      nome: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       conteudo_markdown: {
         type: Sequelize.TEXT
       },
@@ -21,6 +25,14 @@ module.exports = {
         references: {
           model: "Usuario",
           key: "id_usuario"
+        }
+      },
+      id_topico: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: "Topico",
+          key: "id_topico"
         }
       },
       createdAt: {

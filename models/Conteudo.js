@@ -30,6 +30,13 @@ module.exports = (sequelize, DataTypes) => {
         model:"Usuario",
         key:"id_usuario"
       }
+    },
+    id_topico: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Topico",
+        key: "id_topico"
+      }
     }
   }, {
     sequelize,
