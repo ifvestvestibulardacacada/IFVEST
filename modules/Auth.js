@@ -44,7 +44,6 @@ class Auth {
             req.session.nomeUsuario = usuarioEncontrado.usuario;
             req.session.imagemPerfil = usuarioEncontrado.imagem_perfil;
 
-
             await new Promise((resolve, reject) => {
                 req.session.save(err => {
                     if (err) reject(err);

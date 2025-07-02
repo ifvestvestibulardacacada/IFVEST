@@ -17,8 +17,7 @@ module.exports = {
     for (const simulado of simulados) {
   
         await queryInterface.sequelize.query(
-          "INSERT INTO `Simulado` (`titulo`, `descricao`, `tipo`, `id_usuario`,  `createdAt`, `updatedAt`) VALUES (?, ?, ?, ?, NOW(), NOW())",
-          { replacements: [simulado.titulo, simulado.descricao, simulado.tipo, usuarioId] }
+          `INSERT INTO Simulado (titulo, descricao, tipo, id_usuario,  createdAt, updatedAt) VALUES ('${simulado.titulo}', '${simulado.descricao}', '${simulado.tipo}', ${usuarioId}, NOW(), NOW())`
         );
       
     }
@@ -26,6 +25,6 @@ module.exports = {
 
  down: async (queryInterface, Sequelize) => {
     // Removendo os simulados inseridos pelo seed
-    await queryInterface.sequelize.query("DELETE FROM `Simulado`");
+    await queryInterface.sequelize.query(`DELETE FROM Simulado`);
  }
 };

@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsToMany(models.PalavraChave, { through: 'TagConteudo', foreignKey: 'id_conteudo', as: 'PalavrasChave' });
+      this.belongsToMany(models.PalavraChave, { through: 'TagConteudo', foreignKey: 'id_conteudo', as: 'PalavraChave' });
       this.belongsToMany(models.MaterialExterno, { through: 'Recomendacao', foreignKey: 'id_conteudo', as: 'MaterialExterno' });
     }
   }
@@ -29,6 +29,13 @@ module.exports = (sequelize, DataTypes) => {
       references:{
         model:"Usuario",
         key:"id_usuario"
+      }
+    },
+    id_topico: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "Topico",
+        key: "id_topico"
       }
     }
   }, {

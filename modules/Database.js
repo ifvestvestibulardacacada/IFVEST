@@ -15,7 +15,6 @@ class Database {
         delete: async (req, res) => {
             try {
                 const { id } = req.params;
-
                 const questao = await Questao.findByPk(id);
 
                 if (!questao) {

@@ -95,17 +95,16 @@ module.exports = {
 
     // Inserindo os tópicos no banco de dados
     for (const area in topics) {
-      for (const topico of topics[area]) {
-         await queryInterface.sequelize.query(
-            "INSERT INTO `Topico` (`nome`, `id_area`, `id_usuario`, `createdAt`, `updatedAt`) VALUES (?, ?, ?, NOW(), NOW())",
-            { replacements: [topico.nome, topico.id_area, 1] }
-          );
+      for (const materia of topics[area]) {
+        await queryInterface.sequelize.query(
+          `INSERT INTO Topico (nome, id_area, id_usuario, createdAt, updatedAt) VALUES ('${materia.materia}', ${materia.areaId}, '${1}', NOW(), NOW())`
+        );
       }
     }
  },
 
  down: async (queryInterface, Sequelize) => {
     // Removendo os tópicos inseridos pelo seed
-    await queryInterface.sequelize.query("DELETE FROM `Topico`");
+    await queryInterface.sequelize.query(`DELETE FROM Topico`);
  }
 };

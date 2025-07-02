@@ -3,12 +3,36 @@ async function loadTopicDropdown(AreaId, topicosSelecionados) {
     const loadingContainer = document.getElementById('loading-container');
     const dropdownList = document.getElementById('dropdown-list');
 
+<<<<<<< HEAD
+    topicos.forEach(function (topico) {
+        topico.id = topico.id_topico
+        const listItem = document.createElement('li');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.name = 'topicosSelecionados[]';
+        checkbox.value = topico.id;
+
+        const label = document.createElement('label');
+        label.htmlFor = 'topico-' + topico.id;
+        label.textContent = topico.materia;
+        
+    
+
+        let isSelected = false;
+        Topicos.forEach(t => {
+            if (t.id_topico === topico.id) {
+                isSelected = true;
+                return false; // Sair do loop interno
+            }
+        });
+=======
     // Mostra o indicador de carregamento
     loadingContainer.style.display = 'block';
     dropdownList.innerHTML = ''; // Limpa a lista antes de carregar novos itens
 
     try {
         const response = await fetch(`/professor/topicos/${AreaId}`);
+>>>>>>> e4c0146aa0ad84b94d9a5456dba1d13eb96dd188
 
         // Verifica se a resposta foi bem-sucedida
         if (!response.ok) {

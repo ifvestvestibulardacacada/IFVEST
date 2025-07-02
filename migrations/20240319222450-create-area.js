@@ -11,7 +11,7 @@
           allowNull: false
         },
         nome: {
-          type: Sequelize.STRING,
+          type: Sequelize.STRING ,
           allowNull: false,
         },
         descricao: {

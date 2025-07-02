@@ -1,7 +1,11 @@
 {
   "development": {
     "username": "root",
+<<<<<<< HEAD
+    "password": "root",
+=======
     "password": "residentevil6",
+>>>>>>> e4c0146aa0ad84b94d9a5456dba1d13eb96dd188
     "database": "ifvest_mysql",
     "host": "localhost",
     "dialect": "mysql",

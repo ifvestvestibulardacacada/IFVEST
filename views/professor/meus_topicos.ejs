@@ -52,16 +52,27 @@
                             <td>
                                 <span class="material-span "id="span<%= topico.id_topico %>"><%= topico.nome %></span>
                                 <form class="hide" id="editForm<%= topico.id_topico %>" action="/professor/editar-topico" method="POST">
+<<<<<<< HEAD:views/professor/meus-topicos.ejs
+                                    <input class="py-2 border border-black" type="text" name="materia" value="<%= topico.materia %>" >
+                                    <input type="hidden" name="id" value="<%= topico.id_topico %>" >
+                                    <button type="submit" id="saveButton" class=" btn ">Salvar</button>
+                                    <button type="button" id="cancelButton" class=" btn " onclick="ocultarForm(<%= topico.id_topico %>)">Cancelar</button>
+=======
                                     <input class="py-2 border border-black" type="text" name="nome" value="<%= topico.nome %>" maxlength="100">
                                     <input type="hidden" name="id" value="<%= topico.id_topico %>" >
                                     <button type="submit" id="saveButton" class=" btn ">Salvar</button>
                                     <button type="button" id="cancelButton" class="btn cancelBtn" data-id="<%= topico.id_topico %>">Cancelar</button>
+>>>>>>> e4c0146aa0ad84b94d9a5456dba1d13eb96dd188:views/professor/meus_topicos.ejs
                                 </form>
                                 
                                
                             </td>
                             <td>
+<<<<<<< HEAD:views/professor/meus-topicos.ejs
+                              <a class="btn" data-id="<%= topico.id_topico %>" onclick="exibirForm(<%= topico.id_topico %>)"><i class="fas fa-edit"></i> Editar</a>
+=======
                               <a class="btn editBtn" data-id="<%= topico.id_topico %>"><i class="fas fa-edit"></i> Editar</a>
+>>>>>>> e4c0146aa0ad84b94d9a5456dba1d13eb96dd188:views/professor/meus_topicos.ejs
                             </td>
                         </td>
                         </tr>

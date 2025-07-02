@@ -86,11 +86,23 @@
                                                                         <div>
                                                                             <label for="areaId">Selecione uma
                                                                                 área:</label>
+<<<<<<< HEAD:views/professor/editar-questao.ejs
+                                                                            <select name="areaId" id="areaId"
+                                                                                onchange="addItemsToDropdown(<%= JSON.stringify(Areas) %>, <%= JSON.stringify(questao.Topico) %>)">
+
+                                                                                <% Areas.forEach(area=> { %>
+                                                                                    <option value="<%= area.id_area %>"
+                                                                                        <%=area.id_area===questao.areaId
+                                                                                        ? 'selected' : '' %>
+
+                                                                                        >
+=======
                                                                             <select name="areaId" id="areaId">
                                                                                 <% Areas.forEach(area=> { %>
                                                                                     <option value="<%= area.id_area %>"
                                                                                         <%=area.id_area===questao.id_area
                                                                                         ? 'selected' : '' %>>
+>>>>>>> e4c0146aa0ad84b94d9a5456dba1d13eb96dd188:views/professor/editar_questao.ejs
                                                                                         <%= area.nome %>
                                                                                     </option>
                                                                                     <% }); %>
@@ -102,6 +114,16 @@
                                                         <div class="dropdown" id="topicosSearchContainer">
                                                             <input type="text" id="search" placeholder="Pesquisar...">
                                                             <ul id="dropdown-list">
+<<<<<<< HEAD:views/professor/editar-questao.ejs
+                                                                <% questao.Topico.forEach(topic=> { %>
+                                                                    <li>
+                                                                        <input type="checkbox"
+                                                                            name="topicosSelecionados[]"
+                                                                            value="<%= topic.id_topico %>" checked>
+                                                                        <label for="topico-<%= topic.id_topico %>">
+                                                                            <%= topic.nome %>
+                                                                        </label>
+=======
                                                                 <div id="loading-indicator" style="display: none;">
                                                                     Carregando...</div>
                                                                 <% Topicos.forEach(topic=> { %>
@@ -116,6 +138,7 @@
                                                                             <label for="topico-<%= topic.id_topico %>">
                                                                                 <%= topic.nome %>
                                                                             </label>
+>>>>>>> e4c0146aa0ad84b94d9a5456dba1d13eb96dd188:views/professor/editar_questao.ejs
                                                                     </li>
                                                                     <% }); %>
                                                             </ul>

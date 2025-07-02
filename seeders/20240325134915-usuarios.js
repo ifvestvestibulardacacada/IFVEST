@@ -21,13 +21,12 @@ module.exports = {
 
     // Inserindo o usuário no banco de dados com a senha criptografada
     await queryInterface.sequelize.query(
-      "INSERT INTO `Usuario` (`nome`,`usuario`, `email`, `senha`,`tipo_perfil`, `createdAt`, `updatedAt`) VALUES (?, ?, ?, ?, ?, NOW(), NOW())",
-      { replacements: [usuario.nome, usuario.usuario, usuario.email, hashedPassword, usuario.tipo_perfil] }
+      `INSERT INTO Usuario (nome, usuario, email, senha, tipo_perfil, createdAt, updatedAt) VALUES ('${usuario.nome}','${usuario.usuario}','${usuario.email}', '${hashedPassword}', '${usuario.perfil}', NOW(), NOW())`
     );
  },
 
  down: async (queryInterface, Sequelize) => {
     // Removendo o usuário inserido pelo seed
-    await queryInterface.sequelize.query("DELETE FROM `usuarios` WHERE `email` = ?", { replacements: ['email@exemplo.com'] });
+    await queryInterface.sequelize.query(`DELETE FROM Usuario WHERE 'email' = 'email@exemplo.com'`);
  }
 };

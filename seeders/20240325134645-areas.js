@@ -23,14 +23,13 @@ module.exports = {
     // Inserindo as áreas no banco de dados usando query raw
     for (const area of areas) {
       await queryInterface.sequelize.query(
-        "INSERT INTO `Area` (`nome`, `descricao`, `createdAt`, `updatedAt`) VALUES (?, ?, NOW(), NOW())",
-        { replacements: [area.nome, area.descricao] }
+        `INSERT INTO Area (nome, descricao, createdAt, updatedAt) VALUES ('${area.nome}', '${area.descricao}', NOW(), NOW())`
       );
     }
  },
 
  down: async (queryInterface, Sequelize) => {
     // Removendo as áreas inseridas pelo seed
-    await queryInterface.sequelize.query("DELETE FROM `area`");
+    await queryInterface.sequelize.query(`DELETE FROM Area`);
  }
 };
