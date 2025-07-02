@@ -25,14 +25,17 @@ main {
 /* Organização das questões em duas colunas */
 .questoes-container {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Mantém duas colunas */
-    gap: 1.5rem; /* Reduz o espaçamento entre as colunas */
+    grid-template-columns: 1fr 1fr;
+    /* Mantém duas colunas */
+    gap: 1.5rem;
+    /* Reduz o espaçamento entre as colunas */
 }
 
 
 /* Ajuste das margens para compactar */
 .name-div {
-    margin-bottom: 1rem; /* Reduz o espaçamento inferior */
+    margin-bottom: 1rem;
+    /* Reduz o espaçamento inferior */
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #ccc;
 }
@@ -46,25 +49,29 @@ main {
 
 .name {
     font-size: 12px;
-    text-align: justify; /* Justificar o texto */
+    text-align: justify;
+    /* Justificar o texto */
 }
 
 /* Ajuste no layout das opções */
 .opcao {
     display: flex;
     align-items: center;
-    margin-bottom: 0.8rem; /* Reduz espaço entre as opções */
+    margin-bottom: 0.8rem;
+    /* Reduz espaço entre as opções */
     text-align: justify;
 }
 
 .letra {
     font-weight: bold;
     margin-right: 8px;
-    font-size: 12px; /* Reduz o tamanho das letras das opções */
+    font-size: 12px;
+    /* Reduz o tamanho das letras das opções */
 }
 
 .radio-input {
-    margin-right: 8px; /* Reduz o espaço entre o rádio e o texto */
+    margin-right: 8px;
+    /* Reduz o espaço entre o rádio e o texto */
 }
 
 
@@ -77,7 +84,8 @@ main {
 /* Ajuste no textarea */
 textarea {
     width: 100%;
-    height: 100px; /* Diminui a altura para caber mais conteúdo */
+    height: 100px;
+    /* Diminui a altura para caber mais conteúdo */
     margin-top: 0.5rem;
     padding: 8px;
     font-size: 1rem;
@@ -88,10 +96,13 @@ textarea {
 
 
 /* Ajuste nos botões */
-.button1, .button2 {
+.button1,
+.button2 {
     width: 50%;
-    padding: 8px; /* Reduz o padding para compactar */
-    font-size: 1rem; /* Reduz o tamanho do texto dos botões */
+    padding: 8px;
+    /* Reduz o padding para compactar */
+    font-size: 1rem;
+    /* Reduz o tamanho do texto dos botões */
     border-radius: 5px;
     cursor: pointer;
     margin-left: auto;
@@ -103,13 +114,15 @@ textarea {
 .button1:hover {
     background-color: #45a049;
 }
+
 .button2:hover {
     background-color: #ff0000;
 }
 
 /* Imagens ajustadas para o tamanho do contêiner */
 img {
-    max-width: 100%; /* Garante que a imagem não ultrapasse o limite */
+    max-width: 100%;
+    /* Garante que a imagem não ultrapasse o limite */
     height: auto;
 }
 
@@ -124,8 +137,58 @@ img {
     cursor: pointer;
 
 }
-@media print {
-    .name-div { 
-          page-break-inside:avoid; 
-    }
+
+
+main,
+.questoes-container,
+.form {
+    display: block !important;
+    overflow: visible !important;
+    height: auto !important;
 }
+
+/* Garante que o container do Quill não limite a altura */
+.ql-container,
+.ql-editor {
+    height: auto !important;
+    overflow: visible !important;
+}
+
+/* Mantém a regra principal para evitar quebra DENTRO da questão */
+.questao-wrapper {
+    /* Use o .name-div se não tiver criado o wrapper */
+    page-break-inside: avoid !important;
+    margin-top: 20px;
+    /* Adiciona um espaço para visualmente separar as questões */
+}
+
+    /* ... seus outros estilos ... */
+
+    /* Abordagem 1 (essencial) */
+    #questionario * {
+        box-sizing: border-box;
+    }
+
+    /* Abordagem 2 (para conteúdo específico) */
+    #questionario img {
+        max-width: 100% !important; /* Garante que imagens nunca ultrapassem o container */
+        height: auto !important;
+    }
+
+    #questionario pre, #questionario code {
+        white-space: pre-wrap !important;       /* Permite a quebra de linha em blocos de código */
+        word-break: break-all !important;      /* Força a quebra de palavras/linhas muito longas */
+    }
+
+    #questionario table {
+        table-layout: fixed !important;        /* Impede que o conteúdo da tabela defina sua largura */
+        width: 100% !important;
+    }
+    
+    #questionario p, #questionario div, #questionario li {
+        word-wrap: break-word !important; /* Quebra palavras muito longas que podem vazar */
+    }
+
+    .pdf-page-break {
+        page-break-before: always !important;
+    }

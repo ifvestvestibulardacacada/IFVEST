@@ -2,10 +2,8 @@
 document.getElementById('areaId').addEventListener('change', function () {
     var searchContainer = document.getElementById('topicosSearchContainer');
     if (this.value === '') {
-        // Oculta a barra de pesquisa se nenhuma área for selecionada
         searchContainer.style.display = 'none';
     } else {
-        // Exibe a barra de pesquisa se uma área for selecionada
         searchContainer.style.display = 'block';
     }
 });

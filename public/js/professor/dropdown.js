@@ -2,7 +2,7 @@
 function addItemsToDropdown(Areas) {
     const areaSelect = document.getElementById('areaId');
     const selectedAreaId = areaSelect.value;
-    const selectedArea = Areas.find(area => area.id === parseInt(selectedAreaId));
+    const selectedArea = Areas.find(area => area.id_area === parseInt(selectedAreaId));
     const topicos = selectedArea ? selectedArea.Topico : [];
 
     const dropdownList = document.getElementById('dropdown-list');
@@ -13,12 +13,12 @@ function addItemsToDropdown(Areas) {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = 'topicosSelecionados[]';
-        checkbox.value = topico.id;
-        checkbox.id = 'topico-' + topico.id;
+        checkbox.value = topico.id_topico;
+        checkbox.id = 'topico-' + topico.id_topico;
 
         const label = document.createElement('label');
-        label.htmlFor = 'topico-' + topico.id;
-        label.textContent = topico.materia;
+        label.htmlFor = 'topico-' + topico.id_topico;
+        label.textContent = topico.nome;
 
         checkbox.addEventListener('change', function () {
             updateSelectedTopics();
@@ -53,7 +53,7 @@ function handleSearch(inputValue) {
     
     // Filter the list based on the search input
     const filteredItems = topicos.filter(item => 
-        item.materia.toLowerCase().includes(searchInput.value.toLowerCase())
+        item.nome.toLowerCase().includes(searchInput.value.toLowerCase())
     );
 
     // Update the dropdown list with filtered items
@@ -63,12 +63,12 @@ function handleSearch(inputValue) {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = 'topicosSelecionados[]';
-        checkbox.value = item.id;
-        checkbox.id = 'topico-' + item.id;
+        checkbox.value = item.id_topico;
+        checkbox.id = 'topico-' + item.id_topico;
 
         const label = document.createElement('label');
-        label.htmlFor = 'topico-' + item.id;
-        label.textContent = item.materia;
+        label.htmlFor = 'topico-' + item.id_topico;
+        label.textContent = item.nome;
 
         checkbox.addEventListener('change', function () {
             updateSelectedTopics();
@@ -95,11 +95,11 @@ async function loadTopicDropdown(AreaId) {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = 'topicosSelecionados[]';
-        checkbox.value = topic.id;
+        checkbox.value = topic.id_topico;
 
         const label = document.createElement('label');
-        label.htmlFor = 'topico-' + topic.id;
-        label.textContent = topic.materia;
+        label.htmlFor = 'topico-' + topic.id_topico;
+        label.textContent = topic.nome;
 
         checkbox.checked = topic.selected; // Inicializa como selecionado
 

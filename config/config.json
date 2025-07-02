@@ -1,16 +1,11 @@
 {
   "development": {
-    "username": "neondb_owner",
-    "password": "npg_SfTwEhlR1u3s",
-    "database": "neondb",
-    "host": "ep-empty-term-acex0779.sa-east-1.aws.neon.tech",
-    "dialect": "",
-    "port": "3306",
-    "dialectOptions": {
-      "ssl": {
-        "require": true
-      }
-    }
+    "username": "root",
+    "password": "root",
+    "database": "ifvest_mysql",
+    "host": "localhost",
+    "dialect": "mysql",
+    "port": "3306"
    },
   "test": {
     "username": "ruan177",
@@ -25,7 +20,6 @@
         "require": true
       }
     }
-  
   },
   "production": {
     "username": "ifvestjc_user",

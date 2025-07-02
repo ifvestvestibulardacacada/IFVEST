@@ -27,7 +27,7 @@
             <div class="filtros">
                 <form action="/simulados/visualizar?titulo=" method="GET">
                     <label for="titulo">Buscar:</label>
-                    <input type="text" id="titulo" name="titulo" required>
+                    <input type="text" id="titulo" name="titulo" required maxlength="100">
                     <button type="submit"><i class='bx bx-search'></i> Pesquisar</button>
                 </form>
                
@@ -50,7 +50,7 @@
                      
                             <td>
                               
-                                    <a href="/simulados/<%= simulado.id %>/fazer" class="simulado-icon">
+                                    <a href="/simulados/<%= simulado.id_simulado %>/fazer" class="simulado-icon">
                                         <i class="fas fa-play"></i> Fazer Simulado
                                     </a>
                         

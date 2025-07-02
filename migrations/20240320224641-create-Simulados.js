@@ -2,8 +2,8 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('simulados', {
-      id: {
+    await queryInterface.createTable('Simulado', {
+      id_simulado: {
         type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
@@ -23,12 +23,12 @@ module.exports = {
         }),
         allowNull: false
       },
-      usuarioId: {
+      id_usuario: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'usuarios', // Certifique-se de que 'Usuarios' seja o nome correto da tabela de usuários
-          key: 'id'
+          model: 'Usuario',
+          key: 'id_usuario'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
@@ -47,6 +47,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('simulados');
+    await queryInterface.dropTable('Simulado');
   }
 };

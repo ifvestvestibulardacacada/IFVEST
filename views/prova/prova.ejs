@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/prova/googlef2.css">
     <link rel="stylesheet" href="/css/prova/gabarito.css">
-    <%- include('../partials/quillandUIkit') %>
+    <%- include('../partials/quill_and_uikit') %>
 
 
 </head>
@@ -26,22 +26,19 @@
                     };
                 </script>
             <% } %>
-            <form id="questionario" class="form" action="/simulados/responder-prova/<%= simulado.id %>"
+            <form id="questionario" class="form" action="/simulados/responder-prova/<%= simulado.id_simulado %>"
                 method="POST">
                 <div class="title-div">
                     <h1> <%= simulado.tipo %>
                     </h1>
                 </div>
 
-                <% simulado.Questões.forEach(questao=> { %>
+                <% simulado.Questao.forEach(questao=> { %>
                     <div class="name-div">
                         <div class="titulo">
                             <p>
                                 <%= questao.titulo %>
-                                    <% if (questao.vestibular && questao.vestibular.nome && questao.vestibular.ano) { %>
-                                        (<%= questao.vestibular.nome %>
-                                            <%= questao.vestibular.ano %>)
-                                                <% } %>
+ 
                             </p>
                         </div>
 
@@ -55,27 +52,27 @@
                             // Mapeia as letras para as opções
                             const letras = ['A', 'B', 'C', 'D', 'E'];
                             const opcoesOrdenadas = letras.map(letra => 
-                                questao.Opcoes.find(opcao => opcao.alternativa.startsWith(letra))
+                                questao.Opcao.find(opcao => opcao.alternativa.startsWith(letra))
                             ).filter(opcao => opcao); // Filtra opções que não foram encontradas
                             %>
                             
                             <% opcoesOrdenadas.forEach((opcao, index) => { %>
                                 <div class="opcao">
-                                    <label class="letra" for="opcao<%= opcao.id %>">
+                                    <label class="letra" for="opcao<%= opcao.id_opcao %>">
                                         <%= opcao.alternativa %>
                                     </label>
-                                    <input class="radio-input" type="radio" id="opcao<%= opcao.id %>"
-                                        name="questoes[<%= questao.id %>]"
-                                        value="<%= questao.id %>-<%= opcao.id %>">
+                                    <input class="radio-input" type="radio" id="opcao<%= opcao.id_opcao %>"
+                                        name="questoes[<%= questao.id_questao %>]"
+                                        value="<%= questao.id_questao %>-<%= opcao.id_opcao %>">
                                     
-                                    <div class="name" data-delta='<%= opcao.descricao %>'>
+                                    <div class="name" data-delta='<%= opcao.descricao %>' contenteditable="false">
                                         <span class="required">*</span>
                                     </div>
                                 </div>
                             <% }) %>
                                         <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
-                                            <textarea name="respostas[questao_<%= questao.id %>]"
-                                                placeholder="Sua resposta"></textarea>
+                                            <textarea name="respostas[questao_<%= questao.id_questao %>]"
+                                                placeholder="Sua resposta" ></textarea>
                                             <% } %>
                     </div>
                     <% }) %>
@@ -88,7 +85,7 @@
 
         <!-- Adicione aqui os scripts JS necessários -->
         <script src="/js/main.js"></script>
-        <script src="/js/quillContentHTML.js"></script>
+        <script src="/js/prova/quillContentHTML.js"></script>
 </body>
 
 </html>
