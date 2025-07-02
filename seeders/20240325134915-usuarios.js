@@ -7,11 +7,11 @@ module.exports = {
  up: async (queryInterface, Sequelize) => {
     // Definindo um usuário para inserir no banco de dados
     const usuario = {
-      nome: 'ruan',
-      usuario: 'ruan177',
+       nome: 'admin',
+      usuario: 'admin123',
       email: 'email@exemplo.com',
       senha: '123', 
-      perfil: 'PROFESSOR',// Senha em texto simples
+      tipo_perfil: 'PROFESSOR',// Senha em texto simples
       createdAt: new Date(),
       updatedAt: new Date()
     };

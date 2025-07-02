@@ -5,26 +5,24 @@ function addResposta() {
     const container = document.getElementById("respostas-container");
     const div = document.createElement("div");
     div.className = "resposta-item";
-    div.id = "resposta-item-" + new Date().getTime(); // Adiciona um ID único para cada item de resposta
+    div.id = "resposta-item-" + new Date().getTime(); 
 
 
     const input = document.createElement("input");
-    input.type = "text" // Define o tipo de input como radio
-    input.name = "respostas[]"; // Todos os botões de opção compartilham o mesmo nome
+    input.type = "text" 
+    input.name = "respostas[]"; 
     input.id = "inputTexto"
     input.classList.add('input-resposta')
     input.placeholder = "Sua resposta"
 
     const inputFile = document.createElement("input");
-    inputFile.type = "file"; // Define o tipo de input como radio
-    inputFile.name = "files[]"; // Todos os botões de opção compartilham o mesmo nome
+    inputFile.type = "file"; 
+    inputFile.name = "files[]"; 
     inputFile.id = "inputFile"
     inputFile.classList.add('input-resposta')
 
     inputFile.onchange = function() {
-        // Aqui você pode chamar a função uploadImage com o primeiro arquivo selecionado
         previewImage(this);
-        // uploadImageRespostas(this.files[0]);
     };
 
     const imagePreview = document.createElement("img");
@@ -96,7 +94,7 @@ function updateTopicos(Areas) {
 
         const label = document.createElement('label');
         label.htmlFor = 'topico-' + topico.id;
-        label.textContent = topico.materia;
+        label.textContent = topico.nome;
 
         topicosContainer.appendChild(checkbox);
         topicosContainer.appendChild(label);

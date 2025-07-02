@@ -22,11 +22,11 @@
                     <h1>LOGIN</h1>
                     <div class="textfield">
                         <label for="usuario">Usuário</label>
-                        <input type="text" name="usuario" placeholder="Usuário">
+                        <input type="text" name="usuario" placeholder="Usuário" maxlength="20">
                     </div>
                     <div class="textfield">
                         <label for="senha">Senha</label>
-                        <input type="password" name="senha" placeholder="Senha">
+                        <input type="password" name="senha" placeholder="Senha" maxlength="50">
                     </div>
                     <% if (errorMessage) { %>
                         <div class="error-message" style="color: red">
@@ -41,6 +41,7 @@
         </form>
     </div>
     <div class="infiniteLogo"><img src="/img/infinite_logo.png" alt="Infinite Logo"  /></div>
-</body>
+    
+</body><script src="/js/validate.js"></script>
 
 </html>

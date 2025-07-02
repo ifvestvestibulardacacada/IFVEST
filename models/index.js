@@ -35,4 +35,12 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+sequelize.options.logging = (msg) => {
+  if (msg.startsWith('[SEQUELIZE]')) {
+    console.log(msg);
+  } else if (msg.includes('error') || msg.includes('warning')) {
+    console.error(msg);
+  }
+};
+
 module.exports = db;

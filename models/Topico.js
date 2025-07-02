@@ -5,9 +5,9 @@ module.exports = (sequelize, DataTypes) => {
 
     class Topico extends Model {
         static associate(models) {
-          this.belongsTo(models.Usuario, { foreignKey: 'id_usuario' });
-          this.belongsTo(models.Area, { foreignKey: 'id_area' });
-          this.belongsToMany(models.Questao, { through: 'QuestaoTopico', foreignKey: 'id_topico' });
+          this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'Usuario' });
+          this.belongsTo(models.Area, { foreignKey: 'id_area', as: 'Area' });
+          this.belongsToMany(models.Questao, { through: 'QuestaoTopico', foreignKey: 'id_topico', as: 'Questao' });
         }
     }
 

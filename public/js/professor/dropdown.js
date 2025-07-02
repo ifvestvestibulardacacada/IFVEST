@@ -53,7 +53,7 @@ function handleSearch(inputValue) {
     
     // Filter the list based on the search input
     const filteredItems = topicos.filter(item => 
-        item.materia.toLowerCase().includes(searchInput.value.toLowerCase())
+        item.nome.toLowerCase().includes(searchInput.value.toLowerCase())
     );
 
     // Update the dropdown list with filtered items
@@ -63,12 +63,12 @@ function handleSearch(inputValue) {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = 'topicosSelecionados[]';
-        checkbox.value = item.id;
-        checkbox.id = 'topico-' + item.id;
+        checkbox.value = item.id_topico;
+        checkbox.id = 'topico-' + item.id_topico;
 
         const label = document.createElement('label');
-        label.htmlFor = 'topico-' + item.id;
-        label.textContent = item.materia;
+        label.htmlFor = 'topico-' + item.id_topico;
+        label.textContent = item.nome;
 
         checkbox.addEventListener('change', function () {
             updateSelectedTopics();

@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsToMany(models.PalavraChave, { through: 'TagConteudo', foreignKey: 'id_conteudo' });
-      this.belongsToMany(models.MaterialExterno, { through: 'Recomendacao', foreignKey: 'id_conteudo' });
+      this.belongsToMany(models.PalavraChave, { through: 'TagConteudo', foreignKey: 'id_conteudo', as: 'PalavraChave' });
+      this.belongsToMany(models.MaterialExterno, { through: 'Recomendacao', foreignKey: 'id_conteudo', as: 'MaterialExterno' });
     }
   }
   Conteudo.init({

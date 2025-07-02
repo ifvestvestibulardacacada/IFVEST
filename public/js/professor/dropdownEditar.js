@@ -1,13 +1,9 @@
-// Function to add items to the dropdown
-function addItemsToDropdown(Areas, Topicos) {
-    const areaSelect = document.getElementById('areaId');
-    const selectedAreaId = areaSelect.value;
-    const selectedArea = Areas.find(area => area.id === parseInt(selectedAreaId));
-    const topicos = selectedArea ? selectedArea.Topico : [];
 
+async function loadTopicDropdown(AreaId, topicosSelecionados) {
+    const loadingContainer = document.getElementById('loading-container');
     const dropdownList = document.getElementById('dropdown-list');
-    dropdownList.innerHTML = '';
 
+<<<<<<< HEAD
     topicos.forEach(function (topico) {
         topico.id = topico.id_topico
         const listItem = document.createElement('li');
@@ -29,19 +25,56 @@ function addItemsToDropdown(Areas, Topicos) {
                 return false; // Sair do loop interno
             }
         });
+=======
+    // Mostra o indicador de carregamento
+    loadingContainer.style.display = 'block';
+    dropdownList.innerHTML = ''; // Limpa a lista antes de carregar novos itens
 
-        checkbox.checked = isSelected;// Inicializa como não selecionado
+    try {
+        const response = await fetch(`/professor/topicos/${AreaId}`);
+>>>>>>> e4c0146aa0ad84b94d9a5456dba1d13eb96dd188
 
-        checkbox.addEventListener('change', function () {
-            updateSelectedTopics();
+        // Verifica se a resposta foi bem-sucedida
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // Garante que topicos seja um array
+        const topicos = Array.isArray(data) ? data : [];
+
+        topicos.forEach(topic => {
+            const listItem = document.createElement('li');
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'topicosSelecionados[]';
+            checkbox.value = topic.id_topico;
+
+            const label = document.createElement('label');
+            label.htmlFor = 'topico-' + topic.id_topico;
+            label.textContent = topic.nome;
+
+            // Verifica se o tópico está selecionado
+            let isSelected = topicosSelecionados.some(t => t.id_topico === topic.id_topico);
+            checkbox.checked = isSelected; // Inicializa como selecionado
+
+            checkbox.addEventListener('change', function () {
+                updateSelectedTopics();
+            });
+
+            listItem.appendChild(checkbox);
+            listItem.appendChild(label);
+            dropdownList.appendChild(listItem);
         });
-
-        listItem.appendChild(checkbox);
-        listItem.appendChild(label);
-        dropdownList.appendChild(listItem);
-    });
+    } catch (error) {
+        console.error("Erro ao adicionar itens ao dropdown:", error);
+        alert("Ocorreu um erro ao carregar os tópicos. Tente novamente."); // Mensagem ao usuário
+    } finally {
+        // Oculte o indicador de carregamento após a conclusão
+        loadingContainer.style.display = 'none';
+    }
 }
-
 
 // Function to update selected topics
 function updateSelectedTopics() {
@@ -54,12 +87,17 @@ function updateSelectedTopics() {
 }
 
 // Function to handle search in the dropdown
-function handleSearch(inputValue) {
+async function handleSearch(inputValue, areaId) {
+
+    const response = await fetch(`/professor/topicos/${AreaId}`);
+
+    const data = await response.json();
+    const topicos = data;
     const dropdownList = document.getElementById('dropdown-list');
     const searchInput = document.getElementById('search');
-    
+
     // Filter the list based on the search input
-    const filteredItems = topicos.filter(item => 
+    const filteredItems = topicos.filter(item =>
         item.materia.toLowerCase().includes(searchInput.value.toLowerCase())
     );
 
@@ -70,12 +108,12 @@ function handleSearch(inputValue) {
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.name = 'topicosSelecionados[]';
-        checkbox.value = item.id;
-        checkbox.id = 'topico-' + item.id;
+        checkbox.value = item.id_topico;
+        checkbox.id = 'topico-' + item.id_topico;
 
         const label = document.createElement('label');
-        label.htmlFor = 'topico-' + item.id;
-        label.textContent = item.materia;
+        label.htmlFor = 'topico-' + item.id_topico;
+        label.textContent = item.nome;
 
         checkbox.addEventListener('change', function () {
             updateSelectedTopics();
@@ -88,6 +126,8 @@ function handleSearch(inputValue) {
 }
 
 // Event listener for search input
-document.getElementById('search').addEventListener('input', function() {
+document.getElementById('search').addEventListener('input', function () {
     handleSearch(this.value);
 });
+
+// Função auxiliar para criar um item de dropdown

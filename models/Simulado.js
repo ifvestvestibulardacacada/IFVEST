@@ -4,13 +4,13 @@ module.exports = (sequelize, DataTypes) => {
 
     class Simulado extends Model {
         static associate(models) {
-          this.belongsTo(models.Usuario, { foreignKey: 'id_usuario' });
+          this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'Usuario' });
           this.hasMany(models.Resposta, {
             foreignKey: 'id_simulado',
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           });
-          this.belongsToMany(models.Questao, { through: 'QuestaoSimulado', foreignKey: 'id_simulado' });
+          this.belongsToMany(models.Questao, { through: 'QuestaoSimulado', foreignKey: 'id_simulado', as: 'Questao' });
         }
     }
 
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         tipo: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.ENUM('DISSERTATIVO', 'OBJETIVO', 'ALEATORIO'),
           allowNull: true
         },
     }, {

@@ -17,28 +17,29 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
       throw new Error('Questão não encontrada');
     }
 
-    const topicosIdsAtuais = questao.Topico.map(topico => topico.id);
-
-    // Remover tópicos que não estão mais selecionados
-    await questao.removeTopico(topicosIdsAtuais);
-
-    // Adicionar novos tópicos selecionados
-    if (areaId && areaId !== questao.areaId) {
-      // Atualizar a área da questão
-      await Questao.update({
-        id_area: areaId,
-      }, {
-        where: { id_questao: idQuestao }
-      });
+    const idTopicos = topicosSelecionados.filter(item => !isNaN(item) && item !== '');
+  
+    // // Adicionar novos tópicos selecionados
+    if (areaId && areaId !== questao.id_area) {
+      // Usando o método update da própria instância
+      await questao.update({ id_area: areaId });
     }
 
-    await questao.addTopico(topicosSelecionados);
+    await questao.setTopico(idTopicos);
+
   } catch (error) {
-    console.error('Erro ao atualizar relação de tópicos:', error);
-    throw error;
+    console.error(error);
+    req.session.errorMessage = error.message;
+    await new Promise((resolve, reject) => {
+      req.session.save(err => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+    return res.redirect(req.session.lastGetUrl || '/');
   }
 }
 
-  module.exports = {
-    atualizarRelacaoTopicos
-  };
+module.exports = {
+  atualizarRelacaoTopicos
+};

@@ -20,32 +20,28 @@
     overflow-y: auto;
 }
 
-/* Estilos para o cabeçalho do modal */
+
 .modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 15px;
 }
 
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+
+
 .modal-title {
     font-size: 24px;
     color: #333;
-}
+} 
 
-/* Estilos para o fechamento do modal */
-.close-modal {
-    background-color: #f8f8f8;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    padding: 10px 15px;
-    border-radius: 4px;
-    font-weight: bold;
-}
-
-/* Estilos para o formulário */
 .form-group {
     margin-bottom: 15px;
 }
@@ -101,4 +97,69 @@ color: white;
 .topic-button {
 background-color: #28a745; /* Bootstrap success color */
 color: white;
+} */
+
+
+.topic-group, .flex-col-gap-2 {
+    margin-bottom: 20px;
+}
+
+.label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.select, .topic-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.topic-input:disabled, .topic-button:disabled {
+    background-color: #f5f5f5;
+    color: #999;
+    border-color: #ddd;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center; /* Centraliza o botão horizontalmente */
+    margin-top: 20px; /* Adiciona espaço acima do botão */
+}
+
+.topic-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 440px; /* Define uma largura fixa para o botão */
+    text-align: center;
+}
+
+.topic-button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+#close-modal {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#topico{
+    width: 100%;
+}
+
+#close-modal:hover {
+    background-color: #c82333;
 }

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/simulado/criar_simulado.css">
+  <%- include('../partials/quill_and_uikit') %>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>Criar Simulado - IFVest</title>
+</head>
+
+<body>
+  <%- include('../partials/sidebar') %>
+      <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+                <script>
+                    window.onload = function() {
+                        alert("<%= errorMessage %>");
+                    };
+                </script>
+            <% } %>
+    <div class="form-container" id="formSection">
+      <h1>Criar Simulado</h1>
+      <form id="simuladoForm" action="/api/simulado" method="POST">
+        <label for="titulo">Título do Simulado:</label>
+        <input type="text" id="titulo" name="titulo" required maxlength="100">
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" rows="5" required maxlength="1000"></textarea>
+        <label for="tipo">Selecione o tipo:</label>
+        <select name="tipo" id="tipo" required>
+          <option value="Aleatorio" selected>Aleatoria</option>
+          <option value="Dissertativo">Dissertativa</option>
+          <option value="Objetivo">Objetiva</option>
+        </select>
+        <label for="modo">Selecione o Modo:</label>
+        <select name="modo" id="modo" required>
+          <option value="1">Normal</option>
+          <option value="2">Aleatorio</option>
+        </select>
+        <!-- Hidden input for selected question IDs -->
+        <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
+        <button type="button" onclick="goToNewContent()">Adicionar Questões</button>
+      </form>
+    </div>
+
+    <div class="new-content" id="newContentSection">
+      <h1 class="uk-heading-divider">Associar Questões</h1>
+      <div class="filter-container">
+        <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
+          <script>
+            window.onload = function () {
+              alert("<%= errorMessage %>");
+            };
+          </script>
+          <% } %>
+            <input type="text" name="tituloFiltro" id="tituloFiltro" placeholder="Filtrar por título">
+            <button class="botaoFiltro" onclick="applyFilters()">Filtrar</button>
+      </div>
+
+      <div id="contador-questoes-selecionadas">Questões Selecionadas: <span id="numero-questoes-selecionadas">0</span>
+      </div>
+
+      <div class="table-container">
+        <table class="uk-table uk-table-striped" id="questoesTable">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAll"></th>
+              <th>Título</th>
+              <th>Tipo</th>
+              <th>Questão</th>
+              <th>Tópico</th>
+            </tr>
+          </thead>
+          <tbody id="questoesBody"></tbody>
+        </table>
+      </div>
+      <div class="pagination" id="pagination"></div>
+
+      <div class="button-container">
+        <button type="button" class="voltar-btn" onclick="goBack()">Voltar</button>
+        <button type="button" class="salvar-btn" onclick="saveSimulado()">Salvar</button>
+      </div>
+    </div>
+
+<script>
+  window.questoes = <%- JSON.stringify(questoes || []) %>;
+  console.log('Questoes:', window.questoes);
+</script>
+<script src="/js/simulado/criarSimulado.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/validate.js"></script>
+
+
+</body>
+
+</html>
