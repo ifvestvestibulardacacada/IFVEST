@@ -4,8 +4,8 @@
     "password": "npg_SfTwEhlR1u3s",
     "database": "neondb",
     "host": "ep-empty-term-acex0779.sa-east-1.aws.neon.tech",
-    "dialect": "postgres",
-    "port": "5432",
+    "dialect": "",
+    "port": "3306",
     "dialectOptions": {
       "ssl": {
         "require": true
