@@ -663,6 +663,7 @@ class Render {
         visualizarSimulado: async (req, res) => {
             try {
                 let simulados;
+                console.log(req.session)
                 const perfilUsuario = req.session.perfil;
                 const nomeUsuario = req.session.nomeUsuario;
                 const imagemPerfil = req.session.imagemPerfil;
@@ -680,9 +681,9 @@ class Render {
                     }, {
                         model: Usuario,
                         as: 'Usuario',
-                        attributes: ['perfil'],
+                        attributes: ['tipo_perfil'],
                         where: {
-                            perfil: 'PROFESSOR'
+                            tipo_perfil: 'PROFESSOR'
                         }
                     }
                     ]
