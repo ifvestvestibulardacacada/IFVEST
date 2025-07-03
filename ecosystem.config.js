@@ -1,6 +1,13 @@
 module.exports = {
   apps : [{
     name   : "IFVest",
-    script : "./index.js"
+    script : "./index.js",
+    env: {
+      NODE_ENV: "development"
+    },
+
+    env_production: {
+      NODE_ENV: "production"
+    }
   }],
 }

@@ -28,5 +28,6 @@
     "host": "localhost",
     "dialect": "mariadb",
     "port": "3306"
-  }
+  },
+  "use_env_variable": true
 }
