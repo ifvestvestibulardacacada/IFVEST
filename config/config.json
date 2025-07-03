@@ -24,7 +24,7 @@
   "production": {
     "username": "ifvestjc_user",
     "password": "boso_W{w+VKg",
-    "database": "ifvestjc_production_mysql",
+    "database": "ifvestjc_ifdb",
     "host": "localhost",
     "dialect": "mariadb",
     "port": "3306"
