@@ -1,0 +1,40 @@
+name: Deploy on Infinite Cloud
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Deploy no servidor
+        uses: appleboy/ssh-action@master
+
+        with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          port: ${{secrets.SSH_PORT}}
+
+          script: |
+            echo "Entrando na pasta /home/ifvestjc/public_html/ifvest"
+            cd /home/ifvestjc/public_html/ifvest
+
+            echo "Fazendo pull do repositório na branch main"
+            git pull origin main
+
+            echo "Instalando dependências"
+            npm install --production
+
+            echo "Executando migrations"
+            npx sequelize-cli db:migrate env --production
+
+            echo "Reiniciando no pm2"
+            pm2 reload IFVest
+
+            echo "Deploy finalizado com sucesso."
