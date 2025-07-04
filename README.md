@@ -11,3 +11,5 @@
 - npx sequeliza db:migrate
 - nodemon index.js
 - dentro do navegador digite "http://localhost/"
+
+Alteração teste na main
