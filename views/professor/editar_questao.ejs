@@ -109,10 +109,7 @@
                                                                         <input type="checkbox"
                                                                             name="topicosSelecionados[]"
                                                                             value="<%= topic.id_topico %>"
-                                                                            id="topico-<%= topic.id_topico %>" <% if
-                                                                            (questao.Topico && questao.Topico.filter(t=>
-                                                                        t.id_topico === topic.id_topico).length > 0) {
-                                                                        %> checked <% } %>>
+                                                                            id="topico-<%= topic.id_topico %>" <% if(questao.Topico && questao.Topico.filter(t=>t.id_topico === topic.id_topico).length > 0) {%> checked <% } %>>
                                                                             <label for="topico-<%= topic.id_topico %>">
                                                                                 <%= topic.nome %>
                                                                             </label>
