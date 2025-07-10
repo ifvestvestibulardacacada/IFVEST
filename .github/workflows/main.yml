@@ -26,7 +26,8 @@ jobs:
             cd /home/ifvestjc/public_html/ifvest
 
             echo "Fazendo pull do repositório na branch main"
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
 
             echo "Instalando dependências"
             npm install --production
