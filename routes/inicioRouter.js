@@ -4,8 +4,8 @@ const { Render } = require("../modules/Render")
 const { Auth } = require("../modules/Auth");
 
 // ! Pastas de validação
-// const validateRequest = require('../middleware/validateRequest');
-// const { authSchemas } = require('../validations/schemas');
+const validateRequest = require('../middleware/validateRequest');// ! Remover para tirar validação
+const { authSchemas } = require('../validations/schemas');// ! Remover para tirar validação
 
 const roteador = Router()
 
@@ -28,11 +28,12 @@ roteador.get('/login',  Render.auth.login);
 
 roteador.post('/logoff', Auth.logout);
 roteador.post('/login',
-	// validateRequest(authSchemas.login), //teste schema zod
+	//teste schema zod
+	validateRequest(authSchemas.login), // ! Remover para tirar validação
  	Auth.login
 );
 roteador.post('/cadastro',
-	// validateRequest(authSchemas.cadastro), 
+	validateRequest(authSchemas.cadastro), // ! Remover para tirar validação
 	Auth.cadastro
 );
 
