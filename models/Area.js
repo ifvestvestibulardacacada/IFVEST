@@ -5,8 +5,8 @@ const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Area extends Model {
     static associate(models) {
-      this.hasMany(models.Topico, { foreignKey: 'id_topico', as: 'Topico' })
-      this.hasMany(models.Questao, { foreignKey: 'id_questao', as: 'Questao' })
+      this.hasMany(models.Topico, { foreignKey: 'id_area', as: 'Topico' })
+      this.hasMany(models.Questao, { foreignKey: 'id_area', as: 'Questao' })
     }
   }
 
