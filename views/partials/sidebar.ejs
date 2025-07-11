@@ -21,8 +21,12 @@
                 <%= nomeUsuario %>
             </a>
 
-            <img src="<%= imagemPerfil ? imagemPerfil : '/img/profile.jpg' %>" alt="Perfil" class="header__img"
-                id="perfilImage">
+            <img 
+                src="<%= imagemPerfil ? imagemPerfil : '/img/profile.jpg' %>" 
+                alt="Perfil" 
+                class="header__img"
+                id="perfilImage"
+            >
 
 
 
@@ -83,9 +87,6 @@
                 <div class="nav__items">
                     <h3 class="nav__subtitle">Menu</h3>
 
-
-
-
                     <% if (perfilUsuario==="PROFESSOR" ) { %>
                         <div class="nav__dropdown">
                             <a href="#" class="nav__link">
@@ -94,10 +95,8 @@
                                 <span class="nav__name">Questões</span>
                                 <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
                             </a>
-
                             <div class="nav__dropdown-collapse">
                                 <div class="nav__dropdown-content">
-
 
                                     <a href="/professor/registrar-questao/objetiva" class="nav__dropdown-item"> <i
                                             class='bx bx-checkbox-square'></i>Objetiva</a>
@@ -112,12 +111,8 @@
 
                                     <!-- <a href="/professor/verificar-similaridade" class="nav__dropdown-item"><i 
                                             class='bx bxs-paint' ></i>Verificação IA</a> -->
-
-                     
-
                                 </div>
                             </div>
-
                         </div>
                         <div class="nav__dropdown">
                             <a href="#" class="nav__link">
@@ -125,50 +120,46 @@
                                 <span class="nav__name">Topicos</span>
                                 <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
                             </a>
-
-
                             <div class="nav__dropdown-collapse">
                                 <div class="nav__dropdown-content">
-
 
                                     <a href="/professor/topicos" class="nav__dropdown-item">Meus Topicos</a>
                                    
                                 </div>
-                          
                             </div>
-
-
-
-
-
-
                         </div>
                         <% } %>
-                            <div class="nav__dropdown">
-                                <a href="#" class="nav__link">
-                                    <i class='bx bx-book-heart nav__icon'></i>
-                                    <span class="nav__name">Simulados</span>
-                                    <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
-                                </a>
+                    <div class="nav__dropdown">
+                        <a href="#" class="nav__link">
+                            <i class='bx bx-book-heart nav__icon'></i>
+                            <span class="nav__name">Simulados</span>
+                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
+                        </a>
 
 
-                                <div class="nav__dropdown-collapse">
-                                    <div class="nav__dropdown-content">
+                        <div class="nav__dropdown-collapse">
+                            <div class="nav__dropdown-content">
 
-                                        <a href="/simulados/criar-simulado" class="nav__dropdown-item">Criar
-                                            Simulado</a>
-                                        <a href="/simulados/meus-simulados" class="nav__dropdown-item">Meus
-                                            Simulados</a>
-                                        <!-- <a href="/usuario/seleciona-simulado" class="nav__dropdown-item">Consultar simulados</a> -->
-
-
-                                    </div>
-                                </div>
-
+                                <a href="/simulados/criar-simulado" class="nav__dropdown-item">Criar
+                                    Simulado</a>
+                                <a href="/simulados/meus-simulados" class="nav__dropdown-item">Meus
+                                    Simulados</a>
+                                <!-- <a href="/usuario/seleciona-simulado" class="nav__dropdown-item">Consultar simulados</a> -->
                             </div>
+                        </div>
+                    </div>
+
+                    <a href="/revisao" class="nav__link 
+                        <% if (currentPage==='revisao'){%>
+                        active
+                        <%}%>
+                        ">
+                        <i class='bx bx-library nav__icon'></i> 
+                        <span class="nav__name">Revisão</span>
+                    </a>
+
                 </div>
             </div>
-
         </div>
 
         <form action="/logoff" method="post" class="nav__logout-form">

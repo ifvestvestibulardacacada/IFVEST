@@ -7,6 +7,9 @@ const { Usuario } = require('../models');
 const { Resposta } = require('../models');
 const { Op } = require('sequelize');
 
+// ! Logs lib
+const Nayahath = require('../logs/ArcanaFlow')
+
 // const { Database } = require('./Database') // Inativo momentâneamente
 
 class Render {
@@ -868,6 +871,163 @@ class Render {
             const imagemPerfil = req.session.imagemPerfil;
             res.status(200).render('desenvolvedores/sobre_nos', { nomeUsuario, perfilUsuario, imagemPerfil });
         }
+    }
+
+    static moduloRevisao = {
+        home: async (req, res) => {
+            /*
+            Objetivo: Página inicial para acessar os recursos do módulo de revisão
+            Recebe: Nada
+            Retorna: Página inicial do módulo com nome, perfil e imagem de perfil do usuario
+            */
+            /*
+            ! Fluxo esperado
+            * Recebe a requisição e pega dados de login para exibição
+            * Retorna status 200 e renderiza a página inicial passando os dados de login
+            */
+           Nayahath.action('Revisão', 'Pediu homepage')
+
+           res.locals.currentPage = "revisao"
+            
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+
+            // ! Temporário
+            res.redirect('/revisao/busca')
+        },
+        buscarArea: async (req, res) =>{
+            /*
+            Objetivo: Retornar a página de busca de área
+            Recebe: Nada
+            Retorna: Página da busca de áreas com a lista de áreas para renderizar
+            */
+            /*
+            ! Fluxo esperado
+            * Recebe a requisição e pega dados de login para exibição
+            * Pega o nome e ID de todas as áreas
+            * Renderiza todas as áreas como botões com nome e link usando o id da área
+            */
+            Nayahath.action('Revisão', 'Pediu buscar area')
+
+            res.locals.currentPage = "revisao"
+            
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+
+            const listaAreas = await Area.findAll({
+                attributes: ['id_area', 'nome'],
+                order: [['nome', 'ASC']]
+            })
+            res.render('moduloRevisao/buscarArea', { listaAreas, nomeUsuario, perfilUsuario, imagemPerfil })
+        },
+        buscarTopico: async (req, res) =>{
+            /*
+            Objetivo: Retornar uma página de busca de todos os tópicos de uma área específica
+            Recebe: id_area da área correspondente
+            Retorna: Página de busca de tópicos com a lista de todos os tópicos para renderizar
+            */
+            /*
+            ! Fluxo esperado
+            * Recebe a requisição e pega dados de login para exibição
+            * Pega o nome e descrição da área escolhida
+            * Pega o nome e ID de todos os tópicos pertencentes a área escolhida
+            * Renderiza todos os tópicos como botões com nome e link usando o id do tópico, exibindo uma espécie de página representando a área em si, com título da área e subtítulo como descrição
+            */
+            Nayahath.action('Revisão', 'Pediu buscar topico')
+
+            res.locals.currentPage = "revisao"
+            
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+
+            const { id_area } = req.params;
+
+            const areaAtual = await Area.findByPk(id_area, {
+                attributes: ['id_area', 'nome', 'descricao'],
+                include: {
+                    attributes: ['id_topico', 'nome'],
+                    model: Topico,
+                    as: 'Topico'
+                }
+            })
+
+            const listaTopicos = areaAtual.Topico
+
+            res.render('moduloRevisao/buscarTopico', { area:areaAtual, listaTopicos, nomeUsuario, perfilUsuario, imagemPerfil })
+        },
+        buscarMaterial: async (req, res) =>{
+            /*
+            Objetivo: Retornar uma página de busca de todos os materiais de um tópico específico
+            Recebe: id_topico do tópico correspondente
+            Retorna: Página de busca de materiais com a lista de todos os materiais para renderizar
+            */
+            /*
+            ! Fluxo esperado
+            * Recebe a requisição e pega dados de login para exibição
+            * Pega o nome do tópico escolhido
+            * Pega o título, id, autor e data de todos os materiais associados a um tópico
+            * Renderiza todos os materiais como botões com titulo, autor e data, usando o id do material para servir de link
+            */
+            Nayahath.action('Revisão', 'Pediu buscar material')
+
+            res.locals.currentPage = "revisao"
+            
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+
+            // ! Temporário
+            res.render('moduloRevisao/error', { nomeUsuario, perfilUsuario, imagemPerfil })
+        },
+        criarMaterial: async (req, res) =>{
+            /*
+            Objetivo: Retornar a página com o editor markdown para a criação de um novo material
+            Recebe: Dados do usuario que enviou a requisição
+            Retorna: Editor de material vazio
+            */
+            /*
+            ! Fluxo esperado
+            * Recebe a requisição e pega dados de login para exibição
+            * Se o login condizer com um usuário que tem permissão de criar materiais de revisão, prossegue
+            * Renderiza um editor de materiais vazio
+            */
+            Nayahath.action('Revisão', 'Pediu criar material')
+
+            res.locals.currentPage = "revisao"
+            
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+
+            // ! Temporário
+            res.render('moduloRevisao/error', { nomeUsuario, perfilUsuario, imagemPerfil })
+        },
+        editarMaterial: async (req, res) =>{
+            /*
+            Objetivo: Retornar a página com o editor markdown para a edição de um material existente
+            Recebe: Dados do usuário que enviou a requisição e o ID do material
+            Retorna: Página 
+            */
+            /*
+            ! Fluxo esperado
+            * Recebe a requisição e pega dados de login para exibição
+            * Se o login condizer com um usuário que tem permissão de editar ESTE ESPECIFICO MATERIAL, prossegue
+            * Renderiza um editor de materiais com o conteúdo do material preenchendo os campos do editor
+            */
+            Nayahath.action('Revisão', 'Pediu editar material')
+
+            res.locals.currentPage = "revisao"
+            
+            const perfilUsuario = req.session.perfil;
+            const nomeUsuario = req.session.nomeUsuario;
+            const imagemPerfil = req.session.imagemPerfil;
+
+            // ! Temporário
+            res.render('moduloRevisao/error', { nomeUsuario, perfilUsuario, imagemPerfil })
+        },
     }
 }
 
