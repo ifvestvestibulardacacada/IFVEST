@@ -1,16 +1,8 @@
-const { Area } = require('../models');
-const { Simulado } = require('../models');
-const { Topico } = require('../models');
-const { Questao } = require('../models');
-const { Opcao } = require('../models');
-const { Usuario } = require('../models');
-const { Resposta } = require('../models');
+
+const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta } = require('../models');
 const { Op } = require('sequelize');
 
-// ! Logs lib
 const Nayahath = require('../logs/ArcanaFlow')
-
-// const { Database } = require('./Database') // Inativo momentâneamente
 
 class Render {
     static auth = {
@@ -1031,6 +1023,7 @@ class Render {
     }
 }
 
+exports.Render = Render;
+
 // Render.auth.cadastro(req, res)
 
-exports.Render = Render

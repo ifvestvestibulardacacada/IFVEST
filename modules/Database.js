@@ -1,20 +1,14 @@
-const { Usuario } = require('../models');
-const { Questao } = require('../models');
-const { Opcao } = require('../models');
-const { Simulado } = require('../models');
-const { Resposta } = require('../models');
-const { Topico } = require('../models');
+const { Usuario, Questao, Opcao, Simulado, Resposta, Topico } = require('../models');
 const { removeFileFromUploads } = require('../utils/removeImage')
 const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const bcrypt = require('bcrypt');
-const { Op } = require('sequelize');
-
 
 class Database {
     static questoes = {
         delete: async (req, res) => {
             try {
                 const { id } = req.params;
+
                 const questao = await Questao.findByPk(id);
 
                 if (!questao) {
@@ -37,7 +31,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         register: async (req, res) => {
@@ -62,9 +56,10 @@ class Database {
             const alternativas = ['A', 'B', 'C', 'D', 'E'];
 
             try {
-                if (!pergunta) {
+                if (pergunta === undefined || pergunta === null || pergunta.trim() === '' || pergunta === 'undefined') {
                     throw new Error("Pergunta não pode ser vazio")
                 }
+
                 if (!respostasSelecionadas) {
                     throw new Error("Respostas não pode ser vazio")
                 }
@@ -137,7 +132,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         edit: async (req, res) => { // ! Antigo UpdateQuestaoController
@@ -241,7 +236,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         addImage: async (req, res) => { // ? Antigo uploads/editorImageUploadController.js
@@ -269,7 +264,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect( 'back');
             }
         }
     }
@@ -302,7 +297,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         edit: async (req, res) => {
@@ -337,7 +332,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         register: async (req, res) => {
@@ -398,7 +393,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         removeQuestion: async (req, res) => {
@@ -433,7 +428,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         delete: async (req, res) => {
@@ -463,7 +458,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         submit: async (req, res) => {
@@ -534,7 +529,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
     }
@@ -565,7 +560,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         register: async (req, res) => {
@@ -605,7 +600,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         getAll: async (req, res) => {
@@ -627,7 +622,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
     }
@@ -679,7 +674,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect('back');
             }
         },
         delete: async (req, res) => {
@@ -706,7 +701,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect( 'back');
             }
         },
         edit: async (req, res) => {
@@ -794,90 +789,12 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.redirect(req.session.lastGetUrl || '/');
+                return res.status(400).redirect( 'back');
             }
         }
     }
-    static moduloRevisao = {
-        buscarArea: async (req, res) => {
-            /*
-            Objetivo: Realizar a busca de áreas e retornar a área mais provavel
-            Recebe: Query de busca
-            Retorna: Lista de resultados mais provaveis
-            */
-            /*
-            ! Fluxo esperado
-            * Passo 1 // ? Pendente
-            * Passo 2 // ? Pendente
-            * Passo 3 // ? Pendente
-            */
-        },
-        buscarTopico: async (req, res) => {
-            /*
-            Objetivo: 
-            Recebe: 
-            Retorna: 
-            */
-            /*
-            ! Fluxo esperado
-            * Passo 1 // ? Pendente
-            * Passo 2 // ? Pendente
-            * Passo 3 // ? Pendente
-            */
-        },
-        buscarMaterial: async (req, res) => {
-            /*
-            Objetivo: 
-            Recebe: 
-            Retorna: 
-            */
-            /*
-            ! Fluxo esperado
-            * Passo 1 // ? Pendente
-            * Passo 2 // ? Pendente
-            * Passo 3 // ? Pendente
-            */
-        },
-        criarMaterial: async (req, res) => {
-            /*
-            Objetivo: Guardar um material novo no banco de dados
-            Recebe: Dados de um novo material
-            Retorna: Nada ou redireciona pra alguma pagina
-            */
-            /*
-            ! Fluxo esperado
-            * Passo 1 // ? Pendente
-            * Passo 2 // ? Pendente
-            * Passo 3 // ? Pendente
-            */
-        },
-        editarMaterial: async (req, res) => {
-            /*
-            Objetivo: Editar um material já existente
-            Recebe: 
-            Retorna: 
-            */
-            /*
-            ! Fluxo esperado
-            * Passo 1 // ? Pendente
-            * Passo 2 // ? Pendente
-            * Passo 3 // ? Pendente
-            */
-        },
-        removerMaterial: async (req, res) => {
-            /*
-            Objetivo: 
-            Recebe: 
-            Retorna: 
-            */
-            /*
-            ! Fluxo esperado
-            * Passo 1 // ? Pendente
-            * Passo 2 // ? Pendente
-            * Passo 3 // ? Pendente
-            */
-        },
-    }
 }
 
-exports.Database = Database
+exports.Database = Database;
+
+

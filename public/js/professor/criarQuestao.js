@@ -62,11 +62,17 @@ function initializeQuestionEditors(tipo) {
     }
 
     // Função para enviar o conteúdo do editor
-    function sendEditorContent() {
+    function sendEditorContent(event) {
         const data = getAllContent();
-        console.log(data);
         const length = quill.getLength();
-        const pergunta = length > 1 ? quill.getContents() : alert("A pergunta não pode estar vazia.");
+
+        if (length <= 1) {
+            alert("A pergunta não pode estar vazia.");
+            event.preventDefault(); // Impede o envio do formulário
+            return;
+        }
+
+        const pergunta = quill.getContents();
         localStorage.setItem('pergunta', JSON.stringify(pergunta));
         document.getElementById('respostasSelecionadas').value = JSON.stringify(data);
         document.getElementById('pergunta').value = JSON.stringify(pergunta);

@@ -1,8 +1,4 @@
 function initializeQuill(editorId, buttonId, placeholder) {
-    
-
-    // Registrar um manipulador personalizado para o clipboard
-
 
   const quill = new Quill(editorId, {
         placeholder: placeholder,
@@ -50,14 +46,8 @@ function initializeQuill(editorId, buttonId, placeholder) {
 
                         // Create container for size selection
                         const selectContainer = document.createElement('div');
-                        selectContainer.style.position = 'absolute';
-                        selectContainer.style.background = '#fff';
-                        selectContainer.style.border = '1px solid #ccc';
-                        selectContainer.style.padding = '10px';
-                        selectContainer.style.zIndex = '1000';
-                        selectContainer.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-
-                        // Create select element with size options
+                        selectContainer.className = 'select-container';
+                        // Criar o select com opções de tamanho
                         const select = document.createElement('select');
                         select.innerHTML = `
                             <option value="muito_pequena">Muito Pequena (100x75)</option>
@@ -67,24 +57,14 @@ function initializeQuill(editorId, buttonId, placeholder) {
                             <option value="extra_grande">Extra Grande (800x600)</option>
                         `;
 
-                        // Create confirm and cancel buttons
+                        // Botões de confirmar e cancelar
                         const confirmButton = document.createElement('button');
                         confirmButton.textContent = 'Confirmar';
-                        confirmButton.style.marginLeft = '10px';
-                        confirmButton.style.padding = '5px 10px';
-                        confirmButton.style.background = '#007bff';
-                        confirmButton.style.color = '#fff';
-                        confirmButton.style.border = 'none';
-                        confirmButton.style.cursor = 'pointer';
+                        confirmButton.className = 'confirm-button';
 
                         const cancelButton = document.createElement('button');
                         cancelButton.textContent = 'Cancelar';
-                        cancelButton.style.marginLeft = '10px';
-                        cancelButton.style.padding = '5px 10px';
-                        cancelButton.style.background = '#dc3545';
-                        cancelButton.style.color = '#fff';
-                        cancelButton.style.border = 'none';
-                        cancelButton.style.cursor = 'pointer';
+                        cancelButton.className = 'cancel-button';
 
                         // Append elements to container
                         selectContainer.appendChild(select);
@@ -205,13 +185,7 @@ function uploadImage(file, quillInstance) {
     if (file) {
         // Criar o contêiner para o select
         const selectContainer = document.createElement('div');
-        selectContainer.style.position = 'absolute';
-        selectContainer.style.background = '#fff';
-        selectContainer.style.border = '1px solid #ccc';
-        selectContainer.style.padding = '10px';
-        selectContainer.style.zIndex = '1000';
-        selectContainer.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
-
+        selectContainer.className = 'select-container';
         // Criar o select com opções de tamanho
         const select = document.createElement('select');
         select.innerHTML = `
@@ -225,21 +199,11 @@ function uploadImage(file, quillInstance) {
         // Botões de confirmar e cancelar
         const confirmButton = document.createElement('button');
         confirmButton.textContent = 'Confirmar';
-        confirmButton.style.marginLeft = '10px';
-        confirmButton.style.padding = '5px 10px';
-        confirmButton.style.background = '#007bff';
-        confirmButton.style.color = '#fff';
-        confirmButton.style.border = 'none';
-        confirmButton.style.cursor = 'pointer';
+        confirmButton.className = 'confirm-button';
 
         const cancelButton = document.createElement('button');
         cancelButton.textContent = 'Cancelar';
-        cancelButton.style.marginLeft = '10px';
-        cancelButton.style.padding = '5px 10px';
-        cancelButton.style.background = '#dc3545';
-        cancelButton.style.color = '#fff';
-        cancelButton.style.border = 'none';
-        cancelButton.style.cursor = 'pointer';
+        cancelButton.className = 'cancel-button';
 
         // Adicionar elementos ao contêiner
         selectContainer.appendChild(select);

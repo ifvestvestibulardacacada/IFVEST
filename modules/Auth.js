@@ -1,16 +1,7 @@
 const { Usuario } = require('../models');
-const { Session } = require('../models/Session');
-const { sequelize } = require('../models/index');
-const session = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const store = new SequelizeStore({ db: sequelize, tableName: "sessions", model: Session })
+const { store } = require('../utils/sessionConfig');
 const bcrypt = require('bcrypt');
 
-// const ArcanaFlow = require('../logs/ArcanaFlow.js')
-
-
-// ArcanaFlow.addEntity("Auth", "red")
-// ArcanaFlow.addEntity("Auth.login", "red")
 
 class Auth {
     static async login(req, res) {
@@ -44,6 +35,7 @@ class Auth {
             req.session.nomeUsuario = usuarioEncontrado.usuario;
             req.session.imagemPerfil = usuarioEncontrado.imagem_perfil;
 
+
             await new Promise((resolve, reject) => {
                 req.session.save(err => {
                     if (err) reject(err);
@@ -61,7 +53,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.redirect(req.session.lastGetUrl || '/');
+            return res.redirect('back');
         }
     }
     static async logout(req, res) {
@@ -93,12 +85,13 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.redirect(req.session.lastGetUrl || '/');
+            return res.status(400).redirect( 'back');
         }
     }
 
     static async cadastro(req, res) {
         const { nome, usuario, senha, email, perfil } = req.body;
+       
 
         if (!nome || !usuario || !senha || !email || !perfil) {
             throw new Error("Dados Invalidos ou Incompletos")
@@ -109,7 +102,7 @@ class Auth {
             await Usuario.create({ nome, usuario, senha: senhaCriptografada, email, tipo_perfil:perfil });
 
             res.status(201).redirect('/login');
-        } catch (err) {
+        } catch (error) {
             console.error(error);
             req.session.errorMessage = error.message;
             await new Promise((resolve, reject) => {
@@ -118,9 +111,9 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.redirect(req.session.lastGetUrl || '/');
+            return res.status(400).redirect( 'back');
         }
     }
 }
 
-exports.Auth = Auth
+exports.Auth = Auth;

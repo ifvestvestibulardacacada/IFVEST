@@ -24,14 +24,14 @@ router.get('/criar_material', Render.moduloRevisao.criarMaterial)
 router.get('/editar_material/:id_conteudo', Render.moduloRevisao.editarMaterial)
 
 // Barra de pesquisa
-router.post('/buscar_area', Database.moduloRevisao.buscarArea)
-router.post('/buscar_topico', Database.moduloRevisao.buscarTopico)
-router.post('/buscar_material', Database.moduloRevisao.buscarMaterial)
+// router.post('/buscar_area', Database.moduloRevisao.buscarArea)
+// router.post('/buscar_topico', Database.moduloRevisao.buscarTopico)
+// router.post('/buscar_material', Database.moduloRevisao.buscarMaterial)
 
-// Criação, edição e remoção de materiais
-router.post('/criar_material', Database.moduloRevisao.criarMaterial)
-router.post('/editar_material/:id_conteudo', Database.moduloRevisao.editarMaterial)
-router.post('/remover_material/:id_conteudo', Database.moduloRevisao.removerMaterial)
+// // Criação, edição e remoção de materiais
+// router.post('/criar_material', Database.moduloRevisao.criarMaterial)
+// router.post('/editar_material/:id_conteudo', Database.moduloRevisao.editarMaterial)
+// router.post('/remover_material/:id_conteudo', Database.moduloRevisao.removerMaterial)
 
 // Consulta para pegar as palavras-chave // ! Em avaliação
 

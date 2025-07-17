@@ -20,4 +20,3 @@ roteador.patch('/editar/:id',validateRequest(userSchemas.edit), Database.usuario
 roteador.delete('/:id', Database.usuarios.delete ); // ! DeleteUsuarioController
 
 module.exports = roteador;
-
