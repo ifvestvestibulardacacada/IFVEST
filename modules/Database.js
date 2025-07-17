@@ -793,6 +793,86 @@ class Database {
             }
         }
     }
+    static moduloRevisao = {
+        buscarArea: async (req, res) => {
+            /*
+            Objetivo: Realizar a busca de áreas e retornar a área mais provavel
+            Recebe: Query de busca
+            Retorna: Lista de resultados mais provaveis
+            */
+            /*
+            ! Fluxo esperado
+            * Passo 1 // ? Pendente
+            * Passo 2 // ? Pendente
+            * Passo 3 // ? Pendente
+            */
+        },
+        buscarTopico: async (req, res) => {
+            /*
+            Objetivo: 
+            Recebe: 
+            Retorna: 
+            */
+            /*
+            ! Fluxo esperado
+            * Passo 1 // ? Pendente
+            * Passo 2 // ? Pendente
+            * Passo 3 // ? Pendente
+            */
+        },
+        buscarMaterial: async (req, res) => {
+            /*
+            Objetivo: 
+            Recebe: 
+            Retorna: 
+            */
+            /*
+            ! Fluxo esperado
+            * Passo 1 // ? Pendente
+            * Passo 2 // ? Pendente
+            * Passo 3 // ? Pendente
+            */
+        },
+        criarMaterial: async (req, res) => {
+            /*
+            Objetivo: Guardar um material novo no banco de dados
+            Recebe: Dados de um novo material
+            Retorna: Nada ou redireciona pra alguma pagina
+            */
+            /*
+            ! Fluxo esperado
+            * Passo 1 // ? Pendente
+            * Passo 2 // ? Pendente
+            * Passo 3 // ? Pendente
+            */
+        },
+        editarMaterial: async (req, res) => {
+            /*
+            Objetivo: Editar um material já existente
+            Recebe: 
+            Retorna: 
+            */
+            /*
+            ! Fluxo esperado
+            * Passo 1 // ? Pendente
+            * Passo 2 // ? Pendente
+            * Passo 3 // ? Pendente
+            */
+        },
+        removerMaterial: async (req, res) => {
+            /*
+            Objetivo: 
+            Recebe: 
+            Retorna: 
+            */
+            /*
+            ! Fluxo esperado
+            * Passo 1 // ? Pendente
+            * Passo 2 // ? Pendente
+            * Passo 3 // ? Pendente
+            */
+        },
+    }
 }
 
 exports.Database = Database;
