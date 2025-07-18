@@ -18,7 +18,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 const { secure_pass } = require('./middleware/sessionMidleware');
-const sessionOptions = require('./utils/sessionConfig');
+const {sessionOptions} = require('./utils/sessionConfig');
 const { usuarios, simulados, inicio, professor, uploads, revisao } = require('./routes');
 const path = require('path');
 

@@ -219,17 +219,20 @@ async function saveSimulado() {
   saveButton.textContent = 'Salvando...';
 
   try {
-    const response = await axios.post('/simulados/criar-simulado', formData);
-
+   const response = await axios.post('/simulados/criar-simulado', formData, {
+      validateStatus: status => status >= 200 && status < 300, // Trata apenas 2xx como sucesso
+    });
+    console.log('Resposta recebida:', response);
     alert('Simulado salvo com sucesso!');
     sessionStorage.removeItem('selectedQuestions');
     selectedQuestions = [];
     window.location.href = '/simulados/meus-simulados';
   } catch (error) {
-    console.error('Error:', error);
-    const errorMessage = error.response?.data?.message || 'Erro ao salvar o simulado';
+    console.error('Erro capturado:', error, error.response);
+    const errorMessage = error.response?.data?.error || 'Erro ao salvar o simulado';
     alert('Erro ao salvar o simulado: ' + errorMessage);
   } finally {
+    console.log('Executando finally');
     saveButton.disabled = false;
     saveButton.textContent = 'Salvar';
   }

@@ -28,5 +28,3 @@ roteador.delete('/excluir-questao/:id', Database.questoes.delete); // ! DeleteQu
 
 
 module.exports = roteador;
-
-

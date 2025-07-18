@@ -20,12 +20,12 @@ body {
 }
 
 
-.container {
+/* .container {
     width: 80%;
     max-width: 1200px;
     margin: auto;
     overflow: hidden;
-}
+} */
 li {
     margin-left: 16px;
 }
@@ -165,9 +165,9 @@ select {
     margin-top: 10px;
 }
 
-.container {
+/* .container {
     width: 80%;
-}
+} */
 
 button[type="submit"]:hover {
     background-color: #0056b3;

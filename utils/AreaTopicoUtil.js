@@ -1,6 +1,5 @@
-const { Topico } = require('../models');
-const { Questao } = require('../models');
-
+'use strict';
+const {  Topico, Questao } = require('../models');
 
 async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
   try {
@@ -36,7 +35,7 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
         else resolve();
       });
     });
-    return res.redirect(req.session.lastGetUrl || '/');
+    return res.redirect('back');
   }
 }
 

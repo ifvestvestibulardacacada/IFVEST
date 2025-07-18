@@ -1,46 +1,30 @@
 const { ZodError } = require('zod');
 
-const validateRequest = (schema) => {
+
+ const validateRequest = (schema) => {
   return async (req, res, next) => {
+    const referer = req.headers.referer || '';
     try {
-      // Validate request body against schema
-
+      
       const validatedData = await schema.parseAsync(req.body);
-
-      // Replace req.body with validated data
       req.body = validatedData;
-
       next();
-    } catch (error) {
-      if (error instanceof ZodError) {
-        // Format Zod errors into a more user-friendly format
+    } catch (error) {      if (error instanceof ZodError) {
         const formattedErrors = error.errors.map(err => ({
           path: err.path.join('.'),
           message: err.message
         }));
+        const allMessages = formattedErrors.map(e => e.message).join('\n');
+        console.log('Erros do Zod:', allMessages);
 
-        console.log("error", formattedErrors)
-        console.error("error", formattedErrors[0].message)
-
-        req.session.errorMessage = formattedErrors[0].message;
-
-        await new Promise((resolve, reject) => {
-          req.session.save(err => {
-            if (err) reject(err);
-            else resolve();
-          });
-        });
-
-    return res.redirect(req.session.lastGetUrl || '/');
+        return referer.includes('/simulados/criar-simulado')
+        ? res.status(400).json({ error: allMessages })
+        : res.redirect('back');
       } else {
-
-      // Handle other types of errors
-      console.error('Validation error:', error);
-      req.session.errorMessage = 'Invalid request data';
-      return res.redirect(req.session.lastGetUrl || '/');
+        console.error('Erro de validação:', error);
+        return res.status(400).json({ error: 'Dados inválidos na requisição' });
+      }
     }
-  }
   };
 };
-
 module.exports = validateRequest; 
