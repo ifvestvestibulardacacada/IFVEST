@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--========== BOX ICONS ==========-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <!--========== CSS ==========-->
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/usuario/card.css">
+    <link rel="stylesheet" href="/css/usuario/Botão.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/revisao/criar_material.css">
+
+    <title>Buscar área - Módulo de Revisão de Conteúdo - IFVest</title>
+</head>
+
+<body>
+    <%- include('../partials/sidebar') %>
+<main>
+        <h1>Editar Material</h1>
+        <p style="display: none;"></p>
+
+        <div class="form-container">
+            <form id="materialForm">
+                <!-- Hidden Material ID -->
+                <input type="hidden" id="materialId" value="<%= Material.id_material %>">
+
+                <!-- Título -->
+                <div class="form-group">
+                    <label for="materialTitulo">Título do Material</label>
+                    <input type="text" class="form-control" id="materialTitulo" value="<%= Material.titulo %>">
+                </div>
+
+                <!-- Seletores de Área e Tópico -->
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="selectArea">Área</label>
+                        <select id="selectArea" class="form-control">
+                            <option value="">Selecione uma opção</option>
+                            <% Areas.forEach(area => { %>
+                                <option value="<%= area.id_area %>" <%= area.id_area == Material.topico.id_area ? 'selected' : '' %>>
+                                    <%= area.nome %>
+                                </option>
+                            <% }); %>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="selectTopico">Tópico</label>
+                        <select id="selectTopico" class="form-control">
+                            <option value="">Escolha um tópico...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Palavras-chave -->
+                <div class="form-row keyword-field align-items-end">
+                    <div class="form-group col-md-8">
+                        <label for="palavrasChave">Palavras-chave</label>
+                        <input type="text" class="form-control" id="palavrasChave" placeholder="trovador, cantigas, vassalagem">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <button type="button" class="btn btn-primary" onclick="addKeyword()">Adicionar palavra-chave</button>
+                    </div>
+                    <div class="form-group tag-box"></div>
+                </div>
+
+                <!-- Editor Markdown -->
+                <div class="form-group">
+                    <label for="markdownEditor">Conteúdo do Material (Markdown)</label>
+                    <iframe id="myIframe" frameborder="0" width="100%" src="/editor" height="450"></iframe>
+                </div>
+
+                <!-- Materiais Externos -->
+                <div class="form-group">
+                    <label for="linksExternos">Links Externos (um por linha)</label>
+                    <textarea class="form-control" id="linksExternos" rows="3"><%= Material.MaterialExterno.join('\n') %></textarea>
+                </div>
+
+                <button type="button" id="submitButton" class="btn btn-primary w-100">Salvar Alterações</button>
+            </form>
+        </div>
+    </main>
+
+            <script>
+    // Server-side data passed to client
+    window.Areas = <%- JSON.stringify(Areas || []) %>;
+    window.Topicos = <%- JSON.stringify(topicos || []) %>;
+    window.Material = <%- JSON.stringify(Material || {}) %>;
+ 
+
+    // Initialize tags with provided keywords
+
+</script>
+<script src="/js/revisao/editar_material.js"></script>
+    <script src="/js/handlers/editarMaterialHandler.js"></script>
+       
+</body>
+
+</html>

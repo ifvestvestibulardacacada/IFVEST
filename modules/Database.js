@@ -1,4 +1,4 @@
-const { Usuario, Questao, Opcao, Simulado, Resposta, Topico } = require('../models');
+const { sequelize, Usuario, Questao, Opcao, Simulado, Resposta, Topico, Conteudo, MaterialExterno, Recomendacao, TagConteudo, PalavraChave } = require('../models');
 const { removeFileFromUploads } = require('../utils/removeImage')
 const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const bcrypt = require('bcrypt');
@@ -81,8 +81,8 @@ class Database {
                     throw new Error(`Número de opções deve ser entre ${MIN_OPCOES} e ${MAX_OPCOES}`);
                 }
 
-    
-          
+
+
 
                 if ((tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
                     (tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))) {
@@ -243,13 +243,13 @@ class Database {
             try {
                 // Verifica se uma imagem foi enviada
                 if (!req.file) {
-                    throw new Error('Nenhum arquivo enviado.');
+                    return res.status(400).json({ message:'Nenhum arquivo enviado.' });
                 }
 
                 const url = `/uploads/${req.file.filename}`;
 
                 if (!url) {
-                    throw new Error('Erro no upload da imagem');
+                    return res.status(400).json({ message:'Erro no upload da imagem' });
                 }
 
                 res.status(200).json(url);
@@ -264,7 +264,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect( 'back');
+                return res.status(400).redirect('back');
             }
         }
     }
@@ -340,7 +340,7 @@ class Database {
             const usuarioId = req.session.userId;
             try {
 
-                if (!titulo || !descricao || !tipo ) {
+                if (!titulo || !descricao || !tipo) {
                     return res.status(400).json({ message: 'Dados inválidos: título, descrição, tipo e modo são obrigatórios.' });
                 }
 
@@ -701,7 +701,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect( 'back');
+                return res.status(400).redirect('back');
             }
         },
         edit: async (req, res) => {
@@ -789,7 +789,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect( 'back');
+                return res.status(400).redirect('back');
             }
         }
     }
@@ -834,30 +834,175 @@ class Database {
             */
         },
         criarMaterial: async (req, res) => {
-            /*
-            Objetivo: Guardar um material novo no banco de dados
-            Recebe: Dados de um novo material
-            Retorna: Nada ou redireciona pra alguma pagina
-            */
-            /*
-            ! Fluxo esperado
-            * Passo 1 // ? Pendente
-            * Passo 2 // ? Pendente
-            * Passo 3 // ? Pendente
-            */
+
+            const { titulo, areaId, topicoId, palavrasChave, conteudo, linksExternos } = req.body;
+
+            const userId = req.session.userId;
+
+            const transaction = await sequelize.transaction(); // Inicia a transação
+            try {
+
+                if (!titulo || !areaId || !topicoId || !conteudo) {
+                    return res.status(400).json({ message: 'Todos os campos obrigatórios devem ser preenchidos.' });
+                }
+
+                if (!palavrasChave || !Array.isArray(palavrasChave)) {
+                    return res.status(400).json({ message: 'Palavras-chave devem ser um array.' });
+                }
+                if (palavrasChave.length === 0 && linksExternos.length === 0) {
+                    return res.status(400).json({ message: 'Pelo menos uma palavra-chave e um link externo deve ser fornecida.' });
+                }
+
+                const ConteudoCriado = await Conteudo.create(
+                    {
+                        titulo: titulo,
+                        id_usuario: userId,
+                        id_topico: topicoId,
+                        conteudo_markdown: conteudo,
+                        contagem_leitura: 0,
+                    },
+                    { transaction }
+                );
+
+                const idsPalavrasChave = [];
+                const idsMaterialExterno = [];
+
+                // Processa palavras-chave
+                for (const palavra of palavrasChave) {
+                    let palavraChave = await PalavraChave.findOne({
+                        where: { palavrachave: palavra },
+                        transaction,
+                    });
+
+                    if (palavraChave) {
+                        idsPalavrasChave.push(palavraChave.id_palavrachave);
+                    } else {
+                        palavraChave = await PalavraChave.create(
+                            { palavrachave: palavra },
+                            { transaction }
+                        );
+                        idsPalavrasChave.push(palavraChave.id_palavrachave);
+                    }
+                }
+
+                // Processa links externos
+                for (const link of linksExternos) {
+                    let linkExterno = await MaterialExterno.findOne({
+                        where: { material: link },
+                        transaction,
+                    });
+
+                    if (linkExterno) {
+                        idsMaterialExterno.push(linkExterno.id_material_externo);
+                    } else {
+                        linkExterno = await MaterialExterno.create(
+                            { material: link },
+                            { transaction }
+                        );
+                        idsMaterialExterno.push(linkExterno.id_material_externo);
+                    }
+                }
+
+                await ConteudoCriado.setPalavraChave(idsPalavrasChave, { transaction });
+                await ConteudoCriado.setMaterialExterno(idsMaterialExterno, { transaction });
+
+                // Confirma a transação
+                await transaction.commit();
+                res.status(201).json({
+                    conteudo: ConteudoCriado,
+                    palavrasChave: idsPalavrasChave,
+                    linksExternos: idsMaterialExterno,
+                });
+            } catch (error) {
+                // Desfaz a transação em caso de erro
+                await transaction.rollback();
+                console.error('Erro ao criar conteúdo:', error);
+                res.status(500).json({ error: 'Falha ao criar conteúdo' });
+            }
         },
         editarMaterial: async (req, res) => {
-            /*
-            Objetivo: Editar um material já existente
-            Recebe: 
-            Retorna: 
-            */
-            /*
-            ! Fluxo esperado
-            * Passo 1 // ? Pendente
-            * Passo 2 // ? Pendente
-            * Passo 3 // ? Pendente
-            */
+            const { id_conteudo } = req.params;
+            const { titulo, areaId, topicoId, palavrasChave, conteudo, linksExternos } = req.body;
+            const userId = req.session.userId;
+
+            const transaction = await sequelize.transaction();
+            try {
+
+
+                if (!titulo || !areaId || !topicoId || !conteudo) {
+                    return res.status(400).json({ message: 'Todos os campos obrigatórios devem ser preenchidos.' });
+                }
+
+                if (!Array.isArray(palavrasChave) || !Array.isArray(linksExternos)) {
+                    return res.status(400).json({ message: 'Palavras-chave e links externos devem ser arrays.' });
+                }
+
+                if (palavrasChave.length === 0 && linksExternos.length === 0) {
+                    return res.status(400).json({ message: 'Pelo menos uma palavra-chave ou um link externo deve ser fornecido.' });
+                }
+
+                const conteudoEditado = await Conteudo.findOne({
+                    where: { id_conteudo: id_conteudo, id_usuario: userId },
+                    transaction
+                });
+
+                if (!conteudoEditado) {
+                    await transaction.rollback();
+                    return res.status(404).json({
+                        message: conteudo ? 'Você não tem permissão para editar este conteúdo.' : 'Conteúdo não encontrado.'
+                    });
+                }
+
+                const updates = {};
+                if (titulo && titulo !== conteudoEditado.titulo) updates.titulo = titulo;
+                if (conteudo && conteudo !== conteudoEditado.conteudo_markdown) updates.conteudo_markdown = conteudo;
+                if (topicoId && topicoId !== conteudoEditado.id_topico) updates.id_topico = topicoId;
+
+
+                if (Object.keys(updates).length > 0) {
+                    await conteudoEditado.update(updates, { transaction });
+                }
+
+                const idsPalavrasChave = await Promise.all(palavrasChave.map(async (palavra) => {
+                    const [palavraChave, created] = await PalavraChave.findOrCreate({
+                        where: { palavrachave: palavra },
+                        defaults: { palavrachave: palavra },
+                        transaction
+                    });
+                    return palavraChave.id_palavrachave;
+                }));
+
+                const idsMaterialExterno = await Promise.all(linksExternos.map(async (link) => {
+                    const [linkExterno, created] = await MaterialExterno.findOrCreate({
+                        where: { material: link },
+                        defaults: { material: link },
+                        transaction
+                    });
+                    return linkExterno.id_material_externo;
+                }));
+
+                // Atualiza associações
+             await conteudoEditado.setPalavraChave(idsPalavrasChave, { transaction });
+                await conteudoEditado.setMaterialExterno(idsMaterialExterno, { transaction });
+
+                await transaction.commit();
+                return res.status(200).json({
+                    message: 'Conteúdo atualizado com sucesso.',
+                    conteudo: {
+                        id: conteudoEditado.id_conteudo,
+                        titulo: conteudoEditado.titulo,
+
+                        topicoId: conteudoEditado.id_topico,
+                        palavrasChave: idsPalavrasChave,
+                        linksExternos: idsMaterialExterno
+                    }
+                });
+
+            } catch (error) {
+                await transaction.rollback();
+                console.error('Erro ao editar material:', error);
+                return res.status(500).json({ message: 'Erro interno do servidor.' });
+            }
         },
         removerMaterial: async (req, res) => {
             /*

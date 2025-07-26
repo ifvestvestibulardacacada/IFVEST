@@ -23,7 +23,17 @@ module.exports = (sequelize, DataTypes) => {
     id_conteudo: {
       type:DataTypes.INTEGER,
     },
-    id_palavrachave: DataTypes.INTEGER
+    id_palavrachave: DataTypes.INTEGER,
+        createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    }
   }, {
     sequelize,
     modelName: 'TagConteudo',

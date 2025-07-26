@@ -1,5 +1,5 @@
 import symbolButtons from "./symbolButtons.js"
-import Button from "../core/entity/button.js"
+import Button from "../../core/entity/button.js"
 
 
 /// Editor buttons ///////////////////////////////////////////////////////////////////////////

@@ -15,24 +15,24 @@ if (Nayahath) {
 const express = require('express');
 const methodOverride = require('method-override');
 const session = require('express-session');
-const bodyParser = require('body-parser');
+
 const helmet = require('helmet');
 const { secure_pass } = require('./middleware/sessionMidleware');
 const {sessionOptions} = require('./utils/sessionConfig');
 const { usuarios, simulados, inicio, professor, uploads, revisao } = require('./routes');
 const path = require('path');
-
+const cors = require('cors')
 
 const app = express();
 
 
 
 
-app.use(bodyParser.json());
+
 
 app.use(session(sessionOptions));
 
-
+app.use(cors({ origin: 'http://localhost:3000' }))
 // app.use(helmet({
 //     contentSecurityPolicy: {
 //         directives: {
@@ -106,6 +106,14 @@ app.use('/professor', professor);
 app.use("/uploads",  uploads) 
 app.use("/simulados",  simulados) 
 app.use("/revisao", revisao)
+
+app.use(express.static(path.join(__dirname, 'dist')));
+
+app.get('/editor', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Working on port 3000!')
