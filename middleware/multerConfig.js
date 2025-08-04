@@ -1,10 +1,12 @@
-// Configuração do multer
 const multer = require('multer');
 const path = require('path');
 
+// Define the upload directory based on environment variable or default to /home/ifvestjc/public_html/uploads
+const UPLOADS_DIR = process.env.UPLOADS_DIR || '/home/ifvestjc/public_html/uploads';
+
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, path.join(__dirname, '..', 'uploads'));
+        cb(null, UPLOADS_DIR);
     },
     filename: function(req, file, cb) {
         const filename = `${Date.now()}-${file.originalname}`;
@@ -12,6 +14,6 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage, array: true} );
+const upload = multer({ storage: storage, array: true });
 
 module.exports = upload;
