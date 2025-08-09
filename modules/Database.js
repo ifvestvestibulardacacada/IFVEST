@@ -31,7 +31,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         register: async (req, res) => {
@@ -132,7 +132,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         edit: async (req, res) => { // ! Antigo UpdateQuestaoController
@@ -236,7 +236,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         addImage: async (req, res) => { // ? Antigo uploads/editorImageUploadController.js
@@ -264,7 +264,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect( 'back');
+                return res.status(400).redirect( req.get("Referrer") || "/");
             }
         }
     }
@@ -297,7 +297,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         edit: async (req, res) => {
@@ -332,7 +332,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         register: async (req, res) => {
@@ -393,7 +393,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         removeQuestion: async (req, res) => {
@@ -428,7 +428,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         delete: async (req, res) => {
@@ -458,7 +458,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         submit: async (req, res) => {
@@ -529,7 +529,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
     }
@@ -560,7 +560,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         register: async (req, res) => {
@@ -600,7 +600,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         getAll: async (req, res) => {
@@ -622,7 +622,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
     }
@@ -674,7 +674,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         delete: async (req, res) => {
@@ -701,7 +701,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect( 'back');
+                return res.status(400).redirect( req.get("Referrer") || "/");
             }
         },
         edit: async (req, res) => {
@@ -789,7 +789,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect( 'back');
+                return res.status(400).redirect( req.get("Referrer") || "/");
             }
         }
     }

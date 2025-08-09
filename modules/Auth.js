@@ -53,7 +53,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.redirect('back');
+            return res.redirect(req.get("Referrer") || "/");
         }
     }
     static async logout(req, res) {
@@ -85,7 +85,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.status(400).redirect( 'back');
+            return res.status(400).redirect( req.get("Referrer") || "/");
         }
     }
 
@@ -111,7 +111,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.status(400).redirect( 'back');
+            return res.status(400).redirect( req.get("Referrer") || "/");
         }
     }
 }

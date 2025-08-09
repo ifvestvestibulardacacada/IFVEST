@@ -17,7 +17,7 @@ router.get('/busca/:id_area', Render.moduloRevisao.buscarTopico)
 router.get('/busca/:id_area/:id_topico', Render.moduloRevisao.buscarMaterial)
 
 // Leitura de material
-router.get('/conteudo/:id_conteudo')
+// router.get('/conteudo/:id_conteudo')
 
 // Criação e edição de material
 router.get('/criar_material', Render.moduloRevisao.criarMaterial)
