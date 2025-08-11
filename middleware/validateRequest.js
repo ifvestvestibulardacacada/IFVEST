@@ -19,7 +19,7 @@ const { ZodError } = require('zod');
 
         return referer.includes('/simulados/criar-simulado')
         ? res.status(400).json({ error: allMessages })
-        : res.redirect('back');
+        : res.redirect(req.get("Referrer") || "/");
       } else {
         console.error('Erro de validação:', error);
         return res.status(400).json({ error: 'Dados inválidos na requisição' });

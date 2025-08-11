@@ -154,6 +154,43 @@ addQuestion: z.object({
       .optional()
   }).partial()
 };
+const contentSchemas = {
+  register: z.object({
+    titulo: z
+      .string()
+      .min(1, "O título não pode ser vazio")
+      .max(200, "O título não pode exceder 200 caracteres")
+      .regex(patterns.textPattern, "Formato de título inválido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de título inválido" }),
+    areaId: z
+      .string()
+      .regex(/^\d+$/, "O ID da área deve ser um número válido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de ID da área inválido" }),
+    topicoId: z
+      .string()
+      .regex(/^\d+$/, "O ID do tópico deve ser um número válido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de ID do tópico inválido" }),
+    palavrasChave: z
+      .array(z.string().regex(patterns.textPattern, "Formato de palavra-chave inválido"))
+      .min(1, "Deve haver pelo menos uma palavra-chave")
+      .refine(
+        arr => arr.every(val => !patterns.sqlPattern.test(val)),
+        { message: "Formato de palavra-chave inválido" }
+      ),
+    conteudo: z
+      .string()
+      .min(10, "O conteúdo deve ter pelo menos 10 caracteres")
+      .regex(patterns.textPattern, "Formato de conteúdo inválido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de conteúdo inválido" }),
+    linksExternos: z
+      .array(z.string().url("Formato de URL inválido"))
+      .optional()
+      .refine(
+        arr => (arr ? arr.every(val => !patterns.sqlPattern.test(val)) : true),
+        { message: "Formato de URL inválido" }
+      ),
+  }),
+};
 
 module.exports = {
   patterns,
@@ -161,6 +198,7 @@ module.exports = {
   questionSchemas,
   simuladoSchemas,
   topicoSchemas,
-  userSchemas
+  userSchemas,
+  contentSchemas
 };
 

@@ -1065,26 +1065,27 @@ class Render {
 
             } catch (error) {
                 console.error(error)
-                res.redirect('back');
+                res.redirect(req.get("Referrer") || "/");
             }
 
 
         },
         materiais: async (req, res) => {
             try {
-                const { nomeUsuario, perfilUsuario, imagemPerfil, userId } = req.session;
+                const { nomeUsuario, perfil, imagemPerfil,  } = req.session;
 
-                res.render('moduloRevisao/material', { nomeUsuario, perfilUsuario, imagemPerfil, });
+                res.render('moduloRevisao/material', { nomeUsuario, perfilUsuario: perfil, imagemPerfil, });
 
 
             } catch (error) {
                 console.error(error)
-                res.redirect('back');
+                res.redirect(req.get("Referrer") || "/");
             }
         },
         meus_materiais: async (req, res) => {
             try {
-                const { nomeUsuario, perfilUsuario, imagemPerfil, userId } = req.session;
+                
+                const { nomeUsuario, imagemPerfil, perfil, userId } = req.session;
                 const limit = 10; // Número de Questao por página
 
                 const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
@@ -1116,12 +1117,12 @@ class Render {
 
                 });
 
-                res.render('moduloRevisao/meus_materiais', { totalPages, page, nomeUsuario, perfilUsuario, imagemPerfil, Conteudos });
+                res.render('moduloRevisao/meus_materiais', { totalPages, page, nomeUsuario, perfilUsuario: perfil, imagemPerfil, Conteudos });
 
 
             } catch (error) {
                 console.error(error)
-                res.redirect('back');
+                res.redirect(req.get("Referrer") || "/");
             }
         }
     }

@@ -2,6 +2,7 @@ const { sequelize, Usuario, Questao, Opcao, Simulado, Resposta, Topico, Conteudo
 const { removeFileFromUploads } = require('../utils/removeImage')
 const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const bcrypt = require('bcrypt');
+const { tr } = require('zod/v4/locales');
 
 class Database {
     static questoes = {
@@ -31,7 +32,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         register: async (req, res) => {
@@ -132,7 +133,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         edit: async (req, res) => { // ! Antigo UpdateQuestaoController
@@ -236,20 +237,20 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         addImage: async (req, res) => { // ? Antigo uploads/editorImageUploadController.js
             try {
                 // Verifica se uma imagem foi enviada
                 if (!req.file) {
-                    return res.status(400).json({ message:'Nenhum arquivo enviado.' });
+                    return res.status(400).json({ message: 'Nenhum arquivo enviado.' });
                 }
 
                 const url = `/uploads/${req.file.filename}`;
 
                 if (!url) {
-                    return res.status(400).json({ message:'Erro no upload da imagem' });
+                    return res.status(400).json({ message: 'Erro no upload da imagem' });
                 }
 
                 res.status(200).json(url);
@@ -264,7 +265,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         }
     }
@@ -297,7 +298,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         edit: async (req, res) => {
@@ -332,7 +333,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         register: async (req, res) => {
@@ -393,7 +394,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         removeQuestion: async (req, res) => {
@@ -428,7 +429,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         delete: async (req, res) => {
@@ -458,7 +459,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         submit: async (req, res) => {
@@ -529,7 +530,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
     }
@@ -560,7 +561,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         register: async (req, res) => {
@@ -600,7 +601,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         getAll: async (req, res) => {
@@ -622,7 +623,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
     }
@@ -674,7 +675,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         delete: async (req, res) => {
@@ -701,7 +702,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         edit: async (req, res) => {
@@ -789,7 +790,7 @@ class Database {
                         else resolve();
                     });
                 });
-                return res.status(400).redirect('back');
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         }
     }
@@ -982,7 +983,7 @@ class Database {
                 }));
 
                 // Atualiza associações
-             await conteudoEditado.setPalavraChave(idsPalavrasChave, { transaction });
+                await conteudoEditado.setPalavraChave(idsPalavrasChave, { transaction });
                 await conteudoEditado.setMaterialExterno(idsMaterialExterno, { transaction });
 
                 await transaction.commit();
@@ -1005,18 +1006,47 @@ class Database {
             }
         },
         removerMaterial: async (req, res) => {
-            /*
-            Objetivo: 
-            Recebe: 
-            Retorna: 
-            */
-            /*
-            ! Fluxo esperado
-            * Passo 1 // ? Pendente
-            * Passo 2 // ? Pendente
-            * Passo 3 // ? Pendente
-            */
-        },
+            const { id_conteudo } = req.params;
+            const transaction = await sequelize.transaction();
+            try {
+                const conteudo = await Conteudo.findByPk(id_conteudo, {
+                    transaction
+                });
+                if (!conteudo) {
+                    return res.status(404).json({ message: 'Conteúdo não encontrado.' });
+                }
+                await conteudo.setPalavraChave([], { transaction });
+
+            
+                const materiaisExternos = await conteudo.getMaterialExterno({ transaction });
+                const idsMaterialExterno = materiaisExternos.map(material => material.id_material_externo);
+
+              
+                await conteudo.setMaterialExterno([], { transaction });
+
+                // Exclui os registros de MaterialExterno
+                if (idsMaterialExterno.length > 0) {
+                    await MaterialExterno.destroy({
+                        where: { id_material_externo: idsMaterialExterno },
+                        transaction
+                    });
+                }
+
+                // Exclui o Conteudo
+                await conteudo.destroy({ transaction });
+
+                await transaction.commit();
+                return res.status(200).redirect('/revisao/meus_materiais');
+         
+
+
+
+            } catch (error) {
+                await transaction.rollback();
+                console.error('Erro ao buscar conteúdo:', error);
+                return res.status(500).json({ message: 'Erro interno do servidor.' });
+            }
+        }
     }
 }
 

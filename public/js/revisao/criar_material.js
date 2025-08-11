@@ -70,4 +70,26 @@ window.palavrasChave.forEach(palavra => {
     datalist.appendChild(option);
 });
 
+if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem('EditorContent');
+    console.log('EditorContent cleared');
+} else {
+    console.error('localStorage is not available');
+}
+window.addEventListener('beforeunload', () => {
+    try {
+        localStorage.removeItem('EditorContent');
+        console.log('EditorContent cleared from localStorage on beforeunload');
+    } catch (error) {
+        console.error('Error clearing EditorContent on beforeunload:', error);
+    }
+});
+
+document.addEventListener('click', (event) => {
+    const target = event.target.closest('a');
+    if (target && target.href && !target.href.startsWith(window.location.href)) {
+
+        localStorage.removeItem('EditorContent');
+    }
+});
 

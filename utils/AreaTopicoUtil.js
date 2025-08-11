@@ -35,7 +35,7 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
         else resolve();
       });
     });
-    return res.redirect('back');
+    return res.redirect(req.get("Referrer") || "/");
   }
 }
 

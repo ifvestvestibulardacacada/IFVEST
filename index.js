@@ -18,7 +18,8 @@ const session = require('express-session');
 
 const helmet = require('helmet');
 const { secure_pass } = require('./middleware/sessionMidleware');
-const {sessionOptions} = require('./utils/sessionConfig');
+const {sessionOptions, store} = require('./utils/sessionConfig');
+const uniqueSession = require('./middleware/uniqueSession');
 const { usuarios, simulados, inicio, professor, uploads, revisao } = require('./routes');
 const path = require('path');
 const cors = require('cors')
@@ -31,8 +32,9 @@ const app = express();
 
 
 app.use(session(sessionOptions));
-
+app.use(uniqueSession(store));
 app.use(cors({ origin: 'http://localhost:3000' }))
+
 // app.use(helmet({
 //     contentSecurityPolicy: {
 //         directives: {

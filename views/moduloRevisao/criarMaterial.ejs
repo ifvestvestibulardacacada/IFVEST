@@ -18,7 +18,8 @@
     <link rel="stylesheet" href="/css/revisao/criar_material.css">
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
 
-
+  <script type="module" crossorigin src="/assets/index-QSGzVeGj.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-D17DFlJU.css">
     <title>Buscar área - Módulo de Revisão de Conteúdo - IFVest</title>
 </head>
 
@@ -82,7 +83,8 @@
                     <!-- Editor Markdown -->
                     <div class="form-group">
                         <label for="markdownEditor">Conteúdo do Material (Markdown)</label>
-                        <iframe id="myIframe" frameborder="0" width="100%" src="/editor" height="450"></iframe>
+                         <!-- <iframe id="myIframe" frameborder="0" width="100%" src="/editor" height="450"></iframe> -->
+<div id="root"></div>
                         <!-- <textarea class="form-control" id="markdownEditor" rows="10"></textarea> -->
                     </div>
                     <!-- Materiais Externos -->
@@ -100,18 +102,8 @@
             window.Areas = <%- JSON.stringify(Areas || []) %>;
             window.Topicos = <%- JSON.stringify(topicos || []) %>;
             window.palavrasChave = <%- JSON.stringify(palavrasChave) %>;
-            
-            window.addEventListener('beforeunload', () => {
-                localStorage.removeItem('EditorContent');
-            });
 
-            document.addEventListener('click', (event) => {
-                const target = event.target.closest('a');
-                if (target && target.href && !target.href.startsWith(window.location.href)) {
-                    // Clear localStorage when clicking a link that navigates to a different page
-                    localStorage.removeItem('EditorContent');
-                }
-            });
+
         </script>
 
         <!--========== MAIN JS ==========-->

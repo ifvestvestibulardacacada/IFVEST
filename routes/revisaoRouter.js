@@ -2,7 +2,8 @@ const { Router } = require('express')
 
 const { Render } = require('../modules/Render')
 const { Database } = require('../modules/Database')
-
+const validateRequest = require('../middleware/validateRequest');
+const { contentSchemas } = require('../validations/schemas');
 const router = Router()
 
 // ! Logs lib
@@ -17,7 +18,7 @@ router.get('/busca/:id_area', Render.moduloRevisao.buscarTopico)
 router.get('/busca/:id_area/:id_topico', Render.moduloRevisao.buscarMaterial)
 
 // Leitura de material
-router.get('/conteudo/:id_conteudo')
+// router.get('/conteudo/:id_conteudo')
 
 // Criação e edição de material
 router.get('/home', Render.moduloRevisao.materiais)
@@ -33,7 +34,7 @@ router.post('/buscar_material', Database.moduloRevisao.buscarMaterial)
 // Criação, edição e remoção de materiais
 router.post('/criar_material', Database.moduloRevisao.criarMaterial)
 router.patch('/editar_material/:id_conteudo', Database.moduloRevisao.editarMaterial)
-router.post('/remover_material/:id_conteudo', Database.moduloRevisao.removerMaterial)
+router.delete('/remover_material/:id_conteudo', Database.moduloRevisao.removerMaterial)
 
 // Consulta para pegar as palavras-chave // ! Em avaliação
 
