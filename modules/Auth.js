@@ -5,129 +5,55 @@ const bcrypt = require('bcrypt');
 
 class Auth {
     static async login(req, res) {
-        const { usuario, senha } = req.body;
+          const { usuario, senha } = req.body;
 
         try {
             if (!usuario || !senha) {
-                throw new Error('Usuário ou senha inválidos');
+                throw new Error("Usuario ou Senha invalidos");
             }
 
             const usuarioEncontrado = await Usuario.findOne({
-                where: { usuario },
+                where: { usuario: usuario }
             });
 
             if (!usuarioEncontrado) {
-                throw new Error('Usuário ou senha inválidos');
+                // ArcanaFlow.error('Auth.login', 'Usuario nao encontrado');
+                throw new Error("Usuario ou Senha invalidos");
             }
 
             const senhaCorreta = await bcrypt.compare(senha, usuarioEncontrado.senha);
 
             if (!senhaCorreta) {
-                throw new Error('Usuário ou senha inválidos');
+                // ArcanaFlow.error('Auth.login', `Usuario ou senha invalidos`);
+                throw new Error("Usuario ou Senha invalidos");
             }
 
-            const userId = usuarioEncontrado.id_usuario.toString(); // Normaliza para string
-            console.log(`Iniciando login para userId: ${userId}`);
 
-            // Verificar se já existe uma sessão ativa (opcional, para bloquear logins simultâneos)
-            // let activeSessionExists = false;
-            // try {
-            //     const sessions = await store.sessionModel.findAll();
-            //     console.log(`Total de sessões encontradas: ${sessions.length}`);
-
-            //     for (const session of sessions) {
-            //         try {
-            //             const sessionData = JSON.parse(session.data);
-            //             if (sessionData.userId && sessionData.userId.toString() === userId) {
-            //                 activeSessionExists = true;
-            //                 break;
-            //             }
-            //         } catch (err) {
-            //             console.error(`Erro ao parsear sessão ${session.sid}:`, err.message);
-            //         }
-            //     }
-            // } catch (err) {
-            //     console.error('Erro ao verificar sessões existentes:', err.message);
-            // }
-
-            // // Opcional: Bloquear login se houver sessão ativa
-            // if (activeSessionExists) {
-            //     req.session.errorMessage = 'Já existe uma sessão ativa para esta conta. Faça logout primeiro.';
-            //     await new Promise((resolve, reject) => {
-            //         req.session.save((err) => {
-            //             if (err) {
-            //                 console.error('Erro ao salvar sessão de erro:', err.message);
-            //                 reject(err);
-            //             } else {
-            //                 resolve();
-            //             }
-            //         });
-            //     });
-            //     return res.redirect('/login');
-            // }
-
-            // Deletar sessões antigas do mesmo userId
-            try {
-                const sessions = await store.sessionModel.findAll();
-                let deletedCount = 0;
-                for (const session of sessions) {
-                    try {
-                        const sessionData = JSON.parse(session.data);
-                        console.log(`Analisando sessão: sid=${session.sid}, data=${JSON.stringify(sessionData)}`);
-
-                        if (sessionData.userId && sessionData.userId.toString() === userId) {
-                            const deleted = await store.sessionModel.destroy({ where: { sid: session.sid } });
-                            deletedCount += deleted;
-                            console.log(`Sessão antiga deletada: sid=${session.sid}, userId=${userId}, linhas afetadas=${deleted}`);
-                        }
-                    } catch (err) {
-                        console.error(`Erro ao parsear sessão ${session.sid}:`, err.message);
-                        // Deleta sessões com JSON inválido
-                        const deleted = await store.sessionModel.destroy({ where: { sid: session.sid } });
-                        deletedCount += deleted;
-                        console.log(`Sessão com JSON inválido deletada: sid=${session.sid}, linhas afetadas=${deleted}`);
-                    }
-                }
-                console.log(`Total de sessões antigas deletadas: ${deletedCount}`);
-            } catch (err) {
-                console.error('Erro ao deletar sessões antigas:', err.message);
-                // Não bloqueia o login, mas loga o erro
-            }
-
-            // Criar nova sessão
             req.session.login = true;
-            req.session.userId = userId;
+            req.session.userId = usuarioEncontrado.id_usuario;
             req.session.perfil = usuarioEncontrado.tipo_perfil;
             req.session.nomeUsuario = usuarioEncontrado.usuario;
             req.session.imagemPerfil = usuarioEncontrado.imagem_perfil;
 
+
             await new Promise((resolve, reject) => {
-                req.session.save((err) => {
-                    if (err) {
-                        console.error('Erro ao salvar sessão:', err.message);
-                        reject(err);
-                    } else {
-                        console.log(`Nova sessão criada: sid=${req.sessionID}, userId=${userId}`);
-                        resolve();
-                    }
+                req.session.save(err => {
+                    if (err) reject(err);
+                    else resolve();
                 });
             });
 
             return res.redirect('/usuario/inicioLogado');
         } catch (error) {
-            console.error('Erro no login:', error.message);
+            
             req.session.errorMessage = error.message;
             await new Promise((resolve, reject) => {
-                req.session.save((err) => {
-                    if (err) {
-                        console.error('Erro ao salvar sessão de erro:', err.message);
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
+                req.session.save(err => {
+                    if (err) reject(err);
+                    else resolve();
                 });
             });
-            return res.redirect('/login');
+            return res.redirect(req.get("Referrer") || "/");
         }
     }
 
@@ -140,12 +66,12 @@ class Auth {
 
         const userId = req.session.userId.toString();
         const sessionID = req.sessionID;
-        console.log(`Iniciando logout para userId: ${userId}, sid: ${sessionID}`);
+        
 
         try {
             // Deletar a sessão atual
             const deleted = await store.sessionModel.destroy({ where: { sid: sessionID } });
-            console.log(`Sessão atual deletada: sid=${sessionID}, userId=${userId}, linhas afetadas=${deleted}`);
+            console.log(`Sessão atual deletada: sid=${sessionID}, userId=${userId}, linhas =${deleted}`);
 
             // Destruir a sessão no servidor
             await new Promise((resolve, reject) => {

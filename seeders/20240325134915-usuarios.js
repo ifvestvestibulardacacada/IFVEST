@@ -21,7 +21,7 @@ module.exports = {
 
     // Inserindo o usuário no banco de dados com a senha criptografada
     await queryInterface.sequelize.query(
-      `INSERT INTO Usuario (nome, usuario, email, senha, tipo_perfil, createdAt, updatedAt) VALUES ('${usuario.nome}','${usuario.usuario}','${usuario.email}', '${hashedPassword}', '${usuario.perfil}', NOW(), NOW())`
+      `INSERT INTO Usuario (nome, usuario, email, senha, tipo_perfil, createdAt, updatedAt) VALUES ('${usuario.nome}','${usuario.usuario}','${usuario.email}', '${hashedPassword}', '${usuario.tipo_perfil}', NOW(), NOW())`
     );
  },
 
