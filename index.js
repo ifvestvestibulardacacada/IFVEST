@@ -19,7 +19,7 @@ const session = require('express-session');
 const helmet = require('helmet');
 const { secure_pass } = require('./middleware/sessionMidleware');
 const {sessionOptions, store} = require('./utils/sessionConfig');
-const uniqueSession = require('./middleware/uniqueSession');
+
 const { usuarios, simulados, inicio, professor, uploads, revisao } = require('./routes');
 const path = require('path');
 const cors = require('cors')
