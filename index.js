@@ -32,7 +32,7 @@ const app = express();
 
 
 app.use(session(sessionOptions));
-app.use(uniqueSession(store));
+
 app.use(cors({ origin: 'http://localhost:3000' }))
 
 // app.use(helmet({
