@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false
     },
-     titulo: DataTypes.STRING,
+     nome: DataTypes.STRING,
     conteudo_markdown: DataTypes.TEXT,
     contagem_leituras: DataTypes.INTEGER,
     id_usuario: {
