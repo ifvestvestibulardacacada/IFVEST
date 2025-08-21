@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IFVest - Flashcards</title>
+    <link rel="stylesheet" href="/css/flashcards/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+    <div class="container">
+      <%- include('../partials/sidebar') %>
+      <main class="flashcard-content">
+        
+        <div class="flashcard-header">
+          <a href="/flashcards/selecionar" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Voltar para Seleção
+          </a>
+          <h2 class="title">Flashcards</h2>
+        </div>
+
+        <div id="flashcard-container">
+          <% if (flashcards && flashcards.length > 0) { %>
+            <% flashcards.forEach((card, index) => { %>
+              <!-- Adiciona a classe 'active' apenas no primeiro card -->
+              <div class="flashcard <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>">
+                <div class="flashcard-inner">
+                  <div class="flashcard-front">
+                    <p class="pergunta"><%= card.pergunta %></p>
+                    <button class="ver-resposta">Ver resposta</button>
+                    <div class="interrogacao">?</div>
+                  </div>
+                  <div class="flashcard-back">
+                    <p class="resposta"><%= card.resposta %></p>
+                    <button class="ver-pergunta">Ver pergunta</button>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p>Nenhum flashcard encontrado para o filtro selecionado.</p>
+            <a href="/flashcards/selecionar" class="back-btn" style="margin-top: 1rem; display: inline-block;">Voltar para Seleção</a>
+          <% } %>
+        </div>
+
+        <!-- Controles de Navegação -->
+        <% if (flashcards && flashcards.length > 0) { %>
+          <div class="navigation-controls">
+            <button id="prev-btn" class="nav-btn"><i class="fas fa-chevron-left"></i> Anterior</button>
+            <span id="progress-indicator">1 / <%= flashcards.length %></span>
+            <button id="next-btn" class="nav-btn">Próximo <i class="fas fa-chevron-right"></i></button>
+          </div>
+        <% } %>
+      </main>
+    </div>
+
+  <script src="/js/flashcard/navegaFlashcards.js"></script>
+  </body>
+</html>

@@ -31,5 +31,7 @@ module.exports = {
  down: async (queryInterface, Sequelize) => {
     // Removendo as áreas inseridas pelo seed
     await queryInterface.sequelize.query(`DELETE FROM Area`);
+    await queryInterface.sequelize.query(`ALTER TABLE Area AUTO_INCREMENT = 1`);
+
  }
 };

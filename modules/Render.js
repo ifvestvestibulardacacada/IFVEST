@@ -1,10 +1,54 @@
 
-const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta } = require('../models');
+const { Area, Simulado, Dificuldade, Flashcard, Topico, Questao, Opcao, Usuario, Resposta } = require('../models');
 const { Op } = require('sequelize');
 
 const Nayahath = require('../logs/ArcanaFlow')
 
 class Render {
+    static flashcards = {
+        selecionar: async (req, res) => {
+            try {
+                const areas = await Area.findAll();
+                const topicos = await Topico.findAll();
+                const dificuldades = await Dificuldade.findAll();
+                const nomeUsuario = req.session.nomeUsuario;
+                const perfilUsuario = req.session.perfil;
+                const imagemPerfil = req.session.imagemPerfil;
+                res.render('flashcards/selecionar', { areas, topicos, dificuldades, nomeUsuario, perfilUsuario, imagemPerfil });
+            } catch (error) {
+                res.status(500).send('Erro ao carregar a página de seleção de flashcards.');
+            }
+        },
+        meusFlashcards: async (req, res) => {
+            try {
+                const { id_area, id_topico, id_dificuldade } = req.query;
+                const where = {};
+                if (id_area) where.id_area = id_area;
+                if (id_topico) where.id_topico = id_topico;
+                if (id_dificuldade) where.id_dificuldade = id_dificuldade;
+                const flashcards = await Flashcard.findAll({ where });
+                const nomeUsuario = req.session.nomeUsuario;
+                const perfilUsuario = req.session.perfil;
+                const imagemPerfil = req.session.imagemPerfil;
+                res.render('flashcards/flashcards', { flashcards, nomeUsuario, perfilUsuario, imagemPerfil });
+            } catch (error) {
+                res.status(500).send('Erro ao buscar flashcards.');
+            }
+        }
+    }
+
+    static dificuldades = {
+        dificuldades: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const dificuldades = await Dificuldade.findAll();
+                res.render('dificuldades/dificuldades', { dificuldades });
+            } catch (error) {
+                res.status(500).send('Erro ao buscar dificuldades.');
+            }
+        }
+    }
+
     static auth = {
         cadastro: async (req, res) => {
             let errorMessage = req.session.errorMessage;
@@ -28,6 +72,7 @@ class Render {
             res.status(200).render('usuario/login', { errorMessage });
         }
     }
+
     static questoes = {
         editar: async (req, res) => {
             const { id } = req.params;
@@ -235,6 +280,7 @@ class Render {
         }
 
     }
+
     static simulados = {
         adicionarQuestoes: async (req, res) => {
             try {
@@ -714,6 +760,7 @@ class Render {
             }
         },
     }
+
     static topicos = {
         meusTopicos: async (req, res) => {
             const perfilUsuario = req.session.perfil;
@@ -787,6 +834,7 @@ class Render {
             };
         }
     }
+
     static usuarios = {
         editarUsuario: async (req, res) => {
             try {

@@ -4,6 +4,137 @@ const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const bcrypt = require('bcrypt');
 
 class Database {
+    static flashcards = {
+        getAll: async (req, res) => {
+            const { id_area, id_topico, id_dificuldade } = req.query;
+            const where = {};
+            if (id_area) where.id_area = id_area;
+            if (id_topico) where.id_topico = id_topico;
+            if (id_dificuldade) where.id_dificuldade = id_dificuldade;
+            try {
+                const { Flashcard, Area, Topico, Dificuldade } = require('../models');
+                const flashcards = await Flashcard.findAll({
+                    where,
+                    include: [Area, Topico, Dificuldade]
+                });
+                res.status(200).json(flashcards);
+            } catch (error) {
+                res.status(500).json({ message: 'Erro ao buscar flashcards', error: error.message });
+            }
+        },
+        create: async (req, res) => {
+            try {
+                const { Flashcard } = require('../models');
+                const { pergunta, resposta, id_area, id_topico, id_dificuldade } = req.body;
+                const novoFlashcard = await Flashcard.create({
+                    pergunta,
+                    resposta,
+                    id_area,
+                    id_topico,
+                    id_dificuldade
+                });
+                res.status(201).json(novoFlashcard);
+            } catch (error) {
+                res.status(400).json({ message: 'Erro ao criar flashcard', error: error.message });
+            }
+        },
+        update: async (req, res) => {
+            try {
+                const { Flashcard } = require('../models');
+                const { id } = req.params;
+                const { pergunta, resposta, id_area, id_topico, id_dificuldade } = req.body;
+                const [updated] = await Flashcard.update({
+                    pergunta,
+                    resposta,
+                    id_area,
+                    id_topico,
+                    id_dificuldade
+                }, {
+                    where: { id_flashcards: id }
+                });
+                if (updated) {
+                    const updatedFlashcard = await Flashcard.findByPk(id);
+                    res.status(200).json(updatedFlashcard);
+                } else {
+                    res.status(404).json({ message: 'Flashcard não encontrado' });
+                }
+            } catch (error) {
+                res.status(400).json({ message: 'Erro ao atualizar flashcard', error: error.message });
+            }
+        },
+        delete: async (req, res) => {
+            try {
+                const { Flashcard } = require('../models');
+                const { id } = req.params;
+                const deleted = await Flashcard.destroy({
+                    where: { id_flashcards: id }
+                });
+                if (deleted) {
+                    res.status(204).send();
+                } else {
+                    res.status(404).json({ message: 'Flashcard não encontrado' });
+                }
+            } catch (error) {
+                res.status(500).json({ message: 'Erro ao deletar flashcard', error: error.message });
+            }
+        }
+    }
+
+    static dificuldades = {
+        getAll: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const dificuldades = await Dificuldade.findAll();
+                res.status(200).json(dificuldades);
+            } catch (error) {
+                res.status(500).json({ message: 'Erro interno ao buscar dificuldades', error: error.message });
+            }
+        },
+        create: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const { nivel } = req.body;
+                if (!nivel) {
+                    return res.status(400).json({ message: 'O nível da dificuldade é obrigatório.' });
+                }
+                const novaDificuldade = await Dificuldade.create({ nivel });
+                res.status(201).json(novaDificuldade);
+            } catch (error) {
+                res.status(400).json({ message: 'Erro ao criar dificuldade', error: error.message });
+            }
+        },
+        update: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const { id } = req.params;
+                const { nivel } = req.body;
+                const [updated] = await Dificuldade.update({ nivel }, { where: { id_dificuldade: id } });
+                if (updated) {
+                    const updatedDificuldade = await Dificuldade.findByPk(id);
+                    res.status(200).json(updatedDificuldade);
+                } else {
+                    res.status(404).json({ message: 'Dificuldade não encontrada' });
+                }
+            } catch (error) {
+                res.status(400).json({ message: 'Erro ao atualizar dificuldade', error: error.message });
+            }
+        },
+        delete: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const { id } = req.params;
+                const deleted = await Dificuldade.destroy({ where: { id_dificuldade: id } });
+                if (deleted) {
+                    res.status(204).send();
+                } else {
+                    res.status(404).json({ message: 'Dificuldade não encontrada' });
+                }
+            } catch (error) {
+                res.status(500).json({ message: 'Erro ao deletar dificuldade', error: error.message });
+            }
+        }
+    }
+    
     static questoes = {
         delete: async (req, res) => {
             try {
@@ -268,6 +399,7 @@ class Database {
             }
         }
     }
+
     static simulados = {
         addQuestion: async (req, res) => {
             const { simuladoId } = req.params;
@@ -533,6 +665,7 @@ class Database {
             }
         },
     }
+
     static topicos = {
         edit: async (req, res) => {
             const { id, nome } = req.body;
@@ -626,6 +759,7 @@ class Database {
             }
         },
     }
+
     static usuarios = {
         changeImg: async (req, res) => { // ? Antigo uploads/profileImageUploadControllers.js
             try {
@@ -793,6 +927,7 @@ class Database {
             }
         }
     }
+
     static moduloRevisao = {
         buscarArea: async (req, res) => {
             /*
