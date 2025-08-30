@@ -20,18 +20,17 @@
 </head>
 
 <body>
-    <%- include('../partials/sidebar') %>
     <main>
-        <h1>Buscar área</h1>
-        <h2>Escolha a área que deseja estudar</h2>
+        <h1><%= area.nome %></h1>
+        <h2><%= area.descricao %></h2>
         <div class="container">
             <div class="ag-courses_box">
-                <% listaAreas.forEach(area => { %>
+                <% listaTopicos.forEach(topico => { %>
                     <div class="ag-courses_item">
-                        <a href="/revisao/busca/<%= area.id_area %>" class="ag-courses-item_link">
+                        <a href="/revisao/busca/<%= area.id_area %>/<%= topico.id_topico %>" class="ag-courses-item_link">
                             <div class="ag-courses-item_bg"></div>
                             <div class="ag-courses-item_title">
-                                <%= area.nome %>
+                                <%= topico.nome %>
                             </div>
                         </a>
                     </div>

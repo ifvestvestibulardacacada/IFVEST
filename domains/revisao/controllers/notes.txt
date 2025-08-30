@@ -1,0 +1,1 @@
+tsc buscarArea.ts buscarMaterial.ts buscarTopico.ts criarMaterial.ts editarMaterial.ts home.ts index.ts removerMaterial.ts

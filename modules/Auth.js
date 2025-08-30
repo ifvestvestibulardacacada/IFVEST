@@ -2,10 +2,13 @@ const { Usuario } = require('../models');
 const { store } = require('../utils/sessionConfig');
 const bcrypt = require('bcrypt');
 
+const Nayahath = require('../logs/ArcanaFlow')
 
 class Auth {
     static async login(req, res) {
         const { usuario, senha } = req.body;
+
+        Nayahath.action('Login', `username: ${usuario}, senha: ${senha}`)
 
         try {
             if (!usuario || !senha) {
@@ -92,6 +95,7 @@ class Auth {
     static async cadastro(req, res) {
         const { nome, usuario, senha, email, perfil } = req.body;
        
+        Nayahath.action('Cadastro', `username: ${usuario}, senha: ${senha}`)
 
         if (!nome || !usuario || !senha || !email || !perfil) {
             throw new Error("Dados Invalidos ou Incompletos")

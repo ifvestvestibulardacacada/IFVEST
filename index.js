@@ -21,9 +21,14 @@ const { secure_pass } = require('./middleware/sessionMidleware');
 const {sessionOptions} = require('./utils/sessionConfig');
 const { usuarios, simulados, inicio, professor, uploads, revisao } = require('./routes');
 const path = require('path');
-
+const expressLayouts = require('express-ejs-layouts');
+const revisaoApp = require('./domains/revisao/index.js');
 
 const app = express();
+
+//! Layouts
+app.use(expressLayouts);
+app.set('layout', path.join(__dirname, 'views/layouts/main'))
 
 
 
@@ -105,7 +110,7 @@ app.use('/usuario', usuarios);
 app.use('/professor', professor);
 app.use("/uploads",  uploads) 
 app.use("/simulados",  simulados) 
-app.use("/revisao", revisao)
+app.use("/revisao", revisaoApp)
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Working on port 3000!')
