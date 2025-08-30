@@ -1,5 +1,6 @@
-import express, { Express, RequestHandler } from "express";
-import path from "path";
+const express = require('express');
+const { Express, RequestHandler } = require('express')
+const path = require('path');
 
 interface DomainConfig {
   views: string;
@@ -8,7 +9,7 @@ interface DomainConfig {
   middlewares?: RequestHandler[];
 }
 
-export function createDomainApp(config: DomainConfig): Express {
+function createDomainApp(config: DomainConfig): Express {
   const domainApp = express();
 
   domainApp.set("views", path.resolve(config.views));
@@ -23,4 +24,8 @@ export function createDomainApp(config: DomainConfig): Express {
   }
 
   return domainApp;
+}
+
+module.exports = {
+  createDomainApp
 }
