@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const controllers = require('./controllers/index.js')
+const controllers = require('./controllers')
 const Nayahath = require('../../logs/ArcanaFlow.js')
 
 const { buscarArea, buscarTopico, buscarMaterial, criarMaterial, editarMaterial, home } = controllers

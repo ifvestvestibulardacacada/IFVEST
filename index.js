@@ -22,7 +22,10 @@ const {sessionOptions} = require('./utils/sessionConfig');
 const { usuarios, simulados, inicio, professor, uploads, revisao } = require('./routes');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
+
+
 const revisaoApp = require('./domains/revisao/index.js');
+const simuladosApp = require('./domains/simulados/index.js')
 
 const app = express();
 
@@ -107,12 +110,12 @@ app.use(async (req, res, next) => {
 app.use('/', inicio);
 app.use(secure_pass);
 app.use('/usuario', usuarios);
-app.use('/professor', professor);
+app.use('/professor', simuladosApp);
 app.use("/uploads",  uploads) 
-app.use("/simulados",  simulados) 
+app.use("/simulados",  simuladosApp) 
 app.use("/revisao", revisaoApp)
 
 app.listen(process.env.PORT || 3000, () => {
     console.log('Working on port 3000!')
 });
- module.exports = {app};
+module.exports = {app};

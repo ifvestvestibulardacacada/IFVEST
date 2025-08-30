@@ -1,0 +1,81 @@
+textarea,
+.opcao-dissertativa,
+.resposta-do-usuario {
+  max-width: 600px;
+  width: 100%;
+  min-height: 100px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  color: rgba(0, 0, 0, 0.87);
+  font-family: Roboto, sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.14994px;
+  line-height: 1.5;
+  text-align: justify;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px 0;
+}
+
+/* Ensure the dissertative option has a subtle background to differentiate */
+.opcao-dissertativa {
+  background-color: #f0f4ff; /* Light blue tint to distinguish from user response */
+}
+
+/* User's response has a slightly different background for clarity */
+.resposta-do-usuario {
+  background-color: #f9f9f9; /* Light gray to differentiate from the dissertative option */
+}
+
+/* Maintain the option styling for objective questions */
+.opcao {
+  display: flex;
+  align-items: center;
+  place-content: start;
+  margin-left: 2rem;
+  margin-bottom: 10px;
+}
+
+.letra {
+  margin-right: 10px;
+}
+
+.opcao-correta {
+  background-color: #d4edda; /* Green for correct */
+}
+
+.opcao-incorreta {
+  background-color: #f8d7da; /* Red for incorrect */
+}
+
+.opcao-texto {
+  line-height: 1.5;
+  width: 100%;
+}
+
+.respostas-container {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.opcoes-section,
+.resposta-section {
+  margin-bottom: 20px;
+}
+
+.opcoes-section h4,
+.resposta-section h4 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.resposta-section {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 6px;
+}

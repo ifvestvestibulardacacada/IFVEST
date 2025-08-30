@@ -13,10 +13,10 @@ class Render {
                 errorMessage = " ";
             }
             req.session.errorMessage = null;
-            res.status(200).render('usuario/cadastro', { errorMessage });
+            res.status(200).render('usuario/cadastro', { errorMessage, layout: false });
         },
         home: async (req, res) => {
-            res.status(200).render('usuario/inicio');
+            res.status(200).render('usuario/inicio', { layout: false } );
         },
         login: async (req, res) => {
             let errorMessage = req.session.errorMessage;
@@ -25,7 +25,7 @@ class Render {
                 errorMessage = " ";
             }
             req.session.errorMessage = null; // Limpa a mensagem de erro após exibi-la
-            res.status(200).render('usuario/login', { errorMessage });
+            res.status(200).render('usuario/login', { errorMessage, layout: false  });
         }
     }
     static questoes = {
@@ -823,10 +823,10 @@ class Render {
             const imagemPerfil = req.session.imagemPerfil;
             const id = req.session.userId;
 
-            console.log(id)
+            // console.log(id)
             try {
                 const usuario = await Usuario.findByPk(id);
-                console.log(usuario)
+                // console.log(usuario)
 
                 if (!usuario) {
                     return res.status(400).send("Erro ao buscar usuario ");
