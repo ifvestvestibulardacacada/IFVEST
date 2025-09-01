@@ -123,7 +123,7 @@ class Database {
                     })
                 }
 
-                res.status(201).redirect('/usuario/inicioLogado');
+                return res.status(201).redirect('/professor/questoes');
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
@@ -226,7 +226,7 @@ class Database {
                     });
                 }
 
-                res.redirect('/professor/questoes');
+                return res.redirect('/professor/questoes');
 
             } catch (error) {
                 console.error(error);
@@ -665,7 +665,7 @@ class Database {
                 });
 
                 // Redireciona para a página de perfil
-                res.status(200).redirect(`/usuario/perfil`);
+                return res.status(200).redirect(`/usuario/perfil`);
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
@@ -853,6 +853,7 @@ class Database {
                 if (palavrasChave.length === 0 && linksExternos.length === 0) {
                     return res.status(400).json({ message: 'Pelo menos uma palavra-chave e um link externo deve ser fornecida.' });
                 }
+
 
                 const ConteudoCriado = await Conteudo.create(
                     {

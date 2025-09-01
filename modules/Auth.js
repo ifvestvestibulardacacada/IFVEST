@@ -126,7 +126,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.status(400).redirect('/cadastro');
+            return res.redirect(req.get("Referrer") || "/");
         }
     }
 }

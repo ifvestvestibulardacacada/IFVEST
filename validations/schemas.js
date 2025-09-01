@@ -180,7 +180,6 @@ const contentSchemas = {
     conteudo: z
       .string()
       .min(10, "O conteúdo deve ter pelo menos 10 caracteres")
-      .regex(patterns.textPattern, "Formato de conteúdo inválido")
       .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de conteúdo inválido" }),
     linksExternos: z
       .array(z.string().url("Formato de URL inválido"))

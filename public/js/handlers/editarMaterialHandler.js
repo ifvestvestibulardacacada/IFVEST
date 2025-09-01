@@ -17,12 +17,21 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Por favor, preencha todos os campos obrigatórios (Título, Área, Tópico e Conteúdo).');
             return;
         }
+        if (!formData.palavrasChave || formData.palavrasChave.length === 0) {
+            alert('Por favor, adicione pelo menos uma palavra-chave.');
+            return;
+        }
+        if (!formData.linksExternos || formData.linksExternos.length === 0) {
+            alert('Por favor, adicione pelo menos um link externo.');
+            return;
+        }
 
         try {
             // Send data to the server using Axios
             const response = await axios.patch(`/revisao/editar_material/${window.Material.id_conteudo}`, formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             });
 
@@ -37,6 +46,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('selectTopico').innerHTML = '<option selected>Escolha a área primeiro...</option>';
                 document.getElementById('selectTopico').disabled = true;
                   window.location.href = '/revisao/home';
+            }
+            if (response.status === 400) {
+                const errorMessage = response.data.message || 'Erro ao atualizar material.';
+                throw new Error(errorMessage);  
             }
         } catch (error) {
             console.error('Erro ao enviar o formulário:', error);

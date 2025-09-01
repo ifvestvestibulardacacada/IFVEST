@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
- document.getElementById('submitButton').addEventListener('click', async function (event) {
+    document.getElementById('submitButton').addEventListener('click', async function (event) {
         event.preventDefault(); // Prevent the default form submission
 
         // Collect form data
@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // Send data to the server using Axios
             const response = await axios.post('/revisao/criar_material', formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             });
 
@@ -36,13 +37,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 renderTags(); // Update the tag display
                 document.getElementById('selectTopico').innerHTML = '<option selected>Escolha a área primeiro...</option>';
                 document.getElementById('selectTopico').disabled = true;
-                window.location.href = '/revisao/home';
+                window.location.href = '/revisao/home'
 
             }
+
         } catch (error) {
             console.error('Erro ao enviar o formulário:', error);
-            const errorMessage = error.response?.data?.message || 'Tente novamente.';
-            alert(`Erro ao criar material: ${errorMessage}`);
+
+            // Handle validation errors from Zod
+            if (error.response?.status === 400 && error.response?.data?.details) {
+                const errorDetails = error.response.data.details;
+                // Format error messages for display
+                const errorMessages = errorDetails.map(err => `${err.path}: ${err.message}`).join('\n');
+                alert(`Erro ao criar material:\n${errorMessages}`);
+            } else {
+                // Fallback for other errors
+                const errorMessage = error.response?.data?.error || 'Tente novamente.';
+                alert(`Erro ao criar material: ${errorMessage}`);
+            }
         }
     });
 });

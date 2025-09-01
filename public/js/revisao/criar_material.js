@@ -7,11 +7,14 @@ const tagBox = document.querySelector(".tag-box")
 const tags = []
 
 function addKeyword() {
-    const keyword = palavrasChaveHTML.value
-    tags.push(keyword)
-    palavrasChaveHTML.value = ""
-
-    renderTags()
+    const keyword = palavrasChaveHTML.value.trim(); // Remove espaços em branco
+    if (!keyword) {
+        alert('Por favor, insira uma palavra-chave válida (não vazia).');
+        return;
+    }
+    tags.push(keyword);
+    palavrasChaveHTML.value = ''; // Limpa o input
+    renderTags();
 }
 
 function renderTags() {

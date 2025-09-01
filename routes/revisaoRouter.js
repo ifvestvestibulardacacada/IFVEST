@@ -32,8 +32,8 @@ router.post('/buscar_topico', Database.moduloRevisao.buscarTopico)
 router.post('/buscar_material', Database.moduloRevisao.buscarMaterial)
 
 // Criação, edição e remoção de materiais
-router.post('/criar_material', Database.moduloRevisao.criarMaterial)
-router.patch('/editar_material/:id_conteudo', Database.moduloRevisao.editarMaterial)
+router.post('/criar_material', validateRequest(contentSchemas.register), Database.moduloRevisao.criarMaterial)
+router.patch('/editar_material/:id_conteudo', validateRequest(contentSchemas.register), Database.moduloRevisao.editarMaterial)
 router.delete('/remover_material/:id_conteudo', Database.moduloRevisao.removerMaterial)
 
 // Consulta para pegar as palavras-chave // ! Em avaliação

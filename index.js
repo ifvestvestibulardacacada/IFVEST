@@ -109,15 +109,11 @@ app.use("/uploads",  uploads)
 app.use("/simulados",  simulados) 
 app.use("/revisao", revisao)
 
-app.use(express.static(path.join(__dirname, 'dist')));
-
-app.get('/editor', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
 
 
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(process.env.PORT || 3000
+    , () => {
     console.log('Working on port 3000!')
 });
  module.exports = {app};
