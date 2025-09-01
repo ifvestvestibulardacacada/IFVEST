@@ -857,7 +857,7 @@ class Database {
 
                 const ConteudoCriado = await Conteudo.create(
                     {
-                        titulo: titulo,
+                        nome: titulo,
                         id_usuario: userId,
                         id_topico: topicoId,
                         conteudo_markdown: conteudo,
@@ -956,7 +956,7 @@ class Database {
                 }
 
                 const updates = {};
-                if (titulo && titulo !== conteudoEditado.titulo) updates.titulo = titulo;
+                if (titulo && titulo !== conteudoEditado.nome) updates.nome = titulo;
                 if (conteudo && conteudo !== conteudoEditado.conteudo_markdown) updates.conteudo_markdown = conteudo;
                 if (topicoId && topicoId !== conteudoEditado.id_topico) updates.id_topico = topicoId;
 
@@ -992,7 +992,7 @@ class Database {
                     message: 'Conteúdo atualizado com sucesso.',
                     conteudo: {
                         id: conteudoEditado.id_conteudo,
-                        titulo: conteudoEditado.titulo,
+                        nome: conteudoEditado.nome,
 
                         topicoId: conteudoEditado.id_topico,
                         palavrasChave: idsPalavrasChave,
