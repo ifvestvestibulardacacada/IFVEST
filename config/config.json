@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "residentevil6",
-    "database": "ifvest_teste",
+    "database": "ifvest_mysql",
     "host": "localhost",
     "dialect": "mysql",
     "port": "3306"

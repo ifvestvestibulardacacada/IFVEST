@@ -14,10 +14,11 @@ const validateRequest = (schema) => {
         }));
         const allMessages = formattedErrors.map(e => e.message).join('\n');
         console.log('Erros do Zod:', allMessages);
+   
 
         // Verifica se a requisição é AJAX (cabeçalho 'X-Requested-With' ou Accept)
         const isAjax = req.headers['x-requested-with'] === 'XMLHttpRequest' ||
-                       req.headers.accept?.includes('application/json');
+          req.headers.accept?.includes('application/json');
 
         if (isAjax) {
           // Retorna JSON com os erros do Zod para requisições AJAX
@@ -26,13 +27,19 @@ const validateRequest = (schema) => {
             details: formattedErrors
           });
         } else {
-          // Redireciona para requisições de formulário
+          req.session.errorMessage = allMessages
+          await new Promise((resolve, reject) => {
+            req.session.save(err => {
+              if (err) reject(err);
+              else resolve();
+            });
+          });
           return res.redirect(req.get('Referrer') || '/');
         }
       } else {
         console.error('Erro de validação:', error);
         // Retorna erro genérico para outros tipos de erros
-        return res.status(400).json({ error: 'Erro interno no servidor' });
+        return res.redirect(req.get('Referrer') || '/');
       }
     }
   };
