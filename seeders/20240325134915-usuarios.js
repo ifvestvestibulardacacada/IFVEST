@@ -11,7 +11,7 @@ module.exports = {
       usuario: 'admin123',
       email: 'email@exemplo.com',
       senha: '123', 
-      tipo_perfil: 'PROFESSOR',// Senha em texto simples
+      tipo_perfil: 0,// Senha em texto simples
       createdAt: new Date(),
       updatedAt: new Date()
     };

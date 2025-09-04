@@ -11,8 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsToMany(models.PalavraChave, { through: 'TagConteudo', foreignKey: 'id_conteudo', as: 'PalavraChave' });
-      this.belongsToMany(models.MaterialExterno, { through: 'Recomendacao', foreignKey: 'id_conteudo', as: 'MaterialExterno' });
+      this.belongsToMany(models.PalavraChave, { through: 'TagConteudo', foreignKey: 'id_conteudo',otherKey: 'id_palavrachave', as: 'PalavraChave' });
+      this.belongsToMany(models.MaterialExterno, { through: 'Recomendacao', foreignKey: 'id_conteudo',otherKey: 'id_material_externo', as: 'MaterialExterno' });
+      this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'Usuario' });
+      this.belongsTo(models.Assunto, { foreignKey: 'id_assunto', as: 'Assunto' });
     }
   }
   Conteudo.init({
@@ -22,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       autoIncrement: true,
       allowNull: false
     },
+     nome: DataTypes.STRING,
     conteudo_markdown: DataTypes.TEXT,
     contagem_leituras: DataTypes.INTEGER,
     id_usuario: {
@@ -31,16 +34,27 @@ module.exports = (sequelize, DataTypes) => {
         key:"id_usuario"
       }
     },
-    id_topico: {
+    id_assunto: {
       type: DataTypes.INTEGER,
       references: {
-        model: "Topico",
-        key: "id_topico"
+        model: "Assunto",
+        key: "id_assunto"
       }
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
     }
   }, {
     sequelize,
     modelName: 'Conteudo',
+    tableName: 'Conteudo'
   });
   return Conteudo;
 };

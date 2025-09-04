@@ -37,7 +37,6 @@ module.exports = {
           values: ['USUARIO', 'PROFESSOR', 'ADMIN']
         }),
         allowNull: true,
-        defaultValue: 'USUARIO'
       },
       imagem_perfil:{
         type: Sequelize.STRING,

@@ -27,12 +27,12 @@ module.exports = {
           key: "id_usuario"
         }
       },
-      id_topico: {
+      id_assunto: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "Topico",
-          key: "id_topico"
+          model: "Assunto",
+          key: "id_assunto"
         }
       },
       createdAt: {

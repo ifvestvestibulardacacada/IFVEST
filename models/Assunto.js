@@ -5,9 +5,9 @@ const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Assunto extends Model {
     static associate(models) {
-      this.belongsTo(models.Assunto, { foreignKey: 'id_assunto', as: 'Ascendent'})
-      this.hasMany(models.Assunto, { foreignKey: 'id_assunto', as: 'Descendents' })
-      this.hasMany(models.Conteudo, { foreignKey: 'id_conteudo', as: 'Conteudo' })
+      this.belongsTo(models.Assunto, { foreignKey: 'id_assunto_ascendente', as: 'Ascendent'})
+      this.hasMany(models.Assunto, { foreignKey: 'id_assunto_ascendente', as: 'Descendents' })
+      this.hasMany(models.Conteudo, { foreignKey: 'id_assunto', as: 'Conteudo' })
     }
   }
 
@@ -20,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     nome: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true
     },
     descricao: {
       type: DataTypes.STRING,
@@ -31,8 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         references: {
           model: 'Assunto',
-          key: 'id_assunto',
-          as: 'Ascendent'
+          key: 'id_assunto'
         }
     }
 

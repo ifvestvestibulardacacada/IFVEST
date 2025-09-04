@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
         },     
         tipo_perfil: {
-          type: DataTypes.INTEGER,
+          type: DataTypes.STRING,
           allowNull: true,
         },
   
