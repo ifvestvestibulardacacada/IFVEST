@@ -15,27 +15,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/revisao/revisao_conteudo.css">
+    <link rel="stylesheet" href="/revisao/css/revisao-card.css">
 
-    <!-- ! ATENÇÃO PARA A FORMA DE USAR ARQUIVOS ESTÁTICOS DO DOMÍNIO -->
-    <link rel="stylesheet" href="/revisao/css/test.css">
-
-    <title>Buscar área - Módulo de Revisão de Conteúdo - IFVest</title>
+    <title><%= assunto.nome %> | Busca por Assunto - Módulo de Revisão de Conteúdo - IFVest</title>
 </head>
 
 <body>
     <main>
-        <h1>Buscar área</h1>
-        <h2>Escolha a área que deseja estudar</h2>
+        <h1><%= assunto.nome %></h1>
+        <h2><%= assunto.descricao %></h2>
         <div class="container">
-            <div class="ag-courses_box">
-                <% listaAreas.forEach(area => { %>
-                    <div class="ag-courses_item">
-                        <a href="/revisao/busca/<%= area.id_area %>" class="ag-courses-item_link">
-                            <div class="ag-courses-item_bg"></div>
-                            <div class="ag-courses-item_title">
-                                <%= area.nome %>
-                            </div>
-                        </a>
+            
+            <div class="assunto-area">
+                <h2>Assuntos</h2>
+                <% listaAssuntos.forEach(assunto => { %>
+                    <div class="revisao-card assunto-card">
+                        <a href="/revisao/busca/<%= assunto.id_assunto %>"><%= assunto.nome %></a>
+                    </div>
+                <%})%>
+            </div>
+            <div class="material-area">
+                <h2>Materiais</h2>
+                <% listaMateriais.forEach(conteudo => { %>
+                    <div class="revisao-card conteudo-card">
+                        <a href="/revisao/busca/<%= conteudo.id_conteudo %>"><%= conteudo.nome %></a>
                     </div>
                 <%})%>
             </div>

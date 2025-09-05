@@ -8,7 +8,7 @@ if (Nayahath) {
     Nayahath.setConfig('entity', true)
     Nayahath.setConfig('message', true)
 
-    Nayahath.setActive(false) // ! Alternar se quiser desligar os logs
+    Nayahath.setActive(true) // ! Alternar se quiser desligar os logs
 }
 
 
