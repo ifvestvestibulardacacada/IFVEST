@@ -15,6 +15,7 @@
     "axios": "^1.10.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^2.2.0",
+    "bootstrap": "^5.3.8",
     "connect-session-sequelize": "^7.1.7",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.9",

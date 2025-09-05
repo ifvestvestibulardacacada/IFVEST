@@ -33,6 +33,8 @@ const app = express();
 app.use(expressLayouts);
 app.set('layout', path.join(__dirname, 'views/layouts/main'))
 
+//! Bootstrap
+app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')))
 
 
 
