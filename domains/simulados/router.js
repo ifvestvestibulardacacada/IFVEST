@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const {
+    home,
     manutencao,
 
     // Simulados
@@ -28,6 +29,8 @@ const writeControllers = require('./controllers/write-controllers')
 const router = Router()
 
 // Simulados
+
+router.get('/', home)
 
 router.get('/criar-simulado', criarSimulado);
 router.get('/:id/editar', editarSimulado);

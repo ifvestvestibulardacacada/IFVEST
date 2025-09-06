@@ -1,41 +1,3 @@
-<!--========== HEADER ==========-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
-<link rel="stylesheet" href="/css/global.css">
-
-<header class="header">
-    <div class="header__container">
-
-        <a href="" class="header__logo">IFVest</a>
-
-
-
-        <div class="header__toggle">
-            <i class='bx bx-menu' id="header-toggle"></i>
-
-        </div>
-
-
-        <div style="display: flex; align-items: center;">
-            <a href="/usuario/perfil" class="header__logo-name" style="margin-right: 10px;">
-                <%= nomeUsuario %>
-            </a>
-
-            <img 
-                src="<%= imagemPerfil ? imagemPerfil : '/img/profile.jpg' %>" 
-                alt="Perfil" 
-                class="header__img"
-                id="perfilImage"
-            >
-
-
-
-        </div>
-
-
-    </div>
-</header>
-
 <!--========== NAV ==========-->
 <div class="nav" id="navbar">
     <nav class="nav__container">
@@ -45,9 +7,7 @@
             </div>
             <a href="/usuario/iniciologado" class="nav__link nav__logo">
                 <img width="80" height="80" src="/img/logo/logo_IFSP.png" alt="if" />
-
             </a>
-
             <div class="nav__list">
                 <div class="nav__items">
                     <h3 class="nav__subtitle">Perfil</h3>
@@ -86,78 +46,34 @@
 
                 <div class="nav__items">
                     <h3 class="nav__subtitle">Menu</h3>
-
-                    <% if (perfilUsuario==="PROFESSOR" ) { %>
-                        <div class="nav__dropdown">
-                            <a href="#" class="nav__link">
-                                <i class='bx bx-question-mark nav__icon'></i>
-
-                                <span class="nav__name">Questões</span>
-                                <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
-                            </a>
-                            <div class="nav__dropdown-collapse">
-                                <div class="nav__dropdown-content">
-
-                                    <a href="/professor/registrar-questao/objetiva" class="nav__dropdown-item"> <i
-                                            class='bx bx-checkbox-square'></i>Objetiva</a>
-
-
-                                    <a href="/professor/registrar-questao/dissertativa" class="nav__dropdown-item"><i
-                                            class='bx bxs-paint'></i> Dissertativa</a>
-
-
-                                    <a href="/professor/questoes" class="nav__dropdown-item"><i
-                                            class='bx bxs-paint'></i>Minhas questões</a>
-
-                                    <!-- <a href="/professor/verificar-similaridade" class="nav__dropdown-item"><i 
-                                            class='bx bxs-paint' ></i>Verificação IA</a> -->
-                                </div>
-                            </div>
-                        </div>
-                        <div class="nav__dropdown">
-                            <a href="#" class="nav__link">
-                                <i class='bx bx-check-square nav__icon'></i>
-                                <span class="nav__name">Topicos</span>
-                                <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
-                            </a>
-                            <div class="nav__dropdown-collapse">
-                                <div class="nav__dropdown-content">
-
-                                    <a href="/professor/topicos" class="nav__dropdown-item">Meus Topicos</a>
-                                   
-                                </div>
-                            </div>
-                        </div>
-                        <% } %>
-                    <div class="nav__dropdown">
-                        <a href="#" class="nav__link">
-                            <i class='bx bx-book-heart nav__icon'></i>
-                            <span class="nav__name">Simulados</span>
-                            <i class='bx bx-chevron-down nav__icon nav__dropdown-icon'></i>
-                        </a>
-
-
-                        <div class="nav__dropdown-collapse">
-                            <div class="nav__dropdown-content">
-
-                                <a href="/simulados/criar-simulado" class="nav__dropdown-item">Criar
-                                    Simulado</a>
-                                <a href="/simulados/meus-simulados" class="nav__dropdown-item">Meus
-                                    Simulados</a>
-                                <!-- <a href="/usuario/seleciona-simulado" class="nav__dropdown-item">Consultar simulados</a> -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <a href="/revisao" class="nav__link 
-                        <% if (currentPage==='revisao'){%>
+                    <a href="/simulados" class="nav__link 
+                        <% if (currentPage==='simulado'){%>
                         active
                         <%}%>
                         ">
-                        <i class='bx bx-library nav__icon'></i> 
-                        <span class="nav__name">Revisão</span>
+                        <i class='bx bx-book-heart nav__icon'></i>
+                        <span class="nav__name">Simulado</span>
                     </a>
-
+                    
+                    <a href="/revisao" class="nav__link 
+                    <% if (currentPage==='revisao'){%>
+                    active
+                    <%}%>
+                    ">
+                    <i class='bx bx-library nav__icon'></i> 
+                    <span class="nav__name">Revisão</span>
+                </a>
+                
+                <% if (perfilUsuario==="PROFESSOR" ) { %>
+                    <a href="/simulados" class="nav__link 
+                        <% if (currentPage==='simulado'){%>
+                        active
+                        <%}%>
+                        ">
+                        <i class='bx bx-compass nav__icon'></i>
+                        <span class="nav__name">Editar categorias</span>
+                    </a>
+                    <% } %>
                 </div>
             </div>
         </div>

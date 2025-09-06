@@ -1,4 +1,5 @@
 const manutencao = require('./manutencao');
+const home = require('./home')
 
 // Simulados
 const criarSimulado = require('./criarSimulado');
@@ -19,6 +20,7 @@ const removerQuestoes = require('./removerQuestoes');
 
 module.exports = {
     manutencao,
+    home,
 
     // Simulados
     criarSimulado,

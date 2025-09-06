@@ -5,7 +5,7 @@
 
 .colorful-btn{
 	width: 300px;
-	height: 100px;
+	height: 120px;
 	/* float: left; */
 	background: #111;
 	color: #eee;
@@ -19,7 +19,7 @@
 	overflow: hidden;
 
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
 }
 
 .colorful-btn::before{
@@ -40,10 +40,12 @@
 }
 
 .colorful-btn:hover::before{
-	width: 130%;
-	align-self: center;
-	right: 50%;
-	top: 50%;
+	width: 250%;
+
+	/* transform: scale(2); */
+
+	/* right: 0;
+	top: 0; */
 	
 	transform: translate(50%, -50%)
 }
