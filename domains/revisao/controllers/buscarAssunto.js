@@ -19,12 +19,21 @@ module.exports = async (req, res) => {
         order: [['nome', 'ASC']]
     })
 
+    const isRoot = id_assunto ? false : true
 
     const assunto = id_assunto ? await Assunto.findByPk(id_assunto) : {nome: "Assunto", descricao: ""}
-    // const assunto = await Assunto.findByPk(id_assunto)
 
-    console.dir(listaAssuntos)
+    const ascendente = assunto.id_assunto_ascendente ? await assunto.getAscendent() : null
 
-    res.render('buscarAssunto', { assunto, listaAssuntos, listaMateriais, nomeUsuario, perfilUsuario: perfil, imagemPerfil })
-    // res.send("fala galera")
+    res.render('buscarAssunto', {
+        isRoot, 
+        id_ascendente: ascendente ? ascendente.id_assunto : "",
+        ascendente, 
+        assunto, 
+        listaAssuntos, 
+        listaMateriais, 
+
+        nomeUsuario, 
+        perfilUsuario: perfil, 
+        imagemPerfil })
 }

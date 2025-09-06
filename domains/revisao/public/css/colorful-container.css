@@ -1,0 +1,78 @@
+.colorful-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.colorful-btn{
+	width: 300px;
+	height: 100px;
+	/* float: left; */
+	background: #111;
+	color: #eee;
+	position: relative;
+	border-radius: 15px;
+	padding: 15px;
+	cursor: pointer;
+	
+	margin: 0.5rem;
+	
+	overflow: hidden;
+
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.colorful-btn::before{
+	content: "";
+	background-color: #f9b234;
+	width: 70px;
+	border-radius: 50%;
+	position: absolute;
+	right: -25px;
+	top: -25px;
+	
+	aspect-ratio: 1/1;
+	
+	transition: all ease 200ms;
+	
+	z-index: 3;
+	
+}
+
+.colorful-btn:hover::before{
+	width: 130%;
+	align-self: center;
+	right: 50%;
+	top: 50%;
+	
+	transform: translate(50%, -50%)
+}
+
+.colorful-btn > div{
+	position: absolute;
+	z-index: 5;
+}
+
+.colorful-btn:nth-child(2n)::before{
+	background-color: #3ecd5e;
+}
+
+
+.colorful-btn:nth-child(3n)::before{
+	background-color: #e44002;
+}
+
+
+.colorful-btn:nth-child(4n)::before{
+	background-color: #952aff;
+}
+
+
+.colorful-btn:nth-child(5n)::before{
+	background-color: #cd3e94;
+}
+
+
+.colorful-btn:nth-child(6n)::before{
+	background-color: #4c49ea;
+}

@@ -2,7 +2,7 @@ const { Router } = require('express')
 const controllers = require('./controllers')
 const Nayahath = require('../../logs/ArcanaFlow.js')
 
-const { buscarArea, buscarAssunto, buscarTopico, buscarMaterial, criarMaterial, editarMaterial, home } = controllers
+const { buscarArea, buscarAssunto, buscarTopico, buscarMaterial, criarMaterial, editarMaterial, home, leitura} = controllers
 
 
 const router = Router()
@@ -21,6 +21,7 @@ Nayahath.action('Revisão', 'Router carregado com sucesso')
 router.get('/', home)
 router.get('/busca', buscarAssunto)
 router.get('/busca/:id_assunto', buscarAssunto)
+router.get('/leitura/:id_conteudo', leitura)
 // router.get('/busca/:id_area', buscarTopico)
 // router.get('/busca/:id_area/:id_topico', buscarMaterial)
 

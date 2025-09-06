@@ -5,6 +5,7 @@ const buscarMaterial = require('./buscarMaterial');
 const criarMaterial = require('./criarMaterial');
 const editarMaterial = require('./editarMaterial');
 const home = require('./home');
+const leitura = require('./leitura')
 
 module.exports = {
     buscarArea,
@@ -13,5 +14,6 @@ module.exports = {
     buscarMaterial,
     criarMaterial,
     editarMaterial,
-    home
+    home,
+    leitura
 }
