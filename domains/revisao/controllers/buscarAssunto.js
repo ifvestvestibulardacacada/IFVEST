@@ -1,4 +1,4 @@
-const { Assunto, Conteudo } = require('../../../models')
+const { Assunto, Conteudo, Usuario } = require('../../../models')
 const Nayahath = require('../../../logs/ArcanaFlow');
 
 module.exports = async (req, res) => {
@@ -16,8 +16,16 @@ module.exports = async (req, res) => {
     const listaMateriais = await Conteudo.findAll({
         attributes: ['id_conteudo', 'nome', 'id_assunto'],
         where: { id_assunto: id_assunto || null },
-        order: [['nome', 'ASC']]
+        order: [['nome', 'ASC']],
+        include: [
+            {
+                model: Usuario,
+                as: 'Usuario'
+            }
+        ]
     })
+
+    console.log(listaMateriais)
 
     const isRoot = id_assunto ? false : true
 

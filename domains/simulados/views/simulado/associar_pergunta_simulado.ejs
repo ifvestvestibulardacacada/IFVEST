@@ -139,7 +139,7 @@
                                             href="/simulados/<%= simulado.id_simulado %>/adicionar-questoes?page=<%= page + 1 %>">Próximo</a>
                                         <% } %>
                 </div>
-                <button type="submit" class="botao-associar">Associar Questões</button>
+                <button type="submit" id="submitButton" class="botao-associar">Associar Questões</button>
                 <input type="hidden" name="simuladoId" value="<%= simulado.id_simulado %>">
             </form>
 
@@ -150,7 +150,7 @@
         <!--========== MAIN JS ==========-->
         <script src="/js/simulado/associarpergunta.js"></script> 
         <script src="/js/main.js"></script>
-        <script src="/js/quillContentHtmlTable.js"></script>
-        <script src="/js/validate.js"></script>
+        <script src="/js/professor/quillContentHtmlTable.jsable.js"></script>
+        <script src="/js/validations/validate.js"></script>
 </body>
 </html>

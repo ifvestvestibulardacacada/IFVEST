@@ -6,6 +6,9 @@ const criarMaterial = require('./criarMaterial');
 const editarMaterial = require('./editarMaterial');
 const home = require('./home');
 const leitura = require('./leitura')
+const meusMateriais = require('./meusMateriais')
+const registrarMaterial = require('./registrarMaterial')
+const atualizarMaterial = require('./atualizarMaterial')
 
 module.exports = {
     buscarArea,
@@ -15,5 +18,8 @@ module.exports = {
     criarMaterial,
     editarMaterial,
     home,
-    leitura
+    leitura,
+    meusMateriais,
+    registrarMaterial,
+    atualizarMaterial
 }

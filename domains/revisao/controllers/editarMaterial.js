@@ -1,25 +1,59 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
+const { Conteudo, Assunto, MaterialExterno, PalavraChave } = require('../../../models')
 
-module.exports = async (req, res) =>{
-            /*
-            Objetivo: Retornar a página com o editor markdown para a edição de um material existente
-            Recebe: Dados do usuário que enviou a requisição e o ID do material
-            Retorna: Página 
-            */
-            /*
-            ! Fluxo esperado
-            * Recebe a requisição e pega dados de login para exibição
-            * Se o login condizer com um usuário que tem permissão de editar ESTE ESPECIFICO MATERIAL, prossegue
-            * Renderiza um editor de materiais com o conteúdo do material preenchendo os campos do editor
-            */
-            Nayahath.action('Revisão', 'Pediu editar material')
+module.exports = async (req, res) => {
 
-            res.locals.currentPage = "revisao"
-            
-            const perfilUsuario = req.session.perfil;
-            const nomeUsuario = req.session.nomeUsuario;
-            const imagemPerfil = req.session.imagemPerfil;
+    const id_conteudo = req.params.id_conteudo;
 
-            // ! Temporário
-            res.render('error', { nomeUsuario, perfilUsuario, imagemPerfil })
+    Nayahath.action('Revisão', 'Pediu editar material')
+
+    res.locals.currentPage = "revisao"
+
+    const perfilUsuario = req.session.perfil;
+    const nomeUsuario = req.session.nomeUsuario;
+    const imagemPerfil = req.session.imagemPerfil;
+    try {
+        const Assuntos = await Assunto.findAll()
+
+        const Material = await Conteudo.findByPk(id_conteudo, {
+            include: [{
+                model: MaterialExterno,
+                as: 'MaterialExterno',
+                through: { attributes: [] }
+            },
+            {
+                model: PalavraChave,
+                as: 'PalavraChave',
+                through: { attributes: [] }
+            }]
+
+
+        });
+        if (!Material) {
+            return res.status(404).send('Material not found');
         }
+        const assunto = await Assunto.findByPk(Material.id_assunto);
+
+
+        // Convert to plain object
+        const plainMaterial = Material.get({ plain: true });
+
+        // Transform PalavraChave to array of strings
+        plainMaterial.PalavraChave = plainMaterial.PalavraChave.map(keyword => keyword.palavrachave); // Extract 'PalavraChave' field
+
+        // Transform MaterialExterno to array of strings
+        plainMaterial.MaterialExterno = plainMaterial.MaterialExterno.map(link => link.material);
+
+        plainMaterial.assunto = assunto;
+
+
+        // ! Temporário
+        res.render('editarMaterial', { nomeUsuario, perfilUsuario, imagemPerfil, Assuntos, Material: plainMaterial, assunto });
+
+    } catch (error) {
+        console.error(error)
+        res.redirect(req.get("Referrer") || "/");
+    }
+
+
+}

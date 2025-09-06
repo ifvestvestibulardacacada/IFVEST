@@ -2,7 +2,19 @@ const { Router } = require('express')
 const controllers = require('./controllers')
 const Nayahath = require('../../logs/ArcanaFlow.js')
 
-const { buscarArea, buscarAssunto, buscarTopico, buscarMaterial, criarMaterial, editarMaterial, home, leitura} = controllers
+const { 
+    buscarArea, 
+    buscarAssunto, 
+    buscarTopico, 
+    buscarMaterial, 
+    criarMaterial, 
+    editarMaterial, 
+    home, 
+    leitura,
+    meusMateriais,
+    registrarMaterial,
+    atualizarMaterial,
+} = controllers
 
 
 const router = Router()
@@ -22,6 +34,7 @@ router.get('/', home)
 router.get('/busca', buscarAssunto)
 router.get('/busca/:id_assunto', buscarAssunto)
 router.get('/leitura/:id_conteudo', leitura)
+router.get('/meus_materiais', meusMateriais)
 // router.get('/busca/:id_area', buscarTopico)
 // router.get('/busca/:id_area/:id_topico', buscarMaterial)
 
@@ -38,8 +51,8 @@ router.post('/buscar_topico', buscarTopico)
 router.post('/buscar_material', buscarMaterial)
 
 // Criação, edição e remoção de materiais
-router.post('/criar_material', criarMaterial)
-router.post('/editar_material/:id_conteudo', editarMaterial)
+router.post('/criar_material', registrarMaterial)
+router.post('/editar_material/:id_conteudo', atualizarMaterial)
 // router.post('/remover_material/:id_conteudo', removerMaterial)
 
 // Consulta para pegar as palavras-chave // ! Em avaliação

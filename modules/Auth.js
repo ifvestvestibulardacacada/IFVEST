@@ -59,39 +59,54 @@ class Auth {
             return res.redirect(req.get("Referrer") || "/");
         }
     }
+
     static async logout(req, res) {
+        if (!req.session || !req.session.userId || !req.sessionID) {
+            console.log('Nenhuma sessão válida encontrada para logout');
+            res.clearCookie('connect.sid', { path: '/' });
+            return res.redirect('/login');
+        }
+
+        const userId = req.session.userId.toString();
+        const sessionID = req.sessionID;
+        
+
         try {
-            const sessionID = req.sessionID;
+            // Deletar a sessão atual
+            const deleted = await store.sessionModel.destroy({ where: { sid: sessionID } });
+            console.log(`Sessão atual deletada: sid=${sessionID}, userId=${userId}, linhas =${deleted}`);
 
-            if (!sessionID) {
-                return res.redirect('/usuario/login');
-            }
-
-            res.clearCookie("connect.sid", { path: '/' });
-
-            req.session.destroy((err) => {
-                if (err) {
-                    console.error("Erro ao destruir a sessão:", err.message);
-                    return res.status(500).send("Erro ao destruir a sessão");
-                }
-                store.destroy(sessionID);
-
-                res.redirect('/usuario/login');
-            });
-
-        } catch (error) {
-            console.error(error);
-            req.session.errorMessage = error.message;
+            // Destruir a sessão no servidor
             await new Promise((resolve, reject) => {
-                req.session.save(err => {
-                    if (err) reject(err);
-                    else resolve();
+                req.session.destroy((err) => {
+                    if (err) {
+                        console.error('Erro ao destruir sessão:', err.message);
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
                 });
             });
-            return res.status(400).redirect( req.get("Referrer") || "/");
+
+            res.clearCookie('connect.sid', { path: '/' });
+            console.log('Sessão destruída e cookie limpo');
+            res.redirect('/login');
+        } catch (err) {
+            console.error('Erro ao processar logout:', err.message);
+            req.session.errorMessage = err.message;
+            await new Promise((resolve, reject) => {
+                req.session.save((err) => {
+                    if (err) {
+                        console.error('Erro ao salvar sessão de erro:', err.message);
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+            return res.status(400).redirect('/login');
         }
     }
-
     static async cadastro(req, res) {
         const { nome, usuario, senha, email, perfil } = req.body;
        
@@ -101,9 +116,9 @@ class Auth {
             throw new Error("Dados Invalidos ou Incompletos")
         }
         const senhaCriptografada = await bcrypt.hash(senha, 10);
-        
+
         try {
-            await Usuario.create({ nome, usuario, senha: senhaCriptografada, email, tipo_perfil:perfil });
+            await Usuario.create({ nome, usuario, senha: senhaCriptografada, email, tipo_perfil: perfil });
 
             res.status(201).redirect('/login');
         } catch (error) {
@@ -115,7 +130,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.status(400).redirect( req.get("Referrer") || "/");
+            return res.redirect(req.get("Referrer") || "/");
         }
     }
 }

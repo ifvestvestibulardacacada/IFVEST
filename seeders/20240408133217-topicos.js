@@ -97,7 +97,7 @@ module.exports = {
     for (const area in topics) {
       for (const materia of topics[area]) {
         await queryInterface.sequelize.query(
-          `INSERT INTO Topico (nome, id_area, id_usuario, createdAt, updatedAt) VALUES ('${materia.materia}', ${materia.areaId}, '${1}', NOW(), NOW())`
+          `INSERT INTO Topico (nome, id_area, id_usuario, createdAt, updatedAt) VALUES ('${materia.nome}', ${materia.id_area}, '${1}', NOW(), NOW())`
         );
       }
     }

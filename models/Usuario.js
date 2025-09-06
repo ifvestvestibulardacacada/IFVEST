@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
             onDelete: 'CASCADE',
             onUpdate: 'CASCADE',
           });
+          this.belongsTo(models.Conteudo, { foreignKey: 'id_usuario', as: 'Conteudo' });
         }
     }
 

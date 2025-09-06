@@ -21,7 +21,17 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     id_conteudo: DataTypes.INTEGER,
-    id_material_externo: DataTypes.INTEGER
+    id_material_externo: DataTypes.INTEGER,
+        createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    }
   }, {
     sequelize,
     modelName: 'Recomendacao',

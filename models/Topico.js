@@ -5,10 +5,10 @@ module.exports = (sequelize, DataTypes) => {
 
     class Topico extends Model {
         static associate(models) {
-          this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'Usuario' });
-          this.belongsTo(models.Area, { foreignKey: 'id_area', as: 'Area' });
-          this.belongsToMany(models.Questao, { through: 'QuestaoTopico', foreignKey: 'id_topico', as: 'Questao' });
-        }
+
+  this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'Usuario' });
+  this.belongsTo(models.Topico, { foreignKey: 'id_topico', as: 'Topico' });
+this.belongsToMany(models.Questao, { through: 'QuestaoTopico', foreignKey: 'id_topico', as: 'Questao' });}
     }
 
     Topico.init({

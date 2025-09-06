@@ -219,8 +219,11 @@ async function saveSimulado() {
   saveButton.textContent = 'Salvando...';
 
   try {
-   const response = await axios.post('/simulados/criar-simulado', formData, {
-      validateStatus: status => status >= 200 && status < 300, // Trata apenas 2xx como sucesso
+    const response = await axios.post('/simulados/criar-simulado', formData, {
+      validateStatus: status => status >= 200 && status < 300,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
     });
     console.log('Resposta recebida:', response);
     alert('Simulado salvo com sucesso!');
@@ -229,8 +232,16 @@ async function saveSimulado() {
     window.location.href = '/simulados/meus-simulados';
   } catch (error) {
     console.error('Erro capturado:', error, error.response);
-    const errorMessage = error.response?.data?.error || 'Erro ao salvar o simulado';
-    alert('Erro ao salvar o simulado: ' + errorMessage);
+    if (error.response?.status === 400 && error.response?.data?.details) {
+      const errorDetails = error.response.data.details;
+      // Format error messages for display
+      const errorMessages = errorDetails.map(err => `${err.path}: ${err.message}`).join('\n');
+      alert(`Erro ao criar material:\n${errorMessages}`);
+    } else {
+      // Fallback for other errors
+      const errorMessage = error.response?.data?.error || 'Tente novamente.';
+      alert(`Erro ao criar material: ${errorMessage}`);
+    }
   } finally {
     console.log('Executando finally');
     saveButton.disabled = false;

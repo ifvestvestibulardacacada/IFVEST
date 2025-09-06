@@ -2,7 +2,8 @@ const { Router } = require('express')
 
 const { Render } = require('../modules/Render')
 const { Database } = require('../modules/Database')
-
+const validateRequest = require('../middleware/validateRequest');
+const { contentSchemas } = require('../validations/schemas');
 const router = Router()
 
 // ! Logs lib
@@ -20,6 +21,8 @@ router.get('/busca/:id_area/:id_topico', Render.moduloRevisao.buscarMaterial)
 // router.get('/conteudo/:id_conteudo')
 
 // Criação e edição de material
+router.get('/home', Render.moduloRevisao.materiais)
+router.get('/meus_materiais', Render.moduloRevisao.meus_materiais)
 router.get('/criar_material', Render.moduloRevisao.criarMaterial)
 router.get('/editar_material/:id_conteudo', Render.moduloRevisao.editarMaterial)
 
@@ -29,9 +32,9 @@ router.post('/buscar_topico', Database.moduloRevisao.buscarTopico)
 router.post('/buscar_material', Database.moduloRevisao.buscarMaterial)
 
 // Criação, edição e remoção de materiais
-router.post('/criar_material', Database.moduloRevisao.criarMaterial)
-router.post('/editar_material/:id_conteudo', Database.moduloRevisao.editarMaterial)
-router.post('/remover_material/:id_conteudo', Database.moduloRevisao.removerMaterial)
+router.post('/criar_material', validateRequest(contentSchemas.register), Database.moduloRevisao.criarMaterial)
+router.patch('/editar_material/:id_conteudo', validateRequest(contentSchemas.register), Database.moduloRevisao.editarMaterial)
+router.delete('/remover_material/:id_conteudo', Database.moduloRevisao.removerMaterial)
 
 // Consulta para pegar as palavras-chave // ! Em avaliação
 

@@ -1,8 +1,9 @@
 
-const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta } = require('../models');
-const { Op } = require('sequelize');
+const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta, Conteudo, MaterialExterno, Recomendacao, TagConteudo, PalavraChave } = require('../models');
+const { Op, where } = require('sequelize');
 
-const Nayahath = require('../logs/ArcanaFlow')
+const Nayahath = require('../logs/ArcanaFlow');
+const { ca } = require('zod/v4/locales');
 
 class Render {
     static auth = {
@@ -135,7 +136,7 @@ class Render {
                 const totalPages = Math.ceil(questoesCount / limit);
                 console.log(3) // ! Log temporário
                 // Buscar todas as áreas para o filtro
-                const topicos = await Topico.findAll();console.log(4) // ! Log temporário
+                const topicos = await Topico.findAll(); console.log(4) // ! Log temporário
                 const Areas = await Area.findAll({
                     include: [{
                         model: Topico,
@@ -147,7 +148,7 @@ class Render {
                 let questoesFiltradas = questoes;
                 if (titulo) {
                     questoesFiltradas = questoes.filter(questao => questao.titulo.toLowerCase().includes(titulo.toLowerCase()));
-                }console.log(6) // ! Log temporário
+                } console.log(6) // ! Log temporário
                 if (areaId && areaId !== "") {
                     questoesFiltradas = questoes.filter(questao => questao.id_area === Number(areaId));
                 }
@@ -158,10 +159,10 @@ class Render {
                         const topicos = Array.isArray(questao.Topico) ? questao.Topico : [];
                         return topicos.some(topico => topicosIds.includes(topico.id_topico));
                     });
-                }console.log(8) // ! Log temporário
+                } console.log(8) // ! Log temporário
                 if (pergunta) {
                     questoesFiltradas = questoes.filter(questao => questao.pergunta.toLowerCase().includes(pergunta.toLowerCase()));
-                }console.log(9) // ! Log temporário
+                } console.log(9) // ! Log temporário
 
                 let errorMessage = req.session.errorMessage;
 
@@ -357,7 +358,7 @@ class Render {
                         as: 'Topico',
                     },
                 ],
-                
+
             });
 
             let errorMessage = req.session.errorMessage;
@@ -877,10 +878,10 @@ class Render {
             * Recebe a requisição e pega dados de login para exibição
             * Retorna status 200 e renderiza a página inicial passando os dados de login
             */
-           Nayahath.action('Revisão', 'Pediu homepage')
+            Nayahath.action('Revisão', 'Pediu homepage')
 
-           res.locals.currentPage = "revisao"
-            
+            res.locals.currentPage = "revisao"
+
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
@@ -888,7 +889,7 @@ class Render {
             // ! Temporário
             res.redirect('/revisao/busca')
         },
-        buscarArea: async (req, res) =>{
+        buscarArea: async (req, res) => {
             /*
             Objetivo: Retornar a página de busca de área
             Recebe: Nada
@@ -903,7 +904,7 @@ class Render {
             Nayahath.action('Revisão', 'Pediu buscar area')
 
             res.locals.currentPage = "revisao"
-            
+
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
@@ -914,7 +915,7 @@ class Render {
             })
             res.render('moduloRevisao/buscarArea', { listaAreas, nomeUsuario, perfilUsuario, imagemPerfil })
         },
-        buscarTopico: async (req, res) =>{
+        buscarTopico: async (req, res) => {
             /*
             Objetivo: Retornar uma página de busca de todos os tópicos de uma área específica
             Recebe: id_area da área correspondente
@@ -930,7 +931,7 @@ class Render {
             Nayahath.action('Revisão', 'Pediu buscar topico')
 
             res.locals.currentPage = "revisao"
-            
+
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
@@ -948,9 +949,9 @@ class Render {
 
             const listaTopicos = areaAtual.Topico
 
-            res.render('moduloRevisao/buscarTopico', { area:areaAtual, listaTopicos, nomeUsuario, perfilUsuario, imagemPerfil })
+            res.render('moduloRevisao/buscarTopico', { area: areaAtual, listaTopicos, nomeUsuario, perfilUsuario, imagemPerfil })
         },
-        buscarMaterial: async (req, res) =>{
+        buscarMaterial: async (req, res) => {
             /*
             Objetivo: Retornar uma página de busca de todos os materiais de um tópico específico
             Recebe: id_topico do tópico correspondente
@@ -966,7 +967,7 @@ class Render {
             Nayahath.action('Revisão', 'Pediu buscar material')
 
             res.locals.currentPage = "revisao"
-            
+
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
@@ -974,52 +975,156 @@ class Render {
             // ! Temporário
             res.render('moduloRevisao/error', { nomeUsuario, perfilUsuario, imagemPerfil })
         },
-        criarMaterial: async (req, res) =>{
-            /*
-            Objetivo: Retornar a página com o editor markdown para a criação de um novo material
-            Recebe: Dados do usuario que enviou a requisição
-            Retorna: Editor de material vazio
-            */
-            /*
-            ! Fluxo esperado
-            * Recebe a requisição e pega dados de login para exibição
-            * Se o login condizer com um usuário que tem permissão de criar materiais de revisão, prossegue
-            * Renderiza um editor de materiais vazio
-            */
+        criarMaterial: async (req, res) => {
+
             Nayahath.action('Revisão', 'Pediu criar material')
 
             res.locals.currentPage = "revisao"
-            
+
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
 
+            try {
+                const topicos = await Topico.findAll();
+                const Areas = await Area.findAll({
+                    include: [{
+                        model: Topico,
+                        as: 'Topico'
+                    }]
+                });
+                const palavras = await PalavraChave.findAll({
+                    attributes: ['palavrachave']
+                })
+                const palavrasChave = palavras.map(palavra => palavra.palavrachave); // Extrai o campo 'palavrachave' de cada objeto
+
+                res.render('moduloRevisao/criarMaterial', { nomeUsuario, perfilUsuario, imagemPerfil, topicos, Areas, palavrasChave })
+            } catch (error) {
+                console.error(error)
+                res.redirect('/usuario/inicioLogado');
+            }
+
             // ! Temporário
-            res.render('moduloRevisao/error', { nomeUsuario, perfilUsuario, imagemPerfil })
+
         },
-        editarMaterial: async (req, res) =>{
-            /*
-            Objetivo: Retornar a página com o editor markdown para a edição de um material existente
-            Recebe: Dados do usuário que enviou a requisição e o ID do material
-            Retorna: Página 
-            */
-            /*
-            ! Fluxo esperado
-            * Recebe a requisição e pega dados de login para exibição
-            * Se o login condizer com um usuário que tem permissão de editar ESTE ESPECIFICO MATERIAL, prossegue
-            * Renderiza um editor de materiais com o conteúdo do material preenchendo os campos do editor
-            */
+        editarMaterial: async (req, res) => {
+
+
+            const id_conteudo = req.params.id_conteudo;
+
             Nayahath.action('Revisão', 'Pediu editar material')
 
             res.locals.currentPage = "revisao"
-            
+
             const perfilUsuario = req.session.perfil;
             const nomeUsuario = req.session.nomeUsuario;
             const imagemPerfil = req.session.imagemPerfil;
+            try {
+                const topicos = await Topico.findAll();
+                const Areas = await Area.findAll({
+                    include: [{
+                        model: Topico,
+                        as: 'Topico'
+                    }]
+                });
 
-            // ! Temporário
-            res.render('moduloRevisao/error', { nomeUsuario, perfilUsuario, imagemPerfil })
+                const Material = await Conteudo.findByPk(id_conteudo, {
+                    include: [{
+                        model: MaterialExterno,
+                        as: 'MaterialExterno',
+                        through: { attributes: [] }
+                    },
+                    {
+                        model: PalavraChave,
+                        as: 'PalavraChave',
+                        through: { attributes: [] }
+                    }]
+
+
+                });
+                if (!Material) {
+                    return res.status(404).send('Material not found');
+                }
+                const topico = await Topico.findByPk(Material.id_topico);
+
+
+                // Convert to plain object
+                const plainMaterial = Material.get({ plain: true });
+
+                // Transform PalavraChave to array of strings
+                plainMaterial.PalavraChave = plainMaterial.PalavraChave.map(keyword => keyword.palavrachave); // Extract 'PalavraChave' field
+
+                // Transform MaterialExterno to array of strings
+                plainMaterial.MaterialExterno = plainMaterial.MaterialExterno.map(link => link.material);
+
+                plainMaterial.topico = topico;
+
+
+                // ! Temporário
+                res.render('moduloRevisao/editarMaterial', { nomeUsuario, perfilUsuario, imagemPerfil, topicos, Areas, Material: plainMaterial, topico });
+
+            } catch (error) {
+                console.error(error)
+                res.redirect(req.get("Referrer") || "/");
+            }
+
+
         },
+        materiais: async (req, res) => {
+            try {
+                const { nomeUsuario, perfil, imagemPerfil,  } = req.session;
+
+                res.render('moduloRevisao/material', { nomeUsuario, perfilUsuario: perfil, imagemPerfil, });
+
+
+            } catch (error) {
+                console.error(error)
+                res.redirect(req.get("Referrer") || "/");
+            }
+        },
+        meus_materiais: async (req, res) => {
+            try {
+                
+                const { nomeUsuario, imagemPerfil, perfil, userId } = req.session;
+                const limit = 10; // Número de Questao por página
+
+                const page = parseInt(req.query.page) || 1; // Página atual, padrão é 1
+                const offset = (page - 1) * limit;
+                const conteudoCount = await Conteudo.count({
+                    where: {
+                        id_usuario: userId,
+                    },  
+                });
+
+                 const totalPages = Math.ceil(conteudoCount / limit);
+
+                const Conteudos = await Conteudo.findAll({
+                    include: [{
+                        model: MaterialExterno,
+                        as: 'MaterialExterno',
+                        through: { attributes: [] }
+                    },
+                    {
+                        model: PalavraChave,
+                        as: 'PalavraChave',
+                        through: { attributes: [] }
+                    }],
+                    where: {
+                        id_usuario: userId,
+                    },
+                    limit: limit,
+                    offset: offset
+
+                });
+
+                res.render('moduloRevisao/meus_materiais', { totalPages, page, nomeUsuario, perfilUsuario: perfil, imagemPerfil, Conteudos });
+
+
+            } catch (error) {
+                console.error(error)
+                res.redirect(req.get("Referrer") || "/");
+            }
+        }
     }
 }
 

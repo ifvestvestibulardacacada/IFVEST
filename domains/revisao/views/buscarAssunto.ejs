@@ -52,11 +52,14 @@
                 <h2>Materiais</h2>
                 <div class="colorful-container">
                     <% listaMateriais.forEach(conteudo => { %>
-                        <a href="/revisao/leitura/<%= conteudo.id_conteudo %>" class="colorful-btn">
+                        <a href="/revisao/leitura/<%= conteudo.id_conteudo %>" class="colorful-btn large">
                             <div>
-                                <span>
+                                <p>
                                     <%= conteudo.nome %>
-                                </span>
+                                </p>
+                                <p class="fs-5">
+                                    Por: <%= conteudo.Usuario.nome%>
+                                </p>
                             </div>
                         </a>
                     <%})%>

@@ -1,12 +1,14 @@
 .colorful-container {
     display: flex;
+	justify-content: start;
     flex-wrap: wrap;
+	gap: 0.5rem;
 }
 
 .colorful-btn{
-	width: 300px;
+	width: 30%;
 	height: 120px;
-	/* float: left; */
+	float: left;
 	background: #111;
 	color: #eee;
 	position: relative;
@@ -14,7 +16,7 @@
 	padding: 15px;
 	cursor: pointer;
 	
-	margin: 0.5rem;
+	/* margin: 0.5rem; */
 	
 	overflow: hidden;
 
@@ -37,6 +39,11 @@
 	
 	z-index: 3;
 	
+}
+
+.colorful-btn.large{
+	width: 45%;
+	margin: 0;
 }
 
 .colorful-btn:hover::before{

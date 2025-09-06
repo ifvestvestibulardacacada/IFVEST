@@ -14,7 +14,7 @@ const store = new SequelizeStore({
 });
 
 // Sincroniza o store com o banco
-store.sync();
+store.sync()
 
 const sessionOptions = {
   secret: 'frasealeatoria',

@@ -2,3 +2,5 @@ node_modules
 # logs
 insertData.js
 uploads 
+cypress
+cypress.config.js

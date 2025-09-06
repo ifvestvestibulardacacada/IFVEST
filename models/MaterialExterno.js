@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsToMany(models.Conteudo, { through: 'Recomendacao', foreignKey: 'id_material_externo', as: 'Conteudo' });
+      this.belongsToMany(models.Conteudo, { through: 'Recomendacao', foreignKey: 'id_material_externo',otherKey: 'id_conteudo', as: 'Conteudo' });
     }
   }
   MaterialExterno.init({
@@ -22,10 +22,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     material: DataTypes.STRING,
-    tipo_material: DataTypes.STRING // ! Potencialmente isso pode virar um ENUM.
+    tipo_material: DataTypes.STRING,
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    }
+      // ! Potencialmente isso pode virar um ENUM.
   }, {
     sequelize,
     modelName: 'MaterialExterno',
+    tableName: 'MaterialExterno'
   });
   return MaterialExterno;
 };
