@@ -7,125 +7,125 @@
     <link rel="stylesheet" href="/css/professor/editor_equacao.css">
     <link rel="stylesheet" href="/css/global.css">
     <link rel="stylesheet" href="/css/professor/questao.css">
-   
+
     <%- include('../partials/quill_and_uikit') %>
-    <title>Criar questão - IFVest</title>
+        <title>Criar questão - IFVest</title>
 </head>
 
 <body>
-    
-        <div class="overlay" id="overlay"></div>
-        <div class="container">
-            <div id="loading-container"
-                style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
-                <div class="spinner"></div>
-                Carregando...
-            </div>
 
-
-            <h1 class="title">Criar Questão</h1>
-            <hr class="uk-divider-icon">
-            <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
-                <script>
-                    window.onload = function () {
-                        alert("<%= errorMessage %>");
-                    };
-                </script>
-                <% } %>
-                    <form action="/professor/registrar-questao/<%= tipo %>" method="POST">
-                        <div class="titulo">
-                            <label for="titulo">TITULO:</label>
-                            <input type="text" id="titulo" name="titulo" placeholder="Exemplo: Questão 32 (Enem 2022) "
-                                required maxlength="100">
-                        </div>
-
-   <%- include('../partials/editor_equacao') %>
-
-                        <% if ( tipo==="objetiva" ) { %>
-                            <%- include('../partials/resposta_objetiva') %>
-                                <% }else{ %>
-                                    <%- include('../partials/resposta_dissertativa') %>
-                                        <% } %>
-                                           
-                                                <textarea id="pergunta" name="pergunta" rows="5" cols="50"
-                                                    style="display: none;"> </textarea>
-                                                <textarea id="respostasSelecionadas" name="respostasSelecionadas"
-                                                    rows="5" cols="50" style="display: none;"> </textarea>
-                                                    <textarea id="respostas" name="respota"
-                                                    rows="5" cols="50" style="display: none;"> </textarea>
-                                                <div>
-                                                    <br>
-                                                    <div uk-grid>
-                                                        <div>
-                                                            <% if ( tipo==="objetiva" ) { %>
-                                                                <label for="opcaoId">Selecione a opção correta:</label>
-                                                                <select name="correta" id="correta" required>
-                                                                    <option value="">Selecione uma opção</option>
-                                                                    <option value="A">Opção A</option>
-                                                                    <option value="B">Opção B</option>
-                                                                    <option value="C">Opção C</option>
-                                                                    <option value="D">Opção D</option>
-                                                                    <option value="E">Opção E</option>
-                                                                </select>
-                                                                <% } %>
-                                                                    <div>
-                                                                        <h4>Area e Topicos</h4>
-                                                                        <label for="areaId">Selecione uma área:</label>
-                                                                        <select name="areaId" id="areaId" required>
-                                                                            <option value="">Selecione uma opção
-                                                                            </option>
-                                                                            <% Areas.forEach(area=> { %>
-                                                                                <option value="<%= area.id_area %>">
-                                                                                    <%= area.nome %>
-                                                                                </option>
-                                                                                <% }); %>
-                                                                        </select>
-                                                                    </div>
-                                                        </div>
-                                                        <label for="topicos">Selecione topico(s):</label>
-                                                        <div class="dropdown" style="display: none;"
-                                                            id="topicosSearchContainer">
-                                                            <input type="text" id="search" placeholder="Pesquisar..." maxlength="100">
-
-                                                            <ul id="dropdown-list" required>
-
-                                                                <!-- Adicione mais itens conforme necessário -->
-                                                            </ul>
-
-
-                                                        </div>
-                                                        <a href="#" onclick="showCreateTopicModal()"
-                                                            id="create-topic-link">Não
-                                                            encontrou o tópico que procura? Clique aqui para criar um
-                                                            novo tópico</a>
-                                                    </div>
-                                                </div>
-
-
-
-
-                                                <div class="button-container">
-                                                    <button type="submit" class="botao-registro">Registrar</button>
-                                                </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="container">
+        <div id="loading-container"
+            style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+            <div class="spinner"></div>
+            Carregando...
         </div>
 
-        </form>
-        <%- include('../partials/modal_topicos') %>
-        
-            <script src="/js/professor/initializeQuill.js"></script>
-            <script src="/js/professor/editor.js"></script>
-            <script src="/js/main.js"></script>
-            <script src="/js/professor/dropdown.js"></script>
-            <script src="/js/professor/editorInputs.js"></script>
-            
-            <script type="module" src="/js/index.js"></script>
-            <script src="/js/professor/criarQuestao.js"></script>
+
+        <h1 class="title">Criar Questão</h1>
+        <hr class="uk-divider-icon">
+        <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
             <script>
-                // Inicializar os editores com o tipo da questão
-                initializeQuestionEditors(<%- JSON.stringify(tipo) %>);
-                
-    
+                window.onload = function () {
+                    alert("<%= errorMessage %>");
+                };
             </script>
+        <% } %>
+    <form action="/professor/registrar-questao/<%= tipo %>" method="POST">
+        <div class="titulo">
+            <label for="titulo">TITULO:</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Exemplo: Questão 32 (Enem 2022) "
+                required maxlength="100">
+        </div>
+
+        <%- include('../partials/editor_equacao') %>
+
+            <% if ( tipo==="objetiva" ) { %>
+                <%- include('../partials/resposta_objetiva') %>
+            <% }else{ %>
+                <%- include('../partials/resposta_dissertativa') %>
+            <% } %>
+
+
+            <textarea id="pergunta" name="pergunta" rows="5" cols="50"
+                style="display: none;"> </textarea>
+            <textarea id="respostasSelecionadas" name="respostasSelecionadas" rows="5"
+                cols="50" style="display: none;"> </textarea>
+            <textarea id="respostas" name="respota" rows="5" cols="50"
+                style="display: none;"> </textarea>
+            <div>
+                <br>
+                <div uk-grid>
+                    <div>
+                        <% if ( tipo==="objetiva" ) { %>
+                            <label for="opcaoId">Selecione a opção correta:</label>
+                            <select name="correta" id="correta" required>
+                                <option value="">Selecione uma opção</option>
+                                <option value="A">Opção A</option>
+                                <option value="B">Opção B</option>
+                                <option value="C">Opção C</option>
+                                <option value="D">Opção D</option>
+                                <option value="E">Opção E</option>
+                            </select>
+                        <% } %>
+
+                        <div>
+                            <h4>Area e Topicos</h4>
+                            <label for="areaId">Selecione uma área:</label>
+                            <select name="areaId" id="areaId" required>
+                                <option value="">Selecione uma opção
+                                </option>
+                                <% Areas.forEach(area=> { %>
+                                    <option value="<%= area.id_area %>">
+                                        <%= area.nome %>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                        </div>
+
+                    </div>
+                    <label for="topicos">Selecione topico(s):</label>
+                    <div class="dropdown" style="display: none;"
+                        id="topicosSearchContainer">
+                        <input type="text" id="search" placeholder="Pesquisar..."
+                            maxlength="100">
+
+                        <ul id="dropdown-list" required>
+
+                            <!-- Adicione mais itens conforme necessário -->
+                        </ul>
+
+
+                    </div>
+                    <a href="#" onclick="showCreateTopicModal()"
+                        id="create-topic-link">Não
+                        encontrou o tópico que procura? Clique aqui para criar um
+                        novo tópico</a>
+                </div>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="botao-registro">Registrar</button>
+            </div>
+        </div>
+
+    </form>
+    <%- include('../partials/modal_topicos') %>
+
+        <script src="/js/professor/initializeQuill.js"></script>
+        <script src="/js/professor/editor.js"></script>
+        <script src="/js/main.js"></script>
+        <script src="/js/professor/dropdown.js"></script>
+        <script src="/js/professor/editorInputs.js"></script>
+
+        <script type="module" src="/js/index.js"></script>
+        <script src="/js/professor/criarQuestao.js"></script>
+        <script>
+            // Inicializar os editores com o tipo da questão
+            initializeQuestionEditors(<%- JSON.stringify(tipo) %>);
+
+
+        </script>
 
 
 

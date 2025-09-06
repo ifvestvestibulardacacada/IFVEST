@@ -54,7 +54,9 @@
                     <% listaMateriais.forEach(conteudo => { %>
                         <a href="/revisao/leitura/<%= conteudo.id_conteudo %>" class="colorful-btn">
                             <div>
-                                <%= conteudo.nome %>
+                                <span>
+                                    <%= conteudo.nome %>
+                                </span>
                             </div>
                         </a>
                     <%})%>

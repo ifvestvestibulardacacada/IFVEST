@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="/revisao/css/colorful-container.css">
+<div class="container">
+    <h1 class="text-center mt-5">Módulo de Revisão de Conteúdo</h1>
+    <hr>
+    <h2>Materiais</h2>
+    <div class="colorful-container">
+        <a href="/revisao/busca" class="colorful-btn">
+            <div>
+                Busca
+            </div>
+        </a>
+    </div>
+    <% if (perfilUsuario === "PROFESSOR") { %>
+        <hr>
+        <h2>Área do professor</h2>
+        <div class="colorful-container">
+            <a href="" class="colorful-btn">
+                <div>
+                    Criar material
+                </div>
+            </a>
+        </div>
+    <% } %>
+</div>
