@@ -1,14 +1,20 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+<link rel="stylesheet" href="/revisao/css/leitura.css">
+<title><%=conteudo.nome%> - Módulo de Revisão - IFVest</title>
 <div class="container">
-
-    <p>salve guys, enquanto essa pagina aqui nao fica pronta, vou deixar aqui um log do que chegou de material aqui pra gente com esse id que voce ta procurando ;)</p>
-    
     <%if (conteudo) {%>
-        <h1><%=conteudo.nome%></h1>
-        <p><%=conteudo.conteudo_markdown%></p>
+        <h1 class="text-center mt-5"><%=conteudo.nome%></h1>
+        <h2 class="text-center mb-5 fs-5">Material de apoio de <%=conteudo.Assunto.nome%></h2>
+        <span><i class='bx  bx-chevron-left'></i><a href="/revisao/busca/<%=conteudo.Assunto.id_assunto%>">Voltar para <%=conteudo.Assunto.nome%></a></span>
+        <hr>
+        <div class="markdown-area">
+            <%-conteudo_markdown%>
+        </div>
     <%} else {%>
         Ops, nao achei nada aqui :(
     <%}%>
-
-
 
 </div>

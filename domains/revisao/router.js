@@ -52,7 +52,7 @@ router.post('/buscar_material', buscarMaterial)
 
 // Criação, edição e remoção de materiais
 router.post('/criar_material', registrarMaterial)
-router.post('/editar_material/:id_conteudo', atualizarMaterial)
+router.patch('/editar_material/:id_conteudo', atualizarMaterial)
 // router.post('/remover_material/:id_conteudo', removerMaterial)
 
 // Consulta para pegar as palavras-chave // ! Em avaliação

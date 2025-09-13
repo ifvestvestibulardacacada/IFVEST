@@ -1,18 +1,28 @@
-const { Conteudo } = require('../../../models')
+const { Conteudo, Assunto } = require('../../../models')
+const MarkdownSolver = require('../utils/MarkdownSolver')
 
 module.exports = async (req, res) => {
     const { nomeUsuario, perfil, imagemPerfil } = req.session;
 
     const { id_conteudo } = req.params
 
-    const conteudo = await Conteudo.findByPk(id_conteudo) || null
+    const conteudo = await Conteudo.findByPk(id_conteudo, {
+        include: [{
+            model: Assunto,
+            as: "Assunto"
+        }]
+    }) || null
 
+    const conteudo_markdown = MarkdownSolver.Render(conteudo.conteudo_markdown)
 
+    console.log(conteudo.conteudo_markdown)
+    // console.dir(conteudo_markdown)
 
     res.render('leitura', {
         conteudo,
-        nomeUsuario, 
-        perfilUsuario: perfil, 
+        conteudo_markdown,
+        nomeUsuario,
+        perfilUsuario: perfil,
         imagemPerfil
     })
 }
