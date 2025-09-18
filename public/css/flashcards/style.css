@@ -4,6 +4,8 @@
   padding: 2rem 3rem;
   background-color: #f9f6fb;
   perspective: 1500px;
+  display: flex;
+  gap: 2.5rem;
 }
 
 .flashcard-header {
@@ -40,19 +42,111 @@
 }
 
 /* Container que segura todos os flashcards */
+/* Centralize flashcards and set max width */
 #flashcard-container {
   position: relative;
-  min-height: 250px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+/* --- Estilos para o grupo de flashcards por tempo visto --- */
+.flashcard-groups {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 1.5rem 1.2rem;
+  min-width: 250px;
+  max-width: 350px;
+  height: fit-content;
+  margin-right: 1rem;
+}
+
+.group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.group-block {
+  background: #f9f6fb;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.group-block.active {
+  outline: 2px solid #0ea5e9;
+}
+
+.group-heading {
+  margin-bottom: 1rem;
+}
+
+.group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-title {
+  font-weight: bold;
+  font-size: 1.08rem;
+  color: #2e4e4e;
+  margin-bottom: 0.5rem;
+}
+
+.group-action {
+  background: #0ea5e9;
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.9rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+}
+
+.group-action:hover {
+  background: #0284c7;
+}
+
+.group-action.disabled {
+  background: #cfd8dc;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.queue-label {
+  margin: 0.5rem 0 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.group-cards {
+  list-style: none;
+  padding-left: 0;
+}
+
+.group-cards li {
+  margin-bottom: 0.5rem;
+  font-size: 0.98rem;
+  color: #2e4e4e;
+  font-weight: 500;
 }
 
 /* Container principal do flashcard */
+/* Smaller and centralized flashcard */
 .flashcard {
   background-color: transparent;
-  width: 100%;
-  min-height: 250px;
-  border-radius: 8px;
+  width: clamp(320px, 80vw, 640px);
+  min-height: 360px;
+  max-height: 520px;
+  border-radius: 12px;
   margin-bottom: 2rem;
   display: none; /* Esconde todos os cards por padrão */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  overflow: auto;
+  resize: vertical;
 }
 
 /* Mostra apenas o card com a classe 'active' */
@@ -64,8 +158,8 @@
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 250px;
-  transition: transform 0.7s;
+  min-height: 360px;
+  transition: transform 0.6s ease;
   transform-style: preserve-3d;
 }
 
@@ -82,56 +176,74 @@
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 2rem 2rem 2.5rem;
   box-sizing: border-box;
-  border-radius: 8px;
+  border-radius: 12px;
+  border: 1px solid #e9e9ee;
 }
 
 .flashcard-front {
-  background-color: #000;
-  color: white;
+  background-color: #ffffff;
+  color: #1f2937;
 }
 
 .flashcard-back {
-  background-color: #2e4e4e;
-  color: white;
+  background-color: #f6fafc;
+  color: #1f2937;
   transform: rotateY(180deg);
 }
 
 .pergunta, .resposta {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 1.5rem;
-  text-align: center;
+  font-size: clamp(1.05rem, 1.2rem + 0.4vw, 1.6rem);
+  line-height: 1.6;
+  font-weight: 600;
+  margin: 0;
+  text-align: left;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .ver-resposta, .ver-pergunta {
-  background-color: #f0f0f0;
-  color: #333;
-  padding: 0.6rem 1.2rem;
+  background-color: #0ea5e9; /* azul claro */
+  color: #fff;
+  padding: 0.7rem 1.25rem;
   border: none;
   border-radius: 10px;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
-  margin-top: 1rem;
+  margin-top: auto;
+  box-shadow: 0 2px 6px rgba(14,165,233,0.35);
+  transition: transform 0.08s ease, background-color 0.2s ease;
+}
+
+.ver-resposta:hover, .ver-pergunta:hover {
+  background-color: #0284c7;
+}
+
+.ver-resposta:active, .ver-pergunta:active {
+  transform: translateY(1px);
 }
 
 .interrogacao {
   position: absolute;
   bottom: 1rem;
   right: 1rem;
-  background-color: white;
-  color: red;
-  font-size: 1.4rem;
-  font-weight: bold;
+  background-color: #fff;
+  color: #0ea5e9;
+  font-size: 1.1rem;
+  font-weight: 800;
   border-radius: 50%;
   width: 28px;
   height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #e9e9ee;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
 
 /* Estilos para os controles de navegação */
@@ -139,27 +251,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
-  margin-top: 1rem;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
 }
 
 .nav-btn {
-  background-color: #000;
-  color: white;
+  background-color: #111827;
+  color: #fff;
   border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
   font-size: 1rem;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s, transform 0.08s;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
 .nav-btn:hover:not(:disabled) {
-  background-color: #333;
+  background-color: #1f2937;
 }
 
 .nav-btn:disabled {
@@ -171,4 +283,27 @@
   font-size: 1.2rem;
   font-weight: bold;
   color: #333;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .flashcard-content {
+    padding: 1.5rem 1rem;
+    gap: 1.25rem;
+  }
+
+  .flashcard {
+    width: 95vw;
+    min-height: 320px;
+    max-height: 480px;
+  }
+
+  .flashcard-front,
+  .flashcard-back {
+    padding: 1.25rem 1rem 1.75rem;
+  }
+
+  .navigation-controls {
+    gap: 1rem;
+  }
 }

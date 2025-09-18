@@ -158,6 +158,26 @@
                         <span class="nav__name">Revisão</span>
                     </a>
 
+            <% if (perfilUsuario === 'PROFESSOR') { %>
+                <a href="/flashcards" class="nav__link 
+                    <% if (currentPage==='flashcards'){%>
+                    active
+                    <%}%>
+                    ">
+                    <i class='bx bx-card nav__icon'></i>
+                    <span class="nav__name">Flashcards</span>
+                </a>
+            <% } else { %>
+                <a href="/flashcards" class="nav__link 
+                    <% if (currentPage==='flashcards'){%>
+                    active
+                    <%}%>
+                    ">
+                    <i class='bx bx-card nav__icon'></i>
+                    <span class="nav__name">Flashcards</span>
+                </a>
+            <% } %>
+
                 </div>
             </div>
         </div>

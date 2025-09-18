@@ -5,23 +5,33 @@ const bcrypt = require('bcrypt');
 
 class Database {
     static flashcards = {
-        getAll: async (req, res) => {
-            const { id_area, id_topico, id_dificuldade } = req.query;
-            const where = {};
-            if (id_area) where.id_area = id_area;
-            if (id_topico) where.id_topico = id_topico;
-            if (id_dificuldade) where.id_dificuldade = id_dificuldade;
-            try {
-                const { Flashcard, Area, Topico, Dificuldade } = require('../models');
-                const flashcards = await Flashcard.findAll({
-                    where,
-                    include: [Area, Topico, Dificuldade]
-                });
-                res.status(200).json(flashcards);
-            } catch (error) {
-                res.status(500).json({ message: 'Erro ao buscar flashcards', error: error.message });
-            }
-        },
+            getAll: async (req, res) => {
+                const { id_area, id_topico, id_dificuldade, onlyUnseen } = req.query;
+                const where = {};
+                if (id_area) where.id_area = id_area;
+                if (id_topico) where.id_topico = id_topico;
+                if (id_dificuldade) where.id_dificuldade = id_dificuldade;
+                try {
+                    const { Flashcard, Area, Topico, Dificuldade, FlashcardUsuario } = require('../models');
+                    let flashcards = await Flashcard.findAll({
+                        where,
+                        include: [Area, Topico, Dificuldade]
+                    });
+                    // If onlyUnseen is set, filter flashcards that have not been seen by the user
+                    if (onlyUnseen && req.session && req.session.userId) {
+                        const id_usuario = req.session.userId;
+                        const seenIds = await FlashcardUsuario.findAll({
+                            where: { id_usuario },
+                            attributes: ['id_flashcards']
+                        }); 
+                        const seenFlashcardIds = seenIds.map(fu => fu.id_flashcards);
+                        flashcards = flashcards.filter(card => !seenFlashcardIds.includes(card.id_flashcards));
+                    }
+                    res.status(200).json(flashcards);
+                } catch (error) {
+                    res.status(500).json({ message: 'Erro ao buscar flashcards', error: error.message });
+                }
+            },
         create: async (req, res) => {
             try {
                 const { Flashcard } = require('../models');
@@ -36,6 +46,19 @@ class Database {
                 res.status(201).json(novoFlashcard);
             } catch (error) {
                 res.status(400).json({ message: 'Erro ao criar flashcard', error: error.message });
+            }
+        },
+        createUi: async (req, res) => {
+            try {
+                const { Flashcard } = require('../models');
+                const { pergunta, resposta, id_area, id_topico, id_dificuldade } = req.body;
+                await Flashcard.create({ pergunta, resposta, id_area, id_topico, id_dificuldade });
+                return res.redirect('/flashcards');
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => req.session.save(err => err ? reject(err) : resolve()));
+                return res.status(400).redirect(req.get('Referrer') || '/flashcards');
             }
         },
         update: async (req, res) => {
@@ -62,6 +85,21 @@ class Database {
                 res.status(400).json({ message: 'Erro ao atualizar flashcard', error: error.message });
             }
         },
+        updateUi: async (req, res) => {
+            try {
+                const { Flashcard } = require('../models');
+                const { id } = req.params;
+                const { pergunta, resposta, id_area, id_topico, id_dificuldade } = req.body;
+                const [updated] = await Flashcard.update({ pergunta, resposta, id_area, id_topico, id_dificuldade }, { where: { id_flashcards: id } });
+                if (!updated) throw new Error('Flashcard não encontrado');
+                return res.redirect('/flashcards');
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => req.session.save(err => err ? reject(err) : resolve()));
+                return res.status(400).redirect(req.get('Referrer') || '/flashcards');
+            }
+        },
         delete: async (req, res) => {
             try {
                 const { Flashcard } = require('../models');
@@ -76,6 +114,21 @@ class Database {
                 }
             } catch (error) {
                 res.status(500).json({ message: 'Erro ao deletar flashcard', error: error.message });
+            }
+        }
+        ,
+        deleteUi: async (req, res) => {
+            try {
+                const { Flashcard } = require('../models');
+                const { id } = req.params;
+                const deleted = await Flashcard.destroy({ where: { id_flashcards: id } });
+                if (!deleted) throw new Error('Flashcard não encontrado');
+                return res.redirect('/flashcards');
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => req.session.save(err => err ? reject(err) : resolve()));
+                return res.status(400).redirect(req.get('Referrer') || '/flashcards');
             }
         }
             ,

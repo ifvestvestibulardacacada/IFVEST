@@ -61,14 +61,21 @@
         </div>
 
         <div class="ag-courses_item">
-          <a href="/flashcards/selecionar" class="ag-courses-item_link">
-            <div class="ag-courses-item_bg"></div>
-
-            <div class="ag-courses-item_title">
-              Flashcards
-
-            </div>
-          </a>
+          <% if (perfilUsuario === 'PROFESSOR') { %>
+            <a href="/flashcards" class="ag-courses-item_link">
+              <div class="ag-courses-item_bg"></div>
+              <div class="ag-courses-item_title">
+                Flashcards
+              </div>
+            </a>
+          <% } else { %>
+            <a href="/flashcards" class="ag-courses-item_link">
+              <div class="ag-courses-item_bg"></div>
+              <div class="ag-courses-item_title">
+                Flashcards
+              </div>
+            </a>
+          <% } %>
         </div>
       </div>
       </div>

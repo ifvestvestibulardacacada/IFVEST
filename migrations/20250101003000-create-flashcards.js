@@ -32,10 +32,6 @@ module.exports = {
           model: 'Dificuldade',
           key: 'id_dificuldade'
         } },
-      visto_por_ultimo: {
-        type: Sequelize.DATE,
-        allowNull: true
-      },
       createdAt:{
         type: Sequelize.DATE,
         allowNull: false,

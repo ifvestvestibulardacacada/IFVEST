@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar Flashcard</title>
+    <link rel="stylesheet" href="/css/flashcards/professor.css" />
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+    <div class="container">
+      <%- include('../partials/sidebar') %>
+      <main class="flashcard-content">
+        <h2 class="title">Criar Flashcard</h2>
+        <form action="/flashcards/criar" method="POST" class="flashcard-form">
+          <label>Pergunta</label>
+          <textarea name="pergunta" required rows="4"></textarea>
+          <label>Resposta</label>
+          <textarea name="resposta" required rows="4"></textarea>
+          <label>Área</label>
+          <select name="id_area" id="area" required></select>
+          <label>Tópico</label>
+          <select name="id_topico" id="topico"></select>
+          <label>Dificuldade</label>
+          <select name="id_dificuldade" id="dificuldade"></select>
+          <button type="submit" class="criar-flashcard-btn">Salvar</button>
+        </form>
+      </main>
+    </div>
+    <script src="/js/flashcard/carregarFiltros.js"></script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Flashcard</title>
+    <link rel="stylesheet" href="/css/flashcards/professor.css" />
+  </head>
+  <body>
+    <%- include('../partials/header') %>
+    <div class="container">
+      <%- include('../partials/sidebar') %>
+      <main class="flashcard-content">
+        <h2 class="title">Editar Flashcard</h2>
+        <form action="/flashcards/<%= flashcard.id_flashcards %>/editar" method="POST" class="flashcard-form">
+          <label>Pergunta</label>
+          <textarea name="pergunta" required rows="4"><%= flashcard.pergunta %></textarea>
+          <label>Resposta</label>
+          <textarea name="resposta" required rows="4"><%= flashcard.resposta %></textarea>
+          <label>Área</label>
+          <select name="id_area" id="area" required data-selected="<%= flashcard.id_area %>"></select>
+          <label>Tópico</label>
+          <select name="id_topico" id="topico" data-selected="<%= flashcard.id_topico %>"></select>
+          <label>Dificuldade</label>
+          <select name="id_dificuldade" id="dificuldade" data-selected="<%= flashcard.id_dificuldade %>"></select>
+          <button type="submit" class="criar-flashcard-btn">Salvar</button>
+        </form>
+      </main>
+    </div>
+    <script src="/js/flashcard/carregarFiltros.js"></script>
+  </body>
+</html>
