@@ -5,18 +5,31 @@ module.exports = (sequelize, DataTypes) => {
 
     class Usuario extends Model {
         static associate(models) {
-          this.hasMany(models.Questao, {
-            foreignKey: 'id_usuario',
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-          });
-      
-          // Associação com Respostas
-          this.hasMany(models.Resposta, {
-            foreignKey: 'id_usuario',
-            onDelete: 'CASCADE',
-            onUpdate: 'CASCADE',
-          });
+            this.hasMany(models.Questao, {
+              foreignKey: 'id_usuario',
+              onDelete: 'CASCADE',
+              onUpdate: 'CASCADE',
+            });
+
+            // Associação com Respostas
+            this.hasMany(models.Resposta, {
+              foreignKey: 'id_usuario',
+              onDelete: 'CASCADE',
+              onUpdate: 'CASCADE',
+            });
+
+            // Associação com FlashcardUsuario
+            this.hasMany(models.FlashcardUsuario, {
+              foreignKey: 'id_usuario',
+              onDelete: 'CASCADE',
+              onUpdate: 'CASCADE',
+            });
+            this.belongsToMany(models.Flashcard, {
+              through: models.FlashcardUsuario,
+              foreignKey: 'id_usuario',
+              otherKey: 'id_flashcards',
+              as: 'flashcards',
+            });
         }
     }
 

@@ -37,9 +37,30 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.querySelectorAll('.ver-resposta').forEach(button => {
-    button.addEventListener('click', (event) => {
+    button.addEventListener('click', async (event) => {
       const flashcard = event.target.closest('.flashcard');
       flashcard.classList.add('flip');
+
+      // Atualiza visto_por_ultimo
+      const id_flashcards = flashcard.dataset.idFlashcard || flashcard.getAttribute('data-id-flashcard');
+      let id_usuario = window.idUsuario;
+      if (!id_usuario) {
+        // Tenta obter do DOM ou session
+        id_usuario = document.body.dataset.idUsuario;
+      }
+      if (id_flashcards && id_usuario) {
+        try {
+          await fetch(`/flashcards/${id_flashcards}/visto-por-ultimo`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id_usuario })
+          });
+        } catch (err) {
+          console.error('Erro ao atualizar visto_por_ultimo:', err);
+        }
+      }
     });
   });
 

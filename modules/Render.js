@@ -30,7 +30,8 @@ class Render {
                 const nomeUsuario = req.session.nomeUsuario;
                 const perfilUsuario = req.session.perfil;
                 const imagemPerfil = req.session.imagemPerfil;
-                res.render('flashcards/flashcards', { flashcards, nomeUsuario, perfilUsuario, imagemPerfil });
+                const id_usuario = req.session.userId;
+                res.render('flashcards/flashcards', { flashcards, nomeUsuario, perfilUsuario, imagemPerfil, id_usuario });
             } catch (error) {
                 res.status(500).send('Erro ao buscar flashcards.');
             }

@@ -15,6 +15,10 @@ roteador.get('/', Render.flashcards.meusFlashcards);
 // roteador.get('/', Database.flashcards.getAll);
 roteador.post('/criar-flashcard', validateRequest(flashcardsSchemas.register), Database.flashcards.create);
 roteador.patch('/:id/editar', validateRequest(flashcardsSchemas.edit), Database.flashcards.update);
+
+// Atualizar visto_por_ultimo
+roteador.post('/:id_flashcards/visto-por-ultimo', Database.flashcards.updateVistoPorUltimo);
+
 roteador.delete('/:id/excluir', Database.flashcards.delete);
 
 module.exports = roteador;

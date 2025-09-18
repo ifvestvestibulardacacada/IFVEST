@@ -10,7 +10,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
   </head>
-  <body>
+  <body data-id-usuario="<%= id_usuario %>">
     <%- include('../partials/header') %>
     <div class="container">
       <%- include('../partials/sidebar') %>
@@ -27,7 +27,7 @@
           <% if (flashcards && flashcards.length > 0) { %>
             <% flashcards.forEach((card, index) => { %>
               <!-- Adiciona a classe 'active' apenas no primeiro card -->
-              <div class="flashcard <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>">
+              <div class="flashcard <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>" data-id-flashcard="<%= card.id_flashcards %>">
                 <div class="flashcard-inner">
                   <div class="flashcard-front">
                     <p class="pergunta"><%= card.pergunta %></p>
