@@ -11,7 +11,7 @@
 body {
     display: flex;
     justify-content: center;
-    align-items: center;
+    /* align-items: center; */
     min-height: 100vh;
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -278,3 +278,7 @@ main {
     transform: translateX(-50%);
     
 } */
+#editors-container .ql-container, .ql-editor, .ql-container{
+    max-height: 200px;
+    overflow-y: auto;
+}

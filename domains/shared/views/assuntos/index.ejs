@@ -1,0 +1,45 @@
+<div class="container">
+  <h1>Assuntos</h1>
+
+  <form action="/shared/assuntos" method="POST" style="margin-bottom:16px;">
+    <input type="text" name="nome" placeholder="Nome" required />
+    <input type="text" name="descricao" placeholder="Descrição" />
+    <input type="number" name="id_assunto_ascendente" placeholder="ID Assunto Pai (opcional)" />
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Ascendente</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (assuntos || []).forEach(function(assunto){ %>
+        <tr>
+          <td><%= assunto.id_assunto %></td>
+          <td><%= assunto.nome %></td>
+          <td><%= assunto.descricao || '' %></td>
+          <td><%= assunto.id_assunto_ascendente || '' %></td>
+          <td>
+            <form action="/shared/assuntos/<%= assunto.id_assunto %>?_method=PATCH" method="POST" style="display:inline-block;">
+              <input type="text" name="nome" placeholder="Novo nome" />
+              <input type="text" name="descricao" placeholder="Nova descrição" />
+              <input type="number" name="id_assunto_ascendente" placeholder="ID Assunto Pai" />
+              <button type="submit">Salvar</button>
+            </form>
+            <form action="/shared/assuntos/<%= assunto.id_assunto %>?_method=DELETE" method="POST" style="display:inline-block; margin-left:8px;">
+              <button type="submit">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+

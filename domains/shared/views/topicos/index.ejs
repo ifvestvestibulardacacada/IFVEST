@@ -1,0 +1,37 @@
+<div class="container">
+  <h1>Tópicos</h1>
+
+  <form action="/shared/topicos" method="POST" style="margin-bottom:16px;">
+    <input type="text" name="nome" placeholder="Nome" required />
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (topicos || []).forEach(function(topico){ %>
+        <tr>
+          <td><%= topico.id_topico %></td>
+          <td><%= topico.nome %></td>
+          <td>
+            <form action="/shared/topicos/<%= topico.id_topico %>?_method=PATCH" method="POST" style="display:inline-block;">
+              <input type="text" name="nome" placeholder="Novo nome" />
+              <button type="submit">Salvar</button>
+            </form>
+            <form action="/shared/topicos/<%= topico.id_topico %>?_method=DELETE" method="POST" style="display:inline-block; margin-left:8px;">
+              <button type="submit">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+

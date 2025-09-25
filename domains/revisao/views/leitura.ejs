@@ -11,7 +11,11 @@
         <span><i class='bx  bx-chevron-left'></i><a href="/revisao/busca/<%=conteudo.Assunto.id_assunto%>">Voltar para <%=conteudo.Assunto.nome%></a></span>
         <hr>
         <div class="markdown-area">
-            <%-conteudo_markdown%>
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <%-conteudo_markdown%>
+                </div>
+            </div>
         </div>
     <%} else {%>
         Ops, nao achei nada aqui :(

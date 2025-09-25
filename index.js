@@ -28,6 +28,7 @@ const expressLayouts = require('express-ejs-layouts');
 const revisaoApp = require('./domains/revisao/index.js');
 const simuladosApp = require('./domains/simulados/index.js')
 const cors = require('cors')
+const sharedApp = require('./domains/shared/index.js');
 
 const app = express();
 
@@ -119,6 +120,7 @@ app.use('/professor', simuladosApp);
 app.use("/uploads",  uploads) 
 app.use("/simulados",  simuladosApp) 
 app.use("/revisao", revisaoApp)
+app.use('/shared', sharedApp)
 
 
 
