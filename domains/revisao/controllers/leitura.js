@@ -14,8 +14,9 @@ module.exports = async (req, res) => {
     }) || null
 
     const conteudo_markdown = MarkdownSolver.Render(conteudo.conteudo_markdown)
+    // const conteudo_markdown = conteudo.conteudo_markdown
 
-    console.log(conteudo.conteudo_markdown)
+    // console.log(conteudo.conteudo_markdown)
     // console.dir(conteudo_markdown)
 
     res.render('leitura', {

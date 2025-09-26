@@ -81,7 +81,7 @@ function handleSearch(inputValue) {
 }
 
 async function loadTopicDropdown(AreaId) {
-    const response = await fetch(`/professor/topicos/${AreaId}`);
+    const response = await fetch(`/shared/api/topicos/${AreaId}`);
    
     const data = await response.json();
     const topicos = data;

@@ -25,8 +25,6 @@ module.exports = async (req, res) => {
         ]
     })
 
-    console.log(listaMateriais)
-
     const isRoot = id_assunto ? false : true
 
     const assunto = id_assunto ? await Assunto.findByPk(id_assunto) : {nome: "Assunto", descricao: ""}

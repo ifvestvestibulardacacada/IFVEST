@@ -2,8 +2,9 @@ const { Area, Assunto, Topico } = require('../../../models');
 
 // Áreas
 async function listarAreas(req, res) {
+    const { perfil, nomeUsuario, imagemPerfil} = req.session;
     const areas = await Area.findAll({ order: [['id_area','ASC']] });
-    return res.render('shared/areas/index', { areas });
+    return res.render('areas/index', { areas, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
 }
 
 async function criarArea(req, res) {
@@ -27,8 +28,9 @@ async function excluirArea(req, res) {
 
 // Assuntos
 async function listarAssuntos(req, res) {
+    const { perfil, nomeUsuario, imagemPerfil} = req.session;
     const assuntos = await Assunto.findAll({ order: [['id_assunto','ASC']] });
-    return res.render('shared/assuntos/index', { assuntos });
+    return res.render('assuntos/index', { assuntos, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
 }
 
 async function criarAssunto(req, res) {
@@ -51,21 +53,48 @@ async function excluirAssunto(req, res) {
 }
 
 // Tópicos
-async function listarTopicos(req, res) {
-    const topicos = await Topico.findAll({ order: [['id_topico','ASC']] });
-    return res.render('shared/topicos/index', { topicos });
+ async function listarTopicos(req, res) {
+     const { perfil, nomeUsuario, imagemPerfil} = req.session;
+     const topicos = await Topico.findAll({ order: [['id_topico','ASC']] });
+     console.log(topicos)
+     return res.render('topicos/index', { topicos, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
+ }
+
+// JSON consultas
+async function consultarTopicos(req, res) {
+    console.log("Consultando tópicos") // ! Log temporário
+    console.log(req.params);
+    const { id_area } = req.params;
+
+    try {
+        const where = {};
+        if (id_area) {
+            where.id_area = id_area;
+        }
+        
+        const topics = await Topico.findAll({
+            attributes: ['id_topico', 'nome'],
+            where: where,
+            order: [['nome', 'ASC']]
+        });
+        console.log(topics)
+        res.status(200).json(topics);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
 }
 
 async function criarTopico(req, res) {
-    const { nome } = req.body;
-    await Topico.create({ nome });
+    const { nome, id_area, id_usuario } = req.body;
+    await Topico.create({ nome, id_area, id_usuario });
     return res.redirect('/shared/topicos');
 }
 
 async function editarTopico(req, res) {
     const { id_topico } = req.params;
-    const { nome } = req.body;
-    await Topico.update({ nome }, { where: { id_topico } });
+    const { nome, id_area, id_usuario } = req.body;
+    await Topico.update({ nome, id_area, id_usuario }, { where: { id_topico } });
     return res.redirect('/shared/topicos');
 }
 
@@ -87,7 +116,8 @@ module.exports = {
     listarTopicos,
     criarTopico,
     editarTopico,
-    excluirTopico,
+     excluirTopico,
+     consultarTopicos,
 }
 
 

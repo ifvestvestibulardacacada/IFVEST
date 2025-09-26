@@ -3,6 +3,8 @@
 
   <form action="/shared/topicos" method="POST" style="margin-bottom:16px;">
     <input type="text" name="nome" placeholder="Nome" required />
+    <input type="number" name="id_area" placeholder="ID da Área" required />
+    <input type="number" name="id_usuario" placeholder="ID do Usuário" required />
     <button type="submit">Adicionar</button>
   </form>
 
@@ -11,6 +13,8 @@
       <tr>
         <th>ID</th>
         <th>Nome</th>
+        <th>ID Área</th>
+        <th>ID Usuário</th>
         <th>Ações</th>
       </tr>
     </thead>
@@ -19,9 +23,13 @@
         <tr>
           <td><%= topico.id_topico %></td>
           <td><%= topico.nome %></td>
+          <td><%= topico.id_area %></td>
+          <td><%= topico.id_usuario %></td>
           <td>
             <form action="/shared/topicos/<%= topico.id_topico %>?_method=PATCH" method="POST" style="display:inline-block;">
               <input type="text" name="nome" placeholder="Novo nome" />
+              <input type="number" name="id_area" placeholder="ID Área" />
+              <input type="number" name="id_usuario" placeholder="ID Usuário" />
               <button type="submit">Salvar</button>
             </form>
             <form action="/shared/topicos/<%= topico.id_topico %>?_method=DELETE" method="POST" style="display:inline-block; margin-left:8px;">

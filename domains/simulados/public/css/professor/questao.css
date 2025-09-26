@@ -278,7 +278,3 @@ main {
     transform: translateX(-50%);
     
 } */
-#editors-container .ql-container, .ql-editor, .ql-container{
-    max-height: 200px;
-    overflow-y: auto;
-}

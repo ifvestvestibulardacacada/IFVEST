@@ -5,10 +5,10 @@ module.exports = (sequelize, DataTypes) => {
 
     class Topico extends Model {
         static associate(models) {
-
-  this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'Usuario' });
-  this.belongsTo(models.Topico, { foreignKey: 'id_topico', as: 'Topico' });
-this.belongsToMany(models.Questao, { through: 'QuestaoTopico', foreignKey: 'id_topico', as: 'Questao' });}
+            this.belongsTo(models.Usuario, { foreignKey: 'id_usuario', as: 'Usuario' });
+            this.belongsTo(models.Area, { foreignKey: 'id_area', as: 'Area' });
+            this.belongsToMany(models.Questao, { through: 'QuestaoTopico', foreignKey: 'id_topico', as: 'Questao' });
+        }
     }
 
     Topico.init({
@@ -22,6 +22,22 @@ this.belongsToMany(models.Questao, { through: 'QuestaoTopico', foreignKey: 'id_t
             type: DataTypes.STRING,
             allowNull: false
         },
+        id_area: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Area',
+                key: 'id_area'
+            }
+        },
+        id_usuario: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            references: {
+                model: 'Usuario',
+                key: 'id_usuario'
+            }
+        }
     }, {
         sequelize,
         modelName: 'Topico',

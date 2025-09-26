@@ -16,6 +16,9 @@ const {
     criarTopico,
     editarTopico,
     excluirTopico,
+    consultarTopicos,
+    consultarAreas,
+    consultarAssuntos,
 } = controllers
 
 const router = Router()
@@ -37,5 +40,9 @@ router.get('/topicos', listarTopicos)
 router.post('/topicos', criarTopico)
 router.patch('/topicos/:id_topico', editarTopico)
 router.delete('/topicos/:id_topico', excluirTopico)
+
+// JSON APIs (path params)
+router.get('/api/topicos', consultarTopicos) // all
+router.get('/api/topicos/:id_area', consultarTopicos) // by area
 
 module.exports = router
