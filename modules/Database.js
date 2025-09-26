@@ -1,4 +1,4 @@
-const { sequelize, Usuario, Questao, Opcao, Simulado, Resposta, Topico, Conteudo, Recomendacao, TagConteudo, PalavraChave } = require('../models');
+const { sequelize, Usuario, Questao, Opcao, Simulado, Resposta, Topico, Conteudo, TagConteudo, PalavraChave } = require('../models');
 const { removeFileFromUploads } = require('../utils/removeImage')
 const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const bcrypt = require('bcrypt');

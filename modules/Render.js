@@ -1,5 +1,5 @@
 
-const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta, Conteudo, Recomendacao, TagConteudo, PalavraChave } = require('../models');
+const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta, Conteudo, TagConteudo, PalavraChave } = require('../models');
 const { Op, where } = require('sequelize');
 
 const Nayahath = require('../logs/ArcanaFlow');
