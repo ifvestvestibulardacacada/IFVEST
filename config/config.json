@@ -26,7 +26,7 @@
     "password": "boso_W{w+VKg",
     "database": "ifvestjc_ifdb",
     "host": "localhost",
-    "dialect": "mariadb",
+    "dialect": "mysql",
     "port": "3306"
   },
   "use_env_variable": true
