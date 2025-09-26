@@ -1,5 +1,5 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
-const { Conteudo, Assunto, MaterialExterno, PalavraChave } = require('../../../models')
+const { Conteudo, Assunto, PalavraChave } = require('../../../models')
 
 module.exports = async (req, res) => {
 
@@ -16,11 +16,7 @@ module.exports = async (req, res) => {
         const Assuntos = await Assunto.findAll()
 
         const Material = await Conteudo.findByPk(id_conteudo, {
-            include: [{
-                model: MaterialExterno,
-                as: 'MaterialExterno',
-                through: { attributes: [] }
-            },
+            include: [
             {
                 model: PalavraChave,
                 as: 'PalavraChave',
@@ -40,9 +36,6 @@ module.exports = async (req, res) => {
 
         // Transform PalavraChave to array of strings
         plainMaterial.PalavraChave = plainMaterial.PalavraChave.map(keyword => keyword.palavrachave); // Extract 'PalavraChave' field
-
-        // Transform MaterialExterno to array of strings
-        plainMaterial.MaterialExterno = plainMaterial.MaterialExterno.map(link => link.material);
 
         plainMaterial.assunto = assunto;
 

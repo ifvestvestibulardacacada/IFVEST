@@ -1,5 +1,5 @@
 
-const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta, Conteudo, MaterialExterno, Recomendacao, TagConteudo, PalavraChave } = require('../models');
+const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta, Conteudo, Recomendacao, TagConteudo, PalavraChave } = require('../models');
 const { Op, where } = require('sequelize');
 
 const Nayahath = require('../logs/ArcanaFlow');
@@ -1029,11 +1029,7 @@ class Render {
                 });
 
                 const Material = await Conteudo.findByPk(id_conteudo, {
-                    include: [{
-                        model: MaterialExterno,
-                        as: 'MaterialExterno',
-                        through: { attributes: [] }
-                    },
+                    include: [
                     {
                         model: PalavraChave,
                         as: 'PalavraChave',
@@ -1053,9 +1049,6 @@ class Render {
 
                 // Transform PalavraChave to array of strings
                 plainMaterial.PalavraChave = plainMaterial.PalavraChave.map(keyword => keyword.palavrachave); // Extract 'PalavraChave' field
-
-                // Transform MaterialExterno to array of strings
-                plainMaterial.MaterialExterno = plainMaterial.MaterialExterno.map(link => link.material);
 
                 plainMaterial.topico = topico;
 
@@ -1099,11 +1092,7 @@ class Render {
                  const totalPages = Math.ceil(conteudoCount / limit);
 
                 const Conteudos = await Conteudo.findAll({
-                    include: [{
-                        model: MaterialExterno,
-                        as: 'MaterialExterno',
-                        through: { attributes: [] }
-                    },
+                    include: [
                     {
                         model: PalavraChave,
                         as: 'PalavraChave',

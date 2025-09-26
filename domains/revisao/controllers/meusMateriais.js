@@ -1,4 +1,4 @@
-const { Conteudo, MaterialExterno, PalavraChave } = require('../../../models')
+const { Conteudo, PalavraChave } = require('../../../models')
 
 module.exports = async (req, res) => {
     try {
@@ -17,11 +17,7 @@ module.exports = async (req, res) => {
         const totalPages = Math.ceil(conteudoCount / limit);
 
         const Conteudos = await Conteudo.findAll({
-            include: [{
-                model: MaterialExterno,
-                as: 'MaterialExterno',
-                through: { attributes: [] }
-            },
+            include: [
             {
                 model: PalavraChave,
                 as: 'PalavraChave',

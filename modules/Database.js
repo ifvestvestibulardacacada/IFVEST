@@ -1,4 +1,4 @@
-const { sequelize, Usuario, Questao, Opcao, Simulado, Resposta, Topico, Conteudo, MaterialExterno, Recomendacao, TagConteudo, PalavraChave } = require('../models');
+const { sequelize, Usuario, Questao, Opcao, Simulado, Resposta, Topico, Conteudo, Recomendacao, TagConteudo, PalavraChave } = require('../models');
 const { removeFileFromUploads } = require('../utils/removeImage')
 const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const bcrypt = require('bcrypt');
@@ -867,7 +867,6 @@ class Database {
                 );
 
                 const idsPalavrasChave = [];
-                const idsMaterialExterno = [];
 
                 // Processa palavras-chave
                 for (const palavra of palavrasChave) {
@@ -887,33 +886,14 @@ class Database {
                     }
                 }
 
-                // Processa links externos
-                for (const link of linksExternos) {
-                    let linkExterno = await MaterialExterno.findOne({
-                        where: { material: link },
-                        transaction,
-                    });
-
-                    if (linkExterno) {
-                        idsMaterialExterno.push(linkExterno.id_material_externo);
-                    } else {
-                        linkExterno = await MaterialExterno.create(
-                            { material: link },
-                            { transaction }
-                        );
-                        idsMaterialExterno.push(linkExterno.id_material_externo);
-                    }
-                }
 
                 await ConteudoCriado.setPalavraChave(idsPalavrasChave, { transaction });
-                await ConteudoCriado.setMaterialExterno(idsMaterialExterno, { transaction });
 
                 // Confirma a transação
                 await transaction.commit();
                 res.status(201).json({
                     conteudo: ConteudoCriado,
                     palavrasChave: idsPalavrasChave,
-                    linksExternos: idsMaterialExterno,
                 });
             } catch (error) {
                 // Desfaz a transação em caso de erro
@@ -974,18 +954,8 @@ class Database {
                     return palavraChave.id_palavrachave;
                 }));
 
-                const idsMaterialExterno = await Promise.all(linksExternos.map(async (link) => {
-                    const [linkExterno, created] = await MaterialExterno.findOrCreate({
-                        where: { material: link },
-                        defaults: { material: link },
-                        transaction
-                    });
-                    return linkExterno.id_material_externo;
-                }));
-
                 // Atualiza associações
                 await conteudoEditado.setPalavraChave(idsPalavrasChave, { transaction });
-                await conteudoEditado.setMaterialExterno(idsMaterialExterno, { transaction });
 
                 await transaction.commit();
                 return res.status(200).json({
@@ -996,7 +966,6 @@ class Database {
 
                         topicoId: conteudoEditado.id_topico,
                         palavrasChave: idsPalavrasChave,
-                        linksExternos: idsMaterialExterno
                     }
                 });
 
@@ -1017,21 +986,6 @@ class Database {
                     return res.status(404).json({ message: 'Conteúdo não encontrado.' });
                 }
                 await conteudo.setPalavraChave([], { transaction });
-
-            
-                const materiaisExternos = await conteudo.getMaterialExterno({ transaction });
-                const idsMaterialExterno = materiaisExternos.map(material => material.id_material_externo);
-
-              
-                await conteudo.setMaterialExterno([], { transaction });
-
-                // Exclui os registros de MaterialExterno
-                if (idsMaterialExterno.length > 0) {
-                    await MaterialExterno.destroy({
-                        where: { id_material_externo: idsMaterialExterno },
-                        transaction
-                    });
-                }
 
                 // Exclui o Conteudo
                 await conteudo.destroy({ transaction });

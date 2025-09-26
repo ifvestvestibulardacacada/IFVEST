@@ -1,4 +1,4 @@
-const { Conteudo, MaterialExterno, PalavraChave, sequelize } = require('../../../models');
+const { Conteudo, PalavraChave, sequelize } = require('../../../models');
 
 
 module.exports = async (req, res) => {
@@ -34,7 +34,6 @@ module.exports = async (req, res) => {
         );
 
         const idsPalavrasChave = [];
-        const idsMaterialExterno = [];
 
         // Processa palavras-chave
         for (const palavra of palavrasChave) {
@@ -54,33 +53,13 @@ module.exports = async (req, res) => {
             }
         }
 
-        // Processa links externos
-        for (const link of linksExternos) {
-            let linkExterno = await MaterialExterno.findOne({
-                where: { material: link },
-                transaction,
-            });
-
-            if (linkExterno) {
-                idsMaterialExterno.push(linkExterno.id_material_externo);
-            } else {
-                linkExterno = await MaterialExterno.create(
-                    { material: link },
-                    { transaction }
-                );
-                idsMaterialExterno.push(linkExterno.id_material_externo);
-            }
-        }
-
         await ConteudoCriado.setPalavraChave(idsPalavrasChave, { transaction });
-        await ConteudoCriado.setMaterialExterno(idsMaterialExterno, { transaction });
 
         // Confirma a transação
         await transaction.commit();
         res.status(201).json({
             conteudo: ConteudoCriado,
             palavrasChave: idsPalavrasChave,
-            linksExternos: idsMaterialExterno,
         });
     } catch (error) {
         // Desfaz a transação em caso de erro

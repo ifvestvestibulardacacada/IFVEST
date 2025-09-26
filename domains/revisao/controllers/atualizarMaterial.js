@@ -1,5 +1,5 @@
 const { sequelize } = require("../../../models");
-const { Conteudo, MaterialExterno, PalavraChave } = require('../../../models');
+const { Conteudo, PalavraChave } = require('../../../models');
 
 
 module.exports = async (req, res) => {
@@ -54,18 +54,10 @@ module.exports = async (req, res) => {
                     return palavraChave.id_palavrachave;
                 }));
 
-                const idsMaterialExterno = await Promise.all(linksExternos.map(async (link) => {
-                    const [linkExterno, created] = await MaterialExterno.findOrCreate({
-                        where: { material: link },
-                        defaults: { material: link },
-                        transaction
-                    });
-                    return linkExterno.id_material_externo;
-                }));
+                
 
                 // Atualiza associações
                 await conteudoEditado.setPalavraChave(idsPalavrasChave, { transaction });
-                await conteudoEditado.setMaterialExterno(idsMaterialExterno, { transaction });
 
                 await transaction.commit();
                 return res.status(200).json({
@@ -76,7 +68,6 @@ module.exports = async (req, res) => {
 
                         assuntoId: conteudoEditado.id_assunto,
                         palavrasChave: idsPalavrasChave,
-                        linksExternos: idsMaterialExterno
                     }
                 });
 
