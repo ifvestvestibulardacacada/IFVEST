@@ -1,8 +1,7 @@
 <title>Editar Material - Módulo de Revisão de Conteúdo - IFVest</title>
 
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
-  <script type="module" crossorigin src="/assets/index-7zN54S2I.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-D17DFlJU.css">
+ <link rel="stylesheet" href="/css/revisao/criar_material.css">
 <main>
         <h1>Editar Material</h1>
         <p style="display: none;"></p>
@@ -49,14 +48,14 @@
                 <!-- Editor Markdown -->
                 <div class="form-group">
                     <label for="markdownEditor">Conteúdo do Material (Markdown)</label>
-                       <div id="root"></div>
+                      <%- include('./editor') %>
                        
                 </div>
 
                 <!-- Materiais Externos -->
                 <div class="form-group">
                     <label for="linksExternos">Links Externos (um por linha)</label>
-                    <textarea class="form-control" id="linksExternos" rows="3">Material externo em desenvolvimento!</textarea>
+                    <textarea class="form-control" id="linksExternos" rows="3"><%= Material.MaterialExterno %></textarea>
                 </div>
 
                 <button type="button" id="submitButton" class="btn btn-primary w-100">Salvar Alterações</button>

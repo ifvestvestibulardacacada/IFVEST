@@ -14,7 +14,7 @@
 </head>
 
 <body>
-    
+  
     
     <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
         <script>
@@ -38,8 +38,8 @@
 
                         <a class="list-group-item list-group-item-action active" data-toggle="list"
                             href="#account-general">Geral</a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list"
-                            href="#account-change-password">Mudar senha</a>
+                       
+                            
                             <% if (usuario.perfil === "USUARIO" ) { %>
                         <a class="list-group-item list-group-item-action" data-toggle="list"
                             href="#account-delete">Deletar Conta</a>
@@ -95,31 +95,7 @@
 
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="account-change-password">
-                            <form action="/usuario/editar/<%= usuario.id_usuario %>?_method=PATCH" method="POST">
-                                <div class="card-body pb-2">
-                                    <div class="form-group">
-                                        <label class="form-label">Digite sua senha atual</label>
-                                        <input type="password" name="senha" class="form-control" id="senhaAtual"
-                                            placeholder="***********" maxlength="50" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Digite a nova senha</label>
-                                        <input type="password" name="novasenha" class="form-control" id="novaSenha" placeholder="***********" maxlength="50" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Digite a nova senha novamente</label>
-                                        <input type="password" name="confirmacaoSenha" class="form-control" id="confirmacaoSenha"
-                                            placeholder="***********" maxlength="50" required>
-                                    </div>
-                                </div>
-                                <div class="text-right mt-3" style="margin-right: 2rem;;">
-                                    <button type="submit" id="submitButton" class="btn btn-primary">Salvar as alterações</button>
-                                </div>
-
-                            </form>
-
-                        </div>
+                   
                         <div class="tab-pane fade" id="account-delete">
                             <div class="alert alert-danger" role="alert">
                                 <strong>Atenção!</strong> A exclusão da sua conta é irreversível. Todos os seus dados e

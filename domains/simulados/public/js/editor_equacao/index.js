@@ -1,5 +1,5 @@
 import symbolButtons from "./symbolButtons.js"
-import Button from "../core/entity/button.js"
+import Button from "../../core/entity/button.js"
 
 
 /// Editor buttons ///////////////////////////////////////////////////////////////////////////
@@ -7,12 +7,7 @@ const equationInput = document.querySelector('#equation-input')
 const equationPreview = document.querySelector('#equation-preview')
 const insertBtn = document.querySelector('#insert-btn')
 const clearBtn = document.querySelector('#clear-btn')
-const editorBtn = document.querySelector("#editor-open-btn")
-const opcaoBtnA = document.querySelector("#editor-open-btnA")
-const opcaoBtnB = document.querySelector("#editor-open-btnB")
-const opcaoBtnC = document.querySelector("#editor-open-btnC")
-const opcaoBtnD = document.querySelector("#editor-open-btnD")
-const opcaoBtnE = document.querySelector("#editor-open-btnE")
+
 const editorCloseBtn = document.querySelector("#editor-close-btn")
 const editorBox = document.querySelector('#editor-box')
 const symbolsBox = document.querySelector("#symbols-box")
@@ -40,7 +35,19 @@ const comparisonSection = document.querySelector("#comparison-section")
 const comparisonSectionButtons = document.querySelectorAll("#comparison-section button")
 const hiddenComparisonSymbols = document.querySelector("#hidden-comparison-symbols")
 
-
+const tipo = window.questionType || 'objetiva'; // Usa 'objetiva' como fallback
+const editorButtons = [
+    { id: 'editor-open-btn', editorId: '#editor-container' },
+    ...(tipo === 'objetiva' ? [
+        { id: 'editor-open-btnA', editorId: '#opcaoA' },
+        { id: 'editor-open-btnB', editorId: '#opcaoB' },
+        { id: 'editor-open-btnC', editorId: '#opcaoC' },
+        { id: 'editor-open-btnD', editorId: '#opcaoD' },
+        { id: 'editor-open-btnE', editorId: '#opcaoE' }
+    ] : tipo === 'dissertativa' ? [
+        { id: 'editor-open-btn-resposta', editorId: '#resposta' } // Apenas opção A para dissertativa, se necessário
+    ] : [])
+];
 
 /// Editor event listeners ///////////////////////////////////////////////////////////////////
 equationInput.addEventListener('keyup', () => {
@@ -69,62 +76,19 @@ editorCloseBtn.addEventListener('click', () => {
     document.getElementById('overlay').style.display = 'none';
 })
 
-
-editorBtn.addEventListener('click', () => {
-    editorId = "#editor-container"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-    equationPreview.innerHTML = equationInput.value = '';
-
-})
-opcaoBtnA.addEventListener('click', () => {
-    editorId = "#opcaoA"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-    equationPreview.innerHTML = equationInput.value = '';
-
-})
-opcaoBtnB.addEventListener('click', () => {
-    editorId = "#opcaoB"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-    equationPreview.innerHTML = equationInput.value = '';
-
-})
-opcaoBtnC.addEventListener('click', () => {
-    editorId = "#opcaoC"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-    equationPreview.innerHTML = equationInput.value = '';
-
-})
-opcaoBtnD.addEventListener('click', () => {
-    editorId = "#opcaoD"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-    equationPreview.innerHTML = equationInput.value = '';
-
-})
-opcaoBtnE.addEventListener('click', () => {
-    editorId = "#opcaoE"
-    editorBox.classList.remove('hide');
-    symbolsBox.classList.remove('hide');
-    equationInput.focus();
-    document.getElementById('overlay').style.display = 'block';
-    equationPreview.innerHTML = equationInput.value = '';
-
-})
-
+editorButtons.forEach(({ id, editorId: targetEditorId }) => {
+    const button = document.querySelector(`#${id}`);
+    if (button) {
+        button.addEventListener('click', () => {
+            editorId = targetEditorId;
+            editorBox.classList.remove('hide');
+            symbolsBox.classList.remove('hide');
+            equationInput.focus();
+            document.getElementById('overlay').style.display = 'block';
+            equationPreview.innerHTML = equationInput.value = '';
+        });
+    }
+});
 /// Sections event listeners //////////////////////////////////////////////////////////////////
 section_1_btn.forEach(element => {
     element.addEventListener('mouseover', () => {
