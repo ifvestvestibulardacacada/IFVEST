@@ -1,6 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
- document.getElementById('submitButton').addEventListener('click', async function (event) {
+    document.getElementById('submitButton').addEventListener('click', async function (event) {
         event.preventDefault(); // Prevent the default form submission
+
+        const DELIMITER = '---REFERENCES---';
+
+        // Coleta os dados do formulário
+        const mainContent = localStorage.getItem('EditorContent') || '';
+        const references = localStorage.getItem('LinksContent') || '';
+
+        // Concatena o conteúdo principal e as referências
+        const combinedContent = `${mainContent}\n${DELIMITER}\n${references}`;
 
         // Collect form data
         const formData = {
@@ -34,11 +43,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 localStorage.removeItem('EditorContent');
                 tags.length = 0; // Clear the tags array
                 renderTags(); // Update the tag display
-                  window.location.href = '/revisao/';
+                window.location.href = '/revisao/';
             }
             if (response.status === 400) {
                 const errorMessage = response.data.message || 'Erro ao atualizar material.';
-                throw new Error(errorMessage);  
+                throw new Error(errorMessage);
             }
         } catch (error) {
             console.error('Erro ao enviar o formulário:', error);

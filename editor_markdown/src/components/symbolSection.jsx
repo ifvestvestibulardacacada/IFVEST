@@ -16,6 +16,7 @@ function SymbolSection({ symbols, onInsert }) {
         <div key={sectionId} >
           <span className="section-title">{sectionId.replace('-section', '').replace('section-', '')}</span>
           <div className="symbol-section">
+            
           <div className="symbol-buttons">
             {sectionSymbols.map((symbol, index) => (
               <button

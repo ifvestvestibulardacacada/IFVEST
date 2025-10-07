@@ -35,7 +35,8 @@ const app = express();
 //! Layouts
 app.use(expressLayouts);
 app.set('layout', path.join(__dirname, 'views/layouts/main'))
-
+app.use('/assets', express.static(path.join(__dirname, 'editor_markdown/dist/assets')));
+app.use('/assets', express.static(path.join(__dirname, 'editor_links/dist/assets')));
 //! Bootstrap
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')))
 

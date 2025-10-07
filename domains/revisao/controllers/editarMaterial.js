@@ -1,5 +1,6 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
 const { Conteudo, Assunto, PalavraChave } = require('../../../models')
+const MarkdownSolver = require('../utils/MarkdownSolver');
 
 module.exports = async (req, res) => {
 
@@ -14,6 +15,8 @@ module.exports = async (req, res) => {
     const imagemPerfil = req.session.imagemPerfil;
     try {
         const Assuntos = await Assunto.findAll()
+
+        const { jsPath, cssPaths } = MarkdownSolver.getViteAssets();
 
         const Material = await Conteudo.findByPk(id_conteudo, {
             include: [
@@ -34,14 +37,19 @@ module.exports = async (req, res) => {
         // Convert to plain object
         const plainMaterial = Material.get({ plain: true });
 
-        // Transform PalavraChave to array of strings
+        const DELIMITER = '---REFERENCES---';
+
+        const parts = plainMaterial.conteudo_markdown.split(DELIMITER);
+        plainMaterial.conteudo_markdown = parts[0]?.trim() || '';
+        plainMaterial.referencias = parts[1]?.trim() || '';
+
         plainMaterial.PalavraChave = plainMaterial.PalavraChave.map(keyword => keyword.palavrachave); // Extract 'PalavraChave' field
 
         plainMaterial.assunto = assunto;
 
 
         // ! Temporário
-        res.render('editarMaterial', { nomeUsuario, perfilUsuario, imagemPerfil, Assuntos, Material: plainMaterial, assunto });
+        res.render('editarMaterial', { nomeUsuario, perfilUsuario, imagemPerfil, Assuntos, Material: plainMaterial, assunto, jsPath, cssPaths });
 
     } catch (error) {
         console.error(error)

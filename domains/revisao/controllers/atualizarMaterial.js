@@ -4,7 +4,7 @@ const { Conteudo, PalavraChave } = require('../../../models');
 
 module.exports = async (req, res) => {
             const { id_conteudo } = req.params;
-            const { titulo, assuntoId, palavrasChave, conteudo, linksExternos } = req.body;
+            const { titulo, assuntoId, palavrasChave, conteudo } = req.body;
             const userId = req.session.userId;
 
             const transaction = await sequelize.transaction();
@@ -15,12 +15,12 @@ module.exports = async (req, res) => {
                     return res.status(400).json({ message: 'Todos os campos obrigatórios devem ser preenchidos.' });
                 }
 
-                if (!Array.isArray(palavrasChave) || !Array.isArray(linksExternos)) {
-                    return res.status(400).json({ message: 'Palavras-chave e links externos devem ser arrays.' });
+                if (!Array.isArray(palavrasChave) ) {
+                    return res.status(400).json({ message: 'Palavras-chave devem ser arrays.' });
                 }
 
-                if (palavrasChave.length === 0 && linksExternos.length === 0) {
-                    return res.status(400).json({ message: 'Pelo menos uma palavra-chave ou um link externo deve ser fornecido.' });
+                if (palavrasChave.length === 0) {
+                    return res.status(400).json({ message: 'Pelo menos uma palavra-chave deve ser fornecida.' });
                 }
 
                 const conteudoEditado = await Conteudo.findOne({

@@ -13,7 +13,11 @@ module.exports = async (req, res) => {
         }]
     }) || null
 
-    const conteudo_markdown = MarkdownSolver.Render(conteudo.conteudo_markdown)
+    const markdown = conteudo.conteudo_markdown.replace('---REFERENCES---', '## Referências e Links ').trim();
+    const conteudo_markdown = MarkdownSolver.Render(markdown)
+
+    
+
     // const conteudo_markdown = conteudo.conteudo_markdown
 
     // console.log(conteudo.conteudo_markdown)

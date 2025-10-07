@@ -42,6 +42,9 @@ router.get('/meus_materiais', meusMateriais)
 // router.get('/conteudo/:id_conteudo')
 
 // Criação e edição de material
+
+
+
 router.get('/criar_material', criarMaterial)
 router.get('/editar_material/:id_conteudo', editarMaterial)
 

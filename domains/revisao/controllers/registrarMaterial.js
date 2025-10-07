@@ -3,7 +3,7 @@ const { Conteudo, PalavraChave, sequelize } = require('../../../models');
 
 module.exports = async (req, res) => {
 
-    const { titulo, assuntoId, palavrasChave, conteudo, linksExternos } = req.body;
+    const { titulo, assuntoId, palavrasChave, conteudo } = req.body;
 
     const userId = req.session.userId;
 
@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
         if (!palavrasChave || !Array.isArray(palavrasChave)) {
             return res.status(400).json({ message: 'Palavras-chave devem ser um array.' });
         }
-        if (palavrasChave.length === 0 && linksExternos.length === 0) {
+        if (palavrasChave.length === 0 ) {
             return res.status(400).json({ message: 'Pelo menos uma palavra-chave e um link externo deve ser fornecida.' });
         }
 

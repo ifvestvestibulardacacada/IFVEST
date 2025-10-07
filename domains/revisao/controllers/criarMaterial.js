@@ -1,5 +1,7 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
 const { Assunto, PalavraChave } = require('../../../models')
+const MarkdownSolver = require('../utils/MarkdownSolver')
+
 
 module.exports = async (req, res) => {
     /*
@@ -17,16 +19,13 @@ module.exports = async (req, res) => {
 
     res.locals.currentPage = "revisao"
 
+    
+
     const { perfil, nomeUsuario, imagemPerfil } = req.session
 
     try {
-        // const topicos = await Topico.findAll();
-        // const Areas = await Area.findAll({
-        //     include: [{
-        //         model: Topico,
-        //         as: 'Topico'
-        //     }]
-        // });
+
+        const { jsPath, cssPaths } = MarkdownSolver.getViteAssets();
 
         const Assuntos = await Assunto.findAll()
         const palavras = await PalavraChave.findAll({
@@ -38,8 +37,7 @@ module.exports = async (req, res) => {
             nomeUsuario,
             perfilUsuario: perfil,
             imagemPerfil,
-            // topicos,
-            // Areas,
+            jsPath, cssPaths,
             Assuntos,
             palavrasChave
         })

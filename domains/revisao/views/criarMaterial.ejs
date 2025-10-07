@@ -5,7 +5,7 @@
     <!--========== CSS ==========-->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
     <link rel="stylesheet" href="/css/revisao/criar_material.css">
-
+<%- include('./editorPath') %>
 
     <title>Criar Material - Módulo de Revisão de Conteúdo - IFVest</title>
 </head>
@@ -62,24 +62,25 @@
                 <!-- Editor Markdown -->
                 <div class="form-group">
                     <label for="markdownEditor">Conteúdo do Material (Markdown)</label>
-                    <%- include('./editor') %>
-
-
+                    <div id="editor"></div>
                 </div>
                 <!-- Materiais Externos -->
                 <div class="form-group">
-                    <label for="linksExternos">Links Externos (um por linha)</label>
-                    <textarea class="form-control" id="linksExternos" rows="3"
-                        placeholder="https://www.youtube.com/watch?v=...&#10;https://www.todamateria.com.br/..."></textarea>
+                    <label for="linksExternos">Referências (um texto e um link)</label>
+                    <div id="link"></div>
                 </div>
+                <br>
 
                 <button type="button" id="submitButton" class="btn btn-primary w-100">Criar Material</button>
             </form>
         </div>
     </main>
     <script>
-        window.Assunto = <% - JSON.stringify(Assuntos || []) %>;
-        window.palavrasChave = <% - JSON.stringify(palavrasChave) %>;
+        window.Assunto = <%- JSON.stringify(Assuntos || []) %>;
+        window.palavrasChave = <%- JSON.stringify(palavrasChave) %>;
+
+        console.log( <%- JSON.stringify(cssPaths || []) %>)
+        console.log( <%- JSON.stringify(jsPath || '') %>)
     </script>
 
     <!--========== MAIN JS ==========-->

@@ -10,6 +10,7 @@ const meusMateriais = require('./meusMateriais')
 const registrarMaterial = require('./registrarMaterial')
 const atualizarMaterial = require('./atualizarMaterial')
 
+
 module.exports = {
     buscarArea,
     buscarAssunto,

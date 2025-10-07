@@ -16,62 +16,100 @@
     <link rel="stylesheet" href="/revisao/css/revisao-card.css">
     <link rel="stylesheet" href="/revisao/css/colorful-container.css">
     <link rel="stylesheet" href="/revisao/css/assunto-containers.css">
-    
+    <link rel="stylesheet" href="/revisao/css/search_pagination.css">
 
 
-    <title><%= assunto.nome %> | Busca por Assunto - Módulo de Revisão de Conteúdo - IFVest</title>
+    <title>
+        <%= assunto.nome %> | Busca por Assunto - Módulo de Revisão de Conteúdo - IFVest
+    </title>
 </head>
 
 <body>
-    <main>
-        <h1 class="text-center mt-4"><%= assunto.nome %></h1>
-        <h2 class="text-center fs-4 mb-4"><%= assunto.descricao %></h2>
-        <% if (!isRoot) {%>
-            <span><i class='bx  bx-chevron-left'></i><a href="/revisao/busca/<%=id_ascendente%>">Voltar para <% if (ascendente){ %><%= ascendente.nome %><%} else {%><%="Início"%><%}%></a></span>
-        <%}%>
+      <main>
+        <h1 class="text-center mt-4">
+            <%= assunto.nome %>
+        </h1>
+        <h2 class="text-center fs-4 mb-4">
+            <%= assunto.descricao %>
+        </h2>
+        <% if (!isRoot) { %>
+            <span><i class='bx bx-chevron-left'></i><a href="/revisao/busca/<%= id_ascendente %>">Voltar para <% if (ascendente) { %>
+                        <%= ascendente.nome %>
+                    <% } else { %>
+                        Início
+                    <% } %></a></span>
+        <% } %>
         <hr>
         <div class="container">
-            
             <div class="assunto-area">
                 <h2>Assuntos</h2>
-                <div class="colorful-container">
+                <input type="text" id="searchAssunto" class="form-control mb-3" placeholder="Filtrar por nome do assunto...">
+                <div class="colorful-container" id="assuntosContainer">
                     <% listaAssuntos.forEach(assunto => { %>
-                        <a href="/revisao/busca/<%= assunto.id_assunto %>" class="colorful-btn">
+                        <a href="/revisao/busca/<%= assunto.id_assunto %>" class="colorful-btn assunto-item">
                             <div>
                                 <%= assunto.nome %>
                             </div>
                         </a>
-                    <%})%>
-                    <% if (listaAssuntos.length === 0){ %>
-                        <p>Nenhum assunto encontrado.</p>
+                    <% }) %>
+                    <% if (listaAssuntos.length === 0) { %>
+                        <p id="noAssuntos">Nenhum assunto encontrado.</p>
+                    <% } else { %>
+                        <p id="noAssuntos" style="display: none;">Nenhum assunto encontrado.</p>
                     <% } %>
                 </div>
+                <div class="pagination" id="assuntosPagination"></div>
             </div>
             <hr>
             <div class="material-area">
                 <h2>Materiais</h2>
-                <div class="colorful-container">
+                <div class="row mb-3" id="searchInputs">
+                    <div class="col-md-6">
+                        <input type="text" id="searchConteudo" class="form-control" placeholder="Filtrar por nome do conteúdo...">
+                    </div>
+                    <div class="col-md-6">
+                        <select id="searchKeyword" class="form-select" aria-label="Filtrar por palavra-chave">
+                            <option value="">Todas as palavras-chave</option>
+                            <% listaDeTags.forEach(tag => { %>
+                                <option value="<%= tag %>">
+                                    <%= tag %>
+                                </option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+                <div class="colorful-container" id="materiaisContainer">
                     <% listaMateriais.forEach(conteudo => { %>
-                        <a href="/revisao/leitura/<%= conteudo.id_conteudo %>" class="colorful-btn large">
+                        <a href="/revisao/leitura/<%= conteudo.id_conteudo %>" class="colorful-btn large material-item" data-keywords="<%= conteudo.keywords || '' %>">
                             <div>
                                 <p>
                                     <%= conteudo.nome %>
                                 </p>
                                 <p class="fs-5">
-                                    Por: <%= conteudo.Usuario.nome%>
+                                    Por: <%= conteudo.Usuario.nome %>
                                 </p>
                             </div>
                         </a>
-                    <%})%>
-                    <% if (listaMateriais.length === 0){ %>
-                        <p>Nenhum material encontrado.</p>
+                    <% }) %>
+                    <% if (listaMateriais.length === 0) { %>
+                        <p id="noMateriais">Nenhum material encontrado.</p>
+                    <% } else { %>
+                        <p id="noMateriais" style="display: none;">Nenhum material encontrado.</p>
                     <% } %>
                 </div>
+                <div class="pagination" id="materiaisPagination"></div>
             </div>
         </div>
     </main>
 
+
     <!--========== MAIN JS ==========-->
-    <script src="/js/main.js"></script>
+    <script src="/revisao/js/main.js"></script>
+   <script src="/revisao/js/search_pagination.js"></script>
+    <script>
+        window.listaMateriais = <%- JSON.stringify(listaMateriais || []) %>;
+        window.listaAssuntos = <%- JSON.stringify(listaAssuntos || []) %>;
+    </script>
 </body>
+
 </html>

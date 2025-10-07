@@ -7,7 +7,7 @@ export default defineConfig({
   build: {
     manifest: true,  // This enables the manifest.json
     rollupOptions: {
-      input: 'src/main.jsx'  // Adjust if your entry is different (e.g., src/index.jsx)
+      input: 'src/App.jsx'  // Adjust if your entry is different (e.g., src/index.jsx)
     }
   }
 })

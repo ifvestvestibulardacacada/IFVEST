@@ -12,7 +12,7 @@ import symbolButtons from '../utils/symbolButtons';
 const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState(() => {
     const savedMarkdown = localStorage.getItem('EditorContent');
-    return savedMarkdown || '# Comece aqui...';
+    return savedMarkdown || 'Ex: # Digite aqui o material ...';
   });
   const [showEquationEditor, setShowEquationEditor] = useState({
     visible: false,
