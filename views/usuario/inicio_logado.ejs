@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR"> <!--  idioma para português brasileiro -->
 
 <head>
   <meta charset="UTF-8">
@@ -19,21 +19,21 @@
 
 <body>
 
+  <!--  Adicionado elemento de navegação semântica -->
+  <nav aria-label="Navegação principal">
+    <ul>
+      <li><a href="/simulados" class="colorful-btn" aria-label="Acessar simulados">Simulados</a></li>
+      <li><a href="/revisao/" class="colorful-btn" aria-label="Acessar revisão">Revisão</a></li>
+    </ul>
+  </nav>
 
   <main>
     <h1 class="mb-5 mt-5">Módulos disponíveis</h1>
-    
+
+    <!-- Removido <div> dentro de <a> para manter semântica correta -->
     <div class="colorful-container">
-      <a href="/simulados" class="colorful-btn">
-        <div>
-          Simulados
-        </div>
-      </a>
-      <a href="/revisao/" class="colorful-btn">
-        <div>
-          Revisão
-        </div>
-      </a>
+      <a href="/simulados" class="colorful-btn" aria-label="Acessar simulados">Simulados</a>
+      <a href="/revisao/" class="colorful-btn" aria-label="Acessar revisão">Revisão</a>
       <a href="/flashcards" class="colorful-btn">
         <div>
           Flashcards
@@ -44,29 +44,28 @@
     <h2 class="mb-3 mt-3">Opções temporárias de administração</h2>
 
     <div class="colorful-container">
-      <a href="/shared/areas/" class="colorful-btn">
-        <div>
-          Áreas
-        </div>
-      </a>
-      <a href="/shared/topicos/" class="colorful-btn">
-        <div>
-          Tópicos
-        </div>
-      </a>
-      <a href="/shared/assuntos/" class="colorful-btn">
-        <div>
-          Assuntos
-        </div>
-      </a>
+      <a href="/shared/areas/" class="colorful-btn" aria-label="Gerenciar áreas">Áreas</a>
+      <a href="/shared/topicos/" class="colorful-btn" aria-label="Gerenciar tópicos">Tópicos</a>
+      <a href="/shared/assuntos/" class="colorful-btn" aria-label="Gerenciar assuntos">Assuntos</a>
     </div>
-
-    
   </main>
+
+  <!--  foco visível no CSS ,aplicar depois no CSS externo  -->
+  <style>
+    a:focus {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+  </style>
 
   <!--========== MAIN JS ==========-->
   <script src="/js/main.js"></script>
 
 </body>
-
 </html>
+
+
+
+
+
+
