@@ -1,72 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br"> <!-- Idioma definido corretamente -->
 
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Cadastro - IFVest</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='/css/usuario/index.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='/css/usuario/cadastro.css'>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Cadastro - IFVest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/usuario/index.css">
+  <link rel="stylesheet" href="/css/usuario/cadastro.css">
   <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
 </head>
 
 <body>
-    <div class="main-login">
+  <!--  Conteúdo principal com estrutura semântica -->
+  <main role="main">
+    <section class="main-login">
+      <div class="left-login">
+        <h1>Registre-se para<br>Aprender coisas novas</h1>
+        <img src="/img/formula-animate.svg" class="left-login-image" alt="Animação de fórmulas representando aprendizado">
+      </div>
 
-        <div class="left-login">
-            <h1>Registre-se para<br>Aprender coisas novas</h1>
-            <img src="/img/formula-animate.svg" class="left-login-image" alt="GifAnimado">
-        </div>
+      <!--  Formulário corrigido com acessibilidade -->
+      <form action="/cadastro" method="POST" role="form" aria-labelledby="titulo-cadastro">
+        <div class="right-login">
+          <div class="card-login">
+            <h1 id="titulo-cadastro">CADASTRO</h1>
 
-        <form action="/cadastro" method="POST">
-            <div class="right-login">
-                <div class="card-login">
-                    <h1>CADASTRO</h1>
-                    <div class="textfield">
-                        <label for="usuario">Usuário</label>
-                        <input type="text" name="usuario" placeholder="Usuário" maxlength="20">
-                    </div>
-                    <div class="textfield">
-                        <label for="nome">Nome</label>
-                        <input type="text" name="nome" placeholder="Nome" maxlength="50">
-                    </div>
-                    <div class="textfield">
-                        <label for="email">E-mail</label>
-                        <input type="email" name="email" placeholder="e-mail" maxlength="100">
-                    </div>
-                    <div class="textfield">
-                        <label for="senha">Senha</label>
-                        <input type="password" name="senha" id="senha" placeholder="Senha" maxlength="50">
-                        <div id="password-strength-container" style="margin-top: 10px; height: 8px; background-color: #e0e0e0; border-radius: 4px; width: 100%; overflow: hidden;">
-                            <div id="password-strength" style="height: 100%; width: 0%; border-radius: 4px; transition: all 0.3s ease;"></div>
-                        </div>
-                    </div>
-                    <div class="textfield">
-                        <label for="perfil">Perfil</label>
-                        <select name="perfil" id="perfil">
-                            <option value="USUARIO">Usuario</option>
-                            <option value="PROFESSOR">Professor</option>
-                        </select><br>
-                        <% if (errorMessage) { %>
-                            <div class="error-message" style="color: red">
-                                <%= errorMessage %>
-                            </div>
-                            <% } %>
-                    </div>
-                    <button class="btn-login" id="btn-cadastro" >Cadastro</button>
-                    <a href="/login" class="Cadastro-Login">Já possui cadastro? clique aqui</a>
-                </div>
+            <div class="textfield">
+              <label for="usuario">Usuário</label>
+              <input type="text" name="usuario" id="usuario" placeholder="Usuário" maxlength="20">
             </div>
-        </form>
-    </div>
-<!-- <script src="/js/handlers/cadastrohandler.js"></script> -->
-    <!-- <script src="/js/usuario/cadastro.js">      
-    </script>
-    -->
 
-  
+            <div class="textfield">
+              <label for="nome">Nome</label>
+              <input type="text" name="nome" id="nome" placeholder="Nome" maxlength="50">
+            </div>
 
+            <div class="textfield">
+              <label for="email">E-mail</label>
+              <input type="email" name="email" id="email" placeholder="e-mail" maxlength="100">
+            </div>
+
+            <div class="textfield">
+              <label for="senha">Senha</label>
+              <input type="password" name="senha" id="senha" placeholder="Senha" maxlength="50">
+            </div>
+
+            <div class="textfield">
+              <label for="perfil">Perfil</label>
+              <select name="perfil" id="perfil">
+                <option value="USUARIO">Usuário</option>
+                <option value="PROFESSOR">Professor</option>
+              </select>
+            </div>
+
+            <% if (errorMessage) { %>
+            <div class="error-message" style="color: red">
+              <%= errorMessage %>
+            </div>
+            <% } %>
+
+            <!--  Botão com type="submit" para envio correto -->
+            <button class="btn-login" id="btn-cadastro" type="submit">Cadastro</button>
+            <a href="/login" class="Cadastro-Login">Já possui cadastro? Clique aqui</a>
+          </div>
+        </div>
+      </form>
+    </section>
+  </main>
 </body>
 
 </html>
