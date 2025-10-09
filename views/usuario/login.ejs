@@ -1,48 +1,65 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br"> <!--  Idioma definido  -->
 
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <meta name="description" content="Pagina de Login">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Página de Login">
     <title>Login - IFVest</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='/css/usuario/index.css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/usuario/index.css">
 </head>
 
 <body>
-    <div class="main-login">
-        <div class="left-login">
-            <h1>Faça login<br>E começe a aprender</h1>
-            <img src="/img/gif.svg" class="left-login-image" alt="GifAnimado">
-        </div>
-        <form action="/login" method="post">
-            <div class="right-login">
-                <div class="card-login">
-                    <h1>LOGIN</h1>
-                    <div class="textfield">
-                        <label for="usuario">Usuário</label>
-                        <input type="text" name="usuario" placeholder="Usuário" maxlength="20">
-                    </div>
-                    <div class="textfield">
-                        <label for="senha">Senha</label>
-                        <input type="password" name="senha" placeholder="Senha" maxlength="50">
-                    </div>
-                    <% if (errorMessage) { %>
-                        <div class="error-message" style="color: red">
+    <!-- Conteúdo principal envolvido por <main> para acessibilidade -->
+    <main role="main">
+        <section class="main-login"> <!--  Uso de <section> para agrupar conteúdo relacionado -->
+            <div class="left-login">
+                <h1>Faça login<br>E comece a aprender</h1>
+                <img src="/img/gif.svg" class="left-login-image" alt="Animação ilustrativa de aprendizado"> <!--  alt mais descritivo -->
+            </div>
+
+            <!--  Formulário com role="form" e aria-labelledby para acessibilidade -->
+            <form action="/login" method="post" role="form" aria-labelledby="titulo-login">
+                <div class="right-login">
+                    <div class="card-login">
+                        <h1 id="titulo-login">LOGIN</h1> <!--  id para associar com aria-labelledby -->
+
+                        <div class="textfield">
+                            <label for="usuario">Usuário</label>
+                            <!-- id e aria-describedby para associar mensagem de erro -->
+                            <input type="text" id="usuario" name="usuario" placeholder="Digite seu usuário" maxlength="20" aria-describedby="erro-usuario">
+                            <span id="erro-usuario" class="mensagem-erro" style="color: red; display: none;">
+                             Usuário inválido ou campo obrigatório.
+                            </span>
+                        </div>
+
+                        <div class="textfield">
+                            <label for="senha">Senha</label>
+                            <!-- id adicionado para associar corretamente ao label -->
+                            <input type="password" id="senha" name="senha" placeholder="Digite sua senha" maxlength="50">
+                        </div>
+
+                        <% if (errorMessage) { %>
+                        <!-- id "erro-usuario" para conectar com aria-describedby -->
+                        <div id="erro-usuario" class="error-message" style="color: red">
                             <%= errorMessage %>
                         </div>
                         <% } %>
-                            <button class="btn-login">Login</button>
-                            <a href="/cadastro" class="Cadastro-Login">Não possui login? clique aqui</a>
-                </div>
 
-            </div>
-        </form>
+                        <!--  type="submit" para garantir envio do formulário -->
+                        <button class="btn-login" type="submit">Login</button>
+                        <a href="/cadastro" class="Cadastro-Login">Não possui login? Clique aqui</a>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <div class="infiniteLogo">
+        <img src="/img/infinite_logo.png" alt="Logo da Infinite" />
     </div>
-    <div class="infiniteLogo"><img src="/img/infinite_logo.png" alt="Infinite Logo"  /></div>
-    
 </body>
 
-
 </html>
+
