@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editar Flashcard</title>
+<<<<<<< HEAD
   <link rel="stylesheet" href="/flashcards/css/professor-form.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
@@ -45,10 +46,33 @@
               <button type="submit" class="criar-flashcard-btn">Salvar</button>
             </div>
           </div>
+=======
+    <link rel="stylesheet" href="/flashcards/css/professor.css" />
+  </head>
+  <body>
+    <div class="container">
+      <main class="flashcard-content">
+        <h2 class="title">Editar Flashcard</h2>
+        <form action="/flashcards/<%= flashcard.id_flashcards %>/editar" method="POST" class="flashcard-form">
+          <label>Pergunta</label>
+          <textarea name="pergunta" required rows="4"><%= flashcard.pergunta %></textarea>
+          <label>Resposta</label>
+          <textarea name="resposta" required rows="4"><%= flashcard.resposta %></textarea>
+          <label>Área</label>
+          <select name="id_area" id="area" required data-selected="<%= flashcard.id_area %>"></select>
+          <label>Tópico</label>
+          <select name="id_topico" id="topico" data-selected="<%= flashcard.id_topico %>"></select>
+          <label>Dificuldade</label>
+          <select name="id_dificuldade" id="dificuldade" data-selected="<%= flashcard.id_dificuldade %>"></select>
+          <button type="submit" class="criar-flashcard-btn">Salvar</button>
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
         </form>
       </main>
     </div>
     <script src="/flashcards/js/carregarFiltros.js"></script>
+<<<<<<< HEAD
     <script src="/flashcards/js/flashMessages.js"></script>
+=======
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   </body>
 </html>

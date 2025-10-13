@@ -11,13 +11,18 @@
 }
 
 .filters .select {
+<<<<<<< HEAD
   padding: 0.6rem 1.2rem;
+=======
+  padding: 0.5rem 1.2rem;
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   border-radius: 8px;
   border: 1px solid #d1d1e0;
   background: #fff;
   font-size: 1rem;
   color: #333;
   min-width: 180px;
+<<<<<<< HEAD
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -25,6 +30,14 @@
   border-color: #2563eb;
   outline: none;
   box-shadow: 0 0 0 3px rgba(37,99,235,0.25);
+=======
+  transition: border-color 0.2s;
+}
+
+.filters .select:focus {
+  border-color: #2e4e4e;
+  outline: none;
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
 }
 
 .filters .simulado-btn {
@@ -32,16 +45,25 @@
   color: #fff;
   border: none;
   border-radius: 8px;
+<<<<<<< HEAD
   padding: 0.8rem 1.5rem; /* larger touch target */
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s;
+=======
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
 }
 
 .filters .simulado-btn:hover {
   background: #000;
 }
+<<<<<<< HEAD
 
 .filters .simulado-btn:focus-visible {
   outline: 2px solid transparent;
@@ -70,3 +92,5 @@
     gap: 0.85rem;
   }
 }
+=======
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)

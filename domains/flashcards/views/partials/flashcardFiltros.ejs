@@ -1,5 +1,6 @@
 
 <link rel="stylesheet" href="/flashcards/css/flashcardFiltros.css">
+<<<<<<< HEAD
 <form action="<%= typeof isGroupsPage !== 'undefined' && isGroupsPage ? '/flashcards/grupos' : '/flashcards' %>" method="GET" class="filters">
   <!-- data-selected attributes allow the client script to pre-select values -->
   <select name="id_area" id="area" class="select" data-selected="<%= typeof id_area !== 'undefined' && id_area !== null ? id_area : '' %>">
@@ -11,6 +12,18 @@
   </select>
 
   <select name="id_dificuldade" id="dificuldade" class="select" data-selected="<%= typeof id_dificuldade !== 'undefined' && id_dificuldade !== null ? id_dificuldade : '' %>">
+=======
+<form action="/flashcards" method="GET" class="filters">
+  <select name="id_area" id="area" class="select">
+    <option value="">Selecione a Área (opcional)</option>
+  </select>
+
+  <select name="id_topico" id="topico" class="select">
+    <option value="">Selecione o Tópico (opcional)</option>
+  </select>
+
+  <select name="id_dificuldade" id="dificuldade" class="select">
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
     <option value="">Selecione a Dificuldade (opcional)</option>
   </select>
 

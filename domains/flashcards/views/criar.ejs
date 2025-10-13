@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Criar Flashcard</title>
+<<<<<<< HEAD
   <link rel="stylesheet" href="/flashcards/css/professor-form.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
@@ -50,5 +51,29 @@
     </div>
     <script src="/flashcards/js/carregarFiltros.js"></script>
     <script src="/flashcards/js/flashMessages.js"></script>
+=======
+    <link rel="stylesheet" href="/flashcards/css/flashcardFiltros.css" />
+  </head>
+  <body>
+    <div class="container">
+      <main class="flashcard-content">
+        <h2 class="title">Criar Flashcard</h2>
+        <form action="/flashcards/criar" method="POST" class="flashcard-form">
+          <label>Pergunta</label>
+          <textarea name="pergunta" required rows="4"></textarea>
+          <label>Resposta</label>
+          <textarea name="resposta" required rows="4"></textarea>
+          <label>Área</label>
+          <select name="id_area" id="area" required></select>
+          <label>Tópico</label>
+          <select name="id_topico" id="topico"></select>
+          <label>Dificuldade</label>
+          <select name="id_dificuldade" id="dificuldade"></select>
+          <button type="submit" class="criar-flashcard-btn">Salvar</button>
+        </form>
+      </main>
+    </div>
+    <script src="/js/flashcard/carregarFiltros.js"></script>
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   </body>
 </html>

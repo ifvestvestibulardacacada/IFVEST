@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 const {Flashcard, FlashcardUsuario, Topico} = require('../../../models');
+=======
+const {Flashcard, FlashcardUsuario} = require('../../../models');
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
 
 module.exports = async (req, res) => {
   try {
       const { id_area, id_topico, id_dificuldade, grupo } = req.query;
       const where = {};
       if (id_area && id_area !== "") where.id_area = Number(id_area);
+<<<<<<< HEAD
       // Defensive: validate id_topico exists in DB before applying filter
       let validatedTopico = null;
       if (id_topico && id_topico !== "") {
@@ -18,6 +23,9 @@ module.exports = async (req, res) => {
               req.session.errorMessage = 'O tópico selecionado não existe e foi ignorado.';
           }
       }
+=======
+      if (id_topico && id_topico !== "") where.id_topico = Number(id_topico);
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
       if (id_dificuldade && id_dificuldade !== "") where.id_dificuldade = Number(id_dificuldade);
       const nomeUsuario = req.session.nomeUsuario;
       const perfilUsuario = req.session.perfil;
@@ -27,7 +35,11 @@ module.exports = async (req, res) => {
           where,
           include: ['Area', 'Topico', 'Dificuldade']
       });
+<<<<<<< HEAD
       let groups = { '1': [], '3': [], '7': [], '15': [], '15+': [] };
+=======
+      let groups = { '1': [], '3': [], '7': [], '15+': [] };
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
       let unseenFlashcards = [];
       let displayFlashcards = [];
       if (id_usuario && perfilUsuario !== "PROFESSOR") {
@@ -44,7 +56,10 @@ module.exports = async (req, res) => {
                   if (daysAgo < 1) groups['1'].push(card);
                   else if (daysAgo < 3) groups['3'].push(card);
                   else if (daysAgo < 7) groups['7'].push(card);
+<<<<<<< HEAD
                   else if (daysAgo < 15) groups['15'].push(card);
+=======
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
                   else groups['15+'].push(card);
               } else {
                   unseenFlashcards.push(card);
@@ -61,7 +76,11 @@ module.exports = async (req, res) => {
 
           // If a specific group is requested, build the display list from that group(s)
           if (grupo) {
+<<<<<<< HEAD
               if (["1", "3", "7", "15", "15+"].includes(grupo)) {
+=======
+              if (["1", "3", "7", "15+"].includes(grupo)) {
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
                   displayFlashcards = shuffle([...(groups[grupo] || [])]).slice(0, 10);
               } else if (grupo === 'misto') {
                   // Weighted mix by urgency: 15+:4, 7:3, 3:2, 1:1
@@ -101,6 +120,7 @@ module.exports = async (req, res) => {
           }
       }
       if (perfilUsuario === "PROFESSOR") {
+<<<<<<< HEAD
           // Captura mensagens da sessão
           const successMessage = req.session.successMessage;
           const errorMessage = req.session.errorMessage;
@@ -124,6 +144,11 @@ module.exports = async (req, res) => {
               delete req.session.errorMessage;
 
               res.render('flashcards', { 
+=======
+          res.render('professor', { flashcards, nomeUsuario, perfilUsuario, imagemPerfil, id_usuario });
+      } else {
+          res.render('flashcards', { 
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
               flashcards,
               nomeUsuario,
               perfilUsuario,
@@ -134,11 +159,16 @@ module.exports = async (req, res) => {
               displayFlashcards,
               selectedGroup: grupo || null,
               id_area: id_area || null,
+<<<<<<< HEAD
               id_topico: validatedTopico || null,
               id_dificuldade: id_dificuldade || null,
               isGroupsPage: false, // Flag para identificar página de estudo
               successMessage,
               errorMessage,
+=======
+              id_topico: id_topico || null,
+              id_dificuldade: id_dificuldade || null,
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
           });
       }
   } catch (error) {

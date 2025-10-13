@@ -12,6 +12,7 @@
   </head>
   <body data-id-usuario="<%= id_usuario %>">
   <div class="container">
+<<<<<<< HEAD
   <%- include('./partials/flashMessages') %>
   <%- include('./partials/flashcardFiltros') %>
     <main class="flashcard-content no-groups">
@@ -28,13 +29,28 @@
         </div>
         <div class="queue-label">
           <% if (selectedGroup === '1') { %>
+=======
+    <main class="flashcard-content">
+        <!-- Left column: Groups -->
+      <%- include('./partials/flashcardGrupos') %>
+      <!-- Right column: Flashcards -->
+      <section class="flashcard-section">
+        <%- include('./partials/flashcardFiltros') %>
+        <div class="queue-label">
+          <% if (selectedGroup === 'misto') { %>
+            Revisando: Misto recomendado
+          <% } else if (selectedGroup === '1') { %>
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
             Revisando: Vistos hoje
           <% } else if (selectedGroup === '3') { %>
             Revisando: Vistos há 3 dias
           <% } else if (selectedGroup === '7') { %>
             Revisando: Vistos há 7 dias
+<<<<<<< HEAD
           <% } else if (selectedGroup === '15') { %>
             Revisando: Vistos há 15 dias
+=======
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
           <% } else if (selectedGroup === '15+') { %>
             Revisando: Vistos há 15+ dias
           <% } else { %>
@@ -80,7 +96,10 @@
     </main>
   </div>
 
+<<<<<<< HEAD
   <script src="/flashcards/js/flashMessages.js"></script>
+=======
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   <script src="/flashcards/js/navegaFlashcards.js"></script>
   </body>
 </html>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ============================================
    STYLE.CSS - Página de Flashcards dos Alunos
    Usado em: flashcards.ejs (estudo)
@@ -8,19 +9,35 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+=======
+/* --- ESTILOS DA ANIMAÇÃO E NAVEGAÇÃO DO FLASHCARD --- */
+.flashcard-content {
+  display: grid;
+  grid-template-columns: minmax(320px, 38%) minmax(0, 1fr); /* was 50% */
+  gap: 48px;
+  align-items: stretch;
+  width: 100%;
+  /* min-height: 100%;
+  height: 100%; */
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
 }
 
 html, body {
   height: 100%;
+<<<<<<< HEAD
   overflow-y: auto;
   overflow-x: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   background: #f8f9fa;
   color: #333;
+=======
+  overflow: hidden; /* prevent whole-page scroll */
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
 }
 
 .container {
   width: 100%;
+<<<<<<< HEAD
   max-width: 1600px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
@@ -37,11 +54,213 @@ html, body {
 
 .flashcard-content.no-groups {
   align-items: center;
+=======
+  /* remove margins that force page scroll */
+  margin: 0;
+}
+
+@media (max-width: 992px) {
+  .flashcard-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+.flashcard-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Georgia', serif;
+  margin: 0;
+}
+
+.back-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+  background-color: #e0e0e0;
+}
+
+.back-btn i {
+  margin-right: 0.5rem;
+}
+
+/* Container que segura todos os flashcards */
+/* Centralize flashcards and set max width */
+#flashcard-container {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 300px;
+  /* display: flex; */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Estilos para o grupo de flashcards por tempo visto --- */
+.flashcard-groups {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  padding-right: 4px;
+  -webkit-overflow-scrolling: touch;
+  min-width: 0;
+}
+
+.group-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: #2b2b2b;
+}
+.group-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0;           /* allow internal scroll */
+  overflow-y: auto;
+}
+
+/* Group card */
+.group-block {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  transition: box-shadow .2s ease, border-color .2s ease;
+  overflow: hidden;        /* prevent children from spilling out */
+}
+.group-block:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  border-color: #dcdcdc;
+}
+.group-block.active {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+/* Header + actions */
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.group-title {
+  font-weight: 600;
+  color: #1f2937;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 0;            /* enable ellipsis */
+}
+.group-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 22px;
+  padding: 0 8px;
+  font-size: 12px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Action button */
+.group-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background .2s ease, transform .05s ease;
+}
+.group-action:hover { background: #2563eb; }
+.group-action:active { transform: translateY(1px); }
+.group-action.disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+/* Preview list (chips grid) */
+.group-cards {
+  margin: 10px 0 0 0;
+  padding: 0;
+  list-style: none;
+  display: block;          /* vertical list, not grid */
+  max-height: 240px;       /* keep block compact */
+  overflow-y: auto;        /* scroll inside the block */
+}
+.group-cards li {
+  display: block;
+  min-width: 0;
+  margin: 0 0 6px 0;       /* spacing between items */
+}
+.group-cards li:last-child { margin-bottom: 0; }
+
+
+.group-chip,
+.group-more {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f9fafb;
+  border: 1px solid #eef0f3;
+  color: #374151;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;     /* keep single line */
+  overflow: hidden;
+  text-overflow: ellipsis; /* truncate long text */
+}
+
+.no-flashcard {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* Section spacing (right column) */
+.queue-label {
+  margin: 8px 0 12px 0;
+  color: #374151;
+  font-size: 0.95rem;
+  font-weight: 500;
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
 }
 
 .flashcard-section {
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   width: 100%;
   max-width: 800px;
   gap: 1rem;
@@ -119,6 +338,29 @@ html, body {
   perspective: 1000px;
 }
 
+=======
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+}
+
+/* Container principal do flashcard */
+/* Smaller and centralized flashcard */
+.flashcard {
+  background-color: transparent;
+  width: clamp(320px, 80vw, 640px);
+  min-height: 360px;
+  max-height: 520px;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  display: none; /* Esconde todos os cards por padrão */
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  overflow: auto;
+  resize: vertical;
+}
+
+/* Mostra apenas o card com a classe 'active' */
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
 .flashcard.active {
   display: block;
 }
@@ -127,8 +369,13 @@ html, body {
   position: relative;
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
   min-height: 400px;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+=======
+  min-height: 360px;
+  transition: transform 0.6s ease;
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   transform-style: preserve-3d;
 }
 
@@ -141,11 +388,15 @@ html, body {
   position: absolute;
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
   min-height: 400px;
+=======
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   display: flex;
   flex-direction: column;
+<<<<<<< HEAD
   justify-content: space-between;
   align-items: flex-start;
   padding: 2.5rem 2rem;
@@ -172,11 +423,38 @@ html, body {
   line-height: 1.7;
   font-weight: 600;
   color: #1f2937;
+=======
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 2rem 2rem 2.5rem;
+  box-sizing: border-box;
+  border-radius: 12px;
+  border: 1px solid #e9e9ee;
+}
+
+.flashcard-front {
+  background-color: #ffffff;
+  color: #1f2937;
+}
+
+.flashcard-back {
+  background-color: #f6fafc;
+  color: #1f2937;
+  transform: rotateY(180deg);
+}
+
+.pergunta, .resposta {
+  font-size: clamp(1.05rem, 1.2rem + 0.4vw, 1.6rem);
+  line-height: 1.6;
+  font-weight: 600;
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   margin: 0;
   text-align: left;
   word-break: break-word;
   overflow-wrap: break-word;
   max-width: 100%;
+<<<<<<< HEAD
   flex: 1;
 }
 
@@ -205,10 +483,34 @@ html, body {
 .ver-resposta:active,
 .ver-pergunta:active {
   transform: translateY(0);
+=======
+}
+
+.ver-resposta, .ver-pergunta {
+  background-color: #0ea5e9; /* azul claro */
+  color: #fff;
+  padding: 0.7rem 1.25rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: auto;
+  box-shadow: 0 2px 6px rgba(14,165,233,0.35);
+  transition: transform 0.08s ease, background-color 0.2s ease;
+}
+
+.ver-resposta:hover, .ver-pergunta:hover {
+  background-color: #0284c7;
+}
+
+.ver-resposta:active, .ver-pergunta:active {
+  transform: translateY(1px);
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
 }
 
 .interrogacao {
   position: absolute;
+<<<<<<< HEAD
   bottom: 1.5rem;
   right: 1.5rem;
   background: #fff;
@@ -226,11 +528,31 @@ html, body {
 }
 
 /* --- CONTROLES DE NAVEGAÇÃO --- */
+=======
+  bottom: 1rem;
+  right: 1rem;
+  background-color: #fff;
+  color: #0ea5e9;
+  font-size: 1.1rem;
+  font-weight: 800;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e9e9ee;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Estilos para os controles de navegação */
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
 .navigation-controls {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
+<<<<<<< HEAD
   flex-wrap: wrap;
   margin-top: 1rem;
   width: 100%;
@@ -308,10 +630,52 @@ html, body {
 
   .flashcard-inner {
     min-height: 350px;
+=======
+  margin-top: 0.5rem;
+}
+
+.nav-btn {
+  background-color: #111827;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.08s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-btn:hover:not(:disabled) {
+  background-color: #1f2937;
+}
+
+.nav-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+#progress-indicator {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .flashcard {
+    width: 95vw;
+    min-height: 320px;
+    max-height: 480px;
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   }
 
   .flashcard-front,
   .flashcard-back {
+<<<<<<< HEAD
     min-height: 350px;
     padding: 2rem 1.5rem;
   }
@@ -325,11 +689,15 @@ html, body {
   .ver-pergunta {
     padding: 0.75rem 1.5rem;
     font-size: 0.95rem;
+=======
+    padding: 1.25rem 1rem 1.75rem;
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   }
 
   .navigation-controls {
     gap: 1rem;
   }
+<<<<<<< HEAD
 
   .nav-btn {
     padding: 0.75rem 1.25rem;
@@ -428,3 +796,6 @@ html, body {
 }
 
 
+=======
+}
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)

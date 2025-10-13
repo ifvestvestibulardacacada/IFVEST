@@ -1,13 +1,44 @@
 <aside class="flashcard-groups">
   <h3 class="group-heading">Revisão por tempo visto</h3>
+<<<<<<< HEAD
   <div class="group-scroller">
     <div class="group-list">
     <% if (groups) { %>
+=======
+  <div class="group-list">
+    <% if (groups) { %>
+      <% let totalCount = 0; Object.values(groups).forEach(arr => totalCount += arr.length); %>
+      <div class="group-block <%= selectedGroup === 'misto' ? 'active' : '' %>">
+        <div class="group-header">
+          <div class="group-title">
+            Misto recomendado
+            <span class="group-count-badge"><%= totalCount %></span>
+          </div>
+          <% if (totalCount === 0) { %>
+            <a class="group-action disabled" aria-disabled="true">Revisar</a>
+          <% } else { %>
+            <a class="group-action" href="/flashcards?<%=
+              [
+                id_area ? `id_area=${id_area}` : null,
+                id_topico ? `id_topico=${id_topico}` : null,
+                id_dificuldade ? `id_dificuldade=${id_dificuldade}` : null,
+                'grupo=misto'
+              ].filter(Boolean).join('&')
+            %>">Revisar</a>
+          <% } %>
+        </div>
+      </div>
+
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
       <% Object.entries(groups).forEach(([days, cards]) => { %>
         <div class="group-block <%= selectedGroup === days ? 'active' : '' %>">
           <div class="group-header">
             <div class="group-title">
+<<<<<<< HEAD
               <%= days === '1' ? 'Vistos hoje' : days === '3' ? 'Vistos há 3 dias' : days === '7' ? 'Vistos há 7 dias' : days === '15' ? 'Vistos há 15 dias' : 'Vistos há 15+ dias' %>
+=======
+              <%= days === '1' ? 'Vistos hoje' : days === '3' ? 'Vistos há 3 dias' : days === '7' ? 'Vistos há 7 dias' : 'Vistos há 15+ dias' %>
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
               <span class="group-count-badge"><%= cards.length %></span>
             </div>
             <% if (cards.length === 0) { %>
@@ -28,11 +59,19 @@
             <ul class="group-cards">
               <% cards.slice(0, 8).forEach(card => { %>
                 <li><span class="group-chip" title="<%= card.pergunta %>">
+<<<<<<< HEAD
                   <%= card.pergunta %>
                 </span></li>
               <% }) %>
               <% if (cards.length > 10) { %>
                 <li><span class="group-more">+<%= cards.length - 10 %> mais</span></li>
+=======
+                  <%= card.pergunta.length > 36 ? card.pergunta.slice(0, 36) + '…' : card.pergunta %>
+                </span></li>
+              <% }) %>
+              <% if (cards.length > 8) { %>
+                <li><span class="group-more">+<%= cards.length - 8 %> mais</span></li>
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
               <% } %>
             </ul>
           <% } else { %>
@@ -41,6 +80,9 @@
         </div>
       <% }) %>
     <% } %>
+<<<<<<< HEAD
     </div>
+=======
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
   </div>
 </aside>

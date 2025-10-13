@@ -11,6 +11,7 @@ module.exports = async (req, res) => {
     );
 
     if (!updated) throw new Error('Flashcard não encontrado');
+<<<<<<< HEAD
     
     // Mensagem de sucesso
     if (req.session) {
@@ -22,11 +23,17 @@ module.exports = async (req, res) => {
       } catch (_) {}
     }
     
+=======
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
     return res.redirect('/flashcards');
   } catch (error) {
     console.error(error);
     if (req.session) {
+<<<<<<< HEAD
       req.session.errorMessage = error.message || 'Erro ao editar flashcard';
+=======
+      req.session.errorMessage = error.message;
+>>>>>>> 49cd21b (feat: architecture change on flashcards domain)
       try {
         await new Promise((resolve, reject) =>
           req.session.save(err => (err ? reject(err) : resolve()))
