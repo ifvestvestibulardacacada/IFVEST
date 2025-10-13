@@ -5,89 +5,89 @@ module.exports = {
     // Definindo os tópicos relacionados a cada área de estudo para o ENEM
     const topics = {
       Matemática: [
-         { materia: 'Álgebra Linear', areaId: 1 },
-         { materia: 'Geometria Analítica', areaId: 1 },
-         { materia: 'Trigonometria', areaId: 1 },
-         { materia: 'Cálculo Diferencial', areaId: 1 },
-         { materia: 'Estatística', areaId: 1 }
+         { nome: 'Álgebra Linear', id_area: 1 },
+         { nome: 'Geometria Analítica', id_area: 1 },
+         { nome: 'Trigonometria', id_area: 1 },
+         { nome: 'Cálculo Diferencial', id_area: 1 },
+         { nome: 'Estatística', id_area: 1 }
       ],
       Português: [
-         { materia: 'Gramática', areaId: 2 },
-         { materia: 'Literatura', areaId: 2 },
-         { materia: 'Redação', areaId: 2 },
-         { materia: 'Interpretação de Texto', areaId: 2 }
+         { nome: 'Gramática', id_area: 2 },
+         { nome: 'Literatura', id_area: 2 },
+         { nome: 'Redação', id_area: 2 },
+         { nome: 'Interpretação de Texto', id_area: 2 }
       ],
       História: [
-         { materia: 'Idade Antiga', areaId: 3 },
-         { materia: 'Idade Média', areaId: 3 },
-         { materia: 'Idade Moderna', areaId: 3 },
-         { materia: 'Idade Contemporânea', areaId: 3 }
+         { nome: 'Idade Antiga', id_area: 3 },
+         { nome: 'Idade Média', id_area: 3 },
+         { nome: 'Idade Moderna', id_area: 3 },
+         { nome: 'Idade Contemporânea', id_area: 3 }
       ],
       Geografia: [
-         { materia: 'Geografia Física', areaId: 4 },
-         { materia: 'Geografia Humana', areaId: 4 },
-         { materia: 'Geopolítica', areaId: 4 },
-         { materia: 'Cartografia', areaId: 4 }
+         { nome: 'Geografia Física', id_area: 4 },
+         { nome: 'Geografia Humana', id_area: 4 },
+         { nome: 'Geopolítica', id_area: 4 },
+         { nome: 'Cartografia', id_area: 4 }
       ],
       Ciências: [
-         { materia: 'Biologia', areaId: 5 },
-         { materia: 'Física', areaId: 5 },
-         { materia: 'Química', areaId: 5 },
-         { materia: 'Astronomia', areaId: 5 }
+         { nome: 'Biologia', id_area: 5 },
+         { nome: 'Física', id_area: 5 },
+         { nome: 'Química', id_area: 5 },
+         { nome: 'Astronomia', id_area: 5 }
       ],
       Artes: [
-         { materia: 'Artes Visuais', areaId: 6 },
-         { materia: 'Música', areaId: 6 },
-         { materia: 'Teatro', areaId: 6 },
-         { materia: 'Cinema', areaId: 6 }
+         { nome: 'Artes Visuais', id_area: 6 },
+         { nome: 'Música', id_area: 6 },
+         { nome: 'Teatro', id_area: 6 },
+         { nome: 'Cinema', id_area: 6 }
       ],
       Informática: [
-         { materia: 'Programação', areaId: 7 },
-         { materia: 'Redes de Computadores', areaId: 7 },
-         { materia: 'Banco de Dados', areaId: 7 },
-         { materia: 'Segurança da Informação', areaId: 7 }
+         { nome: 'Programação', id_area: 7 },
+         { nome: 'Redes de Computadores', id_area: 7 },
+         { nome: 'Banco de Dados', id_area: 7 },
+         { nome: 'Segurança da Informação', id_area: 7 }
       ],
       Química: [
-         { materia: 'Química Orgânica', areaId: 8 },
-         { materia: 'Química Inorgânica', areaId: 8 },
-         { materia: 'Química Analítica', areaId: 8 },
-         { materia: 'Físico-Química', areaId: 8 }
+         { nome: 'Química Orgânica', id_area: 8 },
+         { nome: 'Química Inorgânica', id_area: 8 },
+         { nome: 'Química Analítica', id_area: 8 },
+         { nome: 'Físico-Química', id_area: 8 }
       ],
       Física: [
-         { materia: 'Mecânica Clássica', areaId: 9 },
-         { materia: 'Termodinâmica', areaId: 9 },
-         { materia: 'Óptica', areaId: 9 },
-         { materia: 'Física Nuclear', areaId: 9 }
+         { nome: 'Mecânica Clássica', id_area: 9 },
+         { nome: 'Termodinâmica', id_area: 9 },
+         { nome: 'Óptica', id_area: 9 },
+         { nome: 'Física Nuclear', id_area: 9 }
       ],
       Biologia: [
-         { materia: 'Genética', areaId: 10 },
-         { materia: 'Ecologia', areaId: 10 },
-         { materia: 'Anatomia Humana', areaId: 10 },
-         { materia: 'Evolução', areaId: 10 }
+         { nome: 'Genética', id_area: 10 },
+         { nome: 'Ecologia', id_area: 10 },
+         { nome: 'Anatomia Humana', id_area: 10 },
+         { nome: 'Evolução', id_area: 10 }
       ],
       Filosofia: [
-         { materia: 'Ética', areaId: 11 },
-         { materia: 'Lógica', areaId: 11 },
-         { materia: 'Filosofia Política', areaId: 11 },
-         { materia: 'Metafísica', areaId: 11 }
+         { nome: 'Ética', id_area: 11 },
+         { nome: 'Lógica', id_area: 11 },
+         { nome: 'Filosofia Política', id_area: 11 },
+         { nome: 'Metafísica', id_area: 11 }
       ],
       Sociologia: [
-         { materia: 'Sociedade e Cultura', areaId: 12 },
-         { materia: 'Estratificação Social', areaId: 12 },
-         { materia: 'Movimentos Sociais', areaId: 12 },
-         { materia: 'Teoria Sociológica', areaId: 12 }
+         { nome: 'Sociedade e Cultura', id_area: 12 },
+         { nome: 'Estratificação Social', id_area: 12 },
+         { nome: 'Movimentos Sociais', id_area: 12 },
+         { nome: 'Teoria Sociológica', id_area: 12 }
       ],
       'Educação Física': [
-         { materia: 'Atividades Físicas', areaId: 13 },
-         { materia: 'Fisiologia do Exercício', areaId: 13 },
-         { materia: 'Esportes', areaId: 13 },
-         { materia: 'Saúde e Bem-Estar', areaId: 13 }
+         { nome: 'Atividades Físicas', id_area: 13 },
+         { nome: 'Fisiologia do Exercício', id_area: 13 },
+         { nome: 'Esportes', id_area: 13 },
+         { nome: 'Saúde e Bem-Estar', id_area: 13 }
       ],
       'Língua Estrangeira': [
-         { materia: 'Gramática', areaId: 14 },
-         { materia: 'Vocabulário', areaId: 14 },
-         { materia: 'Conversação', areaId: 14 },
-         { materia: 'Cultura Estrangeira', areaId: 14 }
+         { nome: 'Gramática', id_area: 14 },
+         { nome: 'Vocabulário', id_area: 14 },
+         { nome: 'Conversação', id_area: 14 },
+         { nome: 'Cultura Estrangeira', id_area: 14 }
       ]
      };
       // Adicione os tópicos para as outras áreas aqui, seguindo o mesmo formato
@@ -97,7 +97,7 @@ module.exports = {
     for (const area in topics) {
       for (const materia of topics[area]) {
         await queryInterface.sequelize.query(
-          `INSERT INTO "topicos" ("materia", "areaId", "usuarioId", "createdAt", "updatedAt") VALUES ('${materia.materia}', ${materia.areaId}, '${1}', NOW(), NOW())`
+          `INSERT INTO Topico (nome, id_area, id_usuario, createdAt, updatedAt) VALUES ('${materia.nome}', ${materia.id_area}, '${1}', NOW(), NOW())`
         );
       }
     }
@@ -105,6 +105,6 @@ module.exports = {
 
  down: async (queryInterface, Sequelize) => {
     // Removendo os tópicos inseridos pelo seed
-    await queryInterface.sequelize.query(`DELETE FROM "topicos"`);
+    await queryInterface.sequelize.query(`DELETE FROM Topico`);
  }
 };

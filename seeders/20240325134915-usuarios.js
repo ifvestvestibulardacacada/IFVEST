@@ -7,11 +7,11 @@ module.exports = {
  up: async (queryInterface, Sequelize) => {
     // Definindo um usuário para inserir no banco de dados
     const usuario = {
-      nome: 'ruan',
-      usuario: 'ruan177',
+       nome: 'admin',
+      usuario: 'admin123',
       email: 'email@exemplo.com',
       senha: '123', 
-      perfil: 'PROFESSOR',// Senha em texto simples
+      tipo_perfil: 0,// Senha em texto simples
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -21,12 +21,12 @@ module.exports = {
 
     // Inserindo o usuário no banco de dados com a senha criptografada
     await queryInterface.sequelize.query(
-      `INSERT INTO "usuarios" ("nome","usuario", "email", "senha","perfil", "createdAt", "updatedAt") VALUES ('${usuario.nome}','${usuario.usuario}','${usuario.email}', '${hashedPassword}', '${usuario.perfil}', NOW(), NOW())`
+      `INSERT INTO Usuario (nome, usuario, email, senha, tipo_perfil, createdAt, updatedAt) VALUES ('${usuario.nome}','${usuario.usuario}','${usuario.email}', '${hashedPassword}', '${usuario.tipo_perfil}', NOW(), NOW())`
     );
  },
 
  down: async (queryInterface, Sequelize) => {
     // Removendo o usuário inserido pelo seed
-    await queryInterface.sequelize.query(`DELETE FROM "usuarios" WHERE "email" = 'email@exemplo.com'`);
+    await queryInterface.sequelize.query(`DELETE FROM Usuario WHERE 'email' = 'email@exemplo.com'`);
  }
 };

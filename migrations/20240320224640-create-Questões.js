@@ -2,8 +2,8 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('questoes', {
-      id: {
+    await queryInterface.createTable('Questao', {
+      id_questao: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.ENUM({
           values: ['DISSERTATIVA', 'OBJETIVA']
         }),
-         allowNull: false,
+        allowNull: false,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -33,22 +33,31 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.fn('NOW')
       },
-
-
-      usuarioId: {
+      id_usuario: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'usuarios',
-          key: 'id'
+          model: 'Usuario',
+          key: 'id_usuario'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
-      }
+      },
+      id_area: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Area', // Nome da tabela referenciada
+          key: 'id_area'
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
+      },
+      // id_vestibular: {},
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('questoes');
+    await queryInterface.dropTable('Questao');
   }
 };

@@ -21,20 +21,20 @@
 </head>
 
 <body>
-  <%- include('../partials/sidebar') %>
+  
     <main>
       <div class="flex-container">
 
         <div class="flex-child magenta">
           <div class="image-container">
-            <img src="<%= usuario.imagemPerfil || '/img/profile.jpg' %>" alt class="d-block ui-w-80">
+            <img src="<%= usuario.imagem_perfil || '/img/profile.jpg' %>" alt class="d-block ui-w-80" onerror="this.onerror=null;this.src='/img/profile.jpg';">
             <div class="text">
               <%- usuario.nome %>
             </div>
           </div>
           <div class="w3-container cor">
             <p><i class="fa fa-bookmark-o fa-fw "></i>
-              <%= usuario.perfil %>
+              <%= usuario.tipo_perfil %>
             </p>
             <p><i class="fa fa-home fa-fw"></i>Brasil</p>
             <p><i class="fa fa-envelope fa-fw"></i>
@@ -90,7 +90,7 @@
     </main>
 
     <!--========== MAIN JS ==========-->
-    <script src="assets/js/main.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 
 </html>

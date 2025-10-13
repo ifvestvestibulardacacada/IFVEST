@@ -1,0 +1,60 @@
+.form-container {
+    width: clamp(300px, 80vw, 960px);
+    margin: 20px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: .5rem;
+}
+
+/* EasyMDE Customization */
+.editor-toolbar {
+    border-radius: 7px 7px 0 0;
+    border-color: #ced4da !important;
+}
+
+.CodeMirror {
+    border-radius: 0 0 7px 7px;
+    border: 1px solid #ced4da !important; /* Override EasyMDE default */
+}
+
+.editor-toolbar a.active, .editor-toolbar a:hover {
+    background: #e0e0e0;
+    border-color: #999;
+}
+
+.btn-primary {
+    background-color: #1e87f0;
+    border-color: #1e87f0;
+}
+
+.tag-box{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px
+}
+
+.tag{
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 10px;
+    background: rgb(230, 230, 230);
+}
+
+.tag i{
+    margin: 2px;
+    padding: 3px;
+    border-radius: 50%;
+}
+
+.tag i:hover{
+    background: rgba(200, 200, 200, 0.5);
+    cursor: pointer;
+}

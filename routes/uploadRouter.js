@@ -1,10 +1,7 @@
 
 const { Router } = require('express');
 
-const { EditorImageUploadController } = require('../controllers/uploads/editorImageUploadController');
-const { ProfileImageUploadcontroller } = require('../controllers/uploads/profileImageUploadControllers');
-
-const upload = require('../midlewares/multerConfig');
+const upload = require('../middleware/multerConfig');
 
 const roteador = Router();
 

@@ -20,12 +20,12 @@ body {
 }
 
 
-.container {
+/* .container {
     width: 80%;
     max-width: 1200px;
     margin: auto;
     overflow: hidden;
-}
+} */
 li {
     margin-left: 16px;
 }
@@ -165,9 +165,9 @@ select {
     margin-top: 10px;
 }
 
-.container {
+/* .container {
     width: 80%;
-}
+} */
 
 button[type="submit"]:hover {
     background-color: #0056b3;
@@ -262,11 +262,19 @@ main {
 .uk-navbar-nav li {
     width: 100%;
 }
-.ql-tooltip {
-    left: 0 !important;
-    /* Ajuste conforme necessário */
-    top: 30px !important;
-    /* Mantenha ou ajuste conforme necessário */
-    transform: translateX(-50%);
-    /* Centraliza horizontalmente */
+.image-size-select-container {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
+/* .ql-tooltip {
+    left: 0 !important;
+   
+    top: 30px !important;
+    
+    transform: translateX(-50%);
+    
+} */

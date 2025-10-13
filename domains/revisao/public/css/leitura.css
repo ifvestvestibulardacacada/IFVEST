@@ -1,0 +1,9 @@
+blockquote{
+    padding: 1rem;
+    border-left: 5px rgba(150, 150, 150, 0.5) solid;
+    background: rgba(230, 230, 230, 0.5);
+}
+
+blockquote > *{
+    margin: 0;
+}

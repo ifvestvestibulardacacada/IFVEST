@@ -1,0 +1,101 @@
+<link rel="stylesheet" href="/css/partials/modal_topicos.css">
+<style>
+
+</style>
+<div id="modal-create-topic" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Criar Novo Tópico</h2>
+            <button type="button" id="close-modal">Fechar</button>
+        </div>
+        
+        <div class="topic-group">
+            <label for="areaIdTopico" class="label">Selecione uma área:</label>
+            <select name="areaIdTopico" id="areaIdTopico" class="select" >
+                <option value="" disabled selected>Selecione uma opção</option>
+                <% Areas.forEach(area => { %>
+                    <option value="<%= area.id_area %>">
+                        <%= area.nome %>
+                    </option>
+                <% }) %>
+            </select>
+        </div>
+        <div id="topico-container">
+            <div class="flex-col-gap-2">
+                <label for="topico" class="label">Digite um novo Tópico:</label>
+                <input type="text" name="topico" id="topico" placeholder="Digite o tópico" class="topic-input"  disabled>
+            </div>
+        </div>
+        <div class="button-group">
+            <button type="button" class="topic-button" id="register-button" onclick="registerTopic()" disabled>Registrar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showCreateTopicModal() {
+        document.getElementById('modal-create-topic').style.display = 'block';
+        let searchContainer = document.getElementById('topicosSearchContainer');
+        searchContainer.style.display = 'none';
+        let select = document.getElementById("areaId");
+        select.selectedIndex = 0;
+         document.getElementById('areaIdTopico').setAttribute('required', '');
+        document.getElementById('topico').setAttribute('required', '');
+    }
+
+    function closeCreateTopicModal() {
+        document.getElementById('modal-create-topic').style.display = 'none';
+                document.getElementById('areaIdTopico').removeAttribute('required');
+        document.getElementById('topico').removeAttribute('required');
+    }
+
+    // Event listener para o link
+    document.querySelector('#create-topic-link').addEventListener('click', showCreateTopicModal);
+
+    document.getElementById('close-modal').addEventListener('click', closeCreateTopicModal);
+
+    // Listener para habilitar/desabilitar input e botão com base na seleção da área
+    document.getElementById('areaIdTopico').addEventListener('change', function() {
+        const topicInput = document.getElementById('topico');
+        const registerButton = document.getElementById('register-button');
+        
+        if (this.value !== '') {
+            topicInput.disabled = false;
+            registerButton.disabled = false;
+        } else {
+            topicInput.disabled = true;
+            registerButton.disabled = true;
+            topicInput.value = ''; // Limpa o input se a área for desmarcada
+        }
+    });
+
+    async function registerTopic() {
+        const areaIdTopico = document.getElementById('areaIdTopico').value;
+        const topico = document.getElementById('topico').value;
+
+
+        try {
+            const response = await fetch('/professor/registrar-topico', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ areaIdTopico, topico }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro na requisição: ' + response.statusText);
+            }
+
+            const result = await response.json();
+            alert('Tópico registrado com sucesso!');
+            closeCreateTopicModal();
+        } catch (error) {
+            console.error('Erro:', error);
+            alert('Ocorreu um erro ao registrar o tópico.');
+        }
+    }
+</script>
+    
+    
+

@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config()
+
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
@@ -11,7 +13,8 @@ const db = {};
 
 let sequelize;
 if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  console.log(process.env[config.use_env_variable])
+  sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
@@ -34,5 +37,13 @@ Object.keys(db).forEach(modelName => {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+sequelize.options.logging = (msg) => {
+  if (msg.startsWith('[SEQUELIZE]')) {
+    console.log(msg);
+  } else if (msg.includes('error') || msg.includes('warning')) {
+    console.error(msg);
+  }
+};
 
 module.exports = db;

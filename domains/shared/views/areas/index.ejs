@@ -1,0 +1,41 @@
+<div class="container">
+  <h1>Áreas</h1>
+
+  <form action="/shared/areas" method="POST" style="margin-bottom:16px;">
+    <input type="text" name="nome" placeholder="Nome" required />
+    <input type="text" name="descricao" placeholder="Descrição" />
+    <button type="submit">Adicionar</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (areas || []).forEach(function(area){ %>
+        <tr>
+          <td><%= area.id_area %></td>
+          <td><%= area.nome %></td>
+          <td><%= area.descricao || '' %></td>
+          <td>
+            <form action="/shared/areas/<%= area.id_area %>?_method=PATCH" method="POST" style="display:inline-block;">
+              <input type="text" name="nome" placeholder="Novo nome" />
+              <input type="text" name="descricao" placeholder="Nova descrição" />
+              <button type="submit">Salvar</button>
+            </form>
+            <form action="/shared/areas/<%= area.id_area %>?_method=DELETE" method="POST" style="display:inline-block; margin-left:8px;">
+              <button type="submit">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+

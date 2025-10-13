@@ -1,12 +1,8 @@
-const { Usuario } = require('../models');
-const { Questões } = require('../models');
-const { Opcao } = require('../models');
-const { Simulados } = require('../models');
-const { Resposta } = require('../models');
-const { Topico } = require('../models');
+const { sequelize, Usuario, Questao, Opcao, Simulado, Resposta, Topico, Conteudo, TagConteudo, PalavraChave } = require('../models');
 const { removeFileFromUploads } = require('../utils/removeImage')
 const { atualizarRelacaoTopicos } = require('../utils/AreaTopicoUtil')
 const bcrypt = require('bcrypt');
+const { tr } = require('zod/v4/locales');
 
 class Database {
     static questoes = {
@@ -14,180 +10,274 @@ class Database {
             try {
                 const { id } = req.params;
 
-                // Busca a questão pelo ID
-                const questao = await Questões.findByPk(id);
+                const questao = await Questao.findByPk(id);
 
                 if (!questao) {
-                    return res.status(404).send('Questão não encontrada');
+                    throw new Error("Questão nao encontrada");
                 }
 
-                // Exclui as opções da questão
                 await Opcao.destroy({
-                    where: { questao_id: questao.id }
+                    where: { id_questao: questao.id_questao }
                 });
 
-                // Exclui a questão
                 await questao.destroy();
 
-                res.status(200).redirect('/usuario/inicioLogado')
+                res.status(200).redirect('/professor/questoes')
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         register: async (req, res) => {
+            const {
+                titulo,
+                pergunta,
+                areaId,
+                correta,
+                topicosSelecionados,
+                respostasSelecionadas
+            } = req.body;
+
+            const tipo = req.params.tipo.toUpperCase()
+
+            let arrayRespostas;
+
+            const MIN_OPCOES = 1;
+            const MAX_OPCOES = 5;
+
+            const id_usuario = req.session.userId;
+
+            const alternativas = ['A', 'B', 'C', 'D', 'E'];
+
             try {
-                const { titulo, pergunta, areaId, correta, topicosSelecionados, respostasSelecionadas } = req.body;
-                const tipo = req.params.tipo.toUpperCase()
+                if (pergunta === undefined || pergunta === null || pergunta.trim() === '' || pergunta === 'undefined') {
+                    throw new Error("Pergunta não pode ser vazio")
+                }
 
                 if (!respostasSelecionadas) {
                     throw new Error("Respostas não pode ser vazio")
                 }
+                if (!topicosSelecionados) {
+                    throw new Error("Selecione pelo menos um topico");
+                }
+
+                try {
+                    arrayRespostas = JSON.parse(respostasSelecionadas);
+                    if (typeof arrayRespostas !== 'object' || arrayRespostas === null) {
+                        throw new Error("Formato de respostas inválido");
+                    }
+                } catch (parseError) {
+                    throw new Error("Erro ao processar respostas: formato JSON inválido");
+                }
+
+                const numOpcoes = Object.keys(arrayRespostas).length;
+                if (numOpcoes < MIN_OPCOES || numOpcoes > MAX_OPCOES) {
+                    throw new Error(`Número de opções deve ser entre ${MIN_OPCOES} e ${MAX_OPCOES}`);
+                }
 
 
-                const ArrayRespostas = JSON.parse(respostasSelecionadas);
 
-                const numOpcoes = Object.keys(ArrayRespostas).length;
 
-                const alternativas = ['A', 'B', 'C', 'D', 'E'];
+                if ((tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
+                    (tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))) {
+                    throw new Error(`Número de opções INVÁLIDO`);
+                }
 
                 const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
                     alternativa,
-                    descricao: ArrayRespostas[`#opcao${alternativa}`]  // Descrição padrão se não existir
+                    descricao: arrayRespostas[`#opcao${alternativa}`]  // Descrição padrão se não existir
                 }));
-
-                const usuarioId = req.session.userId;
 
                 if (!topicosSelecionados) {
                     throw new Error("Selecione pelo menos um tópico")
                 }
 
-
-                const createQuestao = await Questões.create({
-                    pergunta: pergunta,
+                const createQuestao = await Questao.create({
+                    pergunta,
                     titulo,
-                    areaId,
-                    usuarioId,
+                    id_area: areaId,
+                    id_usuario,
                     tipo // Usa o novo ID do vestibular
                 });
 
+                if (!topicosSelecionados) {
+                    throw new Error("Erro ao criar questao")
+                }
 
-                await createQuestao.addTopicos(topicosSelecionados)
+                await createQuestao.addTopico(topicosSelecionados)
 
                 for (let opcao of opcoes) {
                     let isTrue = correta === opcao.alternativa ? true : false;
                     await Opcao.create({
-                        questao_id: createQuestao.id,
+                        id_questao: createQuestao.id_questao,
                         descricao: JSON.stringify(opcao.descricao),
                         alternativa: opcao.alternativa,
                         correta: isTrue
-
                     })
                 }
 
-                res.status(201).redirect('/usuario/inicioLogado');
-            } catch (err) {
-                console.error(err);
-                req.session.errorMessage = err.message;
-                res.redirect('back')
+                return res.status(201).redirect('/professor/questoes');
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         edit: async (req, res) => { // ! Antigo UpdateQuestaoController
+            const { id,
+                titulo,
+                pergunta,
+                correta,
+                respostasSelecionadas,
+                areaId,
+                topicosSelecionados
+            } = req.body;
+
+            let arrayRespostas;
+
+            const alternativas = ['A', 'B', 'C', 'D', 'E'];
+
+            const MIN_OPCOES = 1;
+            const MAX_OPCOES = 5;
+            console.log(topicosSelecionados)
+
             try {
-                const { id, titulo, pergunta, correta, respostasSelecionadas } = req.body;
-                const { areaId, topicosSelecionados } = req.body;
 
-                const ArrayRespostas = JSON.parse(respostasSelecionadas)
+                if (!respostasSelecionadas) {
+                    throw new Error("Respostas selecionadas não podem estar vazias");
+                }
 
+                try {
+                    arrayRespostas = JSON.parse(respostasSelecionadas);
+                    if (typeof arrayRespostas !== 'object' || arrayRespostas === null) {
+                        throw new Error("Formato de respostas inválido");
+                    }
+                } catch (parseError) {
+                    throw new Error("Erro ao processar respostas: formato JSON inválido");
+                }
 
-                const numOpcoes = Object.keys(ArrayRespostas).length;
+                const numOpcoes = Object.keys(arrayRespostas).length;
 
-                const alternativas = ['A', 'B', 'C', 'D', 'E'];
-
-                const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
-                    alternativa,
-                    descricao: ArrayRespostas[`#opcao${alternativa}`].content,
-                    id: ArrayRespostas[`#opcao${alternativa}`].id// Descrição padrão se não existir
-                }));
-
-
-                await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
-
-                const questao = await Questões.findByPk(id, {
+                const questao = await Questao.findByPk(id, {
                     include: [{
                         model: Opcao,
-                        as: 'Opcoes'
+                        as: 'Opcao'
                     }
                     ]
                 });
 
-                if (!questao) {
-                    return res.status(404).send('Questão não encontrada');
+                if (numOpcoes < MIN_OPCOES || numOpcoes > MAX_OPCOES) {
+                    throw new Error(`Número de opções deve ser entre ${MIN_OPCOES} e ${MAX_OPCOES}`);
                 }
 
-                await Questões.update({
+
+                if ((questao.tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
+                    (questao.tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))) {
+                    throw new Error(`Número de opções INVÁLIDO`);
+                }
+
+
+                const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
+                    alternativa,
+                    descricao: arrayRespostas[`#opcao${alternativa}`].content,
+                    id: arrayRespostas[`#opcao${alternativa}`].id// Descrição padrão se não existir
+                }));
+
+                if (!questao) {
+                    throw new Error('Questão não encontrada');
+                }
+
+                await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
+
+                await Questao.update({
                     titulo: titulo,
                     pergunta: pergunta,
-
-
                 }, {
-                    where: { id: id }
+                    where: { id_questao: id }
                 });
 
                 if (!opcoes) {
-                    throw new Error("Selected answers cannot be empty");
+                    throw new Error("Opcoes selecionadas não pode ser vazia");
                 }
+
                 for (let opcao of opcoes) {
-                    // Inicializa o objeto de atualização
                     const updateData = {
                         descricao: JSON.stringify(opcao.descricao),
                         alternativa: opcao.alternativa,
                     };
-
-
                     if (correta) {
                         updateData.correta = correta === opcao.alternativa;
                     }
-
                     await Opcao.update(updateData, {
-                        where: { id: opcao.id }
+                        where: { id_opcao: opcao.id }
                     });
                 }
-                res.redirect('/professor/questoes');
+
+                return res.redirect('/professor/questoes');
+
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         addImage: async (req, res) => { // ? Antigo uploads/editorImageUploadController.js
             try {
                 // Verifica se uma imagem foi enviada
                 if (!req.file) {
-                    throw new Error('Nenhum arquivo enviado.');
+                    return res.status(400).json({ message: 'Nenhum arquivo enviado.' });
                 }
 
                 const url = `/uploads/${req.file.filename}`;
 
-                // Retorna a URL da imagem como JSON
+                if (!url) {
+                    return res.status(400).json({ message: 'Erro no upload da imagem' });
+                }
+
                 res.status(200).json(url);
+
             } catch (error) {
+
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         }
     }
     static simulados = {
         addQuestion: async (req, res) => {
-            try {
-                const { simuladoId } = req.params;
-                const { selectedQuestionIds } = req.body;
+            const { simuladoId } = req.params;
+            const { selectedQuestionIds } = req.body;
 
+            try {
                 const idsInteiros = selectedQuestionIds.split(',').map(Number);
 
-                const simulado = await Simulados.findByPk(simuladoId);
+                const simulado = await Simulado.findByPk(simuladoId);
 
                 if (!simulado) {
                     throw new Error('Simulado não encontrado.');
@@ -196,27 +286,37 @@ class Database {
                     throw new Error('Questões não selecionadas.');
                 }
 
-                await simulado.addQuestões(idsInteiros);
+                await simulado.addQuestao(idsInteiros);
 
                 res.redirect(`/simulados/meus-simulados`);
             } catch (error) {
                 console.error(error);
-                req.session.errorMessage = err.message;
-                res.redirect('back')
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         edit: async (req, res) => {
-            try {
-                const { simuladoId } = req.params;
-                const { titulo, descricao, tipo } = req.body;
+            const { simuladoId } = req.params;
+            const { titulo, descricao, tipo } = req.body;
 
-                const [updated] = await Simulados.update({
+            try {
+                if (!titulo || !descricao || !tipo) {
+                    throw new Error("Dados Invalidos !!! ")
+                }
+
+                const [updated] = await Simulado.update({
                     titulo: titulo,
                     descricao: descricao,
                     tipo: tipo
                 }, {
                     where: {
-                        id: simuladoId
+                        id_simulado: simuladoId
                     }
                 });
 
@@ -226,67 +326,140 @@ class Database {
                 res.redirect("/simulados/meus-simulados")
             } catch (error) {
                 console.error(error);
-                req.session.errorMessage = err.message;
-                res.redirect('back')
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         register: async (req, res) => {
-            const { titulo, descricao, tipo } = req.body;
+            const { titulo, descricao, tipo, modo, selectedQuestionIds } = req.body;
             const usuarioId = req.session.userId;
-            const tipoformatado = tipo.toUpperCase()
-
-            if (!titulo || !descricao || !tipo) {
-                throw new Error("Dados Invalidos !!! ")
-            }
-
             try {
-                const simulado = await Simulados.create({
+
+                if (!titulo || !descricao || !tipo) {
+                    return res.status(400).json({ message: 'Dados inválidos: título, descrição, tipo e modo são obrigatórios.' });
+                }
+
+
+                if (!usuarioId) {
+                    return res.status(401).json({ message: 'Usuário não autenticado.' });
+                }
+
+                if (!selectedQuestionIds || !Array.isArray(selectedQuestionIds) || selectedQuestionIds.length === 0) {
+                    return res.status(400).json({ message: 'Nenhuma questão selecionada.' });
+                }
+
+                // Format tipo to uppercase
+                const tipoFormatado = tipo.toUpperCase();
+
+                // Convert selectedQuestionIds to integers and filter out invalid IDs
+                const idsInteiros = selectedQuestionIds
+                    .map(id => parseInt(id, 10))
+                    .filter(id => !isNaN(id));
+
+                if (idsInteiros.length === 0) {
+                    return res.status(400).json({ message: 'IDs de questões inválidos.' });
+                }
+
+                // Create simulado
+                const simulado = await Simulado.create({
                     titulo,
                     descricao,
-                    usuarioId: usuarioId,
-                    tipo: tipoformatado
+                    id_usuario: usuarioId,
+                    tipo: tipoFormatado,
+                    modo, // Include modo if your model supports it
                 });
 
                 if (!simulado) {
-                    throw new Error("Simulado não criado!!! ")
+                    return res.status(500).json({ message: 'Erro ao criar simulado.' });
                 }
 
-                res.redirect(`/simulados/${simulado.id}/adicionar-questoes`);
-            } catch (err) {
-                console.error(err);
-                req.session.errorMessage = err.message;
-                res.redirect('back')
+                // Associate questions with simulado
+                await simulado.addQuestao(idsInteiros);
+
+                // Send success response
+                return res.status(201).json({ message: 'Simulado criado com sucesso!' });
+
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         removeQuestion: async (req, res) => {
-            try {
-                const { simuladoId } = req.params;
-                const { questoesSelecionadas } = req.body;
+            const { simuladoId } = req.params;
+            const { questoesSelecionadas } = req.body;
 
+            try {
                 // Primeiro, verifique se o simulado existe
-                const simulado = await Simulados.findByPk(simuladoId, {
+                const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
-                        model: Questões,
-                        as: 'Questões'
+                        model: Questao,
+                        as: 'Questao'
                     }]
                 });
 
                 if (!simulado) {
-                    return res.status(404).send('Simulado não encontrado.');
+                    throw new Error('Simulado não encontrado.');
                 }
                 if (!questoesSelecionadas || questoesSelecionadas.length === 0) {
-                    return res.status(404).send('Questões não selecionadas.');
+                    throw new Error('Questões não selecionadas.');
                 }
 
-                // Agora, remova as questões do simulado usando o método removeQuestoes
-                // Este método é fornecido pelo Sequelize para associações belongsToMany
-                await simulado.removeQuestões(questoesSelecionadas);
+                await simulado.removeQuestao(questoesSelecionadas);
 
-                res.redirect(`/simulados/`);
+                res.redirect(`/simulados/meus-simulados`);
             } catch (error) {
                 console.error(error);
-                req.session.errorMessage = err.message;
-                res.redirect('back')
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
+            }
+        },
+        delete: async (req, res) => {
+            const { simuladoId } = req.params;
+
+            try {
+                const simulado = await Simulado.findByPk(simuladoId, {
+                    include: [{
+                        model: Questao,
+                        as: 'Questao'
+                    }]
+                });
+
+                if (!simulado) {
+                    throw new Error('Simulado não encontrado.');
+                }
+
+                await simulado.destroy()
+
+                res.redirect(`/simulados/meus-simulados`);
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         submit: async (req, res) => {
@@ -295,16 +468,13 @@ class Database {
             const { simuladoId } = req.params;
             const respostasDissertativas = respostas;
 
-            console.log(`
-                
-                    SESSAO NA SUBMISSAO DE SIMULADO
-
-                    ${JSON.stringify(req.session)}
-                
-                `)
-
-            const simulado = await Simulados.findByPk(simuladoId)
             try {
+                const simulado = await Simulado.findByPk(simuladoId)
+
+                if (!simulado) {
+                    throw new Error('Simulado nao encontrado.');
+                }
+
                 if (questoes && Object.keys(questoes).length > 0) {
 
                     const questoesObj = questoes.reduce((acc, item) => {
@@ -321,10 +491,10 @@ class Database {
                         await Resposta.create({
                             resposta: "", // O ID da opção é salvo no campo resposta
                             tipo: 'OBJETIVA',
-                            opcaoId: opcaoId,
-                            usuarioId: userId, // Ajuste conforme necessário
-                            simuladoId: simuladoId, // Ajuste conforme necessário
-                            questaoId: questaoId,
+                            id_opcao: opcaoId,
+                            id_usuario: userId, // Ajuste conforme necessário
+                            id_simulado: simuladoId, // Ajuste conforme necessário
+                            id_questao: questaoId,
                         });
                     }
                 }
@@ -338,88 +508,125 @@ class Database {
                         await Resposta.create({
                             resposta: resposta,
                             tipo: 'DISSERTATIVA',
-                            usuarioId: idUsuario, // Ajuste conforme necessário
-                            simuladoId: simuladoId, // Ajuste conforme necessário
-                            questaoId: questaoId,
+                            id_usuario: userId, // Ajuste conforme necessário
+                            id_simulado: simuladoId, // Ajuste conforme necessário
+                            id_questao: questaoId,
                         });
                     }
                 }
+
                 await new Promise(resolve => setTimeout(resolve, 1000));
 
 
-                res.status(200).redirect(`/simulados/${simulado.id}/gabarito`)
+                res.status(200).redirect(`/simulados/${simulado.id_simulado}/gabarito`)
 
-                
+
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
     }
     static topicos = {
         edit: async (req, res) => {
+            const { id, nome } = req.body;
             try {
-                const { id, materia } = req.body;
                 // Encontre o tópico pelo ID
                 const topico = await Topico.findByPk(id);
+
                 if (!topico) {
-                    return res.status(404).send('Tópico não encontrado.');
+                    throw new Error('Tópico não encontrado.');
                 }
-                // Atualize o tópico com a nova matéria
-                await topico.update({ materia });
+
+                if (!nome) {
+                    throw new Error('Nome não pode ser vazio.');
+                }
+
+                await topico.update({ nome });
+
                 res.redirect('/professor/topicos');
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         register: async (req, res) => {
+            const { topico, areaIdTopico } = req.body;
+            const usuarioId = req.session.userId;
+            const referer = req.headers.referer || '';
+
             try {
-                const { topico, areaIdTopico } = req.body;
-                const usuarioId = req.session.userId;
 
                 // Verifica se os campos obrigatórios estão preenchidos
                 if (!topico || !areaIdTopico || !usuarioId) {
                     throw new Error('Os campos tópico e areaId são obrigatórios.');
                 }
 
-                // Cria um novo tópico
                 const novoTopico = await Topico.create({
-                    materia: topico, // Supondo que cada tópico seja uma string
-                    areaId: areaIdTopico, // Corrigido para usar areaIdTopico
-                    usuarioId: usuarioId
+                    nome: topico,
+                    id_area: areaIdTopico,
+                    id_usuario: usuarioId
                 });
 
-                // Retorna o novo tópico criado como resposta JSON
-                return res.status(201).json(novoTopico); // Status 201 para criação bem-sucedida
+                // Verifica a URL de origem e responde adequadamente
+                if (referer.includes('/professor/topicos/criar')) {
+                    return res.redirect('/professor/topicos');
+                } else if (referer.includes('/professor/questoes')) {
+                    return res.status(201).json(novoTopico);
+                }
+
+                // Fallback para qualquer outra origem
+                return res.status(201).json(novoTopico);
 
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back')
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         getAll: async (req, res) => {
             const { id } = req.params;
 
             try {
+
                 const topics = await Topico.findAll({
-                    where: { areaId: id },
-                    // Selecione apenas os atributos necessários
+                    where: { id_area: id },
                 });
 
                 res.status(200).json(topics);
             } catch (error) {
                 console.error(error);
-                res.status(500).json({ message: 'Erro ao buscar tópicos' });
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
     }
-    // static uploads = { // ! Inutilizado
-
-    // }
     static usuarios = {
         changeImg: async (req, res) => { // ? Antigo uploads/profileImageUploadControllers.js
             try {
@@ -435,8 +642,8 @@ class Database {
                 const usuario = await Usuario.findByPk(idUsuario);
 
                 // Remove a imagem antiga se existir
-                if (usuario.imagemPerfil) {
-                    removeFileFromUploads(usuario.imagemPerfil);
+                if (usuario.imagem_perfil) {
+                    removeFileFromUploads(usuario.imagem_perfil);
                 }
 
                 // Verifica se uma nova imagem foi recebida
@@ -445,17 +652,30 @@ class Database {
                 }
 
                 // Atualiza o banco de dados com a nova imagem
-                await Usuario.update({ imagemPerfil: caminhoImagem }, { where: { id: idUsuario } });
+                await Usuario.update({ imagem_perfil: caminhoImagem }, { where: { id_usuario: idUsuario } });
 
                 // Atualiza a sessão com a nova imagem
                 req.session.imagemPerfil = caminhoImagem;
 
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+
                 // Redireciona para a página de perfil
-                res.status(200).redirect(`/usuario/perfil`);
+                return res.status(200).redirect(`/usuario/perfil`);
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
-                res.redirect('back');
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         delete: async (req, res) => {
@@ -467,32 +687,48 @@ class Database {
 
                 await Usuario.destroy({
                     where: {
-                        id: req.params.id
+                        id_usuario: req.params.id
                     }
                 }
                 );
                 req.session.destroy();
                 res.status(200).redirect('/usuario/login');
-            } catch (err) {
-                console.log(err)
-                req.session.errorMessage = err.message;
-                res.redirect('back')
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
             }
         },
         edit: async (req, res) => {
+            const id = req.session.userId;
+            const idUsuarioParaEditar = Number(req.params.id);
             try {
-                const id = req.session.userId;
-                const idUsuarioParaEditar = Number(req.params.id);
 
+                // Verifica se o usuário está tentando editar seu próprio perfil
                 if (id !== idUsuarioParaEditar) {
                     req.session.destroy();
+                    return res.redirect('/usuario/login');
                 }
 
                 const { senha, nome, usuario, email, novasenha } = req.body;
 
-                if (!nome & !usuario & !email) {
-                    throw new Error('Um dos campos deve ser preenchido.');
+                // Verifica se pelo menos um campo foi preenchido
+                if (!nome && !usuario && !email && !senha && !novasenha) {
+                    throw new Error('Pelo menos um campo deve ser preenchido.');
                 }
+
+                // Objeto para armazenar os campos a serem atualizados
+                const updateFields = {};
+
+                // Flag para verificar se a senha foi alterada
+                let senhaAlterada = false;
+
 
                 if (senha && novasenha) {
                     const usuarioAtual = await Usuario.findByPk(idUsuarioParaEditar);
@@ -504,32 +740,271 @@ class Database {
                     const senhaCorreta = await bcrypt.compare(senha, usuarioAtual.senha);
 
                     if (!senhaCorreta) {
-                        throw new Error('A senha ou usuario atual está incorreto.');
+                        throw new Error('A senha atual está incorreta.');
                     }
 
-                    const novaSenhaHash = await bcrypt.hash(novasenha, 10); // Hash da nova senha
+                    updateFields.senha = await bcrypt.hash(novasenha, 10);
 
-                    if (!novaSenhaHash) {
-                        throw new Error('Senha não alterada.');
+                    if (!updateFields.senha) {
+                        throw new Error('Erro ao processar nova senha.');
                     }
 
-                    await Usuario.update({ senha: novaSenhaHash }, { where: { id: idUsuarioParaEditar } });
+                    senhaAlterada = true;
+                }
+
+                // Adiciona campos não vazios ao objeto de atualização
+                if (nome) updateFields.nome = nome;
+                if (usuario) updateFields.usuario = usuario;
+                if (email) updateFields.email = email;
+
+                // Realiza a atualização em uma única chamada se houver campos para atualizar
+                if (Object.keys(updateFields).length > 0) {
+                    await Usuario.update(updateFields, {
+                        where: { id_usuario: idUsuarioParaEditar }
+                    });
+
+                    // Atualiza a sessão com os novos dados
+                    if (nome) {
+                        req.session.nomeUsuario = nome;
+                    }
+                    if (usuario) {
+                        req.session.nomeUsuario = usuario;
+                    }
+                    // Força a sessão a salvar as alterações
+                    await new Promise((resolve) => req.session.save(resolve));
+                }
+
+                // Se a senha foi alterada, desloga o usuário
+                if (senhaAlterada) {
+                    req.session.destroy();
+                    return res.status(200).redirect('/usuario/login');
+                }
+
+                res.status(200).redirect(`/usuario/perfil`);
+            } catch (error) {
+                console.error(error);
+                req.session.errorMessage = error.message;
+                await new Promise((resolve, reject) => {
+                    req.session.save(err => {
+                        if (err) reject(err);
+                        else resolve();
+                    });
+                });
+                return res.status(400).redirect(req.get("Referrer") || "/");
+            }
+        }
+    }
+    static moduloRevisao = {
+        buscarArea: async (req, res) => {
+            /*
+            Objetivo: Realizar a busca de áreas e retornar a área mais provavel
+            Recebe: Query de busca
+            Retorna: Lista de resultados mais provaveis
+            */
+            /*
+            ! Fluxo esperado
+            * Passo 1 // ? Pendente
+            * Passo 2 // ? Pendente
+            * Passo 3 // ? Pendente
+            */
+        },
+        buscarTopico: async (req, res) => {
+            /*
+            Objetivo: 
+            Recebe: 
+            Retorna: 
+            */
+            /*
+            ! Fluxo esperado
+            * Passo 1 // ? Pendente
+            * Passo 2 // ? Pendente
+            * Passo 3 // ? Pendente
+            */
+        },
+        buscarMaterial: async (req, res) => {
+            /*
+            Objetivo: 
+            Recebe: 
+            Retorna: 
+            */
+            /*
+            ! Fluxo esperado
+            * Passo 1 // ? Pendente
+            * Passo 2 // ? Pendente
+            * Passo 3 // ? Pendente
+            */
+        },
+        criarMaterial: async (req, res) => {
+
+            const { titulo, areaId, topicoId, palavrasChave, conteudo, linksExternos } = req.body;
+
+            const userId = req.session.userId;
+
+            const transaction = await sequelize.transaction(); // Inicia a transação
+            try {
+
+                if (!titulo || !areaId || !topicoId || !conteudo) {
+                    return res.status(400).json({ message: 'Todos os campos obrigatórios devem ser preenchidos.' });
+                }
+
+                if (!palavrasChave || !Array.isArray(palavrasChave)) {
+                    return res.status(400).json({ message: 'Palavras-chave devem ser um array.' });
+                }
+                if (palavrasChave.length === 0 && linksExternos.length === 0) {
+                    return res.status(400).json({ message: 'Pelo menos uma palavra-chave e um link externo deve ser fornecida.' });
                 }
 
 
-                nome ? await Usuario.update({ nome: nome }, { where: { id: idUsuarioParaEditar } }) : "";
-                usuario ? await Usuario.update({ usuario: usuario }, { where: { id: idUsuarioParaEditar } }) : "";
-                email ? await Usuario.update({ email: email }, { where: { id: idUsuarioParaEditar } }) : "";
+                const ConteudoCriado = await Conteudo.create(
+                    {
+                        nome: titulo,
+                        id_usuario: userId,
+                        id_topico: topicoId,
+                        conteudo_markdown: conteudo,
+                        contagem_leitura: 0,
+                    },
+                    { transaction }
+                );
+
+                const idsPalavrasChave = [];
+
+                // Processa palavras-chave
+                for (const palavra of palavrasChave) {
+                    let palavraChave = await PalavraChave.findOne({
+                        where: { palavrachave: palavra },
+                        transaction,
+                    });
+
+                    if (palavraChave) {
+                        idsPalavrasChave.push(palavraChave.id_palavrachave);
+                    } else {
+                        palavraChave = await PalavraChave.create(
+                            { palavrachave: palavra },
+                            { transaction }
+                        );
+                        idsPalavrasChave.push(palavraChave.id_palavrachave);
+                    }
+                }
 
 
-                res.status(200).redirect(`/usuario/perfil`);
-            } catch (err) {
-                console.error(err);
-                req.session.errorMessage = err.message;
-                res.redirect('back')
+                await ConteudoCriado.setPalavraChave(idsPalavrasChave, { transaction });
+
+                // Confirma a transação
+                await transaction.commit();
+                res.status(201).json({
+                    conteudo: ConteudoCriado,
+                    palavrasChave: idsPalavrasChave,
+                });
+            } catch (error) {
+                // Desfaz a transação em caso de erro
+                await transaction.rollback();
+                console.error('Erro ao criar conteúdo:', error);
+                res.status(500).json({ error: 'Falha ao criar conteúdo' });
+            }
+        },
+        editarMaterial: async (req, res) => {
+            const { id_conteudo } = req.params;
+            const { titulo, areaId, topicoId, palavrasChave, conteudo, linksExternos } = req.body;
+            const userId = req.session.userId;
+
+            const transaction = await sequelize.transaction();
+            try {
+
+
+                if (!titulo || !areaId || !topicoId || !conteudo) {
+                    return res.status(400).json({ message: 'Todos os campos obrigatórios devem ser preenchidos.' });
+                }
+
+                if (!Array.isArray(palavrasChave) || !Array.isArray(linksExternos)) {
+                    return res.status(400).json({ message: 'Palavras-chave e links externos devem ser arrays.' });
+                }
+
+                if (palavrasChave.length === 0 && linksExternos.length === 0) {
+                    return res.status(400).json({ message: 'Pelo menos uma palavra-chave ou um link externo deve ser fornecido.' });
+                }
+
+                const conteudoEditado = await Conteudo.findOne({
+                    where: { id_conteudo: id_conteudo, id_usuario: userId },
+                    transaction
+                });
+
+                if (!conteudoEditado) {
+                    await transaction.rollback();
+                    return res.status(404).json({
+                        message: conteudo ? 'Você não tem permissão para editar este conteúdo.' : 'Conteúdo não encontrado.'
+                    });
+                }
+
+                const updates = {};
+                if (titulo && titulo !== conteudoEditado.nome) updates.nome = titulo;
+                if (conteudo && conteudo !== conteudoEditado.conteudo_markdown) updates.conteudo_markdown = conteudo;
+                if (topicoId && topicoId !== conteudoEditado.id_topico) updates.id_topico = topicoId;
+
+
+                if (Object.keys(updates).length > 0) {
+                    await conteudoEditado.update(updates, { transaction });
+                }
+
+                const idsPalavrasChave = await Promise.all(palavrasChave.map(async (palavra) => {
+                    const [palavraChave, created] = await PalavraChave.findOrCreate({
+                        where: { palavrachave: palavra },
+                        defaults: { palavrachave: palavra },
+                        transaction
+                    });
+                    return palavraChave.id_palavrachave;
+                }));
+
+                // Atualiza associações
+                await conteudoEditado.setPalavraChave(idsPalavrasChave, { transaction });
+
+                await transaction.commit();
+                return res.status(200).json({
+                    message: 'Conteúdo atualizado com sucesso.',
+                    conteudo: {
+                        id: conteudoEditado.id_conteudo,
+                        nome: conteudoEditado.nome,
+
+                        topicoId: conteudoEditado.id_topico,
+                        palavrasChave: idsPalavrasChave,
+                    }
+                });
+
+            } catch (error) {
+                await transaction.rollback();
+                console.error('Erro ao editar material:', error);
+                return res.status(500).json({ message: 'Erro interno do servidor.' });
+            }
+        },
+        removerMaterial: async (req, res) => {
+            const { id_conteudo } = req.params;
+            const transaction = await sequelize.transaction();
+            try {
+                const conteudo = await Conteudo.findByPk(id_conteudo, {
+                    transaction
+                });
+                if (!conteudo) {
+                    return res.status(404).json({ message: 'Conteúdo não encontrado.' });
+                }
+                await conteudo.setPalavraChave([], { transaction });
+
+                // Exclui o Conteudo
+                await conteudo.destroy({ transaction });
+
+                await transaction.commit();
+                return res.status(200).redirect('/revisao/meus_materiais');
+         
+
+
+
+            } catch (error) {
+                await transaction.rollback();
+                console.error('Erro ao buscar conteúdo:', error);
+                return res.status(500).json({ message: 'Erro interno do servidor.' });
             }
         }
     }
 }
 
-exports.Database = Database
+exports.Database = Database;
+
+

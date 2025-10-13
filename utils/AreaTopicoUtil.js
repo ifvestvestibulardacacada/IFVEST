@@ -1,14 +1,13 @@
-const { Topico } = require('../models');
-const { Questões } = require('../models');
-
+'use strict';
+const {  Topico, Questao } = require('../models');
 
 async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
   try {
-    const questao = await Questões.findByPk(idQuestao, {
+    const questao = await Questao.findByPk(idQuestao, {
       include: [{
         model: Topico,
-        as: 'Topicos',
-        attributes: ['id']
+        as: 'Topico',
+        attributes: ['id_topico']
       }]
     });
 
@@ -17,28 +16,29 @@ async function atualizarRelacaoTopicos(idQuestao, topicosSelecionados, areaId) {
       throw new Error('Questão não encontrada');
     }
 
-    const topicosIdsAtuais = questao.Topicos.map(topico => topico.id);
-
-    // Remover tópicos que não estão mais selecionados
-    await questao.removeTopicos(topicosIdsAtuais);
-
-    // Adicionar novos tópicos selecionados
-    if (areaId && areaId !== questao.areaId) {
-      // Atualizar a área da questão
-      await Questões.update({
-        areaId: areaId,
-      }, {
-        where: { id: idQuestao }
-      });
+    const idTopicos = topicosSelecionados.filter(item => !isNaN(item) && item !== '');
+  
+    // // Adicionar novos tópicos selecionados
+    if (areaId && areaId !== questao.id_area) {
+      // Usando o método update da própria instância
+      await questao.update({ id_area: areaId });
     }
 
-    await questao.addTopicos(topicosSelecionados);
+    await questao.setTopico(idTopicos);
+
   } catch (error) {
-    console.error('Erro ao atualizar relação de tópicos:', error);
-    throw error;
+    console.error(error);
+    req.session.errorMessage = error.message;
+    await new Promise((resolve, reject) => {
+      req.session.save(err => {
+        if (err) reject(err);
+        else resolve();
+      });
+    });
+    return res.redirect(req.get("Referrer") || "/");
   }
 }
 
-  module.exports = {
-    atualizarRelacaoTopicos
-  };
+module.exports = {
+  atualizarRelacaoTopicos
+};
