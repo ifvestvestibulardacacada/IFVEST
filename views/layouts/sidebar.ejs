@@ -71,18 +71,50 @@
                     ">
                     <i class='bx bx-library nav__icon'></i> 
                     <span class="nav__name">Revisão</span>
-                </a>
+                    </a>
                 
+<<<<<<< HEAD
                 <% if (perfilUsuario==="PROFESSOR" ) { %>
                     <a href="/shared/assuntos/" class="nav__link 
+=======
+                    <% if (perfilUsuario==="PROFESSOR" ) { %>
+                    <a href="/simulados" class="nav__link 
+>>>>>>> d8195e0 (feat: architecture change on flashcards domain)
                         <% if (currentPage==='simulado'){%>
                         active
                         <%}%>
                         ">
+<<<<<<< HEAD
                             <i class='bx bx-compass nav__icon'></i>
                             <span class="nav__name">Editar categorias</span>
                         </a>
                         <% } %>
+=======
+                        <i class='bx bx-compass nav__icon'></i>
+                        <span class="nav__name">Editar categorias</span>
+                    </a>
+                    <% } %>
+
+                    <% if (perfilUsuario === 'PROFESSOR') { %>
+                        <a href="/flashcards" class="nav__link 
+                            <% if (currentPage==='flashcards'){%>
+                            active
+                            <%}%>
+                            ">
+                            <i class='bx bx-card nav__icon'></i>
+                            <span class="nav__name">Flashcards</span>
+                        </a>
+                    <% } else { %>
+                        <a href="/flashcards" class="nav__link 
+                            <% if (currentPage==='flashcards'){%>
+                            active
+                            <%}%>
+                            ">
+                            <i class='bx bx-card nav__icon'></i>
+                            <span class="nav__name">Flashcards</span>
+                        </a>
+                    <% } %>
+>>>>>>> d8195e0 (feat: architecture change on flashcards domain)
                 </div>
             </div>
         </div>

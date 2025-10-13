@@ -1,0 +1,66 @@
+<aside class="flashcard-groups">
+  <h3 class="group-heading">Revisão por tempo visto</h3>
+  <div class="group-list">
+    <% if (groups) { %>
+      <% let totalCount = 0; Object.values(groups).forEach(arr => totalCount += arr.length); %>
+      <div class="group-block <%= selectedGroup === 'misto' ? 'active' : '' %>">
+        <div class="group-header">
+          <div class="group-title">
+            Misto recomendado
+            <span class="group-count-badge"><%= totalCount %></span>
+          </div>
+          <% if (totalCount === 0) { %>
+            <a class="group-action disabled" aria-disabled="true">Revisar</a>
+          <% } else { %>
+            <a class="group-action" href="/flashcards?<%=
+              [
+                id_area ? `id_area=${id_area}` : null,
+                id_topico ? `id_topico=${id_topico}` : null,
+                id_dificuldade ? `id_dificuldade=${id_dificuldade}` : null,
+                'grupo=misto'
+              ].filter(Boolean).join('&')
+            %>">Revisar</a>
+          <% } %>
+        </div>
+      </div>
+
+      <% Object.entries(groups).forEach(([days, cards]) => { %>
+        <div class="group-block <%= selectedGroup === days ? 'active' : '' %>">
+          <div class="group-header">
+            <div class="group-title">
+              <%= days === '1' ? 'Vistos hoje' : days === '3' ? 'Vistos há 3 dias' : days === '7' ? 'Vistos há 7 dias' : 'Vistos há 15+ dias' %>
+              <span class="group-count-badge"><%= cards.length %></span>
+            </div>
+            <% if (cards.length === 0) { %>
+              <a class="group-action disabled" aria-disabled="true">Revisar</a>
+            <% } else { %>
+              <a class="group-action" href="/flashcards?<%=
+                [
+                  id_area ? `id_area=${id_area}` : null,
+                  id_topico ? `id_topico=${id_topico}` : null,
+                  id_dificuldade ? `id_dificuldade=${id_dificuldade}` : null,
+                  `grupo=${days}`
+                ].filter(Boolean).join('&')
+              %>">Revisar</a>
+            <% } %>
+          </div>
+
+          <% if (cards.length > 0) { %>
+            <ul class="group-cards">
+              <% cards.slice(0, 8).forEach(card => { %>
+                <li><span class="group-chip" title="<%= card.pergunta %>">
+                  <%= card.pergunta.length > 36 ? card.pergunta.slice(0, 36) + '…' : card.pergunta %>
+                </span></li>
+              <% }) %>
+              <% if (cards.length > 8) { %>
+                <li><span class="group-more">+<%= cards.length - 8 %> mais</span></li>
+              <% } %>
+            </ul>
+          <% } else { %>
+            <span class="no-flashcard">Nenhum flashcard</span>
+          <% } %>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</aside>

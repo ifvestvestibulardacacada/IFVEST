@@ -29,6 +29,17 @@ class Render {
             res.status(200).render('usuario/login', { errorMessage, layout: false  });
         }
     }
+    static dificuldades = {
+        dificuldades: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const dificuldades = await Dificuldade.findAll();
+                res.render('dificuldades/dificuldades', { dificuldades });
+            } catch (error) {
+                res.status(500).send('Erro ao buscar dificuldades.');
+            }
+        }
+    }
 
     static usuarios = {
         
