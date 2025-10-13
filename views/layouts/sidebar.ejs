@@ -62,9 +62,9 @@
                     ">
                     <i class='bx bx-library nav__icon'></i> 
                     <span class="nav__name">Revisão</span>
-                </a>
+                    </a>
                 
-                <% if (perfilUsuario==="PROFESSOR" ) { %>
+                    <% if (perfilUsuario==="PROFESSOR" ) { %>
                     <a href="/simulados" class="nav__link 
                         <% if (currentPage==='simulado'){%>
                         active
@@ -73,6 +73,26 @@
                         <i class='bx bx-compass nav__icon'></i>
                         <span class="nav__name">Editar categorias</span>
                     </a>
+                    <% } %>
+
+                    <% if (perfilUsuario === 'PROFESSOR') { %>
+                        <a href="/flashcards" class="nav__link 
+                            <% if (currentPage==='flashcards'){%>
+                            active
+                            <%}%>
+                            ">
+                            <i class='bx bx-card nav__icon'></i>
+                            <span class="nav__name">Flashcards</span>
+                        </a>
+                    <% } else { %>
+                        <a href="/flashcards" class="nav__link 
+                            <% if (currentPage==='flashcards'){%>
+                            active
+                            <%}%>
+                            ">
+                            <i class='bx bx-card nav__icon'></i>
+                            <span class="nav__name">Flashcards</span>
+                        </a>
                     <% } %>
                 </div>
             </div>

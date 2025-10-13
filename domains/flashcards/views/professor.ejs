@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IFVest - Gerenciar Flashcards</title>
+  <link rel="stylesheet" href="/flashcards/css/professor.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  </head>
+  <body>
+    <div class="container">
+      <main class="flashcard-content">
+        <h2 class="title">Gerenciar Flashcards</h2>
+        <%- include('./partials/flashcardFiltros') %>
+        <button class="criar-flashcard-btn" onclick="window.location.href='/flashcards/criar'">
+          <i class="fas fa-plus"></i> Criar Flashcard
+        </button>
+        <div id="flashcard-list">
+          <% if (flashcards && flashcards.length > 0) { %>
+            <table class="flashcard-table">
+              <thead>
+                <tr>
+                  <th>Pergunta</th>
+                  <th>Resposta</th>
+                  <th>Área</th>
+                  <th>Tópico</th>
+                  <th>Dificuldade</th>
+                  <th>Última edição</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% flashcards.forEach(card => { %>
+                  <tr style="border-bottom: 1px solid #ccc;">
+                    <td><%= card.pergunta %></td>
+                    <td><%= card.resposta %></td>
+                    <td><%= card.Area ? card.Area.nome : '-' %></td>
+                    <td><%= card.Topico ? card.Topico.nome : '-' %></td>
+                    <td><%= card.Dificuldade ? card.Dificuldade.nivel : '-' %></td>
+                    <td><%= card.updatedAt ? card.updatedAt.toLocaleString('pt-BR') : '-' %></td>
+                    <td>
+                      <a href="/flashcards/<%= card.id_flashcards %>/editar" class="edit-btn"><i class="fas fa-edit"></i></a>
+                      <form action="/flashcards/<%= card.id_flashcards %>/excluir" method="POST" style="display:inline;">
+                        <button type="submit" class="delete-btn" onclick="return confirm('Tem certeza que deseja excluir este flashcard?')">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <p>Nenhum flashcard encontrado.</p>
+          <% } %>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

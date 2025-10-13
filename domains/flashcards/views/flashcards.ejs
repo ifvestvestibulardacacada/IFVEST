@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IFVest - Flashcards</title>
+    <link rel="stylesheet" href="/flashcards/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body data-id-usuario="<%= id_usuario %>">
+  <div class="container">
+    <main class="flashcard-content">
+        <!-- Left column: Groups -->
+      <%- include('./partials/flashcardGrupos') %>
+      <!-- Right column: Flashcards -->
+      <section class="flashcard-section">
+        <%- include('./partials/flashcardFiltros') %>
+        <div class="queue-label">
+          <% if (selectedGroup === 'misto') { %>
+            Revisando: Misto recomendado
+          <% } else if (selectedGroup === '1') { %>
+            Revisando: Vistos hoje
+          <% } else if (selectedGroup === '3') { %>
+            Revisando: Vistos há 3 dias
+          <% } else if (selectedGroup === '7') { %>
+            Revisando: Vistos há 7 dias
+          <% } else if (selectedGroup === '15+') { %>
+            Revisando: Vistos há 15+ dias
+          <% } else { %>
+            Revisando: Não vistos (aleatório)
+          <% } %>
+        </div>
+        <div id="flashcard-container">
+          <% 
+            // Prefer server-side displayFlashcards (group or mixed selection)
+            let unseen = unseenFlashcards || [];
+            let display = (typeof displayFlashcards !== 'undefined' && displayFlashcards && displayFlashcards.length > 0) ? displayFlashcards : unseen.slice(0, 10);
+          %>
+          <% if (display.length > 0) { %>
+            <% display.forEach((card, index) => { %>
+              <!-- Adiciona a classe 'active' apenas no primeiro card -->
+              <div class="flashcard <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>" data-id-flashcard="<%= card.id_flashcards %>">
+                <div class="flashcard-inner">
+                  <div class="flashcard-front">
+                    <p class="pergunta"><%= card.pergunta %></p>
+                    <button class="ver-resposta">Ver resposta</button>
+                    <div class="interrogacao">?</div>
+                  </div>
+                  <div class="flashcard-back">
+                    <p class="resposta"><%= card.resposta %></p>
+                    <button class="ver-pergunta">Ver pergunta</button>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <p>Nenhum flashcard encontrado para o filtro selecionado.</p>
+          <% } %>
+        </div>
+        <!-- Controles de Navegação -->
+        <% if (display && display.length > 0) { %>
+          <div class="navigation-controls">
+            <button id="prev-btn" class="nav-btn"><i class="fas fa-chevron-left"></i> Anterior</button>
+            <span id="progress-indicator">1 / <%= display.length %></span>
+            <button id="next-btn" class="nav-btn">Próximo <i class="fas fa-chevron-right"></i></button>
+          </div>
+        <% } %>
+      </section>
+    </main>
+  </div>
+
+  <script src="/flashcards/js/navegaFlashcards.js"></script>
+  </body>
+</html>

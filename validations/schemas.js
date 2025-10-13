@@ -191,6 +191,69 @@ const contentSchemas = {
   }),
 };
 
+const flashcardsSchemas = {
+  register: z.object({
+    pergunta: z.string()
+      .min(5, "A pergunta deve ter pelo menos 5 caracteres")
+      .max(500, "A pergunta não pode exceder 500 caracteres")
+      .regex(patterns.textPattern, "Formato de pergunta inválido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de pergunta inválido" }),
+    resposta: z.string()
+      .min(1, "A resposta não pode ser vazia")
+      .max(500, "A resposta não pode exceder 500 caracteres")
+      .regex(patterns.textPattern, "Formato de resposta inválido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de resposta inválido" }),
+    id_area: z.string()
+      .regex(/^\d+$/, "O id_area deve ser um número válido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de id_area inválido" }),
+    id_topico: z.string()
+      .regex(/^\d+$/, "O id_topico deve ser um número válido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de id_topico inválido" }),
+    id_dificuldade: z.string()
+      .regex(/^\d+$/, "O id_dificuldade deve ser um número válido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de id_dificuldade inválido" })
+  }),
+  edit: z.object({
+    pergunta: z.string()
+      .min(5)
+      .max(500)
+      .regex(patterns.textPattern, "Formato de pergunta inválido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de pergunta inválido" }),
+    resposta: z.string()
+      .min(1)
+      .max(500)
+      .regex(patterns.textPattern, "Formato de resposta inválido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de resposta inválido" }),
+    id_area: z.string()
+      .regex(/^\d+$/)
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de id_area inválido" }),
+    id_topico: z.string()
+      .regex(/^\d+$/)
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de id_topico inválido" }),
+    id_dificuldade: z.string()
+      .regex(/^\d+$/)
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de id_dificuldade inválido" })
+  })
+};
+
+
+const dificuldadesSchemas = {
+  register: z.object({
+    nivel: z.string()
+      .min(1, "O nível não pode ser vazio")
+      .max(50, "O nível não pode exceder 50 caracteres")
+      .regex(patterns.textPattern, "Formato de nível inválido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de nível inválido" })
+  }),
+  edit: z.object({
+    nivel: z.string()
+      .min(1)
+      .max(50)
+      .regex(patterns.textPattern, "Formato de nível inválido")
+      .refine(val => !patterns.sqlPattern.test(val), { message: "Formato de nível inválido" })
+  })
+};
+
 module.exports = {
   patterns,
   authSchemas,
@@ -198,6 +261,8 @@ module.exports = {
   simuladoSchemas,
   topicoSchemas,
   userSchemas,
-  contentSchemas
+  contentSchemas,
+  flashcardsSchemas,
+  dificuldadesSchemas
 };
 

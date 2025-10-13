@@ -1,0 +1,43 @@
+/* flashcardFiltros.css - Estilos para o filtro de flashcards */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+}
+
+.filters .select {
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #d1d1e0;
+  background: #fff;
+  font-size: 1rem;
+  color: #333;
+  min-width: 180px;
+  transition: border-color 0.2s;
+}
+
+.filters .select:focus {
+  border-color: #2e4e4e;
+  outline: none;
+}
+
+.filters .simulado-btn {
+  background: #2e4e4e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.filters .simulado-btn:hover {
+  background: #000;
+}

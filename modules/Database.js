@@ -5,6 +5,60 @@ const bcrypt = require('bcrypt');
 const { tr } = require('zod/v4/locales');
 
 class Database {
+    static dificuldades = {
+        getAll: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const dificuldades = await Dificuldade.findAll();
+                res.status(200).json(dificuldades);
+            } catch (error) {
+                res.status(500).json({ message: 'Erro interno ao buscar dificuldades', error: error.message });
+            }
+        },
+        create: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const { nivel } = req.body;
+                if (!nivel) {
+                    return res.status(400).json({ message: 'O nível da dificuldade é obrigatório.' });
+                }
+                const novaDificuldade = await Dificuldade.create({ nivel });
+                res.status(201).json(novaDificuldade);
+            } catch (error) {
+                res.status(400).json({ message: 'Erro ao criar dificuldade', error: error.message });
+            }
+        },
+        update: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const { id } = req.params;
+                const { nivel } = req.body;
+                const [updated] = await Dificuldade.update({ nivel }, { where: { id_dificuldade: id } });
+                if (updated) {
+                    const updatedDificuldade = await Dificuldade.findByPk(id);
+                    res.status(200).json(updatedDificuldade);
+                } else {
+                    res.status(404).json({ message: 'Dificuldade não encontrada' });
+                }
+            } catch (error) {
+                res.status(400).json({ message: 'Erro ao atualizar dificuldade', error: error.message });
+            }
+        },
+        delete: async (req, res) => {
+            try {
+                const { Dificuldade } = require('../models');
+                const { id } = req.params;
+                const deleted = await Dificuldade.destroy({ where: { id_dificuldade: id } });
+                if (deleted) {
+                    res.status(204).send();
+                } else {
+                    res.status(404).json({ message: 'Dificuldade não encontrada' });
+                }
+            } catch (error) {
+                res.status(500).json({ message: 'Erro ao deletar dificuldade', error: error.message });
+            }
+        }
+    }
     static questoes = {
         delete: async (req, res) => {
             try {
