@@ -1,81 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!--========== BOX ICONS ==========-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <!--========== BOX ICONS ==========-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
 
-    <!--========== CSS ==========-->
-    <link rel="stylesheet" href="/css/global.css">
+  <!--========== CSS ==========-->
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/simulado/simulados.css">
 
-    <link rel="stylesheet" href="/css/simulado/simulados.css">
-    <title>Simulados - IFVest</title>
+  <title>Simulados - IFVest</title>
 </head>
 
 <body>
-    <style>
+  <style>
+    /* Estilos futuros podem ser adicionados aqui */
+  </style>
 
-    </style>
+  <!--========== CONTENTS ==========-->
+  <main>
+    <h1 class="uk-heading-divider">Selecione um simulado</h1>
+
+    <div class="filtros">
+      <form action="/simulados/visualizar?titulo=" method="GET">
+        <label for="titulo">Buscar:</label>
+        <input type="text" id="titulo" name="titulo" required maxlength="100" aria-label="Campo de busca por título do simulado">
+        <button type="submit" aria-label="Buscar simulados pelo título">
+          <i class='bx bx-search'></i> Pesquisar
+        </button>
+      </form>
+    </div>
+
+    <table class="uk-table uk-table-striped">
+      <thead>
+        <tr>
+          <!-- <th scope="col">Título</th>  Adicionado scope para acessibilidade na tabela -->
+          <th scope="col">Descrição</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% simulados.forEach(simulado => { %>
+          <tr>
+            <td><%= simulado.titulo %></td>
+            <td><%= simulado.descricao %></td>
+            <td>
+              <a href="/simulados/<%= simulado.id_simulado %>/fazer"
+                 class="simulado-icon"
+                 aria-label="Iniciar simulado <%= simulado.titulo %>">
+                <i class="fas fa-play"></i> Fazer Simulado
+              </a>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+
     
-        <!--========== CONTENTS ==========-->
-        <main>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="/css/global.css"> 
+  </main>
 
-            <h1 class="uk-heading-divider">Selecione um simulado</h1>
-            <div class="filtros">
-                <form action="/simulados/visualizar?titulo=" method="GET">
-                    <label for="titulo">Buscar:</label>
-                    <input type="text" id="titulo" name="titulo" required maxlength="100">
-                    <button type="submit"><i class='bx bx-search'></i> Pesquisar</button>
-                </form>
-               
-            </div>
-          
-            <table class="uk-table uk-table-striped">
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Descricao</th>
-       
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% simulados.forEach(simulado => { %>
-                        <tr>
-                            <td><%= simulado.titulo %></td>
-                            <td><%= simulado.descricao %></td>
-                     
-                            <td>
-                              
-                                    <a href="/simulados/<%= simulado.id_simulado %>/fazer" class="simulado-icon">
-                                        <i class="fas fa-play"></i> Fazer Simulado
-                                    </a>
-                        
-                       
-                            </td>
-                        </tr>
-                    <% }); %>
-                </tbody>
-            </table>
-
-            
-
-
-
-
-            <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
-            </div>
-
-            
-            <link rel="stylesheet" href="/css/global.css">
-        </main>
-
-        <!--========== MAIN JS ==========-->
-        <script src="/js/main.js"></script>
+  <!--========== MAIN JS ==========-->
+  <script src="/js/main.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
   <meta charset="UTF-8">
@@ -13,86 +13,101 @@
 </head>
 
 <body>
-  
-      <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
-                <script>
-                    window.onload = function() {
-                        alert("<%= errorMessage %>");
-                    };
-                </script>
-            <% } %>
-    <div class="form-container" id="formSection">
+  <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+    <!-- Feedback de erro exibido ao carregar a página -->
+    <script>
+      window.onload = function() {
+        alert("<%= errorMessage %>");
+      };
+    </script>
+  <% } %>
+
+  <!-- Adicionado <main> para conteúdo principal da página -->
+  <main>
+    
+    <section class="form-container" id="formSection">
       <h1>Criar Simulado</h1>
+
       <form id="simuladoForm" action="/api/simulado" method="POST">
+        <!-- Labels associados corretamente aos inputs com for/id -->
         <label for="titulo">Título do Simulado:</label>
         <input type="text" id="titulo" name="titulo" required maxlength="100">
+
         <label for="descricao">Descrição:</label>
         <textarea id="descricao" name="descricao" rows="5" required maxlength="1000"></textarea>
+
         <label for="tipo">Selecione o tipo:</label>
         <select name="tipo" id="tipo" required>
-          <option value="Aleatorio" selected>Aleatoria</option>
+          <option value="Aleatorio" selected>Aleatória</option>
           <option value="Dissertativo">Dissertativa</option>
           <option value="Objetivo">Objetiva</option>
         </select>
+
         <label for="modo">Selecione o Modo:</label>
         <select name="modo" id="modo" required>
           <option value="1">Normal</option>
-          <option value="2">Aleatorio</option>
+          <option value="2">Aleatório</option>
         </select>
-        <!-- Hidden input for selected question IDs -->
-        <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
-        <button type="button" onclick="goToNewContent()">Adicionar Questões</button>
-      </form>
-    </div>
 
-    <div class="new-content" id="newContentSection">
+      
+        <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
+
+        <!-- Botão com aria-label para descrever sua função -->
+        <button type="button" onclick="goToNewContent()" aria-label="Ir para seção de adicionar questões">Adicionar Questões</button>
+      </form>
+    </section>
+
+    <!-- Seção para associar questões ao simulado -->
+    <section class="new-content" id="newContentSection">
       <h1 class="uk-heading-divider">Associar Questões</h1>
+
       <div class="filter-container">
-        <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
-          <script>
-            window.onload = function () {
-              alert("<%= errorMessage %>");
-            };
-          </script>
-          <% } %>
-            <input type="text" name="tituloFiltro" id="tituloFiltro" placeholder="Filtrar por título">
-            <button class="botaoFiltro" onclick="applyFilters()">Filtrar</button>
+        <!-- Campo de filtro com aria-label para leitores de tela -->
+        <input type="text" name="tituloFiltro" id="tituloFiltro" placeholder="Filtrar por título" aria-label="Campo para filtrar questões por título">
+
+        <!-- Botão com aria-label para descrever sua ação -->
+        <button class="botaoFiltro" onclick="applyFilters()" aria-label="Aplicar filtro de título">Filtrar</button>
       </div>
 
-      <div id="contador-questoes-selecionadas">Questões Selecionadas: <span id="numero-questoes-selecionadas">0</span>
+      <!-- Adicionado aria-live para que leitores de tela anunciem mudanças no contador -->
+      <div id="contador-questoes-selecionadas" aria-live="polite">
+        Questões Selecionadas: <span id="numero-questoes-selecionadas">0</span>
       </div>
 
       <div class="table-container">
         <table class="uk-table uk-table-striped" id="questoesTable">
           <thead>
             <tr>
-              <th><input type="checkbox" id="selectAll"></th>
-              <th>Título</th>
-              <th>Tipo</th>
-              <th>Questão</th>
-              <th>Tópico</th>
+              <!-- Adicionado scope="col" para cabeçalhos de tabela -->
+              <th scope="col"><input type="checkbox" id="selectAll" aria-label="Selecionar todas as questões"></th>
+              <th scope="col">Título</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Questão</th>
+              <th scope="col">Tópico</th>
             </tr>
           </thead>
           <tbody id="questoesBody"></tbody>
         </table>
       </div>
+
       <div class="pagination" id="pagination"></div>
 
       <div class="button-container">
-        <button type="button" class="voltar-btn" onclick="goBack()">Voltar</button>
-        <button type="button" id="submitButton" class="salvar-btn" onclick="saveSimulado()">Salvar</button>
+        <!-- Botões com aria-label para descrever suas ações -->
+        <button type="button" class="voltar-btn" onclick="goBack()" aria-label="Voltar para o formulário">Voltar</button>
+        <button type="button" id="submitButton" class="salvar-btn" onclick="saveSimulado()" aria-label="Salvar simulado com questões selecionadas">Salvar</button>
       </div>
-    </div>
+    </section>
+  </main>
 
-<script>
-  window.questoes = <%- JSON.stringify(questoes || []) %>;
-  console.log('Questoes:', window.questoes);
-</script>
-<script src="/js/simulado/criarSimulado.js"></script>
-<script src="/js/main.js"></script>
-<script src="/js/validations/validate.js"></script>
-
-
+  
+  <script>
+    window.questoes = <%- JSON.stringify(questoes || []) %>;
+    console.log('Questoes:', window.questoes);
+  </script>
+  <script src="/js/simulado/criarSimulado.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/validations/validate.js"></script>
 </body>
-
 </html>
+
