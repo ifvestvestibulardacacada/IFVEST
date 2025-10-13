@@ -1,0 +1,31 @@
+<h1>Teste dos uploads</h1>
+
+<form action="/revisao/upload" method="POST" id="uploadForm">
+    <div class="input-group mb-3">
+      <input type="file" class="form-control" id="inputGroupFile" name="file">
+      <label class="input-group-text" for="inputGroupFile02">Upload</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+
+<script>
+    document.querySelector('#uploadForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Impede o envio padrão do formulário
+
+        const formData = new FormData(this);
+
+        fetch('/revisao/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            alert('Upload realizado com sucesso! Link: ' + data.link);
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            alert('Erro ao realizar upload.');
+        });
+    });
+</script>
