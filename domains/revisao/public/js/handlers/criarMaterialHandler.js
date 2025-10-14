@@ -6,9 +6,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const DELIMITER = '---REFERENCES---';
 
         // Coleta os dados do formulário
-        const mainContent = localStorage.getItem('EditorContent') || '';
-        const references = localStorage.getItem('LinksContent') || '';
-        
+        const mainContent = sessionStorage.getItem('EditorContent') || '';
+        const references = sessionStorage.getItem('LinksContent') || '';
+
         // Concatena o conteúdo principal e as referências
         const combinedContent = `${mainContent}\n${DELIMITER}\n${references}`;
 

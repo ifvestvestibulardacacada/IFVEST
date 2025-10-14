@@ -48,51 +48,6 @@ app.use(session(sessionOptions));
 
 app.use(cors({ origin: 'http://localhost:3000' }))
 
-// app.use(helmet({
-//     contentSecurityPolicy: {
-//         directives: {
-//             defaultSrc: ["'self'"],
-//             scriptSrc: [
-//                 "'self'",
-//                 "'unsafe-inline'",
-//                 "'unsafe-eval'",
-//                 "https://cdn.jsdelivr.net",
-//                 "https://cdnjs.cloudflare.com",
-//                 "https://cdn-uicons.flaticon.com",
-//                 "https://code.jquery.com",
-//                 "https://unpkg.com",
-//                 "'self' js/"
-//             ],
-//             scriptSrcAttr: ["'self'", "'unsafe-inline'"], //
-//             styleSrc: [
-//                 "'self'",
-//                 "'unsafe-inline'",
-//                 "https://cdn.jsdelivr.net",
-//                 "https://cdnjs.cloudflare.com",
-//                 "https://cdn-uicons.flaticon.com",
-//                 "https://fonts.googleapis.com"
-//             ],
-//             fontSrc: [
-//                 "'self'",
-//                 "https:",
-//                 "data:",
-//                 "https://fonts.gstatic.com"
-//             ],
-//             imgSrc: ["'self'", "data:", "https:"],
-//             connectSrc: ["'self'"],
-//             frameSrc: ["'self'"],
-//             objectSrc: ["'none'"],
-//             mediaSrc: ["'self'"],
-//             workerSrc: ["'self'"],
-//             formAction: ["'self'"],
-//             frameAncestors: ["'self'"]
-//         }
-//     },
-//     crossOriginEmbedderPolicy: false,
-//     crossOriginResourcePolicy: { policy: "cross-origin" }
-// }));
-
-
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
@@ -101,7 +56,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static('/home/ifvestjc/public_html/uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 app.use(methodOverride('_method'));

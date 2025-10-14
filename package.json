@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
+    "build:editor": "cd editor_markdown && npm run build",
     "start": "node index.js",
     "db:create": "npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all",
     "deploy": "npm install && npx sequelize-cli db:migrate"

@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // variaveis globais de paginacao
-    const assuntosPerPage = 9;
-    const materiaisPerPage = 6;
+    const assuntosPerPage = 6;
+    const materiaisPerPage = 4;
     let currentAssuntosPage = 1;
     let currentMateriaisPage = 1;
 

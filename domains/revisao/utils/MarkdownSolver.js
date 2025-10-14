@@ -42,23 +42,17 @@ class MarkdownSolver {
     return html
   }
   static getViteAssets() {
-  const manifestConfigs = [
-    {
-      manifestPath: path.join(__dirname, '..', '..', '..', 'editor_markdown', 'dist', '.vite', 'manifest.json'),
-      entry: 'src/main.jsx',
-    
-    },
-    {
-      manifestPath: path.join(__dirname, '..', '..', '..', 'editor_links', 'dist', '.vite', 'manifest.json'),
-      entry: 'src/App.jsx',
-    
-    }
-  ];
+    const manifestConfig = [
+      {
+        manifestPath: path.join(__dirname, '..', '..', '..', 'editor_markdown', 'dist', '.vite', 'manifest.json'),
+        entry: 'src/main.jsx',
+      },
+    ];
 
-  const jsPath = [];
-  const cssPaths = [];
+    const jsPath = [];
+    const cssPaths = [];
 
-  for (const { manifestPath, entry } of manifestConfigs) {
+    const { manifestPath, entry } = manifestConfig[0]; // Access the single config object
     try {
       // Check if manifest file exists
       if (!fs.existsSync(manifestPath)) {
@@ -83,10 +77,9 @@ class MarkdownSolver {
       console.error('Error processing Vite manifest:', error.message);
       // Skip adding paths for failed manifests
     }
-  }
 
-  return { jsPath, cssPaths };
-}
+    return { jsPath, cssPaths };
+  }
 
   static Editor = () => { }
 }

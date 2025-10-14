@@ -5,23 +5,29 @@ import { useEffect } from 'react';
 
 function EditorDeLinks() {
 
-    const [markdown, setMarkdown] = useState(() => {
-      const savedMarkdown = localStorage.getItem('LinksContent');
-      return savedMarkdown || '# Digite aqui os links ...';
+    const [reference, setReference] = useState(() => {
+      const savedMarkdown = window.Material ? window.Material.referencias : '# Digite aqui os links ...';
+      return savedMarkdown ;
     });
 
-  
-    useEffect(() => {
-      localStorage.setItem('LinksContent', markdown);
-    }, [markdown]);
-  
+
+
+  useEffect(() => {
+    // Dispara um evento personalizado
+    const event = new CustomEvent('referenceContentChange', {
+      detail: { content: reference }
+    });
+    window.dispatchEvent(event);
+  }, [reference]);
+
+
  
 
   return (
     <div  data-color-mode="light">
       <MDEditor
-        value={markdown}
-        onChange={setMarkdown}
+        value={reference}
+        onChange={setReference}
         commands={[
           commands.bold,
           commands.italic,
@@ -38,10 +44,3 @@ function EditorDeLinks() {
 }
 
 export default EditorDeLinks;
-
-const App = () => {
-  return <EditorDeLinks />;
-};
-
-const links = createRoot(document.getElementById('link'));
-links.render(<App />);

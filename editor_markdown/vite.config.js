@@ -9,5 +9,12 @@ export default defineConfig({
     rollupOptions: {
       input: 'src/main.jsx'  // Adjust if your entry is different (e.g., src/index.jsx)
     }
+  },
+  server: {
+        proxy: {
+            '/revisao': 'http://localhost:3000/revisao',
+            '/uploads': 'http://localhost:3000/uploads',
+
+        },
   }
 })

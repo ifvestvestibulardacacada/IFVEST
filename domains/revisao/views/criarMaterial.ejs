@@ -5,9 +5,9 @@
     <!--========== CSS ==========-->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
     <link rel="stylesheet" href="/css/revisao/criar_material.css">
-<%- include('./editorPath') %>
+    <%- include('./editorPath') %>
 
-    <title>Criar Material - Módulo de Revisão de Conteúdo - IFVest</title>
+        <title>Criar Material - Módulo de Revisão de Conteúdo - IFVest</title>
 </head>
 
 <body>
@@ -47,7 +47,11 @@
                             <label for="palavrasChave" class="form-label">Palavras-chave</label>
                             <input type="text" class="form-control" id="palavrasChave" list="palavrasChaveList"
                                 placeholder="trovador, cantigas, vassalagem">
-                            <datalist id="palavrasChaveList"></datalist>
+                            <datalist id="palavrasChaveList">
+                                <% palavrasChave.forEach(palavra => { %>
+                                    <option value="<%= palavra %>">
+                                <% }); %>
+                            </datalist>
                         </div>
                         <div class="col-md-4">
                             <button type="button" class="btn btn-primary" onclick="addKeyword()">Adicionar
@@ -59,34 +63,29 @@
                     </div>
                 </div>
 
-                <!-- Editor Markdown -->
-                <div class="form-group">
-                    <label for="markdownEditor">Conteúdo do Material (Markdown)</label>
-                    <div id="editor"></div>
-                </div>
-                <!-- Materiais Externos -->
-                <div class="form-group">
-                    <label for="linksExternos">Referências (um texto e um link)</label>
-                    <div id="link"></div>
-                </div>
-                <br>
+
+                                <div id="editor"></div>
+
 
                 <button type="button" id="submitButton" class="btn btn-primary w-100">Criar Material</button>
             </form>
         </div>
     </main>
-    <script>
-        window.Assunto = <%- JSON.stringify(Assuntos || []) %>;
-        window.palavrasChave = <%- JSON.stringify(palavrasChave) %>;
 
-        console.log( <%- JSON.stringify(cssPaths || []) %>)
-        console.log( <%- JSON.stringify(jsPath || '') %>)
-    </script>
 
     <!--========== MAIN JS ==========-->
     <script src="/revisao/js/criar_material.js"></script>
-    <script src="/js/handlers/criarMaterialHandler.js"></script>
+    <script src="/revisao/js/handlers/criarMaterialHandler.js"></script>
     <script src="/js/validations/validate.js"></script>
+    <script>
+        window.addEventListener('editorContentChange', (event) => {
+            window.editorContent = event.detail.content;
+        });
+
+        window.addEventListener('referenceContentChange', (event) => {
+            window.referenceContent = event.detail.content;
+        });
+    </script>
 </body>
 
 </html>

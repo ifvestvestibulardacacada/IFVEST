@@ -3,17 +3,18 @@ import MDEditor from '@uiw/react-md-editor';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import "@uiw/react-md-editor/markdown-editor.css";
-import {filteredCommands } from '../utils/editorCommands';
+import { filteredCommands } from '../utils/editorCommands';
 import ImageSizeModal from './ImageSizeModal';
 import EquationEditor from './EquationEditor';
 import { handleImageUpload } from '../utils/imageUtils';
 import symbolButtons from '../utils/symbolButtons';
 
 const MarkdownEditor = () => {
-  const [markdown, setMarkdown] = useState(() => {
-    const savedMarkdown = localStorage.getItem('EditorContent');
-    return savedMarkdown || 'Ex: # Digite aqui o material ...';
-  });
+const [markdown, setMarkdown] = useState(() => {
+  const savedMarkdown = window.Material ? window.Material.conteudo_markdown : 'Ex: # Digite aqui o material ...';
+  return savedMarkdown ;
+});
+
   const [showEquationEditor, setShowEquationEditor] = useState({
     visible: false,
     insertLatex: null,
@@ -21,8 +22,13 @@ const MarkdownEditor = () => {
   const [showImageSizeModal, setShowImageSizeModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
+
   useEffect(() => {
-    localStorage.setItem('EditorContent', markdown);
+    // Dispara um evento personalizado
+    const event = new CustomEvent('editorContentChange', {
+      detail: { content: markdown }
+    });
+    window.dispatchEvent(event);
   }, [markdown]);
 
   const handleInsertImage = async ({ width, height }) => {
@@ -46,8 +52,8 @@ const MarkdownEditor = () => {
           cmd.name === 'custom-image-upload'
             ? { ...cmd, execute: (state, api) => cmd.execute(state, api, setShowImageSizeModal, setSelectedFile) }
             : cmd.name === 'custom-equation-editor'
-            ? { ...cmd, execute: (state, api) => cmd.execute(state, api, setShowEquationEditor) }
-            : cmd
+              ? { ...cmd, execute: (state, api) => cmd.execute(state, api, setShowEquationEditor) }
+              : cmd
         )}
         previewOptions={{
           remarkPlugins: [remarkMath],

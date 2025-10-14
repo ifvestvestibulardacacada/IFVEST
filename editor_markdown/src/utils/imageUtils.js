@@ -21,7 +21,7 @@ export const handleImageUpload = async (file, width, height) => {
     const formData = new FormData();
     formData.append('image', resizedFile);
 
-    const response = await axios.post('/Uploads/editor', formData, {
+    const response = await axios.post('/uploads/editor', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

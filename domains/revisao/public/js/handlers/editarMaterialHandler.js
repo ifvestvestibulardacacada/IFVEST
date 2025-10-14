@@ -5,8 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const DELIMITER = '---REFERENCES---';
 
         // Coleta os dados do formulário
-        const mainContent = localStorage.getItem('EditorContent') || '';
-        const references = localStorage.getItem('LinksContent') || '';
+        const mainContent = sessionStorage.getItem('EditorContent') || '';
+        const references = sessionStorage.getItem('LinksContent') || '';
 
         // Concatena o conteúdo principal e as referências
         const combinedContent = `${mainContent}\n${DELIMITER}\n${references}`;
@@ -15,9 +15,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const formData = {
             titulo: document.getElementById('materialTitulo').value,
             assuntoId: document.getElementById('selectAssunto').value,
-            palavrasChave: tags, // Array of keywords from the tags array
-            conteudo: localStorage.getItem('EditorContent') || '', // Markdown content from localStorage
-            linksExternos: document.getElementById('linksExternos').value.split('\n').filter(link => link.trim() !== '') // Split links into an array, remove empty lines
+            palavrasChave: window.getKeywords(), // Array of keywords from the tags array
+            conteudo: combinedContent, // Markdown content from localStorage
+             // Split links into an array, remove empty lines
         };
 
         // Validate required fields

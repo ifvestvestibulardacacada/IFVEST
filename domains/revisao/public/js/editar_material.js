@@ -30,16 +30,6 @@
         // Populate tags
         renderTags();
         
-        // Set markdown content in localStorage for the editor
-        localStorage.setItem('EditorContent', window.Material.conteudo_markdown);
-        localStorage.setItem('LinksContent', window.Material.referencias);
-        // Ensure iframe reloads to pick up localStorage changes
-        // const iframe = document.getElementById('myIframe');
-        // iframe.src = iframe.src; // Force reload to trigger editor initialization
-
-        // Handle form submission
-
-        // loading assunto
         document.querySelector(`#selectAssunto option[value="${window.Material.id_assunto}"]`).selected = true
      
     });
