@@ -117,12 +117,12 @@
                     </div>
         </main>
         <%- include('../partials/modal_topicos') %>
-            <script src="/js/professor/initializeQuill.js"></script>
-            <script src="/js/professor/dropdownEditar.js"></script>
-            <script src="/js/professor/editarQuestao.js"></script>
+            <script src="/simulados/js/professor/initializeQuill.js"></script>
+            <script src="/simulados/js/professor/dropdownEditar.js"></script>
+            <script src="/simulados/js/professor/editarQuestao.js"></script>
             <script src="/js/main.js"></script>
-            <script src="/js/professor/editor.js"></script>
-            <script type="module" src="/js/editor_equacao/index.js"></script>
+            <script src="/simulados/js/professor/editor.js"></script>
+            <script type="module" src="/simulados/js/editor_equacao/index.js"></script>
 
             <script>
 
@@ -142,6 +142,21 @@
                     const area = document.getElementById('selectArea').value;
                     loadTopicDropdown(area);
                 });
+
+                                const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+                const appendAlert = (message, type) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = [
+                        `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
+                        `   <div>${message}</div>`,
+                        '    <button type="button" class="close" data-dismiss="alert" aria-label="Close">',
+                        '<span aria-hidden="true">&times;</span>',
+                        '</button>',
+                        '</div>'
+                    ].join('');
+
+                    alertPlaceholder.append(wrapper);
+                };
             </script>
 
 </body>

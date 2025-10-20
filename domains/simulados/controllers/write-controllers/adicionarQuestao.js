@@ -1,4 +1,4 @@
-const { Questao, Opcao } = require('../../../../models');
+const { Questao, Opcao, sequelize } = require('../../../../models');
 
 
 module.exports = async (req, res) => {

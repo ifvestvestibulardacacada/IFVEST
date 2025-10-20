@@ -265,7 +265,7 @@ function validateTitulo(value) {
 }
 
 function validateDescricao(value) {
-  if (!value) return "O título não pode ser vazio";
+  if (!value) return "Descrição não pode ser vazio";
   if (value.length < 10) return "A descrição deve ter pelo menos 10 caracteres";
   if (value.length > 1000) return "A descrição não pode exceder 1000 caracteres";
   if (!patterns.textPattern.test(value)) return "Formato da descrição inválido";

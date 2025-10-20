@@ -11,15 +11,22 @@ import symbolButtons from '../utils/symbolButtons';
 
 const MarkdownEditor = () => {
 const [markdown, setMarkdown] = useState(() => {
-  const savedMarkdown = window.Material ? window.Material.conteudo_markdown : 'Ex: # Digite aqui o material ...';
+  const savedMarkdown = 
+  window.Material 
+  ? window.Material.conteudo_markdown 
+  : 'Ex: # Digite aqui o material ...';
   return savedMarkdown ;
 });
 
-  const [showEquationEditor, setShowEquationEditor] = useState({
+  const [showEquationEditor, 
+    setShowEquationEditor] 
+    = useState({
     visible: false,
     insertLatex: null,
   });
-  const [showImageSizeModal, setShowImageSizeModal] = useState(false);
+  const [showImageSizeModal, 
+    setShowImageSizeModal] 
+    = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
 
@@ -33,7 +40,8 @@ const [markdown, setMarkdown] = useState(() => {
 
   const handleInsertImage = async ({ width, height }) => {
     if (selectedFile) {
-      const markdownImage = await handleImageUpload(selectedFile, width, height);
+      const markdownImage = 
+      await handleImageUpload(selectedFile, width, height);
       if (markdownImage) {
         setMarkdown((prev) => prev + markdownImage);
         setShowImageSizeModal(false);
@@ -50,9 +58,15 @@ const [markdown, setMarkdown] = useState(() => {
         onChange={setMarkdown}
         commands={filteredCommands.map(cmd =>
           cmd.name === 'custom-image-upload'
-            ? { ...cmd, execute: (state, api) => cmd.execute(state, api, setShowImageSizeModal, setSelectedFile) }
+            ? { ...cmd, 
+              execute: (state, api) => 
+                cmd.execute(state, api, 
+                  setShowImageSizeModal, 
+                  setSelectedFile) }
             : cmd.name === 'custom-equation-editor'
-              ? { ...cmd, execute: (state, api) => cmd.execute(state, api, setShowEquationEditor) }
+              ? { ...cmd, 
+                execute: (state, api) => 
+                  cmd.execute(state, api, setShowEquationEditor) }
               : cmd
         )}
         previewOptions={{
@@ -67,7 +81,8 @@ const [markdown, setMarkdown] = useState(() => {
               showEquationEditor.insertLatex(latex);
               setShowEquationEditor({ visible: false, insertLatex: null });
             }}
-            onClose={() => setShowEquationEditor({ visible: false, insertLatex: null })}
+            onClose={() => 
+              setShowEquationEditor({ visible: false, insertLatex: null })}
             symbols={symbolButtons}
           />
         </div>

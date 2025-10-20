@@ -154,6 +154,7 @@ async function initializeEditQuestionEditors(questao, opcoes) {
                 }
             })
                 .then(response => {
+                          if (response.status === 201 || response.status === 200) {
                     console.log('Success:', response.data);
                     alert('Questão registrada com sucesso!');
                     document.getElementById('questaoForm').reset();
@@ -169,6 +170,7 @@ async function initializeEditQuestionEditors(questao, opcoes) {
                     }
                     window.location.href = '/professor/questoes';
                     return;
+                }
                 })
                 .catch(error => {
                     console.error('Error:', error.response?.data || error.message);

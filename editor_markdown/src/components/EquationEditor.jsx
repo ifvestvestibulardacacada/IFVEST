@@ -5,15 +5,18 @@ import katex from 'katex';
 import 'katex/dist/katex.min.css';
 
 function EquationEditor({ onInsert, onClose, symbols }) {
-  const [equation, setEquation] = useState('');
-  const [isSymbolsVisible, setIsSymbolsVisible] = useState(true);
+  const [equation, 
+    setEquation] = useState('');
+  const [isSymbolsVisible, 
+    setIsSymbolsVisible] = useState(true);
   const equationPreviewRef = useRef(null);
   const equationInputRef = useRef(null);
 
   // Renderiza o LaTeX na div de visualização
   const renderLatex = () => {
     try {
-      return katex.renderToString(equation, { throwOnError: false });
+      return katex.renderToString(equation, 
+        { throwOnError: false });
     } catch (error) {
       return 'Invalid LaTeX';
     }
@@ -53,12 +56,19 @@ function EquationEditor({ onInsert, onClose, symbols }) {
 
   return (
     <div className="editor-container">
-      <div className={`symbols-container ${isSymbolsVisible ? '' : 'hide'}`}>
-        <SymbolSection symbols={symbols} onInsert={handleInsertSymbol} />
+      <div className={
+        `symbols-container ${isSymbolsVisible 
+        ? '' : 'hide'}`}>
+        <SymbolSection symbols={symbols} 
+        onInsert={handleInsertSymbol} />
       </div>
       <div className="equation-editor">
-        <button type='button' className="editor-close-btn" onClick={onClose}>×</button>
-        <div className="equation-preview" ref={equationPreviewRef}></div>
+        <button type='button' 
+        className="editor-close-btn" 
+        onClick={onClose}>×</button>
+        <div className="equation-preview" 
+        ref={equationPreviewRef}>
+        </div>
         <div className="item">
           <textarea
             id="equation-input"
@@ -68,12 +78,18 @@ function EquationEditor({ onInsert, onClose, symbols }) {
             placeholder="Digite o LaTeX aqui..."
           />
           <div className="equation-btn-box">
-            <button type='button' onClick={() => setIsSymbolsVisible(!isSymbolsVisible)}>☰</button>
-            <button type='button' onClick={handleClear}>C</button>
+            <button type='button' 
+            onClick={() => 
+            setIsSymbolsVisible(!isSymbolsVisible)}>
+              ☰</button>
+            <button type='button' 
+            onClick={handleClear}>C</button>
           </div>
         </div>
         <div className="item">
-          <button type='button' className="generator-btn" onClick={handleInsert}>
+          <button type='button' 
+          className="generator-btn" 
+          onClick={handleInsert}>
             Inserir
           </button>
         </div>

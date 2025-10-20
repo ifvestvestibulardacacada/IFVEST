@@ -31,7 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const response = await axios.patch(`/revisao/editar_material/${window.Material.id_conteudo}`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json' 
                 }
             });
 

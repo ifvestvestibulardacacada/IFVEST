@@ -1,194 +1,302 @@
-body {
-    font-family: Arial, sans-serif;
+/* Reset e configurações básicas */
+* {
+    box-sizing: border-box;
     margin: 0;
-    padding: 2rem;
-    background-color: #f5f5f5;
+    padding: 0;
+}
+
+body {
+    font-family: 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.4;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #000;
 }
 
 main {
-    max-width: 900px;
-    margin: auto;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 10mm;
     background: #fff;
-    padding: 2rem;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow-wrap: break-word;
-    word-wrap: break-word;
 }
 
-
-.title-div h1 {
-    font-size: 40px;
-    text-align: center;
-    color: #333;
-}
-
-/* Organização das questões em duas colunas */
-.questoes-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    /* Mantém duas colunas */
-    gap: 1.5rem;
-    /* Reduz o espaçamento entre as colunas */
-}
-
-
-/* Ajuste das margens para compactar */
-.name-div {
+/* Controles de interface */
+#button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem;
     margin-bottom: 1rem;
-    /* Reduz o espaçamento inferior */
-    padding-bottom: 0.5rem;
     border-bottom: 1px solid #ccc;
 }
 
+#generate-pdf {
+    padding: 8px 16px;
+    font-size: 12pt;
+    border: 1px solid #000;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
 
-/* Justificação do texto nas perguntas */
+/* Cabeçalho estilo ENEM */
+.title-div {
+    text-align: center;
+    margin-bottom: 20mm;
+    border-bottom: 2px solid #000;
+    padding-bottom: 5mm;
+}
+
+.title-div h1 {
+    font-size: 18pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5mm;
+}
+
+/* Instruções */
+.instrucoes {
+    font-size: 11pt;
+    text-align: justify;
+    margin-bottom: 15mm;
+    padding: 8mm;
+    border: 1px solid #000;
+    background-color: #f9f9f9;
+}
+
+.instrucoes p {
+    margin: 0;
+}
+
+/* Container das questões */
+.questoes-container {
+    display: block;
+}
+
+/* Questão individual - CRÍTICO para não quebrar */
+.questao-wrapper {
+    margin-bottom: 8mm;
+    padding-bottom: 5mm;
+    border-bottom: 1px solid #ddd;
+    
+    /* Propriedades para evitar quebra de página */
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    display: block;
+    width: 100%;
+    overflow: visible;
+}
+
+.questao-header {
+    margin-bottom: 3mm;
+}
+
+.questao-numero {
+    font-weight: bold;
+    font-size: 14pt;
+    color: #000;
+    text-transform: uppercase;
+    margin-bottom: 2mm;
+}
+
+.questao-content {
+    width: 100%;
+}
+
+.titulo {
+    font-weight: bold;
+    font-size: 12pt;
+    margin-bottom: 3mm;
+}
+
 .titulo p {
+    margin: 0;
     text-align: justify;
 }
 
-
-.name {
-    font-size: 12px;
+.pergunta {
+    font-size: 12pt;
     text-align: justify;
-    /* Justificar o texto */
+    margin-bottom: 5mm;
+    line-height: 1.5;
 }
 
-/* Ajuste no layout das opções */
+/* Opções das questões objetivas */
+.opcoes-container {
+    margin-left: 5mm;
+}
+
 .opcao {
     display: flex;
-    align-items: center;
-    margin-bottom: 0.8rem;
-    /* Reduz espaço entre as opções */
-    text-align: justify;
+    align-items: flex-start;
+    margin-bottom: 3mm;
+    page-break-inside: avoid;
+    break-inside: avoid;
 }
 
 .letra {
     font-weight: bold;
-    margin-right: 8px;
-    font-size: 12px;
-    /* Reduz o tamanho das letras das opções */
+    margin-right: 5mm;
+    font-size: 12pt;
+    min-width: 8mm;
+    flex-shrink: 0;
 }
 
 .radio-input {
-    margin-right: 8px;
-    /* Reduz o espaço entre o rádio e o texto */
+    margin-right: 3mm;
+    margin-top: 2px;
+    flex-shrink: 0;
 }
-
 
 .opcao-texto {
-    font-size: 12px;
-    color: #333;
+    font-size: 12pt;
     text-align: justify;
+    line-height: 1.4;
+    flex: 1;
 }
 
-/* Ajuste no textarea */
-textarea {
+/* Questões dissertativas */
+.resposta-dissertativa {
+    margin-top: 5mm;
+}
+
+.resposta-dissertativa textarea {
     width: 100%;
-    height: 100px;
-    /* Diminui a altura para caber mais conteúdo */
-    margin-top: 0.5rem;
-    padding: 8px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    min-height: 50mm;
+    padding: 3mm;
+    font-size: 12pt;
+    font-family: 'Times New Roman', serif;
+    border: 1px solid #000;
+    border-radius: 0;
+    line-height: 1.5;
+    resize: none;
+}
+
+/* Elementos Quill */
+.ql-container, .ql-editor {
+    height: auto !important;
+    overflow: visible !important;
+    font-size: 12pt !important;
+    font-family: 'Times New Roman', serif !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+.ql-editor p, .ql-editor div, .ql-editor span {
+    font-size: 12pt !important;
+    font-family: 'Times New Roman', serif !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
     text-align: justify;
 }
 
-
-/* Ajuste nos botões */
-.button1,
-.button2 {
-    width: 50%;
-    padding: 8px;
-    /* Reduz o padding para compactar */
-    font-size: 1rem;
-    /* Reduz o tamanho do texto dos botões */
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    margin-top: 20px;
-}
-
-.button1:hover {
-    background-color: #45a049;
-}
-
-.button2:hover {
-    background-color: #ff0000;
-}
-
-/* Imagens ajustadas para o tamanho do contêiner */
+/* Imagens */
 img {
-    max-width: 100%;
-    /* Garante que a imagem não ultrapasse o limite */
-    height: auto;
-}
-
-.button {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 12px;
-    border-radius: 5px;
-    border: 1px solid black;
-    color: black;
-    cursor: pointer;
-
-}
-
-
-main,
-.questoes-container,
-.form {
-    display: block !important;
-    overflow: visible !important;
+    max-width: 180mm !important;
     height: auto !important;
+    display: block;
+    margin: 3mm 0;
+    page-break-inside: avoid;
 }
 
-/* Garante que o container do Quill não limite a altura */
-.ql-container,
-.ql-editor {
-    height: auto !important;
-    overflow: visible !important;
+/* Tabelas */
+table {
+    width: 100% !important;
+    border-collapse: collapse;
+    margin: 3mm 0;
+    page-break-inside: avoid;
+    break-inside: avoid;
 }
 
-/* Mantém a regra principal para evitar quebra DENTRO da questão */
-.questao-wrapper {
-    /* Use o .name-div se não tiver criado o wrapper */
+table td, table th {
+    padding: 2mm;
+    border: 1px solid #000;
+    font-size: 11pt;
+    text-align: left;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+/* Código e fórmulas */
+pre, code {
+    font-family: 'Courier New', monospace;
+    font-size: 11pt;
+    white-space: pre-wrap;
+    word-break: break-all;
+    page-break-inside: avoid;
+}
+
+/* Classes para controle de quebra */
+.page-break-before {
+    page-break-before: always !important;
+    break-before: page !important;
+}
+
+.page-break-after {
+    page-break-after: always !important;
+    break-after: page !important;
+}
+
+.avoid-break {
     page-break-inside: avoid !important;
-    margin-top: 20px;
-    /* Adiciona um espaço para visualmente separar as questões */
+    break-inside: avoid !important;
 }
 
-    /* ... seus outros estilos ... */
-
-    /* Abordagem 1 (essencial) */
-    #questionario * {
-        box-sizing: border-box;
-    }
-
-    /* Abordagem 2 (para conteúdo específico) */
-    #questionario img {
-        max-width: 100% !important; /* Garante que imagens nunca ultrapassem o container */
-        height: auto !important;
-    }
-
-    #questionario pre, #questionario code {
-        white-space: pre-wrap !important;       /* Permite a quebra de linha em blocos de código */
-        word-break: break-all !important;      /* Força a quebra de palavras/linhas muito longas */
-    }
-
-    #questionario table {
-        table-layout: fixed !important;        /* Impede que o conteúdo da tabela defina sua largura */
-        width: 100% !important;
+/* Estilos específicos para PDF */
+@media print {
+    body {
+        margin: 0;
+        padding: 0;
+        background: white;
     }
     
-    #questionario p, #questionario div, #questionario li {
-        word-wrap: break-word !important; /* Quebra palavras muito longas que podem vazar */
+    main {
+        max-width: none;
+        width: 100%;
+        margin: 0;
+        padding: 10mm;
     }
+    
+    #button-container {
+        display: none !important;
+    }
+    
+    .questao-wrapper {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 8mm;
+        orphans: 3;
+        widows: 3;
+    }
+    
+    .opcao {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+    
+    img {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+    
+    table {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+    
+    tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+}
 
-    .pdf-page-break {
-        page-break-before: always !important;
-    }
+/* Estilos para elementos sem quebra */
+.required {
+    display: none;
+}

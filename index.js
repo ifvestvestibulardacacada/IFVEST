@@ -46,7 +46,7 @@ app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstra
 
 app.use(session(sessionOptions));
 
-app.use(cors({ origin: 'http://localhost:3000' }))
+
 
 
 app.set('view engine', 'ejs');
@@ -63,9 +63,6 @@ app.use(methodOverride('_method'));
 
 app.use(async (req, res, next) => {
     res.locals.currentPage = ''
-    if (req.method === 'GET') {
-        req.session.lastGetUrl = req.originalUrl;
-    }
     next();
 });
 
@@ -78,7 +75,9 @@ app.use("/simulados",  simuladosApp)
 app.use("/revisao", revisaoApp)
 app.use('/shared', sharedApp)
 
-
+app.use(cors({
+    origin: [ 'http://localhost:3000']
+}))
 
 
 app.listen(process.env.PORT || 3000

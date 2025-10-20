@@ -1,4 +1,4 @@
-const { Questao, Opcao, Topico, Area, QuestaoTopico } = require('../../../../models');
+const { Questao, Opcao, Topico, Area, QuestaoTopico , sequelize } = require('../../../../models');
 
 module.exports = async (req, res) => { // ! Antigo UpdateQuestaoController
                   const { id, titulo, pergunta, correta, respostas, area, topicos } = req.body;
