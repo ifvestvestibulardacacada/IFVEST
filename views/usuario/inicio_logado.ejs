@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR"> <!--  idioma para português brasileiro -->
 
 <head>
   <meta charset="UTF-8">
@@ -19,49 +19,40 @@
 
 <body>
 
-
   <main>
     <h1 class="mb-5 mt-5">Módulos disponíveis</h1>
-    
+
+    <!-- Removido <div> dentro de <a> para manter semântica correta -->
     <div class="colorful-container">
-      <a href="/simulados" class="colorful-btn">
-        <div>
-          Simulados
-        </div>
-      </a>
-      <a href="/revisao/" class="colorful-btn">
-        <div>
-          Revisão
-        </div>
-      </a>
+      <a href="/simulados" class="colorful-btn" aria-label="Acessar simulados"><div>Simulados</div></a>
+      <a href="/revisao/" class="colorful-btn" aria-label="Acessar revisão"><div>Revisão</div></a>
     </div>
 
     <h2 class="mb-3 mt-3">Opções temporárias de administração</h2>
 
     <div class="colorful-container">
-      <a href="/shared/areas/" class="colorful-btn">
-        <div>
-          Áreas
-        </div>
-      </a>
-      <a href="/shared/topicos/" class="colorful-btn">
-        <div>
-          Tópicos
-        </div>
-      </a>
-      <a href="/shared/assuntos/" class="colorful-btn">
-        <div>
-          Assuntos
-        </div>
-      </a>
+      <a href="/shared/areas/" class="colorful-btn" aria-label="Gerenciar áreas"><div>Áreas</div></a>
+      <a href="/shared/topicos/" class="colorful-btn" aria-label="Gerenciar tópicos"><div>Tópicos</div></a>
+      <a href="/shared/assuntos/" class="colorful-btn" aria-label="Gerenciar assuntos"><div>Assuntos</div></a>
     </div>
-
-    
   </main>
+
+  <!--  foco visível no CSS ,aplicar depois no CSS externo  -->
+  <style>
+    a:focus {
+      outline: 2px solid #000;
+      outline-offset: 2px;
+    }
+  </style>
 
   <!--========== MAIN JS ==========-->
   <script src="/js/main.js"></script>
 
 </body>
-
 </html>
+
+
+
+
+
+
