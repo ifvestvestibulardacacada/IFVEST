@@ -3,6 +3,47 @@
    Usado em: grupos.ejs
    ============================================ */
 
+.container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* --- LAYOUT PRINCIPAL --- */
+.flashcard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  align-items: center;
+}
+
+.flashcard-content.no-groups {
+  align-items: center;
+}
+
+.flashcard-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1000px;
+  gap: 1rem;
+}
+
+/* --- LABEL DE CONTEXTO --- */
+.queue-label {
+  margin: 0.5rem 0 1rem 0;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-left: 4px solid #3b82f6;
+  border-radius: 6px;
+  color: #1f2937;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
 /* --- BOTÃO DE VOLTAR --- */
 .back-button {
   display: inline-flex;
