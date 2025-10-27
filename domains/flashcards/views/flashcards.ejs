@@ -11,11 +11,11 @@
     />
   </head>
   <body data-id-usuario="<%= id_usuario %>">
-  <div class="container">
+    <div class="container">
+    <%- include('./partials/flashcardFiltros') %>
     <main class="flashcard-content no-groups">
       <!-- Página de estudo sem a coluna de grupos -->
       <section class="flashcard-section">
-        <%- include('./partials/flashcardFiltros') %>
         <div class="actions-row">
           <a class="group-review-btn" href="/flashcards/grupos?<%=
             [
@@ -26,14 +26,14 @@
           %>">Revisar por grupos</a>
         </div>
         <div class="queue-label">
-          <% if (selectedGroup === 'misto') { %>
-            Revisando: Misto recomendado
-          <% } else if (selectedGroup === '1') { %>
+          <% if (selectedGroup === '1') { %>
             Revisando: Vistos hoje
           <% } else if (selectedGroup === '3') { %>
             Revisando: Vistos há 3 dias
           <% } else if (selectedGroup === '7') { %>
             Revisando: Vistos há 7 dias
+          <% } else if (selectedGroup === '15') { %>
+            Revisando: Vistos há 15 dias
           <% } else if (selectedGroup === '15+') { %>
             Revisando: Vistos há 15+ dias
           <% } else { %>

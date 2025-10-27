@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
           where,
           include: ['Area', 'Topico', 'Dificuldade']
       });
-      let groups = { '1': [], '3': [], '7': [], '15+': [] };
+      let groups = { '1': [], '3': [], '7': [], '15': [], '15+': [] };
       let unseenFlashcards = [];
       let displayFlashcards = [];
       if (id_usuario && perfilUsuario !== "PROFESSOR") {
@@ -32,6 +32,7 @@ module.exports = async (req, res) => {
                   if (daysAgo < 1) groups['1'].push(card);
                   else if (daysAgo < 3) groups['3'].push(card);
                   else if (daysAgo < 7) groups['7'].push(card);
+                  else if (daysAgo < 15) groups['15'].push(card);
                   else groups['15+'].push(card);
               } else {
                   unseenFlashcards.push(card);
@@ -48,7 +49,7 @@ module.exports = async (req, res) => {
 
           // If a specific group is requested, build the display list from that group(s)
           if (grupo) {
-              if (["1", "3", "7", "15+"].includes(grupo)) {
+              if (["1", "3", "7", "15", "15+"].includes(grupo)) {
                   displayFlashcards = shuffle([...(groups[grupo] || [])]).slice(0, 10);
               } else if (grupo === 'misto') {
                   // Weighted mix by urgency: 15+:4, 7:3, 3:2, 1:1

@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     });
 
     // Agrupar por visto_por_ultimo (apenas alunos)
-    let groups = { '1': [], '3': [], '7': [], '15+': [] };
+    let groups = { '1': [], '3': [], '7': [], '15': [], '15+': [] };
     if (id_usuario && perfilUsuario !== 'PROFESSOR') {
       const seen = await FlashcardUsuario.findAll({
         where: { id_usuario },
@@ -34,6 +34,7 @@ module.exports = async (req, res) => {
           if (daysAgo < 1) groups['1'].push(card);
           else if (daysAgo < 3) groups['3'].push(card);
           else if (daysAgo < 7) groups['7'].push(card);
+          else if (daysAgo < 15) groups['15'].push(card);
           else groups['15+'].push(card);
         }
       });

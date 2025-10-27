@@ -7,7 +7,7 @@
         <div class="group-block <%= selectedGroup === days ? 'active' : '' %>">
           <div class="group-header">
             <div class="group-title">
-              <%= days === '1' ? 'Vistos hoje' : days === '3' ? 'Vistos há 3 dias' : days === '7' ? 'Vistos há 7 dias' : 'Vistos há 15+ dias' %>
+              <%= days === '1' ? 'Vistos hoje' : days === '3' ? 'Vistos há 3 dias' : days === '7' ? 'Vistos há 7 dias' : days === '15' ? 'Vistos há 15 dias' : 'Vistos há 15+ dias' %>
               <span class="group-count-badge"><%= cards.length %></span>
             </div>
             <% if (cards.length === 0) { %>
@@ -31,8 +31,8 @@
                   <%= card.pergunta %>
                 </span></li>
               <% }) %>
-              <% if (cards.length > 8) { %>
-                <li><span class="group-more">+<%= cards.length - 8 %> mais</span></li>
+              <% if (cards.length > 10) { %>
+                <li><span class="group-more">+<%= cards.length - 10 %> mais</span></li>
               <% } %>
             </ul>
           <% } else { %>
