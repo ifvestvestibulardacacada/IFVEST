@@ -1,6 +1,6 @@
 
 <link rel="stylesheet" href="/flashcards/css/flashcardFiltros.css">
-<form action="/flashcards" method="GET" class="filters">
+<form action="<%= typeof isGroupsPage !== 'undefined' && isGroupsPage ? '/flashcards/grupos' : '/flashcards' %>" method="GET" class="filters">
   <select name="id_area" id="area" class="select">
     <option value="">Selecione a Área (opcional)</option>
   </select>

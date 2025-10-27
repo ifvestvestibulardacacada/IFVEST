@@ -88,7 +88,21 @@ module.exports = async (req, res) => {
           }
       }
       if (perfilUsuario === "PROFESSOR") {
-          res.render('professor', { flashcards, nomeUsuario, perfilUsuario, imagemPerfil, id_usuario });
+          // Captura mensagens da sessão
+          const successMessage = req.session.successMessage;
+          const errorMessage = req.session.errorMessage;
+          delete req.session.successMessage;
+          delete req.session.errorMessage;
+          
+          res.render('professor', { 
+              flashcards, 
+              nomeUsuario, 
+              perfilUsuario, 
+              imagemPerfil, 
+              id_usuario,
+              successMessage,
+              errorMessage
+          });
       } else {
           res.render('flashcards', { 
               flashcards,
@@ -103,6 +117,7 @@ module.exports = async (req, res) => {
               id_area: id_area || null,
               id_topico: id_topico || null,
               id_dificuldade: id_dificuldade || null,
+              isGroupsPage: false, // Flag para identificar página de estudo
           });
       }
   } catch (error) {

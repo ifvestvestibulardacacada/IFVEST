@@ -7,11 +7,21 @@ module.exports = async (req, res) => {
     const deleted = await Flashcard.destroy({ where: { id_flashcards: id } });
     if (!deleted) throw new Error('Flashcard não encontrado');
 
+    // Mensagem de sucesso
+    if (req.session) {
+      req.session.successMessage = 'Flashcard excluído com sucesso!';
+      try {
+        await new Promise((resolve, reject) =>
+          req.session.save(err => (err ? reject(err) : resolve()))
+        );
+      } catch (_) {}
+    }
+
     return res.redirect('/flashcards');
   } catch (error) {
     console.error(error);
     if (req.session) {
-      req.session.errorMessage = error.message;
+      req.session.errorMessage = error.message || 'Erro ao excluir flashcard';
       try {
         await new Promise((resolve, reject) =>
           req.session.save(err => (err ? reject(err) : resolve()))

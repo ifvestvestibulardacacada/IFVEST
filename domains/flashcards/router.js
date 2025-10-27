@@ -1,22 +1,22 @@
 
 const { Router } = require('express');
-const {criarFlashcard,
+const {
+    criarFlashcard,
     criarForm,
     editarFlashcard,
     editarForm,
     index,
     home,
+    grupos,
     removerFlashcard,
     updateVistoPorUltimo
 } = require('./controllers')
 
-const validateRequest = require('../../middleware/validateRequest');
-const { flashcardsSchemas } = require('../../validations/schemas');
-
 const router = Router();
 
 router.get('/', home);
-router.post('/criar', validateRequest(flashcardsSchemas.register), criarFlashcard);
+router.get('/grupos', grupos);
+router.post('/criar', criarFlashcard);
 router.post('/:id/editar', editarFlashcard);
 router.post('/:id/excluir', removerFlashcard);
 

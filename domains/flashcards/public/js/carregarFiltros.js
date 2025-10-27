@@ -5,6 +5,11 @@ async function carregarAreas() {
   const areas = await res.json();
   const select = document.getElementById('area');
   const selected = select?.dataset?.selected;
+  const isRequired = select?.hasAttribute('required');
+  // Start with a visible placeholder; only select it if nothing is preselected (create form)
+  const placeholderSelected = selected ? '' : 'selected';
+  const placeholderText = isRequired ? 'Selecione a área' : 'Selecione a Área (opcional)';
+  select.innerHTML = `<option value="" ${placeholderSelected} disabled>${placeholderText}</option>`;
   areas.forEach(a => {
     const isSelected = selected && String(selected) === String(a.id_area);
     select.innerHTML += `<option value="${a.id_area}" ${isSelected ? 'selected' : ''}>${a.nome}</option>`;
@@ -16,7 +21,11 @@ async function carregarTopicos(id_area) {
   const topicos = await res.json();
   const select = document.getElementById('topico');
   const selected = select?.dataset?.selected;
-  select.innerHTML = '<option value="">Selecione o Tópico</option>';
+  const isRequired = select?.hasAttribute('required');
+  // Visible placeholder; select it only when there's no preselected tópico
+  const placeholderSelected = selected ? '' : 'selected';
+  const placeholderText = isRequired ? 'Selecione o tópico' : 'Selecione o Tópico (opcional)';
+  select.innerHTML = `<option value="" ${placeholderSelected} disabled>${placeholderText}</option>`;
   topicos.forEach(t => {
     const isSelected = selected && String(selected) === String(t.id_topico);
     select.innerHTML += `<option value="${t.id_topico}" ${isSelected ? 'selected' : ''}>${t.nome}</option>`;
@@ -28,6 +37,11 @@ async function carregarDificuldades() {
   const dificuldades = await res.json();
   const select = document.getElementById('dificuldade');
   const selected = select?.dataset?.selected;
+  const isRequired = select?.hasAttribute('required');
+  // Visible placeholder; select it only when there's no preselected dificuldade
+  const placeholderSelected = selected ? '' : 'selected';
+  const placeholderText = isRequired ? 'Selecione a dificuldade' : 'Selecione a Dificuldade (opcional)';
+  select.innerHTML = `<option value="" ${placeholderSelected} disabled>${placeholderText}</option>`;
   dificuldades.forEach(d => {
     const isSelected = selected && String(selected) === String(d.id_dificuldade);
     select.innerHTML += `<option value="${d.id_dificuldade}" ${isSelected ? 'selected' : ''}>${d.nivel}</option>`;
@@ -37,6 +51,9 @@ async function carregarDificuldades() {
 if (document.getElementById('area')) {
   document.getElementById('area').addEventListener('change', (e) => {
     const id_area = e.target.value;
+    const topicoSelect = document.getElementById('topico');
+    // Clear tópicos until a valid area is chosen
+    topicoSelect.innerHTML = '<option value="" selected disabled hidden></option>';
     if (id_area) carregarTopicos(id_area);
   });
 }

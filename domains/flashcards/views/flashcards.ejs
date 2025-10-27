@@ -12,12 +12,19 @@
   </head>
   <body data-id-usuario="<%= id_usuario %>">
   <div class="container">
-    <main class="flashcard-content">
-        <!-- Left column: Groups -->
-      <%- include('./partials/flashcardGrupos') %>
-      <!-- Right column: Flashcards -->
+    <main class="flashcard-content no-groups">
+      <!-- Página de estudo sem a coluna de grupos -->
       <section class="flashcard-section">
         <%- include('./partials/flashcardFiltros') %>
+        <div class="actions-row">
+          <a class="group-review-btn" href="/flashcards/grupos?<%=
+            [
+              id_area ? `id_area=${id_area}` : null,
+              id_topico ? `id_topico=${id_topico}` : null,
+              id_dificuldade ? `id_dificuldade=${id_dificuldade}` : null
+            ].filter(Boolean).join('&')
+          %>">Revisar por grupos</a>
+        </div>
         <div class="queue-label">
           <% if (selectedGroup === 'misto') { %>
             Revisando: Misto recomendado
