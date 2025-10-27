@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Editar Flashcard</title>
     <link rel="stylesheet" href="/flashcards/css/professor.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
   <body>
+    <%- include('./partials/flashMessages') %>
     <div class="container">
       <main class="flashcard-content">
         <h2 class="title">Editar Flashcard</h2>
@@ -18,13 +20,14 @@
           <label>Área</label>
           <select name="id_area" id="area" required data-selected="<%= flashcard.id_area %>"></select>
           <label>Tópico</label>
-          <select name="id_topico" id="topico" data-selected="<%= flashcard.id_topico %>"></select>
+          <select name="id_topico" id="topico" required data-selected="<%= flashcard.id_topico %>"></select>
           <label>Dificuldade</label>
-          <select name="id_dificuldade" id="dificuldade" data-selected="<%= flashcard.id_dificuldade %>"></select>
+          <select name="id_dificuldade" id="dificuldade" required data-selected="<%= flashcard.id_dificuldade %>"></select>
           <button type="submit" class="criar-flashcard-btn">Salvar</button>
         </form>
       </main>
     </div>
     <script src="/flashcards/js/carregarFiltros.js"></script>
+    <script src="/flashcards/js/flashMessages.js"></script>
   </body>
 </html>

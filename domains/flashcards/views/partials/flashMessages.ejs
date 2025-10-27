@@ -1,0 +1,19 @@
+<% if (typeof successMessage !== 'undefined' && successMessage) { %>
+  <div class="flash-message flash-success" role="alert">
+    <div class="flash-content">
+      <i class="fas fa-check-circle"></i>
+      <span><%= successMessage %></span>
+    </div>
+    <button class="flash-close" aria-label="Fechar">&times;</button>
+  </div>
+<% } %>
+
+<% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+  <div class="flash-message flash-error" role="alert">
+    <div class="flash-content">
+      <i class="fas fa-exclamation-circle"></i>
+      <span><%= errorMessage %></span>
+    </div>
+    <button class="flash-close" aria-label="Fechar">&times;</button>
+  </div>
+<% } %>
