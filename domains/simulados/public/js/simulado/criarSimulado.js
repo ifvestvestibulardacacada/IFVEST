@@ -9,7 +9,7 @@ const contador = document.getElementById('numero-questoes-selecionadas');
 const paginationContainer = document.getElementById('pagination');
 
 let currentPage = 1;
-const itemsPerPage = 10;
+const itemsPerPage = 5;
 let filteredQuestoes = [];
 
 // Initialize selected questions from sessionStorage
@@ -249,78 +249,10 @@ async function saveSimulado() {
   }
 }
 
-const patterns = {
-  textPattern: /^[a-zA-Z0-9\s.,!?()-]*$/, // Allows alphanumeric, spaces, and common punctuation
-  sqlPattern: /(\b(SELECT|INSERT|UPDATE|DELETE|DROP|;|--|\*)\b)/i // Detects SQL injection patterns
-};
+// /js/validations/validate.js
 
-// Validation functions
-function validateTitulo(value) {
-  if (!value) return "O título não pode ser vazio";
-  if (value.length < 10) return "O título deve ter pelo menos 10 caracteres";
-  if (value.length > 200) return "O título não pode exceder 200 caracteres";
-  if (!patterns.textPattern.test(value)) return "Formato de título inválido";
-  if (patterns.sqlPattern.test(value)) return "Formato de título inválido";
-  return "";
-}
+// 1. Validação genérica de HTML e SQL
 
-function validateDescricao(value) {
-  if (!value) return "Descrição não pode ser vazio";
-  if (value.length < 10) return "A descrição deve ter pelo menos 10 caracteres";
-  if (value.length > 1000) return "A descrição não pode exceder 1000 caracteres";
-  if (!patterns.textPattern.test(value)) return "Formato da descrição inválido";
-  if (patterns.sqlPattern.test(value)) return "Formato da descrição inválido";
-  return "";
-}
-
-function validateTipo(value) {
-  const validTypes = ['Objetivo', 'Dissertativo', 'Aleatorio'];
-  if (!validTypes.includes(value)) return "Selecione um tipo válido";
-  return "";
-}
-
-// Real-time validation
-function setupValidation() {
-  const form = document.getElementById('simuladoForm');
-  const tituloInput = document.getElementById('titulo');
-  const descricaoInput = document.getElementById('descricao');
-  const tipoSelect = document.getElementById('tipo');
-  const addQuestionsButton = document.getElementById('addQuestionsButton');
-
-  // Real-time validation for titulo
-  tituloInput.addEventListener('input', () => {
-    const error = validateTitulo(tituloInput.value);
-    document.getElementById('titulo-error').textContent = error;
-    updateQuestionsButton();
-  });
-
-  // Real-time validation for descricao
-  descricaoInput.addEventListener('input', () => {
-    const error = validateDescricao(descricaoInput.value);
-    document.getElementById('descricao-error').textContent = error;
-    updateQuestionsButton();
-  });
-
-  // Real-time validation for tipo
-  tipoSelect.addEventListener('change', () => {
-    const error = validateTipo(tipoSelect.value);
-    document.getElementById('tipo-error').textContent = error;
-    updateQuestionsButton();
-  });
-
-  // Enable/disable submit button based on validation
-  function updateQuestionsButton() {
-    const tituloError = validateTitulo(tituloInput.value);
-    const descricaoError = validateDescricao(descricaoInput.value);
-    const tipoError = validateTipo(tipoSelect.value);
-    addQuestionsButton.disabled = !!(tituloError || descricaoError || tipoError);
-  }
-
-  updateQuestionsButton();
-}
-
-// Run validation setup when the DOM is loaded
-document.addEventListener('DOMContentLoaded', setupValidation);
 
 // Limpa sessionStorage ao sair da página
 window.addEventListener('beforeunload', () => {

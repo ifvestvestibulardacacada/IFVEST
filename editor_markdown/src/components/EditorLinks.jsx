@@ -6,7 +6,8 @@ import { useEffect } from 'react';
 function EditorDeLinks() {
 
     const [reference, setReference] = useState(() => {
-      const savedMarkdown = window.Material ? window.Material.referencias : '# Digite aqui os links ...';
+      const savedMarkdown = window.ContentManager ? window.ContentManager.getReferencias() : '# Digite aqui os links ...';
+      console.log('Saved Markdown:', savedMarkdown);
       return savedMarkdown ;
     });
 

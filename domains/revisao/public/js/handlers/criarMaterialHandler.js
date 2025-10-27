@@ -3,13 +3,14 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault(); // Impede o envio padrão do formulário
 
         // Delimitador para separar conteúdo e referências
-        const DELIMITER = '---REFERENCES---';
+
 
         // Coleta os dados do formulário
-        const mainContent = sessionStorage.getItem('EditorContent') || '';
-        const references = sessionStorage.getItem('LinksContent') || '';
+        const mainContent = ContentManager.getEditorContent() || '';
+        const references = ContentManager.getReferenceContent() || '';
 
         // Concatena o conteúdo principal e as referências
+        const DELIMITER = '---REFERENCES---'; // Defina o delimitador conforme necessário
         const combinedContent = `${mainContent}\n${DELIMITER}\n${references}`;
 
         // Monta os dados para envio
@@ -41,12 +42,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Material criado com sucesso!');
                 // Reseta o formulário e limpa o localStorage
                 document.querySelector('form').reset();
-                localStorage.removeItem('EditorContent');
-                localStorage.removeItem('LinksContent');
                 tags.length = 0; // Limpa o array de tags
                 renderTags(); // Atualiza a exibição das tags
                 window.location.href = '/revisao/';
             }
+
         } catch (error) {
             console.error('Erro ao enviar o formulário:', error);
 

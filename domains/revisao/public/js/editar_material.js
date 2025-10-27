@@ -1,4 +1,4 @@
-    const tags = window.Material.PalavraChave || [];
+    const tags = window.ContentManager.getPalavraChave() || [];
 
     // Keyword handling
     const palavrasChaveHTML = document.querySelector("#palavrasChave");
@@ -29,7 +29,8 @@
     document.addEventListener('DOMContentLoaded', async () => {
         // Populate tags
         renderTags();
-        
-        document.querySelector(`#selectAssunto option[value="${window.Material.id_assunto}"]`).selected = true
-     
+        const id_assunto = window.ContentManager.getIdAssunto() || '';
+
+        document.querySelector(`#selectAssunto option[value="${id_assunto}"]`).selected = true;
+
     });

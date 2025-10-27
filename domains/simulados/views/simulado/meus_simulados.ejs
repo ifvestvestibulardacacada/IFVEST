@@ -135,15 +135,6 @@
                     </div>
                 </div>
 
-                <!-- Resto do seu código de paginação... -->
-                <% if (totalPages> 1) { %>
-                    <!-- paginação aqui -->
-                    <% } %>
-
-                        <!-- Resto do seu código de paginação... -->
-                        <% if (totalPages> 1) { %>
-                            <!-- paginação aqui -->
-                            <% } %>
 
                                 <% if (totalPages> 1) { %>
                                     <nav aria-label="Navegação">
@@ -175,53 +166,13 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Inicializa tooltips
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-        new bootstrap.Tooltip(tooltipTriggerEl);
-    });
 
-    // MODAL DE IMPRESSÃO - FUNCIONANDO
-    const botoesPDF = document.querySelectorAll('.generate-pdf');
-    const modalImprimir = new bootstrap.Modal(document.getElementById('modal-imprimir'));
-
-    botoesPDF.forEach(botao => {
-        botao.addEventListener('click', function (e) {
-            e.preventDefault();
-            const simuladoId = this.getAttribute('data-simulado-id');
-            const iframe = document.getElementById('iframe-imprimir');
-            iframe.src = `/simulados/${simuladoId}/imprimir`;
-            modalImprimir.show();
-        });
-    });
-
-    // MODAL DE EXCLUSÃO - CORRIGIDO
-    const modalExcluir = new bootstrap.Modal(document.getElementById('modal-excluir'));
-    
-    document.querySelectorAll('.delete-simulado').forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const simuladoId = this.getAttribute('data-simulado-id');
-            const form = document.getElementById('deleteAccountForm');
-            form.action = `/simulados/${simuladoId}?_method=DELETE`;
-            modalExcluir.show();
-        });
-    });
-
-    // Submit do formulário de delete
-    document.getElementById('deleteAccountForm').addEventListener('submit', function(e) {
-        if (!confirm('Tem certeza que deseja excluir este simulado?')) {
-            e.preventDefault();
-        }
-    });
-});
 </script>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script src="/js/main.js"></script>
-    <script src="/js/simulado/meus_simulados.js"></script>
+    <script src="/simulados/js/simulado/meus_simulados.js"></script>
 </body>
 
 </html>

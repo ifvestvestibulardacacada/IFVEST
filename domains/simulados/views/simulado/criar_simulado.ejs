@@ -5,9 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-  <link rel="stylesheet" href="/css/global.css">
-  <link rel="stylesheet" href="/simulados/css/simulado/criar_simulado.css">
+   <link rel="stylesheet" href="/css/global.css">
+   <link rel="stylesheet" href="/simulados/css/simulado/criar_simulado.css">   
 
+  
   <%- include('../partials/libs') %>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Criar Simulado - IFVest</title>
@@ -27,15 +28,20 @@
       <div class="form-container" id="formSection">
         <h1>Criar Simulado</h1>
         <form id="simuladoForm" action="/api/simulado" method="POST">
+       
+          
           <div class="form-group">
+            <div class="error-message" id="titulo-error"></div>
             <label for="titulo">Título do Simulado:</label>
             <input type="text" id="titulo" name="titulo" required maxlength="200">
-            <div class="error-message" id="titulo-error"></div>
-          </div>
+       </div>
+              
           <div class="form-group">
+            
+               <div class="error-message" id="descricao-error"></div>
             <label for="descricao">Descrição:</label>
             <textarea id="descricao" name="descricao" rows="5" required maxlength="1000"></textarea>
-            <div class="error-message" id="descricao-error"></div>
+         
           </div>
           <div class="form-group">
             <label for="tipo">Selecione o tipo:</label>
@@ -46,6 +52,7 @@
             </select>
             <div class="error-message" id="tipo-error"></div>
           </div>
+   
           <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
           <button type="button" id="addQuestionsButton" onclick="goToNewContent()">Adicionar Questões</button>
 
@@ -67,15 +74,9 @@
             };
           </script>
           <% } %>
-            <div class="form-row">
-              <div class="form-group col-md-8">
-
-                <input type="text" name="tituloFiltro" id="tituloFiltro" placeholder="Filtrar por título">
-
-              </div>
-              <div class="form-group col-md-4">
-                <button class="botaoFiltro" onclick="applyFilters()">Filtrar</button>
-              </div>
+            <div class="filter-container">
+              <input type="text" id="tituloFiltro" placeholder="Filtrar por título">
+              <button class="botaoFiltro" onclick="applyFilters()">Filtrar</button>
             </div>
 
 
@@ -106,18 +107,17 @@
       </div>
 
       <script>
-        window.questoes = <% - JSON.stringify(questoes || []) %>;
-        console.log('Questoes:', window.questoes);
+        window.questoes = <%- JSON.stringify(questoes || []) %>;
+    
       </script>
-      <script src="/js/simulado/criarSimulado.js"></script>
+      <script src="/simulados/js/simulado/criarSimulado.js"></script>
+      <script src="/simulados/js/simulado/validate_criar_simulados.js"></script>
       <script src="/js/main.js"></script>
-      <script src="/js/validations/validate.js"></script>
+      <script src="/simulados/js/validate.js"></script>
+    
 
-      <script>
+  
 
-
-      </script>
-     
 </body>
 
 </html>

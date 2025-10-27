@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
             const imagemPerfil = req.session.imagemPerfil;
             const usuarioId = req.session.userId;
             const { titulo, areaId, topicosSelecionados, pergunta } = req.query; // 
-            const limit = 10;
+            const limit = 5;
             const page = parseInt(req.query.page) || 1;
             const offset = (page - 1) * limit;
 

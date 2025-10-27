@@ -2,7 +2,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
 <link rel="stylesheet" href="/css/revisao/criar_material.css">
-<%- include('./editorPath') %>
+
     <main>
         <h1>Editar Material</h1>
         <p style="display: none;"></p>
@@ -59,20 +59,43 @@
 
     <script>
         // Server-side data passed to client
-        
-        window.Assunto = <%- JSON.stringify(Assuntos || []) %>;
-        window.Material = <%- JSON.stringify(Material || {}) %>;
 
-        window.addEventListener('editorContentChange', (event) => {
-            window.editorContent = event.detail.content;
-        });
-        window.addEventListener('referenceContentChange', (event) => {
-            window.referenceContent = event.detail.content;
-        });
-        // Initialize tags with provided keywords
+    
+        const ContentManager = (() => {
+            let editorContent = '';
+            let referenceContent = '';
+            const Material = <%- JSON.stringify(Material || {}) %>;
+           
 
+            // Escuta eventos para atualizar editorContent e referenceContent
+            window.addEventListener('editorContentChange', (event) => {
+                editorContent = event.detail.content;
+            });
+
+            window.addEventListener('referenceContentChange', (event) => {
+                referenceContent = event.detail.content;
+            });
+
+            return {
+                getMaterial: () => ({ ...Material }), // Retorna uma cópia do objeto Material
+                getPalavraChave: () => Material.PalavraChave,
+                getAssunto: () => ({ ...Material.assunto }),
+                getConteudoMarkdown: () => Material.conteudo_markdown,
+                getReferencias: () => Material.referencias,
+                getEditorContent: () => editorContent,
+                getReferenceContent: () => referenceContent,
+                getIdConteudo: () => Material.id_conteudo,
+                getIdAssunto: () => Material.id_assunto,
+            };
+        })();
+
+        // Expor MaterialManager no window para uso no React e outros scripts
+        window.ContentManager = ContentManager;
+
+        window.ContentManager.getConteudoMarkdown();
     </script>
 
+<%- include('./editorPath') %>
 
     <script src="/revisao/js/editar_material.js"></script>
     <script src="/revisao/js/handlers/editarMaterialHandler.js"></script>

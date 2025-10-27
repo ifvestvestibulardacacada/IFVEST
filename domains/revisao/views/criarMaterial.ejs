@@ -5,7 +5,7 @@
     <!--========== CSS ==========-->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
     <link rel="stylesheet" href="/css/revisao/criar_material.css">
-    <%- include('./editorPath') %>
+  
 
         <title>Criar Material - Módulo de Revisão de Conteúdo - IFVest</title>
 </head>
@@ -48,9 +48,9 @@
                             <input type="text" class="form-control" id="palavrasChave" list="palavrasChaveList"
                                 placeholder="trovador, cantigas, vassalagem">
                             <datalist id="palavrasChaveList">
-                                <% palavrasChave.forEach(palavra => { %>
+                                <% palavrasChave.forEach(palavra=> { %>
                                     <option value="<%= palavra %>">
-                                <% }); %>
+                                        <% }); %>
                             </datalist>
                         </div>
                         <div class="col-md-4">
@@ -64,7 +64,7 @@
                 </div>
 
 
-                                <div id="editor"></div>
+                <div id="editor"></div>
 
 
                 <button type="button" id="submitButton" class="btn btn-primary w-100">Criar Material</button>
@@ -78,14 +78,31 @@
     <script src="/revisao/js/handlers/criarMaterialHandler.js"></script>
     <script src="/js/validations/validate.js"></script>
     <script>
-        window.addEventListener('editorContentChange', (event) => {
-            window.editorContent = event.detail.content;
-        });
+        // definição de IIFE com Closure
+        const ContentManager = (() => {
+            // Variáveis privadas
+            let editorContent = '';
+            let referenceContent = '';
 
-        window.addEventListener('referenceContentChange', (event) => {
-            window.referenceContent = event.detail.content;
-        });
+            // Escuta os eventos e atualiza as variáveis locais
+            window.addEventListener('editorContentChange', (event) => {
+                editorContent = event.detail.content;
+            });
+
+            window.addEventListener('referenceContentChange', (event) => {
+                referenceContent = event.detail.content;
+            });
+
+            // Expõe métodos para acessar os conteúdos
+            return {
+                getEditorContent: () => editorContent,
+                getReferenceContent: () => referenceContent,
+                getConteudoMarkdown: () => 'Digita aqui o material ...  ',
+                getReferencias: () => 'Digite aqui as referências ...',
+            };
+        })();
     </script>
+      <%- include('./editorPath') %>
 </body>
 
 </html>

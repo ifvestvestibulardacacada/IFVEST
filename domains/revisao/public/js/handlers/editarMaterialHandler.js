@@ -2,20 +2,23 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('submitButton').addEventListener('click', async function (event) {
         event.preventDefault(); // Prevent the default form submission
 
-        const DELIMITER = '---REFERENCES---';
-
-        // Coleta os dados do formulário
-        const mainContent = sessionStorage.getItem('EditorContent') || '';
-        const references = sessionStorage.getItem('LinksContent') || '';
+        const mainContent = ContentManager.getEditorContent() || '';
+        const references = ContentManager.getReferenceContent() || '';
+        const id_conteudo = ContentManager.getIdConteudo() || '';
 
         // Concatena o conteúdo principal e as referências
+        const DELIMITER = '---REFERENCES---'; // Defina o delimitador conforme necessário
         const combinedContent = `${mainContent}\n${DELIMITER}\n${references}`;
+
+
+        // Concatena o conteúdo principal e as referências
+   
 
         // Collect form data
         const formData = {
             titulo: document.getElementById('materialTitulo').value,
             assuntoId: document.getElementById('selectAssunto').value,
-            palavrasChave: window.getKeywords(), // Array of keywords from the tags array
+            palavrasChave: tags, // Array of keywords from the tags array
             conteudo: combinedContent, // Markdown content from localStorage
              // Split links into an array, remove empty lines
         };
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         try {
             // Send data to the server using Axios
-            const response = await axios.patch(`/revisao/editar_material/${window.Material.id_conteudo}`, formData, {
+            const response = await axios.patch(`/revisao/editar_material/${id_conteudo}`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
@@ -41,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 alert('Material atualizado com sucesso!');
                 // Reset the form and clear localStorage
                 document.querySelector('form').reset();
-                localStorage.removeItem('EditorContent');
                 tags.length = 0; // Clear the tags array
                 renderTags(); // Update the tag display
                 window.location.href = '/revisao/';

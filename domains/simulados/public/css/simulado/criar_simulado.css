@@ -1,28 +1,20 @@
-
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
- body {
-            padding-top: 70px; /* Ajuste conforme a altura da navbar */
-            background: #f4f6f9;
-            height: 100vh;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            color: #333;
-            overflow-x: hidden;
-        }
-        .form-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
+
+body {
+  padding-top: 70px;
+ 
+  /* Ajuste conforme a altura da navbar */
+  background: #f4f6f9;
+  height: 100vh;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #333;
+  overflow-x: hidden;
+}
+
 .form-container {
   display: flex;
   flex-direction: column;
@@ -36,6 +28,7 @@
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+   padding-bottom: 80px;
 }
 
 #simuladoForm {
@@ -329,14 +322,63 @@ h1 {
   }
 
   .filter-container {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
     align-items: stretch;
-    max-width: 100%;
+    /* MUDANÇA: stretch faz os filhos terem mesma altura */
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 1.5rem auto;
   }
 
-  .filter-container input,
+  .filter-container input[type="text"],
   .filter-container button {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
+    height: 48px;
+    /* Altura fixa para consistência */
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+  }
+
+  .filter-container input[type="text"] {
+    flex: 2;
+    /* O input ocupa mais espaço (ex: 66%) */
+    background: #fff;
+  }
+
+  .filter-container input[type="text"]:focus {
+    outline: none;
+    border-color: #1e90ff;
+    box-shadow: 0 0 5px rgba(30, 144, 255, 0.3);
+  }
+
+  .filter-container button {
+    flex: 1;
+    /* O botão ocupa menos (ex: 33%) */
+    background: #1e90ff;
+    color: #fff;
+    font-weight: 600;
+    border: 1px solid #1e90ff;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .filter-container button:hover {
+    background: #187bcd;
+    border-color: #187bcd;
+    transform: translateY(-1px);
+  }
+
+  .filter-container button:active {
+    transform: translateY(0);
   }
 
   .uk-table th,
