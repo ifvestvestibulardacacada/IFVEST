@@ -20,9 +20,20 @@ const storage = multer.diskStorage({
         }
         const filename = `${Date.now()}-${nomeUsuario}-${file.originalname}`
         cb(null, filename)
-    }
+    },
 })
 
-const upload = multer({ storage: storage, array: true})
+const fileFilter = (req, file, cb) => {
+        console.log('File data:', file)
+        const allowedTypes = ['application/pdf']
+        console.log('incoming file type: ', file.mimetype)
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true)
+        } else {
+            cb(new Error('Tipo de arquivo inválido. Apenas PDFs são permitidos.'), false)
+        }
+    }
+
+const upload = multer({ storage: storage, array: true, fileFilter: fileFilter})
 
 module.exports = upload
