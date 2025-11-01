@@ -70,14 +70,17 @@
 document.addEventListener('DOMContentLoaded', function () {
   const chaveStorage = `idsSelecionados${simuladoId}`;
 
+  
   function obterIdsSelecionados() {
     return JSON.parse(sessionStorage.getItem(chaveStorage) || '[]');
   }
 
+  // Salva os IDs selecionados no sessionStorage
   function salvarIdsSelecionados(ids) {
     sessionStorage.setItem(chaveStorage, JSON.stringify(ids));
   }
 
+  // Atualiza o contador de questões selecionadas
   function atualizarContadorQuestoesSelecionadas() {
     const numero = obterIdsSelecionados().length;
     const contador = document.getElementById('numero-questoes-selecionadas');
@@ -100,6 +103,7 @@ document.addEventListener('DOMContentLoaded', function () {
     atualizarContadorQuestoesSelecionadas();
   }
 
+  // Marca os checkboxes que estavam selecionados anteriormente
   function verificarEAtualizarCheckboxes() {
     const ids = obterIdsSelecionados();
     document.querySelectorAll('input[type="checkbox"][name="questoesSelecionadas"]').forEach(checkbox => {
@@ -107,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  // Aplica rótulos acessíveis aos checkboxes com base nos elementos da linha
   function configurarAcessibilidadeCheckboxes() {
     document.querySelectorAll('input[type="checkbox"][name="questoesSelecionadas"]').forEach(checkbox => {
       const id = checkbox.value;
@@ -120,17 +125,22 @@ document.addEventListener('DOMContentLoaded', function () {
         checkbox.setAttribute('aria-labelledby', `titulo-${id} tipo-${id} pergunta-${id} topico-${id}`);
       } else {
         checkbox.setAttribute('aria-label', `Selecionar questão ${id}`);
+        console.warn(`Elementos de rótulo ausentes para checkbox ${id}`);
       }
     });
   }
 
-  document.querySelectorAll('input[type="checkbox"][name="questoesSelecionadas"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function () {
-      manipularCheckbox(this);
+  // Adiciona evento de mudança aos checkboxes
+  function configurarEventosCheckboxes() {
+    document.querySelectorAll('input[type="checkbox"][name="questoesSelecionadas"]').forEach(checkbox => {
+      checkbox.addEventListener('change', function () {
+        manipularCheckbox(this);
+      });
     });
-  });
+  }
 
-  const botaoAssociar = document.querySelector('.botao-associar');
+ 
+  const botaoAssociar = document.querySelector('.botao-associar, #submitButton');
   if (botaoAssociar) {
     botaoAssociar.addEventListener('click', function () {
       const ids = obterIdsSelecionados();
@@ -142,8 +152,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
+  
   verificarEAtualizarCheckboxes();
-  atualizarContadorQuestoesSelecionadas();
   configurarAcessibilidadeCheckboxes();
+  configurarEventosCheckboxes();
+  atualizarContadorQuestoesSelecionadas();
 });
-

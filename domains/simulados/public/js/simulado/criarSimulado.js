@@ -81,11 +81,18 @@ function renderTable() {
     const pergunta = questao.pergunta || '';
     const isChecked = selectedQuestions.includes(String(questao.id_questao)) ? 'checked' : '';
     row.innerHTML = `
-      <td><input type="checkbox" class="questao-checkbox" name="questoesSelecionadas" value="${questao.id_questao || ''}" ${isChecked}></td>
-      <td>${questao.titulo || 'Sem título'}</td>
-      <td>${questao.tipo || 'Desconhecido'}</td>
-      <td><div class="name" data-delta='${encodeURIComponent(pergunta)}'></div></td>
-      <td>${questao.Topico && questao.Topico.length > 0 ? questao.Topico.map(topico => topico.nome || 'Sem nome').join(', ') : 'Sem tópico'}</td>
+     <td>
+    <input
+    type="checkbox"
+    class="questao-checkbox"
+    name="questoesSelecionadas"
+    value="${questao.id_questao || ''}"
+    ${isChecked}
+    aria-labelledby="label-selecionar-questao titulo-${questao.id_questao}"
+    id="questao-${questao.id_questao}"
+  >
+</td>
+
     `;
     questoesBody.appendChild(row);
   });

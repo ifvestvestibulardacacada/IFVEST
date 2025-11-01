@@ -74,21 +74,63 @@
         Questões Selecionadas: <span id="numero-questoes-selecionadas">0</span>
       </div>
 
-      <div class="table-container">
-        <table class="uk-table uk-table-striped" id="questoesTable">
-          <thead>
-            <tr>
-              <!-- Adicionado scope="col" para cabeçalhos de tabela -->
-              <th scope="col"><input type="checkbox" id="selectAll" aria-label="Selecionar todas as questões"></th>
-              <th scope="col">Título</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Questão</th>
-              <th scope="col">Tópico</th>
-            </tr>
-          </thead>
-          <tbody id="questoesBody"></tbody>
-        </table>
-      </div>
+    <div class="table-container">
+  <table class="uk-table uk-table-striped" id="questoesTable" aria-describedby="tabela-instrucoes">
+    <caption class="sr-only">Tabela de questões disponíveis para associação ao simulado</caption>
+    <thead>
+      <tr>
+        <th scope="col" id="col-selecionar">
+          <input type="checkbox" id="selectAll" aria-label="Selecionar todas as questões">
+        </th>
+        <th scope="col" id="col-titulo">Título</th>
+        <th scope="col" id="col-tipo">Tipo</th>
+        <th scope="col" id="col-questao">Questão</th>
+        <th scope="col" id="col-topico">Tópico</th>
+      </tr>
+    </thead>
+    <tbody id="questoesBody">
+      <% questoes.forEach(questao => {
+           const idUnico = `${questao.id_questao}-${questao.ano || 'ano'}`; %>
+        <tr>
+          <td headers="col-selecionar">
+            <input
+              type="checkbox"
+              class="questao-checkbox"
+              name="questoesSelecionadas"
+              value="<%= idUnico %>"
+              id="questao-<%= idUnico %>"
+              aria-labelledby="titulo-<%= idUnico %> tipo-<%= idUnico %> pergunta-<%= idUnico %> topico-<%= idUnico %>"
+              title="Selecionar questão: <%= questao.titulo || 'Sem título' %> (<%= questao.ano || 'Ano desconhecido' %>)"
+            />
+          </td>
+          <td id="titulo-<%= idUnico %>" headers="col-titulo"><%= questao.titulo || 'Sem título' %></td>
+          <td id="tipo-<%= idUnico %>" headers="col-tipo"><%= questao.tipo || 'Sem tipo' %></td>
+          <td id="pergunta-<%= idUnico %>" headers="col-questao">
+            <div class="name"><%= questao.pergunta || 'Sem pergunta' %></div>
+          </td>
+          <td id="topico-<%= idUnico %>" headers="col-topico">
+            <% if (questao.Topico && questao.Topico.length > 0) { %>
+              <%= questao.Topico.map(t => t.nome).join(', ') %>
+            <% } else { %>
+              Sem tópico
+            <% } %>
+          </td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+
+<div id="tabela-instrucoes" class="sr-only">
+  Use Tab para navegar entre as células e barra de espaço para selecionar questões.
+</div>
+
+
+<!-- Instrução oculta para leitores de tela -->
+<div id="tabela-instrucoes" class="sr-only">
+  Use Tab para navegar entre as células e barra de espaço para selecionar questões.
+</div>
+
 
       <div class="pagination" id="pagination"></div>
 
@@ -105,7 +147,7 @@
     window.questoes = <%- JSON.stringify(questoes || []) %>;
     console.log('Questoes:', window.questoes);
   </script>
-  <script src="/js/simulado/criarSimulado.js"></script>
+  <script src="/simulados/js/simulado/criarSimulado.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/validations/validate.js"></script>
 </body>
