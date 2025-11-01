@@ -24,6 +24,12 @@
 
         const formData = new FormData(this);
 
+        if(!formData.get('file').type == 'application/pdf'){
+            alert('Por favor, envie um arquivo PDF.');
+            return;
+        }
+        // PDF included
+
         fetch('/revisao/upload', {
             method: 'POST',
             body: formData
