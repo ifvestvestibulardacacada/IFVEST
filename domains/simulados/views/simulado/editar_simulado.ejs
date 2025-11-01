@@ -10,57 +10,73 @@
 
     <!--========== CSS ==========-->
     <%- include('../partials/libs') %>
-    <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="/css/simulado/editar_simulado.css">
- 
-   
+        <link rel="stylesheet" href="/css/global.css">
+        <link rel="stylesheet" href="/simulados/css/simulado/criar_simulado.css">
 
-    <title>Editar Simulado - IFVest</title>
+
+        <title>Editar Simulado - IFVest</title>
 </head>
 
 <body>
 
-    
-        <main>
-            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
-                <script>
-                    window.onload = function() {
-                        alert("<%= errorMessage %>");
-                    };
-                </script>
-            <% } %>
-            <h1>Editar Simulado</h1>
-
-            <form action="/simulados/<%= simulado.id_simulado %>/editar?_method=PATCH" method="POST">
-                <label for="titulo">Título do Simulados:</label>
-                <input type="text" id="titulo" value="<%= simulado.titulo %>" name="titulo" required maxlength="100">
-
-                <label for="descricao">Descricao:</label>
-                <textarea id="descricao" name="descricao" rows="5" cols="50" required maxlength="1000"><%= simulado.descricao %></textarea>
 
 
 
-                <label for="tipo">Selecione o tipo:</label>
-                <select name="tipo" id="tipo">
-                    <option value="DISSERTATIVO" <%= simulado.tipo === 'DISSERTATIVO' ? 'selected' : '' %>>Dissertativa</option>
-                    <option value="OBJETIVO" <%= simulado.tipo === 'OBJETIVO' ? 'selected' : '' %>>Objetiva</option>
-                    <option value="ALEATORIO" <%= simulado.tipo === 'ALEATORIO' ? 'selected' : '' %>>Aleatoria</option>
-                </select><br>
+    <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
+        <script>
+            window.onload = function () {
+                alert("<%= errorMessage %>");
+            };
+        </script>
+        <% } %>
+            <div class="form-container" id="formSection">
+                <h1>Editar Simulado</h1>
 
-                <label for="modo">Selecione o Modo:</label>
-                <select name="modo" id="modo">
-                    <option value="1">Normal</option>
-                    <option value="2">Aleatorio</option>
-                </select><br>
+                <form id="simuladoForm" action="/simulados/<%= simulado.id_simulado %>/editar?_method=PATCH"
+                    method="POST">
 
-                <button type="submit" id="submitButton" style="width: 80%">Salvar</button>
-            </form>
 
-        </main>
+                    <div class="form-group">
+                        <div class="error-message" id="titulo-error"></div>
+                        <label for="titulo">Título do Simulado:</label>
+                        <input type="text" id="titulo" value="<%= simulado.titulo %>" name="titulo" required
+                            maxlength="200">
+                    </div>
 
-        <!--========== MAIN JS ==========-->
-        <script src="/js/main.js"></script>
-        <script src="/js/validations/validate.js"></script>
+                    <div class="form-group">
+
+                        <div class="error-message" id="descricao-error"></div>
+                        <label for="descricao">Descrição:</label>
+                        <textarea id="descricao" name="descricao" rows="5" required
+                            maxlength="1000"><%= simulado.descricao %></textarea>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Selecione o tipo:</label>
+                        <select name="tipo" id="tipo" required>
+                            <option value="DISSERTATIVO" <%=simulado.tipo==='DISSERTATIVO' ? 'selected' : '' %>
+                                >Dissertativa</option>
+                            <option value="OBJETIVO" <%=simulado.tipo==='OBJETIVO' ? 'selected' : '' %>>Objetiva
+                            </option>
+                            <option value="ALEATORIO" <%=simulado.tipo==='ALEATORIO' ? 'selected' : '' %>>Aleatoria
+                            </option>
+                        </select>
+                        <div class="error-message" id="tipo-error"></div>
+                    </div>
+
+
+                    <button type="submit" id="submitButton">Salvar</button>
+
+                </form>
+
+
+
+            </div>
+
+
+            <!--========== MAIN JS ==========-->
+            <script src="/js/main.js"></script>
+            <script src="/js/validations/validate.js"></script>
 </body>
 
 </html>

@@ -6,8 +6,9 @@ module.exports = async (req, res) => {
             const { selectedQuestionIds } = req.body;
 
             try {
-                const idsInteiros = selectedQuestionIds.split(',').map(Number);
 
+                const idsInteiros = selectedQuestionIds.split(',').map(Number);
+                console.log('IDs das questões selecionadas:', idsInteiros);
                 const simulado = await Simulado.findByPk(simuladoId);
 
                 if (!simulado) {
@@ -19,7 +20,7 @@ module.exports = async (req, res) => {
 
                 await simulado.addQuestao(idsInteiros);
 
-                res.redirect(`/simulados/meus-simulados`);
+                return res.status(200).redirect(`/simulados/meus-simulados`);
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;

@@ -22,7 +22,7 @@
                 <label for="materia" class="form-label">Buscar:</label>
                 <input type="text" id="materia" name="materia" required class="form-control" maxlength="100">
             </div>
-            <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Pesquisar</button>
+            <button type="submit" class="btn btn-success"><i class="bi bi-search"></i> Pesquisar</button>
         </form>
 
         <div class="table-responsive">
@@ -44,7 +44,7 @@
                             <td>
                                 <div class="d-flex gap-2">
                                     <a href="/revisao/editar_material/<%= conteudo.id_conteudo %>"
-                                       class="btn btn-outline-primary btn-sm">
+                                       class="btn btn-outline-success btn-sm">
                                         <i class="bi bi-pencil"></i> Editar
                                     </a>
                                     <a class="btn btn-outline-danger btn-sm" onclick="confirmDelete(<%= conteudo.id_conteudo %>)">

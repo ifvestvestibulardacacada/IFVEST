@@ -3,10 +3,11 @@ const { Questao, Simulado } = require('../../../../models');
 
 module.exports = async (req, res) => {
             const { simuladoId } = req.params;
-            const { questoesSelecionadas } = req.body;
+            const { selectedQuestionIds } = req.body;
 
             try {
                 // Primeiro, verifique se o simulado existe
+                const idsInteiros = selectedQuestionIds.split(',').map(Number);
                 const simulado = await Simulado.findByPk(simuladoId, {
                     include: [{
                         model: Questao,
@@ -17,11 +18,11 @@ module.exports = async (req, res) => {
                 if (!simulado) {
                     throw new Error('Simulado não encontrado.');
                 }
-                if (!questoesSelecionadas || questoesSelecionadas.length === 0) {
+                if (!idsInteiros || idsInteiros.length === 0) {
                     throw new Error('Questões não selecionadas.');
                 }
 
-                await simulado.removeQuestao(questoesSelecionadas);
+                await simulado.removeQuestao(idsInteiros);
 
                 res.redirect(`/simulados/meus-simulados`);
             } catch (error) {

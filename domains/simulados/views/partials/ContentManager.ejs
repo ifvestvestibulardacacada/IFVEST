@@ -1,0 +1,19 @@
+    <script>
+        // script ejs nao funciona em arquivos .js
+        const ContentManager = (() => {
+            const questoes = <%- JSON.stringify(questoes) %>;
+            const id_simulado = <%- JSON.stringify(simulado.id_simulado) %>;
+            return {
+                getQuestoes: () => ([...questoes]), // Retorna uma cópia do objeto questoes
+                getIdSimulado: () => id_simulado,
+            };
+        })();
+        
+        window.ContentManager = ContentManager;
+
+  
+
+
+
+
+    </script>

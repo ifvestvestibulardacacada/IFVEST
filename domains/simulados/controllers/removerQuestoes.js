@@ -9,9 +9,6 @@ module.exports = async (req, res) => {
                 const imagemPerfil = req.session.imagemPerfil;
                 const simuladoId = req.params.simuladoId;
                 const { titulo } = req.query;
-                const page = parseInt(req.query.page) || 1;
-                const limit = 10;
-                const offset = (page - 1) * limit;
 
                 const simulado = await Simulado.findOne({
                     where: { id_simulado: simuladoId },
@@ -37,8 +34,7 @@ module.exports = async (req, res) => {
                         where: { id_simulado: simuladoId },
                         through: { attributes: [] }
                     }],
-                    limit: limit,
-                    offset: offset
+         
                 });
 
                 let questoes = todasQuestoes;
@@ -55,7 +51,7 @@ module.exports = async (req, res) => {
                         through: { attributes: [] }
                     }]
                 });
-                const totalPages = Math.ceil(totalQuestoes / limit);
+
 
                 let errorMessage = req.session.errorMessage;
 
@@ -65,7 +61,7 @@ module.exports = async (req, res) => {
 
                 req.session.errorMessage = null;
 
-                res.render('simulado/remover_questoes', { simulado: simulado, questoes: questoes, page: page, totalPages: totalPages, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('simulado/remover_questoes', { simulado: simulado, questoes: questoes, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (error) {
                 console.error('Erro ao carregar o formulário de edição do simulado:', error);
                 res.status(500).send('Erro ao carregar o formulário de edição do simulado.');

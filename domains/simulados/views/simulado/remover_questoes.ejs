@@ -1,97 +1,103 @@
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css"> 
-        <link rel="stylesheet" href="/css/professor/minhasquestoes.css">
+<html lang="pt-BR">
 
-        <%- include('../partials/libs') %>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remover Questões - IFVest</title>
 
-        <title>Remover Questões - IFVest</title>
-    </head>
-    <body>
-        
-        <!--========== CONTENTS ==========-->
+    <%- include('../partials/libs') %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <link rel="stylesheet" href="/simulados/css/simulado/removerquestoes.css">
+</head>
 
-            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
-                <script>
-                    window.onload = function() {
-                        alert("<%= errorMessage %>");
-                    };
-                </script>
-            <% } %>
+<body>
+    <div class="container col-lg-10 mx-auto my-4">
 
-                <h1 class="uk-heading-divider">REMOVER QUESTÕES</h1>
-               
+        <!-- Mensagem de erro -->
+        <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+            <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <div><%= errorMessage %></div>
+            </div>
+        <% } %>
 
-                <form action="/simulados/<%= simulado.id_simulado %>/remover-questoes" method="GET">
-                    <!-- Campo de filtragem por título -->
-                    <input type="text" name="titulo" placeholder="Filtrar por título">
-                    <button type="submit"><i class='bx bx-search'></i>Pesquisar</button>
-                </form>
+        <!-- Título -->
+        <h1 class="border-bottom pb-2 mb-4">Remover Questões do Simulado</h1>
+        <p class="text-muted mb-4"><strong>Simulado:</strong> <%= simulado.titulo %></p>
 
-
-
-            <form action="/simulados/<%= simulado.id_simulado %>/remover-questoes?_method=DELETE" method="POST">
-                 <div class="table-responsive">
-                <table class="table-container">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>Título</th>
-                            <th>Tipo</th>
-                            <th>Questão</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% questoes.forEach(questao => { %>
-                            <tr>
-                                <td>
-                                    <input type="checkbox" id="questao-<%= questao.id_questao %>" name="questoesSelecionadas" value="<%= questao.id_questao %>">
-                                </td>
-                                <td><%= questao.titulo %></td>
-                                <td>
-                                    <%= questao.tipo %>
-                                </td>
-                                <td>
-                                    <div class="name" data-delta='<%= questao.pergunta %>'>
-                                        <!-- O conteúdo será inserido via JavaScript -->
-                                        <span class="required">*</span>
-                                    </div>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                   
-                </table>
+        <!-- Filtro -->
+        <div class="filter-container">
+            <form method="GET" action="/simulados/<%= simulado.id_simulado %>/remover-questoes" class="row g-3 align-items-end">
+                <div class="col-md-10">
+                    <label for="titulo" class="form-label">Buscar por título</label>
+                    <input type="text" id="titulo" name="titulo" placeholder="Filtrar por título" 
+                           class="form-control" value="<%= typeof titulo !== 'undefined' ? titulo : '' %>">
                 </div>
-                <div class="pagination-container">
-                    <% if (page > 1) { %>
-                        <a href="?page=<%= page - 1 %>">Anterior</a>
-                    <% } %>
-                    <% for (let i = 1; i <= totalPages; i++) { %>
-                        <a href="?page=<%= i %>" class="<%= page === i ? 'active' : '' %>"><%= i %></a>
-                    <% } %>
-                    <% if (page < totalPages) { %>
-                        <a href="?page=<%= page + 1 %>">Próximo</a>
-                    <% } %>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-search"></i> Filtrar
+                    </button>
                 </div>
-                <input type="hidden" name="simuladoId" value="<%= simulado.id_simulado %>">
-                <button type="submit" id="submitButton">Remover Questões</button>
             </form>
-            
-    
-    
-       
+        </div>
 
-        <!--========== MAIN JS ==========-->
+        <!-- Contador de selecionadas -->
+        <div id="contador-questoes-selecionadas" class="contador-questoes">
+            Questões Selecionadas: <span id="numero-questoes-selecionadas">0</span>
+        </div>
 
+        <!-- Formulário principal -->
+        <form id="form-remover" action="/simulados/<%= simulado.id_simulado %>/remover-questoes?_method=DELETE" method="POST">
+            <input type="hidden" name="simuladoId" value="<%= simulado.id_simulado %>">
+            <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
 
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th width="5%">
+                                    <input type="checkbox" id="select-all" class="form-check-input">
+                                </th>
+                                <th>Título</th>
+                                <th width="15%">Tipo</th>
+                                <th width="50%">Questão</th>
+                            </tr>
+                        </thead>
+                        <tbody id="questoes-tbody">
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-        <script src="/js/main.js"></script>
-      
-        <script src="/js/professor/quillContentHtmlTable.jsable.js"></script>
-        <script src="/js/validations/validate.js"></script>
-    </body>
+            <!-- Paginação -->
+            <div id="pagination-container" class="pagination-custom"></div>
+
+            <!-- Botões -->
+            <div class="button-container">
+                <a href="/simulados/meus-simulados" class="btn btn-voltar btn-lg">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+                <button type="submit" id="submitButton" class="btn btn-danger btn-lg"
+                        onclick="return confirm('Tem certeza que deseja remover as questões selecionadas?')">
+                    <i class="bi bi-trash"></i> Remover Questões Selecionadas
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/js/main.js"></script>
+    <script src="/js/validations/validate.js"></script>
+        <script src="/simulados/js/handlers/associarQuestaoHandler.js"></script>
+
+    <%- include('../partials/ContentManager.ejs') %>
+
+    <script src="/simulados/js/simulado/removerQuestoes.js"></script>
+</body>
 </html>

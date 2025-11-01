@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-   <link rel="stylesheet" href="/css/global.css">
-   <link rel="stylesheet" href="/simulados/css/simulado/criar_simulado.css">   
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/simulados/css/simulado/criar_simulado.css">
 
-  
+
   <%- include('../partials/libs') %>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Criar Simulado - IFVest</title>
@@ -28,20 +28,20 @@
       <div class="form-container" id="formSection">
         <h1>Criar Simulado</h1>
         <form id="simuladoForm" action="/api/simulado" method="POST">
-       
-          
+
+
           <div class="form-group">
             <div class="error-message" id="titulo-error"></div>
             <label for="titulo">Título do Simulado:</label>
             <input type="text" id="titulo" name="titulo" required maxlength="200">
-       </div>
-              
+          </div>
+
           <div class="form-group">
-            
-               <div class="error-message" id="descricao-error"></div>
+
+            <div class="error-message" id="descricao-error"></div>
             <label for="descricao">Descrição:</label>
             <textarea id="descricao" name="descricao" rows="5" required maxlength="1000"></textarea>
-         
+
           </div>
           <div class="form-group">
             <label for="tipo">Selecione o tipo:</label>
@@ -52,71 +52,91 @@
             </select>
             <div class="error-message" id="tipo-error"></div>
           </div>
-   
+
           <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
           <button type="button" id="addQuestionsButton" onclick="goToNewContent()">Adicionar Questões</button>
 
         </form>
       </div>
+<div class="new-content" id="newContentSection" style="display: none;">
+    <!-- Título -->
+    <h1 class="border-bottom pb-2 mb-4">Associar Questões</h1>
 
-      <div class="new-content" id="newContentSection">
-        <h1 class="uk-heading-divider">Associar Questões</h1>
-        <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
-          <script>
-            window.onload = function () {
-              <div class="alert alert-danger d-flex align-items-center" role="alert">
-                <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill" /></svg>
-                <div>
-                  An example danger alert with an icon
-                </div>
-              </div>
-              alert("<%= errorMessage %>");
-            };
-          </script>
-          <% } %>
-            <div class="filter-container">
-              <input type="text" id="tituloFiltro" placeholder="Filtrar por título">
-              <button class="botaoFiltro" onclick="applyFilters()">Filtrar</button>
+    <!-- Mensagem de erro -->
+    <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+        <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div><%= errorMessage %></div>
+        </div>
+    <% } %>
+
+    <!-- Filtro -->
+    <div class="filter-container mb-4">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-10">
+                <label for="tituloFiltro" class="form-label">Buscar por título</label>
+                <input type="text" id="tituloFiltro" class="form-control" placeholder="Filtrar por título">
             </div>
-
-
-            <div id="contador-questoes-selecionadas">Questões Selecionadas: <span
-                id="numero-questoes-selecionadas">0</span>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-success w-100" onclick="applyFilters()">
+                    <i class="bi bi-search"></i> Filtrar
+                </button>
             </div>
+        </div>
+    </div>
 
-            <div class="table-container">
-              <table class="uk-table uk-table-striped" id="questoesTable">
-                <thead>
-                  <tr>
-                    <th><input type="checkbox" id="selectAll"></th>
-                    <th>Título</th>
-                    <th>Tipo</th>
-                    <th>Questão</th>
-                    <th>Tópico</th>
-                  </tr>
+    <!-- Contador -->
+    <div id="contador-questoes-selecionadas" class="contador-questoes mb-3">
+        Questões Selecionadas: <span id="numero-questoes-selecionadas">0</span>
+    </div>
+
+    <!-- Tabela -->
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle mb-0" id="questoesTable">
+                <thead class="table-light">
+                    <tr>
+                        <th width="5%">
+                            <input type="checkbox" id="selectAll" class="form-check-input">
+                        </th>
+                        <th>Título</th>
+                        <th width="12%">Tipo</th>
+                        <th width="45%">Questão</th>
+                        <th width="15%">Tópico(s)</th>
+                    </tr>
                 </thead>
                 <tbody id="questoesBody"></tbody>
-              </table>
-            </div>
-            <div class="pagination" id="pagination"></div>
+            </table>
+        </div>
+    </div>
 
-            <div class="button-container">
-              <button type="button" class="voltar-btn" onclick="goBack()">Voltar</button>
-              <button type="button" id="submitButton" class="salvar-btn" onclick="saveSimulado()">Salvar</button>
-            </div>
-      </div>
+    <!-- Paginação -->
+    <nav aria-label="Paginação de questões" class="mt-3">
+        <ul class="pagination justify-content-center" id="pagination"></ul>
+    </nav>
+
+    <!-- Botões -->
+    <div class="button-container d-flex justify-content-center gap-3 mt-4">
+        <button type="button" class="btn btn-secondary btn-lg" onclick="goBack()">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" id="submitButton" class="btn btn-success btn-lg" onclick="saveSimulado()">
+            <i class="bi bi-check-lg"></i> Salvar
+        </button>
+    </div>
+</div>
 
       <script>
         window.questoes = <%- JSON.stringify(questoes || []) %>;
-    
+
       </script>
       <script src="/simulados/js/simulado/criarSimulado.js"></script>
       <script src="/simulados/js/simulado/validate_criar_simulados.js"></script>
       <script src="/js/main.js"></script>
       <script src="/simulados/js/validate.js"></script>
-    
 
-  
+
+
 
 </body>
 

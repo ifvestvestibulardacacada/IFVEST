@@ -13,12 +13,11 @@ const itemsPerPage = 5;
 let filteredQuestoes = [];
 
 // Initialize selected questions from sessionStorage
-let selectedQuestions = JSON.parse(sessionStorage.getItem('selectedQuestions') || '[]');
+let selectedQuestions = [];
 
 // Event listener para limpar selectedQuestions quando o tipo mudar
 tipoSelect.addEventListener('change', () => {
   console.log('Tipo selecionado mudou:', tipoSelect.value);
-  sessionStorage.removeItem('selectedQuestions');
   selectedQuestions = [];
   updateSelectedCount();
   applyFilters(); // Sempre atualiza
@@ -164,7 +163,7 @@ selectAllCheckbox.addEventListener('change', () => {
     selectedQuestions = selectedQuestions.filter(id => !pageQuestionIds.includes(id));
   }
 
-  sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
+  //sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
   console.log('Updated selectedQuestions:', selectedQuestions);
   renderTable();
   updateSelectedCount();
@@ -180,7 +179,7 @@ questoesBody.addEventListener('change', (e) => {
     } else {
       selectedQuestions = selectedQuestions.filter(qid => qid !== id);
     }
-    sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
+    //sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
     console.log('Updated selectedQuestions:', selectedQuestions);
     updateSelectedCount();
     selectAllCheckbox.checked = document.querySelectorAll('.questao-checkbox').length ===
@@ -189,14 +188,13 @@ questoesBody.addEventListener('change', (e) => {
 });
 
 async function saveSimulado() {
-  console.log('sessionStorage.selectedQuestions:', sessionStorage.getItem('selectedQuestions'));
-  console.log('modo value:', modoSelect.value);
+
 
   const formData = {
     titulo: document.getElementById('titulo').value,
     descricao: document.getElementById('descricao').value,
     tipo: document.getElementById('tipo').value,
-    modo: modoSelect.value || '1',
+
     selectedQuestionIds: selectedQuestions.filter(id => id) || []
   };
 
@@ -227,7 +225,7 @@ async function saveSimulado() {
     });
     console.log('Resposta recebida:', response);
     alert('Simulado salvo com sucesso!');
-    sessionStorage.removeItem('selectedQuestions');
+    //sessionStorage.removeItem('selectedQuestions');
     selectedQuestions = [];
     window.location.href = '/simulados/meus-simulados';
   } catch (error) {
@@ -255,10 +253,10 @@ async function saveSimulado() {
 
 
 // Limpa sessionStorage ao sair da página
-window.addEventListener('beforeunload', () => {
-  console.log('Leaving page, clearing sessionStorage');
-  sessionStorage.removeItem('selectedQuestions');
-});
+// window.addEventListener('beforeunload', () => {
+//   console.log('Leaving page, clearing sessionStorage');
+//   sessionStorage.removeItem('selectedQuestions');
+// });
 
 // Inicializa a página
 document.addEventListener('DOMContentLoaded', () => {
