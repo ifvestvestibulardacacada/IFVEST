@@ -43,8 +43,6 @@ module.exports = async (req, res) => {
         const { markdown, references } = MarkdownSolver.breakMarkdown(plainMaterial.conteudo_markdown);
         plainMaterial.conteudo_markdown =  markdown;
 
-        console.log(plainMaterial)
-
         // ! Temporário
         res.render('editor', { 
             nomeUsuario, 

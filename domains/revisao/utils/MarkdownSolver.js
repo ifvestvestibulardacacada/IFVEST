@@ -59,7 +59,7 @@ class MarkdownSolver {
     let referencesMD = "## Materiais Externos \n\n"
     let references = JSON.parse(parts[1] || "[]")
     references.forEach(ref => {
-      referencesMD += MarkdownSolver.getMarkdownLink(ref.name, ref.link) + "\n"
+      referencesMD += MarkdownSolver.getMarkdownLink(ref.name, ref.link) + "\n\n"
     })
     return parts[0].trim() + "\n\n" + referencesMD.trim()
   }

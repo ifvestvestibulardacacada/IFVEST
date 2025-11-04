@@ -23,7 +23,6 @@ module.exports = async (req, res) => {
                     return res.status(400).json({ message: 'Pelo menos uma palavra-chave ou um link externo deve ser fornecido.' });
                 }
 
-                console.log(conteudo)
                 // Processa links externos se fornecidos
                 if (linksExternos && Array.isArray(linksExternos) && linksExternos.length > 0) {
                     conteudo = MarkdownSolver.mergeReference(
@@ -31,7 +30,6 @@ module.exports = async (req, res) => {
                         linksExternos
                     )
                 }
-                console.log(conteudo)
 
                 const conteudoEditado = await Conteudo.findOne({
                     where: { id_conteudo: id_conteudo, id_usuario: userId },
