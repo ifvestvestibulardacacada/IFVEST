@@ -1,7 +1,9 @@
 const { Conteudo, PalavraChave, sequelize } = require('../../../models');
-
+const MarkdownSolver = require('../utils/MarkdownSolver')
 
 module.exports = async (req, res) => {
+
+    console.log(req.body)
 
     const { titulo, assuntoId, palavrasChave, conteudo, linksExternos } = req.body;
 
@@ -21,6 +23,15 @@ module.exports = async (req, res) => {
             return res.status(400).json({ message: 'Pelo menos uma palavra-chave e um link externo deve ser fornecida.' });
         }
 
+        console.log(conteudo)
+        // Processa links externos se fornecidos
+        if (linksExternos && Array.isArray(linksExternos) && linksExternos.length > 0) {
+            conteudo = MarkdownSolver.mergeReference(
+                conteudo,
+                linksExternos
+            )
+        }
+        console.log(conteudo)
 
         const ConteudoCriado = await Conteudo.create(
             {
@@ -55,6 +66,8 @@ module.exports = async (req, res) => {
 
         await ConteudoCriado.setPalavraChave(idsPalavrasChave, { transaction });
 
+        
+        
         // Confirma a transação
         await transaction.commit();
         res.status(201).json({

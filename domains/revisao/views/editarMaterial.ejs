@@ -10,7 +10,7 @@
         <div class="form-container">
             <form id="materialForm">
                 <!-- Hidden Material ID -->
-                <input type="hidden" id="materialId" value="<%= Material.id_material %>">
+                <input type="hidden" id="materialId" value="<%= Material.id_material ? Material.id_material : null %>">
 
                 <!-- Título -->
                 <div class="form-group">
