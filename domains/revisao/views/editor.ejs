@@ -21,16 +21,10 @@
             </div>
 
             <!-- Seletores de Assunto -->
-            <div class="form-row my-3">
-                <div class="form-group col-md-6">
-                    <!-- <label for="selectAssunto">Assunto</label>
-                    <select id="selectAssunto" class="form-control">
-                        <option value="">Selecione uma opção</option>
-                        <% Assuntos.forEach(assunto=> { %>
-                            <option value="<%= assunto.id_assunto %>"><%= assunto.nome %></option>
-                        <% }); %>
-                    </select> -->
+            <div class="form-row my-3 d-flex">
+                <div class="form-group col-md-6 px-1">
 
+                    <label for="selected_subject_id">Assunto</label>
                     <!-- O valor selecionado irá aqui -->
                     <input type="hidden" name="id_assunto" id="selected_subject_id">
 
@@ -45,19 +39,13 @@
                         <%- include('./_subjectTree', { subjects: Assuntos }) %>
                     </div>
                 </div>
-            </div>
-
-            <!-- Palavras-chave -->
-            <div class="form-row keyword-field align-items-end">
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-6 px-1">
                     <label for="palavrasChave">Palavras-chave</label>
                     <input type="text" class="form-control" id="palavrasChave" list="palavrasChaveList" placeholder="trovador, cantigas, vassalagem">
                     <datalist id="palavrasChaveList"></datalist>
-                </div>
-                <div class="form-group col-md-4">
                     <button type="button" class="btn btn-primary" id="addKeywordBtn">Adicionar palavra-chave</button>
+                    <div class="form-group tag-box"></div>
                 </div>
-                <div class="form-group tag-box"></div>
             </div>
 
             <!-- Editor Markdown -->
