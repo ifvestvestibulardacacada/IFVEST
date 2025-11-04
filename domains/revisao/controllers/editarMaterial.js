@@ -1,5 +1,6 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
 const { Conteudo, Assunto, PalavraChave } = require('../../../models')
+const MarkdownSolver = require('../utils/MarkdownSolver')
 
 module.exports = async (req, res) => {
 
@@ -38,10 +39,21 @@ module.exports = async (req, res) => {
         plainMaterial.PalavraChave = plainMaterial.PalavraChave.map(keyword => keyword.palavrachave); // Extract 'PalavraChave' field
 
         plainMaterial.assunto = assunto;
+        
+        const { markdown, references } = MarkdownSolver.breakMarkdown(plainMaterial.conteudo_markdown);
+        plainMaterial.conteudo_markdown =  markdown;
 
+        console.log(plainMaterial)
 
         // ! Temporário
-        res.render('editarMaterial', { nomeUsuario, perfilUsuario, imagemPerfil, Assuntos, Material: plainMaterial, assunto });
+        res.render('editor', { 
+            nomeUsuario, 
+            perfilUsuario, 
+            imagemPerfil, 
+            Assuntos, 
+            Material: plainMaterial, 
+            MaterialExterno: references,
+            assunto });
 
     } catch (error) {
         console.error(error)

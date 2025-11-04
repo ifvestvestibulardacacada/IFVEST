@@ -1,10 +1,10 @@
 const { sequelize } = require("../../../models");
 const { Conteudo, PalavraChave } = require('../../../models');
-
+const MarkdownSolver = require('../utils/MarkdownSolver')
 
 module.exports = async (req, res) => {
             const { id_conteudo } = req.params;
-            const { titulo, assuntoId, palavrasChave, conteudo, linksExternos } = req.body;
+            let { titulo, assuntoId, palavrasChave, conteudo, linksExternos } = req.body;
             const userId = req.session.userId;
 
             const transaction = await sequelize.transaction();
@@ -22,6 +22,16 @@ module.exports = async (req, res) => {
                 if (palavrasChave.length === 0 && linksExternos.length === 0) {
                     return res.status(400).json({ message: 'Pelo menos uma palavra-chave ou um link externo deve ser fornecido.' });
                 }
+
+                console.log(conteudo)
+                // Processa links externos se fornecidos
+                if (linksExternos && Array.isArray(linksExternos) && linksExternos.length > 0) {
+                    conteudo = MarkdownSolver.mergeReference(
+                        conteudo,
+                        linksExternos
+                    )
+                }
+                console.log(conteudo)
 
                 const conteudoEditado = await Conteudo.findOne({
                     where: { id_conteudo: id_conteudo, id_usuario: userId },

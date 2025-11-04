@@ -13,7 +13,11 @@ module.exports = async (req, res) => {
         }]
     }) || null
 
-    const conteudo_markdown = MarkdownSolver.Render(conteudo.conteudo_markdown)
+    
+    // Pré-processa as referências no markdown
+    let contentWithReferences = MarkdownSolver.processReferences(conteudo.conteudo_markdown)
+
+    const conteudo_markdown = MarkdownSolver.Render(contentWithReferences)
     // const conteudo_markdown = conteudo.conteudo_markdown
 
     // console.log(conteudo.conteudo_markdown)
