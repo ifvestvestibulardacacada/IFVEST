@@ -3,8 +3,10 @@
 <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
 <script type="module" crossorigin src="/assets/index-7zN54S2I.js"></script>
 <link rel="stylesheet" crossorigin href="/assets/index-D17DFlJU.css">
+<link rel="stylesheet" href="/revisao/css/subjectTree.css">
+<script src="/revisao/js/subjectTree.js" defer></script>
 
-<main>
+<main class="my-5">
     <h1><%= (Material && Material.nome) ? 'Editar Material' : 'Criar Material' %></h1>
 
     <div class="form-container">
@@ -19,15 +21,29 @@
             </div>
 
             <!-- Seletores de Assunto -->
-            <div class="form-row">
+            <div class="form-row my-3">
                 <div class="form-group col-md-6">
-                    <label for="selectAssunto">Assunto</label>
+                    <!-- <label for="selectAssunto">Assunto</label>
                     <select id="selectAssunto" class="form-control">
                         <option value="">Selecione uma opção</option>
                         <% Assuntos.forEach(assunto=> { %>
                             <option value="<%= assunto.id_assunto %>"><%= assunto.nome %></option>
                         <% }); %>
-                    </select>
+                    </select> -->
+
+                    <!-- O valor selecionado irá aqui -->
+                    <input type="hidden" name="id_assunto" id="selected_subject_id">
+
+                    <!-- Apenas para mostrar o nome selecionado -->
+                    <div class="selection-display">
+                        <strong>Selecionado:</strong> 
+                        <span id="selected_subject_name">Nenhum</span>
+                    </div>
+
+                    <!-- O container da árvore -->
+                    <div class="tree-container" id="subject-tree">
+                        <%- include('./_subjectTree', { subjects: Assuntos }) %>
+                    </div>
                 </div>
             </div>
 

@@ -16,10 +16,12 @@
 <%- include('./modal_view_upload') %>
 
 <div class="container">
-    <%if (conteudo) {%>
+    <% if (conteudo) {%>
         <h1 class="text-center mt-5"><%=conteudo.nome%></h1>
         <h2 class="text-center mb-5 fs-5">Material de apoio de <%=conteudo.Assunto.nome%></h2>
-        <span><i class='bx  bx-chevron-left'></i><a href="/revisao/busca/<%=conteudo.Assunto.id_assunto%>">Voltar para <%=conteudo.Assunto.nome%></a></span>
+        <span><i class='bx  bx-chevron-left'></i><a href="/revisao/busca/<%=conteudo.Assunto.id_assunto%>">Voltar para <%=conteudo.Assunto.nome%></a> 
+            <% if (autor) {%><a href="/revisao/editar_material/<%=conteudo.id_conteudo%>" class="ml-auto btn btn-primary">Editar material</a> <%}%>
+        </span>
         <hr>
         <div class="markdown-area">
             <div class="row d-flex justify-content-center">

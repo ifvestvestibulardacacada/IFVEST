@@ -1,0 +1,29 @@
+<%# Este arquivo se chama recursivamente para construir a árvore. %>
+
+<% if (subjects && subjects.length > 0) { %>
+    <ul class="tree-level">
+        <% subjects.forEach(subject => { %>
+            
+            <%# O <li> armazena o ID para o JavaScript %>
+            <li data-id="<%= subject.id_assunto %>">
+                
+                <%# Adiciona um "toggle" (botão) se o item tiver filhos %>
+                <% if (subject.children && subject.children.length > 0) { %>
+                    <span class="toggle">►</span>
+                <% } else { %>
+                    <%# Placeholder para manter o alinhamento %>
+                    <span class="toggle-placeholder"></span>
+                <% } %>
+
+                <%# O nome do assunto, que será clicável %>
+                <span class="subject-name"><%= subject.nome %></span>
+
+                <%# *** A RECURSÃO ACONTECE AQUI *** %>
+                <%# Se houver filhos, inclua este mesmo arquivo passando os filhos %>
+                <% if (subject.children && subject.children.length > 0) { %>
+                    <%- include('_subjectTree', { subjects: subject.children }) %>
+                <% } %>
+            </li>
+        <% }); %>
+    </ul>
+<% } %>
