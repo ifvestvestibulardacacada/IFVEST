@@ -1,0 +1,113 @@
+
+
+/* Display do item selecionado */
+.selection-display {
+    padding: 10px;
+    background-color: #e9f5ff;
+    border: 1px solid #b3d7ff;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+#selected_subject_name {
+    font-weight: bold;
+    color: #0056b3;
+}
+
+/* --- Estilos da Árvore --- */
+
+/* Container principal da árvore */
+.tree-container {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    max-height: 300px; /* Limita a altura e adiciona scroll */
+    overflow-y: auto;
+    background-color: #fdfdfd;
+}
+
+/* Remove marcadores de lista e controla indentação */
+.tree-level {
+    list-style-type: none;
+    padding-left: 20px; /* Esta é a indentação da árvore */
+}
+
+/* Esconde sub-níveis por padrão */
+.tree-level .tree-level {
+    display: none;
+}
+
+.tree-level li {
+    padding: 4px 0;
+    position: relative;
+}
+
+/* O nome do assunto que será clicado */
+.subject-name {
+    cursor: pointer;
+    padding: 3px 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.subject-name:hover {
+    background-color: #f0f0f0;
+}
+
+/* Estilo do item selecionado */
+.tree-level li.selected > .subject-name {
+    background-color: #007bff;
+    color: white;
+}
+
+/* O "botão" de expandir/recolher */
+.toggle {
+    cursor: pointer;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    line-height: 18px;
+    font-size: 0.8em;
+    font-weight: bold;
+    color: #555;
+    user-select: none; /* Impede seleção de texto */
+    transition: transform 0.2s ease;
+}
+
+.toggle-placeholder {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+}
+
+/* --- Lógica de Expandir/Recolher (via CSS) --- */
+
+/* Quando o <li> tem a classe 'expanded', mostra o <ul> filho imediato */
+.tree-level li.expanded > .tree-level {
+    display: block;
+}
+
+/* Gira o ícone do toggle */
+.tree-level li.expanded > .toggle {
+    transform: rotate(90deg);
+}
+
+/* Botão de salvar */
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover {
+    background-color: #218838;
+}

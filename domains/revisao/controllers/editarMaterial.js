@@ -1,6 +1,7 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
 const { Conteudo, Assunto, PalavraChave } = require('../../../models')
 const MarkdownSolver = require('../utils/MarkdownSolver')
+const buildTree = require('../utils/buildTree')
 
 module.exports = async (req, res) => {
 
@@ -48,7 +49,7 @@ module.exports = async (req, res) => {
             nomeUsuario, 
             perfilUsuario, 
             imagemPerfil, 
-            Assuntos, 
+            Assuntos: buildTree(Assuntos), 
             Material: plainMaterial, 
             MaterialExterno: references,
             assunto });

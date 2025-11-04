@@ -34,12 +34,10 @@ class MarkdownSolver {
       formulas.push(rendered)
       return `{{MATH_${index}}}`
     })
-    console.log(placeholderMarkdown)
 
 
     // Agora renderiza o markdown SEM permitir html
     let html = md.render(placeholderMarkdown)
-    console.log(html)
 
     // Substitui placeholders pelos HTML KaTeX
     formulas.forEach((formula, i) => {

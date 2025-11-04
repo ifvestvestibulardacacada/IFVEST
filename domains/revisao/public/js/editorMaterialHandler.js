@@ -1,20 +1,29 @@
 // Handler for submit and form wiring for unified editor
 (function () {
   const submitBtn = document.getElementById('submitButton');
-  const selectAssunto = document.getElementById('selectAssunto');
-  const linksTextarea = document.getElementById('linksExternos');
+  const selectedSubjectIdInput = document.getElementById('selected_subject_id');
+  const selectedSubjectNameEl = document.getElementById('selected_subject_name');
+  const materialTituloInput = document.getElementById('materialTitulo');
 
-  // select assunto if provided by server
-  try {
-    if (window.Material && window.Material.id_assunto) {
-      const opt = document.querySelector(`#selectAssunto option[value="${window.Material.id_assunto}"]`);
-      if (opt) opt.selected = true;
-    } else if (window.Material && window.Material.assunto && window.Material.assunto.id_assunto) {
-      const opt = document.querySelector(`#selectAssunto option[value="${window.Material.assunto.id_assunto}"]`);
-      if (opt) opt.selected = true;
+  // Fill form fields if in edit mode
+  if (window.MODE === 'edit' && window.Material) {
+    // Set title
+    if (materialTituloInput && window.Material.titulo) {
+      materialTituloInput.value = window.Material.titulo;
     }
-  } catch (e) {
-    console.warn('Erro ao marcar assunto:', e);
+
+    // Set subject
+    if (selectedSubjectIdInput && selectedSubjectNameEl) {
+      if (window.Material.id_assunto) {
+        selectedSubjectIdInput.value = window.Material.id_assunto;
+      } else if (window.Material.assunto && window.Material.assunto.id_assunto) {
+        selectedSubjectIdInput.value = window.Material.assunto.id_assunto;
+      }
+      
+      if (window.Material.assunto && window.Material.assunto.nome) {
+        selectedSubjectNameEl.textContent = window.Material.assunto.nome;
+      }
+    }
   }
 
   async function submitHandler() {
@@ -30,7 +39,7 @@
 
     const payload = {
       titulo: nome,
-      assuntoId: (selectAssunto && selectAssunto.value) ? selectAssunto.value : null,
+      assuntoId: selectedSubjectIdInput.value || null,
       palavrasChave,
       // linksExternos: array of objects { name, link }
       linksExternos: Array.isArray(window.externalMaterials) ? window.externalMaterials : [],
