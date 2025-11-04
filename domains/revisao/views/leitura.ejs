@@ -12,6 +12,9 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
     onload="renderMathInElement(document.body);"></script>
 <title><%=conteudo.nome%> - Módulo de Revisão - IFVest</title>
+
+<%- include('./modal_view_upload') %>
+
 <div class="container">
     <%if (conteudo) {%>
         <h1 class="text-center mt-5"><%=conteudo.nome%></h1>
@@ -26,7 +29,25 @@
             </div>
         </div>
     <%} else {%>
-        Ops, nao achei nada aqui :(
+        Ops, nao achei nada aqui 🙁
     <%}%>
 
 </div>
+
+<script>
+    var modal_link = ""
+    document.querySelectorAll('.container .markdown-area a').forEach((link => {
+        if(link.href.includes('/uploads/revisao/')){
+            // internal pdf link
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                openFileViewer(link.href, link.href.slice(17));
+                console.log("fala galera")
+            })
+        } else {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        }
+
+    }))
+</script>
