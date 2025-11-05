@@ -54,7 +54,7 @@ class MarkdownSolver {
     if (!markdown.includes(MarkdownSolver.DELIMITER))
       return markdown
     const parts = markdown.split(MarkdownSolver.DELIMITER)
-    let referencesMD = "## Materiais Externos \n\n"
+    let referencesMD = "\n\n---\n## Materiais Externos \n\n"
     let references = JSON.parse(parts[1] || "[]")
     references.forEach(ref => {
       referencesMD += MarkdownSolver.getMarkdownLink(ref.name, ref.link) + "\n\n"
