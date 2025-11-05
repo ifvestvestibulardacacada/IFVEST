@@ -12,6 +12,7 @@
   </head>
   <body class="groups-page" data-id-usuario="<%= id_usuario %>">
     <div class="container">
+      <%- include('./partials/flashMessages') %>
       <%- include('./partials/flashcardFiltros') %>
       <main class="flashcard-content no-groups">
         <section class="flashcard-section">
@@ -23,5 +24,6 @@
         </section>
       </main>
     </div>
+    <script src="/flashcards/js/flashMessages.js"></script>
   </body>
   </html>

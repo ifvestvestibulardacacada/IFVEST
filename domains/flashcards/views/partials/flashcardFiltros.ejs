@@ -1,15 +1,16 @@
 
 <link rel="stylesheet" href="/flashcards/css/flashcardFiltros.css">
 <form action="<%= typeof isGroupsPage !== 'undefined' && isGroupsPage ? '/flashcards/grupos' : '/flashcards' %>" method="GET" class="filters">
-  <select name="id_area" id="area" class="select">
+  <!-- data-selected attributes allow the client script to pre-select values -->
+  <select name="id_area" id="area" class="select" data-selected="<%= typeof id_area !== 'undefined' && id_area !== null ? id_area : '' %>">
     <option value="">Selecione a Área (opcional)</option>
   </select>
 
-  <select name="id_topico" id="topico" class="select">
+  <select name="id_topico" id="topico" class="select" data-selected="<%= typeof id_topico !== 'undefined' && id_topico !== null ? id_topico : '' %>">
     <option value="">Selecione o Tópico (opcional)</option>
   </select>
 
-  <select name="id_dificuldade" id="dificuldade" class="select">
+  <select name="id_dificuldade" id="dificuldade" class="select" data-selected="<%= typeof id_dificuldade !== 'undefined' && id_dificuldade !== null ? id_dificuldade : '' %>">
     <option value="">Selecione a Dificuldade (opcional)</option>
   </select>
 

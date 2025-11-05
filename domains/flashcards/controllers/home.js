@@ -1,11 +1,23 @@
-const {Flashcard, FlashcardUsuario} = require('../../../models');
+const {Flashcard, FlashcardUsuario, Topico} = require('../../../models');
 
 module.exports = async (req, res) => {
   try {
       const { id_area, id_topico, id_dificuldade, grupo } = req.query;
       const where = {};
       if (id_area && id_area !== "") where.id_area = Number(id_area);
-      if (id_topico && id_topico !== "") where.id_topico = Number(id_topico);
+      // Defensive: validate id_topico exists in DB before applying filter
+      let validatedTopico = null;
+      if (id_topico && id_topico !== "") {
+          const found = await Topico.findByPk(Number(id_topico));
+          if (found) {
+              validatedTopico = Number(id_topico);
+              where.id_topico = validatedTopico;
+          } else {
+              console.warn(`Filtro de tópico inválido recebido: id_topico=${id_topico}. Ignorando filtro.`);
+              // User-facing flash message for invalid topic filter
+              req.session.errorMessage = 'O tópico selecionado não existe e foi ignorado.';
+          }
+      }
       if (id_dificuldade && id_dificuldade !== "") where.id_dificuldade = Number(id_dificuldade);
       const nomeUsuario = req.session.nomeUsuario;
       const perfilUsuario = req.session.perfil;
@@ -105,7 +117,13 @@ module.exports = async (req, res) => {
               errorMessage
           });
       } else {
-          res.render('flashcards', { 
+              // Capture and clear any flash messages in session for student view
+              const successMessage = req.session.successMessage;
+              const errorMessage = req.session.errorMessage;
+              delete req.session.successMessage;
+              delete req.session.errorMessage;
+
+              res.render('flashcards', { 
               flashcards,
               nomeUsuario,
               perfilUsuario,
@@ -116,9 +134,11 @@ module.exports = async (req, res) => {
               displayFlashcards,
               selectedGroup: grupo || null,
               id_area: id_area || null,
-              id_topico: id_topico || null,
+              id_topico: validatedTopico || null,
               id_dificuldade: id_dificuldade || null,
               isGroupsPage: false, // Flag para identificar página de estudo
+              successMessage,
+              errorMessage,
           });
       }
   } catch (error) {

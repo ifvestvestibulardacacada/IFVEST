@@ -34,6 +34,13 @@ html, body {
   width: 100%;
 }
 
+.professor-flashcard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
 .title {
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 700;
@@ -434,5 +441,56 @@ html, body {
     left: 10px;
     min-width: auto;
     max-width: none;
+  }
+}
+
+/* --- FORM LAYOUT FOR CREATE/EDIT (SCOPED TO PROFESSOR PAGES) --- */
+/* Desktop: two-column layout (left: textareas, right: controls) */
+@media (min-width: 1024px) {
+  .professor-flashcard .flashcard-form {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    grid-auto-rows: min-content;
+    gap: 1.25rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem;
+    align-items: start;
+  }
+
+  /* Ensure textareas occupy the left column */
+  .professor-flashcard .flashcard-form textarea {
+    grid-column: 1 / 2;
+    width: 100%;
+  }
+  .professor-flashcard .flashcard-form textarea:nth-of-type(1) {
+    min-height: 240px;
+  }
+  .professor-flashcard .flashcard-form textarea:nth-of-type(2) {
+    min-height: 160px;
+  }
+
+  /* All form controls that come after the second textarea live in the right column */
+  .professor-flashcard .flashcard-form textarea:nth-of-type(2) ~ label,
+  .professor-flashcard .flashcard-form textarea:nth-of-type(2) ~ select,
+  .professor-flashcard .flashcard-form textarea:nth-of-type(2) ~ button {
+    grid-column: 2 / 3;
+  }
+
+  .professor-flashcard .flashcard-form select {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .professor-flashcard .flashcard-form button[type="submit"],
+  .professor-flashcard .criar-flashcard-btn {
+    justify-self: stretch;
+    margin: 0;
+  }
+
+  /* Make any helper paragraphs span full width */
+  .professor-flashcard .flashcard-form p,
+  .professor-flashcard .flashcard-form .full-width {
+    grid-column: 1 / -1;
   }
 }

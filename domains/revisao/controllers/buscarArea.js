@@ -1,4 +1,4 @@
-const {Area, Topico} = require('../../../models');
+const {Area} = require('../../../models');
 const Nayahath = require('../../../logs/ArcanaFlow');
 
 module.exports = async (req, res) =>{
