@@ -52,32 +52,9 @@
 
         <!-- Formulário principal -->
         <form id="form-remover" action="/simulados/<%= simulado.id_simulado %>/remover-questoes?_method=DELETE" method="POST">
-            <input type="hidden" name="simuladoId" value="<%= simulado.id_simulado %>">
-            <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
-
-            <div class="table-container">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered align-middle mb-0">
-                        <thead class="table-light">
-                            <tr>
-                                <th width="5%">
-                                    <input type="checkbox" id="select-all" class="form-check-input">
-                                </th>
-                                <th>Título</th>
-                                <th width="15%">Tipo</th>
-                                <th width="50%">Questão</th>
-                            </tr>
-                        </thead>
-                        <tbody id="questoes-tbody">
-                            <!-- Preenchido via JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Paginação -->
-            <div id="pagination-container" class="pagination-custom"></div>
-
+       
+            <%- include('../partials/contentTable') %>
+              
             <!-- Botões -->
             <div class="button-container">
                 <a href="/simulados/meus-simulados" class="btn btn-voltar btn-lg">

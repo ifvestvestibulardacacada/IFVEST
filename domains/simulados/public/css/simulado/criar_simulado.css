@@ -122,9 +122,10 @@ h1 {
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  max-width: 500px;
+
   margin: 0 auto 1.5rem auto;
 }
+ 
 
 .filter-container input[type="text"] {
   flex: 1;

@@ -5,113 +5,122 @@
     <title>Template Geração PDF - IFVest Estilo ENEM</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <%- include('../partials/libs') %>
-        <link rel="stylesheet" href="/simulados/css/prova/templateprova.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-        <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-        <script src="https://unpkg.com/turndown/dist/turndown.js"></script>
-        <script type="module" crossorigin src="/simulados/assets/index-Dvz0wraj.js"></script>
-        <link rel="stylesheet" crossorigin href="/simulados/assets/index-BWEAWr6k.css">
+   
+    <link rel="stylesheet" href="/simulados/css/prova/templateprova.css">
 
-        <style>
-            .header,
-            #navbar {
-                display: none;
-            }
 
-            @media print {
-                .questao-wrapper {
-                    page-break-inside: avoid !important;
-                    break-inside: avoid !important;
-                }
-            }
-        </style>
 </head>
-
 <body>
-    <main>
-        <div class="uk-flex uk-flex-between" id="button-container">
-            <button id="generate-pdf" class="button" onclick="gerarPDF('<%= simulado.id_simulado %>')">
-                <i class="fas fa-print"></i> Gerar PDF
-            </button>
 
+<%
 
-        </div>
+    function parseRichText(jsonString) {
+        if (!jsonString) return '';
+        let html = '';
+        try {
+            const ops = JSON.parse(jsonString).ops;
+            
+            ops.forEach(op => {
+                
+                // 1. É um objeto de IMAGEM?
+                if (op.insert && typeof op.insert === 'object' && op.insert.image) {
+                    let attrs = op.attributes || {};
+                    let style = 'max-width: 100%; height: auto; display: block; margin: 10px 0; border: 1px solid #ccc;';
+                    
+                    // Se o JSON tiver uma largura específica, usa, mas mantém responsivo
+                    if (attrs.width) {
+                        style = `width: ${attrs.width}px; max-width: 100%; height: auto; display: block; margin: 10px 0; border: 1px solid #ccc;`;
+                    }
+                    html += `<img src="${op.insert.image}" alt="Imagem da questão" style="${style}">`;
+                }
+                
+                // 2. É um TEXTO?
+                else if (op.insert && typeof op.insert === 'string') {
+                    let text = op.insert;
+                    
+                    // Limpa qualquer artefato de imagem em markdown (ex: ![](...))
+                    // já que a imagem real vem do objeto acima.
+                    text = text.replace(/!\[.*?\]\(.*?\)/g, ''); 
+                    
+                    // Aplica formatação de negrito e quebras de linha
+                    text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>'); 
+                    text = text.replace(/\n/g, '<br>'); 
+                    
+                    html += text;
+                }
+            });
 
-
-        <div class="title-div">
-            <h1>Simulado ENEM - IFVest <%= new Date().getFullYear() %>
-            </h1>
-        </div>
-
-        <form id="questionario">
-            <div class="instrucoes">
-                <p><strong>Instruções Gerais:</strong> Leia atentamente cada questão antes de responder. Marque apenas
-                    uma alternativa nas questões objetivas e utilize o espaço reservado nas dissertativas.</p>
-            </div>
-
-            <div class="questoes-container">
-                <% simulado.Questao.forEach((questao, index)=> { %>
-                    <div class="questao-wrapper" data-questao="<%= questao.id_questao %>">
-
-
-                        <div class="questao-content">
-                            <% if (questao.titulo) { %>
-                                <div class="titulo">
-                                    <p>
-                                        <%= questao.titulo %>
-                                    </p>
-                                </div>
-                                <% } %>
-
-                                    <div class="pergunta" data-delta='<%= questao.pergunta %>'>
-                                        <span class="required">*</span>
-                                    </div>
-
-                                    <% if (questao.tipo==="OBJETIVA" ) { %>
-                                        <div class="opcoes-container">
-                                            <% questao.Opcao.forEach((opcao, index)=> { %>
-                                                <div class="opcao">
-                                                    <label class="letra" for="opcao<%= opcao.id_opcao %>">
-                                                        <%= opcao.alternativa %>)
-                                                    </label>
-                                                    <input class="radio-input" type="radio"
-                                                        id="opcao<%= opcao.id_opcao %>"
-                                                        name="questoes[<%= questao.id_questao %>]"
-                                                        value="<%= questao.id_questao %>-<%= opcao.id_opcao %>"
-                                                        disabled>
-                                                    <div class="opcao-texto" data-delta='<%= opcao.descricao %>'>
-                                                        <span class="required">*</span>
-                                                    </div>
-                                                </div>
-                                                <% }) %>
-                                        </div>
-                                        <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
-                                            <div class="resposta-dissertativa">
-                                                <textarea name="respostas[questao_<%= questao.id_questao %>]"
-                                                    placeholder="Espaço para resposta dissertativa" disabled></textarea>
-                                            </div>
-                                            <% } %>
-                        </div>
-                    </div>
-                    <% }) %>
-            </div>
-        </form>
-    </main>
-    <!-- <div id="pdfPreview" data-id="<%= simulado.id_simulado %>"></div> -->
-    <script src="/simulados/js/main.js"></script>
-    <script src="/simulados/js/prova/quillContentHTML.js"></script>
-    <script src="/simulados/js/prova/gerarPDF.js"></script>
-
-
-
-    <script>
-        function fecharModal() {
-            document.getElementById('modal-imprimir').style.display = 'none';
+        } catch (e) {
+            console.error("Erro ao parsear JSON:", e, jsonString);
+            return jsonString; // Retorna a string original em caso de erro
         }
+        return html;
+    }
+%>
+
+
+    <div id="simulado-print-area" class="page-container">
+
+        <div class="controls">
+            <button id="printButton">Imprimir Simulado</button>
+            <button id="toggleAnswersButton">Mostrar/Ocultar Gabarito</button>
+        </div>
+
+        <header class="exam-header">
+            <h1><%= simulado.titulo %></h1>
+            <p><%= simulado.descricao %></p>
+        </header>
+
+        <main class="content-area">
+
+            <% simulado.Questao.forEach((questao, index) => { %>
+            
+                <article class="question">
+                    
+                    <p class="question-text">
+                        <%= questao.titulo || `Questão ${index + 1}` %>
+                    </p>
+                    
+                    <div class="question-body">
+                        <%# A função parseRichText agora renderiza o HTML correto %>
+                        <%- parseRichText(questao.pergunta) %>
+                    </div>
+
+                    <ol class="alternatives">
+                        
+                        <% questao.Opcao.forEach(opcao => { %>
+                        
+                            <li data-answer="<%= opcao.correta %>">
+                                <%- parseRichText(opcao.descricao) %>
+                            </li>
+                        
+                        <% }) %>
+                    </ol>
+                </article>
+
+            <% }) %>
+            
+        </main> 
+        </div> 
+        <script>
+        // O JavaScript original para os botões permanece IDÊNTICO.
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const printButton = document.getElementById('printButton');
+            if (printButton) {
+                printButton.addEventListener('click', function() {
+                    window.print();
+                });
+            }
+
+            const toggleAnswersButton = document.getElementById('toggleAnswersButton');
+            if (toggleAnswersButton) {
+                toggleAnswersButton.addEventListener('click', function() {
+                    document.body.classList.toggle('show-answers');
+                });
+            }
+        });
     </script>
 
-
 </body>
-
 </html>

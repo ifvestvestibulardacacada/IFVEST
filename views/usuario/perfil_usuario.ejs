@@ -68,7 +68,7 @@
         <div class="info-card">
           <h5><i class="fa fa-user-edit text-primary"></i> Editar Informações</h5>
           <hr>
-          <form action="/usuario/editar/<%= usuario.id_usuario %>?_method=PATCH" method="POST">
+          <form id="formEditarPerfil" data-id="<%= usuario.id_usuario %>" action="/usuario/editar/<%= usuario.id_usuario %>?_method=PATCH" method="POST">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label>Nome de Usuário</label>
@@ -97,7 +97,7 @@
           <div class="alert alert-danger small">
             <strong>Atenção!</strong> Esta ação é <strong>permanente</strong>. Todos os seus dados, simulados e progresso serão apagados.
           </div>
-          <form action="/usuario/<%= usuario.id_usuario %>?_method=DELETE" method="POST" onsubmit="return confirmDelete()">
+          <form id="formExcluirConta" data-id="<%= usuario.id_usuario %>" action="/usuario/<%= usuario.id_usuario %>?_method=DELETE" method="POST" onsubmit="return confirmDelete()">
             <div class="mb-3">
               <label>Digite <code>DELETAR</code> para confirmar:</label>
               <input type="text" class="form-control" name="confirmDelete" id="confirmInput" maxlength="10" required>

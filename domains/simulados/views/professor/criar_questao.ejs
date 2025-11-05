@@ -26,12 +26,18 @@
 
         <main>
             <h1 style="text-align: center;">Criar Questão</h1>
+
+        </div>
             <p style="display: none;"></p>
 
             <div class="form-container">
                
 
                 <form id="questaoForm" action="/professor/registrar-questao/<%= tipo %>" method="POST"> <!-- Título -->
+                                        <div class="button-container">
+            <a href="/simulados" class="btn btn-voltar btn-lg">
+                <i class="bi bi-arrow-left"></i> Voltar ao Menu Simulados
+            </a></div>
                     <div class="form-group">
                         <label for="titulo">Título da Questão</label>
                         <input type="text" class="form-control" id="titulo"
@@ -40,7 +46,7 @@
 
 
                     <!-- Seletores de Área e Tópico -->
-                    <div class="form-row">
+                    <div class="d-flex gap-1">
                         <div class="form-group col-md-6">
                             <label for="selectArea">Área</label>
                             <select id="selectArea" class="form-control" required>

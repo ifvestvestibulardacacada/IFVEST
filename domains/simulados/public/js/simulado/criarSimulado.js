@@ -3,7 +3,7 @@ const newContentSection = document.getElementById('newContentSection');
 const tipoSelect = document.getElementById('tipo');
 const modoSelect = document.getElementById('modo');
 const questoesTable = document.getElementById('questoesTable');
-const questoesBody = document.getElementById('questoesBody');
+const questoesBody = document.getElementById('questoes-tbody');
 const selectAllCheckbox = document.getElementById('selectAll');
 const contador = document.getElementById('numero-questoes-selecionadas');
 const paginationContainer = document.getElementById('pagination');
@@ -124,21 +124,52 @@ function renderTable() {
   renderPagination();
   updateSelectedCount();
 }
+function changePage(page) {
+  if (page < 1 || page > Math.ceil(filteredQuestoes.length / itemsPerPage)) return;
+  currentPage = page;
+  renderTable();
+}
 
 function renderPagination() {
   const pageCount = Math.ceil(filteredQuestoes.length / itemsPerPage);
-  paginationContainer.innerHTML = '';
+  const pagination = document.getElementById('pagination');
+  pagination.innerHTML = '';
 
+  if (pageCount <= 1) return;
+
+  // Botão Anterior
+  const prevItem = document.createElement('li');
+  prevItem.className = 'page-item';
+  if (currentPage === 1) prevItem.classList.add('disabled');
+  prevItem.innerHTML = `
+    <a class="page-link" href="#" aria-label="Anterior" onclick="changePage(${currentPage - 1}); return false;">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  `;
+  pagination.appendChild(prevItem);
+
+  // Páginas
   for (let i = 1; i <= pageCount; i++) {
-    const button = document.createElement('button');
-    button.textContent = i;
-    button.disabled = i === currentPage;
-    button.onclick = () => {
-      currentPage = i;
-      renderTable();
-    };
-    paginationContainer.appendChild(button);
+    const pageItem = document.createElement('li');
+    pageItem.className = 'page-item';
+    if (i === currentPage) pageItem.classList.add('active');
+
+    pageItem.innerHTML = `
+      <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
+    `;
+    pagination.appendChild(pageItem);
   }
+
+  // Botão Próximo
+  const nextItem = document.createElement('li');
+  nextItem.className = 'page-item';
+  if (currentPage === pageCount) nextItem.classList.add('disabled');
+  nextItem.innerHTML = `
+    <a class="page-link" href="#" aria-label="Próximo" onclick="changePage(${currentPage + 1}); return false;">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  `;
+  pagination.appendChild(nextItem);
 }
 
 function updateSelectedCount() {

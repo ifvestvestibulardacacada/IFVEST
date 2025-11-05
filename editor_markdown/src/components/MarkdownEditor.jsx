@@ -11,10 +11,29 @@ import symbolButtons from '../utils/symbolButtons';
 
 const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState(() => {
-    const savedMarkdown = window.ContentManager ? window.ContentManager.getConteudoMarkdown() : 'Ex: # Digite aqui o material ...';
+    const savedMarkdown = window.ContentManager 
+    ? window.ContentManager.getConteudoMarkdown() 
+    : 'Ex: # Digite aqui o material ...';
      console.log('Saved Markdown:', savedMarkdown);
     return savedMarkdown;
   });
+  <style jsx>{`
+        .w-md-editor-toolbar {
+          font-size: 1.4rem !important; /* Aumenta o tamanho dos ícones */
+        }
+        .w-md-editor-toolbar button {
+          width: 36px !important;
+          height: 36px !important;
+          padding: 6px !important;
+        }
+        .w-md-editor-toolbar li > button > svg {
+          width: 20px !important;
+          height: 20px !important;
+        }
+
+        /* O preview ocupa todo o espaço */
+   
+      `}</style>
 
   const [showEquationEditor,
     setShowEquationEditor]
@@ -52,6 +71,7 @@ const MarkdownEditor = () => {
     <div data-color-mode="light">
       <MDEditor
         height={400}
+        preview="live"
         value={markdown}
         onChange={setMarkdown}
         commands={filteredCommands.map(cmd =>
@@ -70,7 +90,7 @@ const MarkdownEditor = () => {
                   cmd.execute(state, api, setShowEquationEditor)
               }
               : cmd
-        )}
+        )}  
         previewOptions={{
           remarkPlugins: [remarkMath],
           rehypePlugins: [[rehypeKatex]],

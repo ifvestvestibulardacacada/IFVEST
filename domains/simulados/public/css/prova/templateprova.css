@@ -1,302 +1,190 @@
-/* Reset e configurações básicas */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+ /* --- Configurações Gerais da Página --- */
+        body {
+            font-family: 'Times New Roman', Times, serif; 
+            line-height: 1.6;
+            background-color: #f4f4f4; 
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            display: none; /* Oculta cabeçalhos e barras de navegação desnecessários */
+        }
+ #navbar {
+            display: none; /* Oculta cabeçalhos e barras de navegação desnecessários */
+        }
+        /* --- Container Principal --- */
+ .page-container {
+            /* * Adicionamos !important para forçar que o container 
+             * tenha exatamente este tamanho, esta margem (para centralizar)
+             * e este preenchimento (padding).
+            */
+            max-width: 1100px !important;
+            margin: 20px auto !important;
+            padding: 40px !important;
+            
+            /* O resto das regras não precisa de !important */
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
 
-body {
-    font-family: 'Times New Roman', serif;
-    font-size: 12pt;
-    line-height: 1.4;
-    margin: 0;
-    padding: 0;
-    background-color: #fff;
-    color: #000;
-}
+        /* --- Controles (Botões) --- */
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
 
-main {
-    max-width: 210mm;
-    margin: 0 auto;
-    padding: 10mm;
-    background: #fff;
-}
+        .controls button {
+            font-size: 16px;
+            padding: 10px 20px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+        }
 
-/* Controles de interface */
-#button-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #ccc;
-}
+        .controls button:hover {
+            background-color: #0056b3;
+        }
 
-#generate-pdf {
-    padding: 8px 16px;
-    font-size: 12pt;
-    border: 1px solid #000;
-    background-color: #fff;
-    color: #000;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
+        /* --- Cabeçalho do Simulado --- */
+        .exam-header {
+            text-align: center;
+            border-bottom: 3px double #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
 
-/* Cabeçalho estilo ENEM */
-.title-div {
-    text-align: center;
-    margin-bottom: 20mm;
-    border-bottom: 2px solid #000;
-    padding-bottom: 5mm;
-}
+        .exam-header h1 {
+            font-family: 'Helvetica', Arial, sans-serif; 
+            font-size: 2.5em;
+            margin: 0;
+        }
 
-.title-div h1 {
-    font-size: 18pt;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 5mm;
-}
+        .exam-header p {
+            font-size: 1.1em;
+            font-style: italic;
+            margin: 5px 0;
+        }
 
-/* Instruções */
-.instrucoes {
-    font-size: 11pt;
-    text-align: justify;
-    margin-bottom: 15mm;
-    padding: 8mm;
-    border: 1px solid #000;
-    background-color: #f9f9f9;
-}
+        /* * --- O LAYOUT DE COLUNAS --- */
+.content-area {
+            /* * Resetamos a margem e o padding que podem estar 
+             * vindo de uma regra global para a tag <main>.
+            */
+            margin: 0 !important;
+            padding: 0 !important;
 
-.instrucoes p {
-    margin: 0;
-}
+            /* Regras de coluna originais */
+            column-count: 2; 
+            column-gap: 40px;  
+            column-rule: 1px solid #eee; 
+            text-align: justify; 
+        }
 
-/* Container das questões */
-.questoes-container {
-    display: block;
-}
+        /* --- Estilos das Questões --- */
+        .section-title {
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            background: #eee;
+            padding: 5px;
+            margin-top: 10px;
+            break-after: avoid-column; 
+        }
 
-/* Questão individual - CRÍTICO para não quebrar */
-.questao-wrapper {
-    margin-bottom: 8mm;
-    padding-bottom: 5mm;
-    border-bottom: 1px solid #ddd;
-    
-    /* Propriedades para evitar quebra de página */
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    display: block;
-    width: 100%;
-    overflow: visible;
-}
+        .question {
+            margin-bottom: 25px;
+            /* A regra 'break-inside: avoid' foi removida daqui, 
+               permitindo que o ENUNCIADO da questão quebre. */
+        }
 
-.questao-header {
-    margin-bottom: 3mm;
-}
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .question-body {
+            font-weight: normal; 
+            margin-top: 10px;
+        }
+        
+        .question-body img { 
+            max-width: 100%; 
+            height: auto;
+            display: block;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+        }
 
-.questao-numero {
-    font-weight: bold;
-    font-size: 14pt;
-    color: #000;
-    text-transform: uppercase;
-    margin-bottom: 2mm;
-}
+        .alternatives {
+            list-style-type: upper-alpha; 
+            padding-left: 20px;
+            margin: 10px 0 0 0; /* Adiciona um espaço acima das alternativas */
+            
+            /* * ================================================
+             * ATUALIZAÇÃO DE LAYOUT (Conforme sua solicitação)
+             * ================================================
+             * Adicionamos a regra AQUI. Isso impede que a *lista
+             * de alternativas* se quebre entre colunas/páginas.
+             * O texto da questão (acima) ainda pode quebrar e fluir.
+            */
+            break-inside: avoid;
+            page-break-inside: avoid; /* Para impressão */
+        }
 
-.questao-content {
-    width: 100%;
-}
+        .alternatives li {
+            margin-bottom: 8px;
+        }
 
-.titulo {
-    font-weight: bold;
-    font-size: 12pt;
-    margin-bottom: 3mm;
-}
+        /* --- Estilos do Gabarito (Toggable com JS) --- */
+        .alternatives li[data-answer="true"] {
+            transition: all 0.3s ease;
+        }
+        .show-answers .alternatives li[data-answer="true"] {
+            background-color: #c8e6c9; 
+            font-weight: bold;
+            border-left: 3px solid #4CAF50;
+            padding-left: 5px;
+        }
 
-.titulo p {
-    margin: 0;
-    text-align: justify;
-}
-
-.pergunta {
-    font-size: 12pt;
-    text-align: justify;
-    margin-bottom: 5mm;
-    line-height: 1.5;
-}
-
-/* Opções das questões objetivas */
-.opcoes-container {
-    margin-left: 5mm;
-}
-
-.opcao {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 3mm;
-    page-break-inside: avoid;
-    break-inside: avoid;
-}
-
-.letra {
-    font-weight: bold;
-    margin-right: 5mm;
-    font-size: 12pt;
-    min-width: 8mm;
-    flex-shrink: 0;
-}
-
-.radio-input {
-    margin-right: 3mm;
-    margin-top: 2px;
-    flex-shrink: 0;
-}
-
-.opcao-texto {
-    font-size: 12pt;
-    text-align: justify;
-    line-height: 1.4;
-    flex: 1;
-}
-
-/* Questões dissertativas */
-.resposta-dissertativa {
-    margin-top: 5mm;
-}
-
-.resposta-dissertativa textarea {
-    width: 100%;
-    min-height: 50mm;
-    padding: 3mm;
-    font-size: 12pt;
-    font-family: 'Times New Roman', serif;
-    border: 1px solid #000;
-    border-radius: 0;
-    line-height: 1.5;
-    resize: none;
-}
-
-/* Elementos Quill */
-.ql-container, .ql-editor {
-    height: auto !important;
-    overflow: visible !important;
-    font-size: 12pt !important;
-    font-family: 'Times New Roman', serif !important;
-    padding: 0 !important;
-    border: none !important;
-}
-
-.ql-editor p, .ql-editor div, .ql-editor span {
-    font-size: 12pt !important;
-    font-family: 'Times New Roman', serif !important;
-    line-height: 1.4 !important;
-    margin: 0 !important;
-    text-align: justify;
-}
-
-/* Imagens */
-img {
-    max-width: 180mm !important;
-    height: auto !important;
-    display: block;
-    margin: 3mm 0;
-    page-break-inside: avoid;
-}
-
-/* Tabelas */
-table {
-    width: 100% !important;
-    border-collapse: collapse;
-    margin: 3mm 0;
-    page-break-inside: avoid;
-    break-inside: avoid;
-}
-
-table td, table th {
-    padding: 2mm;
-    border: 1px solid #000;
-    font-size: 11pt;
-    text-align: left;
-    page-break-inside: avoid;
-    break-inside: avoid;
-}
-
-/* Código e fórmulas */
-pre, code {
-    font-family: 'Courier New', monospace;
-    font-size: 11pt;
-    white-space: pre-wrap;
-    word-break: break-all;
-    page-break-inside: avoid;
-}
-
-/* Classes para controle de quebra */
-.page-break-before {
-    page-break-before: always !important;
-    break-before: page !important;
-}
-
-.page-break-after {
-    page-break-after: always !important;
-    break-after: page !important;
-}
-
-.avoid-break {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-}
-
-/* Estilos específicos para PDF */
-@media print {
-    body {
-        margin: 0;
-        padding: 0;
-        background: white;
-    }
-    
-    main {
-        max-width: none;
-        width: 100%;
-        margin: 0;
-        padding: 10mm;
-    }
-    
-    #button-container {
-        display: none !important;
-    }
-    
-    .questao-wrapper {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        margin-bottom: 8mm;
-        orphans: 3;
-        widows: 3;
-    }
-    
-    .opcao {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
-    
-    img {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
-    
-    table {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
-    
-    tr {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-    }
-}
-
-/* Estilos para elementos sem quebra */
-.required {
-    display: none;
-}
+        /* --- CONFIGURAÇÕES DE IMPRESSÃO --- */
+        @media print {
+            body {
+                background-color: #fff; 
+                font-family: 'Georgia', serif;
+                color: #000;
+            }
+            .page-container {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+                box-shadow: none; 
+                border: none;
+            }
+            .controls {
+                display: none; 
+            }
+            .exam-header {
+                border-bottom: 2px solid #000;
+            }
+            .content-area {
+                column-count: 2;
+                column-gap: 30px;
+                column-rule: 1px solid #ccc;
+                font-size: 11pt; 
+            }
+            .alternatives li[data-answer="true"] {
+                background-color: transparent !important;
+                font-weight: normal !important;
+                border-left: none !important;
+                padding-left: 0 !important;
+            }
+        }

@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
                     }],
                 });
 
-                res.render('prova/templatePDF', { simulado, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('prova/template_prova', { layout: false,simulado, nomeUsuario, perfilUsuario, imagemPerfil });
             } catch (error) {
                 console.error('Erro ao gerar PDF:', error);
                 res.status(500).send('Erro ao gerar o PDF');
