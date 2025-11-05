@@ -4,26 +4,47 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Criar Flashcard</title>
-    <link rel="stylesheet" href="/flashcards/css/professor.css" />
+  <link rel="stylesheet" href="/flashcards/css/professor-form.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   </head>
   <body>
     <%- include('./partials/flashMessages') %>
     <div class="container">
-      <main class="flashcard-content">
+      <main class="professor-flashcard">
         <h2 class="title">Criar Flashcard</h2>
         <form action="/flashcards/criar" method="POST" class="flashcard-form">
-          <label>Pergunta</label>
-          <textarea name="pergunta" required rows="4"></textarea>
-          <label>Resposta</label>
-          <textarea name="resposta" required rows="4"></textarea>
-          <label>Área</label>
-          <select name="id_area" id="area" required></select>
-          <label>Tópico</label>
-          <select name="id_topico" id="topico" required></select>
-          <label>Dificuldade</label>
-          <select name="id_dificuldade" id="dificuldade" required></select>
-          <button type="submit" class="criar-flashcard-btn">Salvar</button>
+          <div class="qa-row">
+            <div class="form-group form-left">
+              <label>Pergunta</label>
+              <textarea name="pergunta" required rows="4"></textarea>
+            </div>
+
+            <div class="form-group form-left">
+              <label>Resposta</label>
+              <textarea name="resposta" required rows="4"></textarea>
+            </div>
+          </div>
+
+          <div class="form-controls">
+            <div class="form-group">
+              <label>Área</label>
+              <select name="id_area" id="area" required data-selected=""></select>
+            </div>
+
+            <div class="form-group">
+              <label>Tópico</label>
+              <select name="id_topico" id="topico" required data-selected=""></select>
+            </div>
+
+            <div class="form-group">
+              <label>Dificuldade</label>
+              <select name="id_dificuldade" id="dificuldade" required data-selected=""></select>
+            </div>
+
+            <div class="form-group">
+              <button type="submit" class="criar-flashcard-btn">Salvar</button>
+            </div>
+          </div>
         </form>
       </main>
     </div>

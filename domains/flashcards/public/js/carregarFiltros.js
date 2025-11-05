@@ -6,7 +6,7 @@ async function carregarAreas() {
   const select = document.getElementById('area');
   const selected = select?.dataset?.selected;
   const isRequired = select?.hasAttribute('required');
-  // Start with a visible placeholder; only select it if nothing is preselected (create form)
+  // Start with a visible placeholder; mark it selected only when there's no preselected value
   const placeholderSelected = selected ? '' : 'selected';
   const placeholderText = isRequired ? 'Selecione a área' : 'Selecione a Área (opcional)';
   select.innerHTML = `<option value="" ${placeholderSelected} disabled>${placeholderText}</option>`;
@@ -26,10 +26,23 @@ async function carregarTopicos(id_area) {
   const placeholderSelected = selected ? '' : 'selected';
   const placeholderText = isRequired ? 'Selecione o tópico' : 'Selecione o Tópico (opcional)';
   select.innerHTML = `<option value="" ${placeholderSelected} disabled>${placeholderText}</option>`;
+  // Populate topics returned by the server
   topicos.forEach(t => {
     const isSelected = selected && String(selected) === String(t.id_topico);
     select.innerHTML += `<option value="${t.id_topico}" ${isSelected ? 'selected' : ''}>${t.nome}</option>`;
   });
+
+  // If there is a selected topic id provided by server but it wasn't included in the returned list,
+  // add a fallback option so the select still shows the selected value (prevents disappearing selection).
+  if (selected) {
+    const found = topicos.some(t => String(t.id_topico) === String(selected));
+    if (!found) {
+      console.warn(`Selected tópico id ${selected} not present in /topicos/${id_area} response. Adding fallback option.`);
+      // Add a fallback option with a readable label
+      const fallbackLabel = `Tópico (ID: ${selected})`;
+      select.innerHTML += `<option value="${selected}" selected>${fallbackLabel}</option>`;
+    }
+  }
 }
 
 async function carregarDificuldades() {
@@ -52,9 +65,15 @@ if (document.getElementById('area')) {
   document.getElementById('area').addEventListener('change', (e) => {
     const id_area = e.target.value;
     const topicoSelect = document.getElementById('topico');
-    // Clear tópicos until a valid area is chosen
-    topicoSelect.innerHTML = '<option value="" selected disabled hidden></option>';
-    if (id_area) carregarTopicos(id_area);
+    // Reset the tópico select to a visible placeholder while loading
+    const isRequired = topicoSelect?.hasAttribute('required');
+    const placeholderText = isRequired ? 'Selecione o tópico' : 'Selecione o Tópico (opcional)';
+    topicoSelect.innerHTML = `<option value="" selected disabled>${placeholderText}</option>`;
+    // Clear any previously stored data-selected because the user actively changed area
+    if (topicoSelect) topicoSelect.dataset.selected = '';
+    if (id_area) carregarTopicos(id_area).catch(err => {
+      console.error('Erro ao carregar tópicos para a área', id_area, err);
+    });
   });
 }
 

@@ -1,11 +1,23 @@
-const { Flashcard, FlashcardUsuario } = require('../../../models');
+const { Flashcard, FlashcardUsuario, Topico } = require('../../../models');
 
 module.exports = async (req, res) => {
   try {
     const { id_area, id_topico, id_dificuldade } = req.query;
     const where = {};
     if (id_area && id_area !== "") where.id_area = Number(id_area);
-    if (id_topico && id_topico !== "") where.id_topico = Number(id_topico);
+    // Defensive: verify topic exists before adding to where
+    let validatedTopico = null;
+    if (id_topico && id_topico !== "") {
+      const found = await Topico.findByPk(Number(id_topico));
+      if (found) {
+        validatedTopico = Number(id_topico);
+        where.id_topico = validatedTopico;
+      } else {
+        console.warn(`Filtro de tópico inválido recebido em /grupos: id_topico=${id_topico}. Ignorando.`);
+        // set a session-based error message to inform testers/users
+        req.session.errorMessage = 'O tópico selecionado não existe e foi ignorado.';
+      }
+    }
     if (id_dificuldade && id_dificuldade !== "") where.id_dificuldade = Number(id_dificuldade);
 
     const nomeUsuario = req.session.nomeUsuario;
@@ -45,6 +57,12 @@ module.exports = async (req, res) => {
       return res.redirect('/flashcards');
     }
 
+    // capture and clear any flash messages stored in session
+    const successMessage = req.session.successMessage;
+    const errorMessage = req.session.errorMessage;
+    delete req.session.successMessage;
+    delete req.session.errorMessage;
+
     res.render('grupos', {
       nomeUsuario,
       perfilUsuario,
@@ -53,8 +71,10 @@ module.exports = async (req, res) => {
       groups,
       selectedGroup: req.query.grupo || null,
       id_area: id_area || null,
-      id_topico: id_topico || null,
+      id_topico: validatedTopico || null,
       id_dificuldade: id_dificuldade || null,
+      successMessage,
+      errorMessage,
       isGroupsPage: true, // Flag para identificar página de grupos
     });
   } catch (err) {
