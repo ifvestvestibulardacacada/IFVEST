@@ -1,36 +1,20 @@
-// Setting ArcanaFlow On/Off
-const Nayahath = require('./logs/ArcanaFlow')
-if (Nayahath) {
-    Nayahath.setConfig('flag', true)
-    Nayahath.setConfig('time', true)
-    Nayahath.setConfig('file', true)
-    Nayahath.setConfig('line', true)
-    Nayahath.setConfig('entity', true)
-    Nayahath.setConfig('message', true)
-
-    Nayahath.setActive(false) // ! Alternar se quiser desligar os logs
-}
-
-
 const express = require('express');
 const methodOverride = require('method-override');
 const session = require('express-session');
-
-const helmet = require('helmet');
 const { secure_pass } = require('./middleware/sessionMidleware');
-const {sessionOptions, store} = require('./utils/sessionConfig');
-
-const { usuarios, simulados, inicio, professor, uploads, revisao } = require('./routes');
+const {sessionOptions} = require('./utils/sessionConfig');
+const { usuarios, inicio,  uploads } = require('./routes');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
-
-
 const revisaoApp = require('./domains/revisao/index.js');
 const simuladosApp = require('./domains/simulados/index.js')
 const cors = require('cors')
 const sharedApp = require('./domains/shared/index.js');
-
 const app = express();
+const authLocals = require('./middleware/authLocals');
+const Nayahath = require('./logs/ArcanaFlow');
+Nayahath.setConfig({ flag: true, time: true, file: true, line: true, entity: true, message: true });
+Nayahath.setActive(false);
 
 //! Layouts
 app.use(expressLayouts);
@@ -65,6 +49,8 @@ app.use(async (req, res, next) => {
     res.locals.currentPage = ''
     next();
 });
+
+app.use(authLocals);
 
 app.use('/', inicio);
 app.use(secure_pass);

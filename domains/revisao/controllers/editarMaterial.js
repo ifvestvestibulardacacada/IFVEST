@@ -10,9 +10,7 @@ module.exports = async (req, res) => {
 
     res.locals.currentPage = "revisao"
 
-    const perfilUsuario = req.session.perfil;
-    const nomeUsuario = req.session.nomeUsuario;
-    const imagemPerfil = req.session.imagemPerfil;
+   
     try {
         const Assuntos = await Assunto.findAll()
 
@@ -49,7 +47,7 @@ module.exports = async (req, res) => {
 
 
         // ! Temporário
-        res.render('editarMaterial', { nomeUsuario, perfilUsuario, imagemPerfil, Assuntos, Material: plainMaterial, jsPath, cssPaths });
+        res.render('editarMaterial', {  Assuntos, Material: plainMaterial, jsPath, cssPaths });
 
     } catch (error) {
         console.error(error)

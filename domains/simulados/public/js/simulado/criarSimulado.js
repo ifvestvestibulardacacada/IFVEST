@@ -41,8 +41,9 @@ function applyFilters() {
   const tituloFiltro = document.getElementById('tituloFiltro').value.toLowerCase() || '';
 
   console.log('Filter inputs:', { tipo, tituloFiltro });
+  const questoes = window.ContentManager.getQuestoes();
 
-  filteredQuestoes = window.questoes.filter(questao => {
+  filteredQuestoes = questoes.filter(questao => {
     const rowTipo = (questao.tipo || '').toUpperCase();
     const normalizedTipo = tipo === 'Dissertativo' ? 'DISSERTATIVA' : tipo === 'Objetivo' ? 'OBJETIVA' : tipo;
     const rowTitulo = (questao.titulo || '').toLowerCase();

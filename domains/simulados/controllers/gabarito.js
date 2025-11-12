@@ -3,9 +3,7 @@ const { Simulado, Questao, Opcao, Resposta } = require('../../../models');
 
 
 module.exports = async (req, res) => {
-            const perfilUsuario = req.session.perfil;
-            const nomeUsuario = req.session.nomeUsuario;
-            const imagemPerfil = req.session.imagemPerfil;
+   
             const userId = req.session.userId;
             const id_simulado = req.params.simuladoId;
             let respostasDissertativas = [];
@@ -81,7 +79,7 @@ module.exports = async (req, res) => {
                     respostasUsuario: respostasDoUsuario,
                     respostasDissertativas: respostasDissertativas,
                     simulado: simulado, errorMessage,
-                    nomeUsuario, perfilUsuario, imagemPerfil
+                    
                 });
 
 

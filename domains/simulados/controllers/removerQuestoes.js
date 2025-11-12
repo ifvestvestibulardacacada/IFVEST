@@ -4,9 +4,7 @@ const { Simulado, Questao } = require('../../../models');
 
 module.exports = async (req, res) => {
             try {
-                const perfilUsuario = req.session.perfil;
-                const nomeUsuario = req.session.nomeUsuario;
-                const imagemPerfil = req.session.imagemPerfil;
+     
                 const simuladoId = req.params.simuladoId;
                 const { titulo } = req.query;
 
@@ -61,7 +59,7 @@ module.exports = async (req, res) => {
 
                 req.session.errorMessage = null;
 
-                res.render('simulado/remover_questoes', { simulado: simulado, questoes: questoes, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('simulado/remover_questoes', { simulado: simulado, questoes: questoes, errorMessage, totalQuestoes  });
             } catch (error) {
                 console.error('Erro ao carregar o formulário de edição do simulado:', error);
                 res.status(500).send('Erro ao carregar o formulário de edição do simulado.');

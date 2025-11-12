@@ -102,7 +102,7 @@ async function initializeEditQuestionEditors(questao, opcoes) {
         const selectArea = document.getElementById('selectArea').value;
         const selectTopico = Array.from(document.getElementById('selectTopico').selectedOptions).map(option => option.value);
 
-        let tipo = window.questionType;
+        let tipo = questionType;
         tipo = tipo.toUpperCase(); // Corrigido de "windows" para "window"
 
         const pergunta = quill.getContents();

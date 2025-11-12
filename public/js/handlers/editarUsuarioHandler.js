@@ -1,3 +1,5 @@
+
+
 document.addEventListener('DOMContentLoaded', function () {
   // === 1. UPLOAD DE FOTO ===
   const uploadForm = document.getElementById('uploadForm');
@@ -18,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const img = document.getElementById('preview-image');
         img.src = res.data.imageUrl + '?t=' + Date.now();
         alert('Foto atualizada com sucesso!');
+        window.location.reload();
       } catch (err) {
         alert(err.response?.data?.error || 'Erro no upload.');
       }
@@ -36,18 +39,37 @@ document.addEventListener('DOMContentLoaded', function () {
         email: formEditar.email.value.trim()
       };
 
+      // Verifica se houve alterações
+      const alterado =
+        data.usuario !== usuario.usuario ||
+        data.nome !== usuario.nome ||
+        data.email !== usuario.email;
+
+      if (!alterado) {
+        alert('Nenhuma alteração foi feita.');
+        return;
+      }
+
       if (!data.usuario || !data.nome || !data.email) {
         return alert('Preencha todos os campos.');
       }
 
       try {
-        await axios.patch(`/usuario/editar/${id}`, data);
-        alert('Perfil atualizado com sucesso!');
+        const res = await axios.post(`/usuario/editar/${id}`, data);
+
+        if (res.status === 200) {
+          alert('Perfil atualizado com sucesso!');
+          window.location.reload();
+
+        }
+
+
 
         // Atualiza na tela
         document.querySelector('.profile-header h3').textContent = data.nome;
         document.querySelector('.profile-header p:nth-of-type(2)').innerHTML = `<i class="fa fa-envelope"></i> ${data.email}`;
       } catch (err) {
+        console.log(err);
         alert(err.response?.data?.error || 'Erro ao salvar.');
       }
     });
@@ -89,3 +111,4 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+});

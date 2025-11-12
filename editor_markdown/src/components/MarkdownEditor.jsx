@@ -8,32 +8,17 @@ import ImageSizeModal from './ImageSizeModal';
 import EquationEditor from './EquationEditor';
 import { handleImageUpload } from '../utils/imageUtils';
 import symbolButtons from '../utils/symbolButtons';
+import '../styles/Editor.css';
 
 const MarkdownEditor = () => {
   const [markdown, setMarkdown] = useState(() => {
     const savedMarkdown = window.ContentManager 
     ? window.ContentManager.getConteudoMarkdown() 
-    : 'Ex: # Digite aqui o material ...';
-     console.log('Saved Markdown:', savedMarkdown);
+    : '';
+     ;
     return savedMarkdown;
   });
-  <style jsx>{`
-        .w-md-editor-toolbar {
-          font-size: 1.4rem !important; /* Aumenta o tamanho dos ícones */
-        }
-        .w-md-editor-toolbar button {
-          width: 36px !important;
-          height: 36px !important;
-          padding: 6px !important;
-        }
-        .w-md-editor-toolbar li > button > svg {
-          width: 20px !important;
-          height: 20px !important;
-        }
 
-        /* O preview ocupa todo o espaço */
-   
-      `}</style>
 
   const [showEquationEditor,
     setShowEquationEditor]
@@ -46,7 +31,9 @@ const MarkdownEditor = () => {
     = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
 
-
+const customCommands = filteredCommands.filter(
+    cmd => !['image', 'edit','preview'].includes(cmd.name)
+  );
   useEffect(() => {
     // Dispara um evento personalizado
     const event = new CustomEvent('editorContentChange', {
@@ -72,9 +59,10 @@ const MarkdownEditor = () => {
       <MDEditor
         height={400}
         preview="live"
+        visible={false}
         value={markdown}
         onChange={setMarkdown}
-        commands={filteredCommands.map(cmd =>
+        commands={customCommands.map(cmd =>
           cmd.name === 'custom-image-upload'
             ? {
               ...cmd,

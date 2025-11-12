@@ -5,9 +5,6 @@ const { Area, Simulado, Topico } = require('../../../models');
 module.exports = async (req, res) => {
            try {
 
-                const perfilUsuario = req.session.perfil;
-                const nomeUsuario = req.session.nomeUsuario;
-                const imagemPerfil = req.session.imagemPerfil;
 
                 const tipo = req.params.tipo.toLowerCase();
                 const usuarioId = req.session.userId;
@@ -51,7 +48,7 @@ module.exports = async (req, res) => {
                 req.session.errorMessage = null;
 
                 // Retorna os simulados filtrados
-                res.status(200).render('professor/criar_questao', { Areas,topicos, tipo, simulados, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.status(200).render('professor/criar_questao', { Areas,topicos, tipo, simulados, errorMessage });
             } catch (error) {
                 console.error(error)
 

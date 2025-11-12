@@ -22,19 +22,18 @@
             
             ops.forEach(op => {
                 
-                // 1. É um objeto de IMAGEM?
+                // IMAGEM
                 if (op.insert && typeof op.insert === 'object' && op.insert.image) {
                     let attrs = op.attributes || {};
                     let style = 'max-width: 100%; height: auto; display: block; margin: 10px 0; border: 1px solid #ccc;';
                     
-                    // Se o JSON tiver uma largura específica, usa, mas mantém responsivo
                     if (attrs.width) {
                         style = `width: ${attrs.width}px; max-width: 100%; height: auto; display: block; margin: 10px 0; border: 1px solid #ccc;`;
                     }
                     html += `<img src="${op.insert.image}" alt="Imagem da questão" style="${style}">`;
                 }
                 
-                // 2. É um TEXTO?
+                // TEXTO
                 else if (op.insert && typeof op.insert === 'string') {
                     let text = op.insert;
                     
@@ -82,7 +81,7 @@
                     </p>
                     
                     <div class="question-body">
-                        <%# A função parseRichText agora renderiza o HTML correto %>
+                   
                         <%- parseRichText(questao.pergunta) %>
                     </div>
 

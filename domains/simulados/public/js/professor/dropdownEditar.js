@@ -1,8 +1,8 @@
 function loadTopicDropdown(AreaId) {
-    const topicos = window.Topicos || [];
+    const topicos = Topicos || [];
     const topicDropdown = document.getElementById('selectTopico');
     topicDropdown.innerHTML = '';
-    const meusTopicos = window.meusTopicos || [];
+    
 
 
     if (!AreaId) {

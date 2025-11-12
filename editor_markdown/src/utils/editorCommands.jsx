@@ -42,7 +42,20 @@ export const customEquationEditor = {
 };
 
 export const filteredCommands = [
-  ...commands.getCommands().filter(cmd => cmd.name !== 'image' && cmd.name !== 'fullscreen'),
+  commands.bold,
+  commands.italic,
+  commands.strikethrough,
+  commands.hr,
+  commands.title,
+  commands.divider,
+  commands.link,
+  commands.quote,
+  commands.code,
+  commands.codeBlock,
+  commands.divider,
+            commands.orderedListCommand,
+          commands.unorderedListCommand,
   customImageUpload,
   customEquationEditor,
+  // Adicione outros se quiser
 ];

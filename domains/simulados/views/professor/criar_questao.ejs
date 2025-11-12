@@ -133,9 +133,9 @@
 
 
             <script>
-                window.questionType = <%- JSON.stringify(tipo) %>;
-                window.Topicos = <%- JSON.stringify(topicos || []) %>;
-                initializeQuestionEditors(window.questionType);
+                const questionType = <%- JSON.stringify(tipo) %>;
+                const Topicos = <%- JSON.stringify(topicos || []) %>;
+                initializeQuestionEditors(questionType);
 
                 const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
                 const appendAlert = (message, type) => {

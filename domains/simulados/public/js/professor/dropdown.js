@@ -1,6 +1,6 @@
 async function loadTopicDropdown(AreaId) {
 
-    const topicos = window.Topicos || [];
+    const topicos = Topicos || [];
     const topicDropdown = document.getElementById('selectTopico');
 
     // Limpa as opções existentes no dropdown de tópicos

@@ -5,10 +5,7 @@ const { Simulado, Questao, Usuario } = require('../../../models');
 module.exports = async (req, res) => {
             try {
                 let simulados;
-                console.log(req.session)
-                const perfilUsuario = req.session.perfil;
-                const nomeUsuario = req.session.nomeUsuario;
-                const imagemPerfil = req.session.imagemPerfil;
+     
 
                 const todosSimulados = await Simulado.findAll({
                     where: {
@@ -54,7 +51,7 @@ module.exports = async (req, res) => {
 
                 req.session.errorMessage = null;
 
-                res.render('simulado/simulados', { simulados, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('simulado/simulados', { simulados, errorMessage,  });
             } catch (error) {
                 console.error(error);
                 res.status(500).send('Ocorreu um erro ao recuperar os questionários.');

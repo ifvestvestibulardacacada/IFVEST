@@ -6,155 +6,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Minhas Questões - IFVest</title>
     <%- include('../partials/libs') %>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="/simulados/css/professor/minhasquestoes.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="stylesheet" href="/simulados/css/professor/minhasquestoes.css">
 </head>
 
 <body>
     <div class="container col-lg-10 mx-auto my-4">
 
         <!-- Mensagem de erro -->
-        <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+        <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
             <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <div><%= errorMessage %></div>
+                <div>
+                    <%= errorMessage %>
+                </div>
             </div>
-        <% } %>
+            <% } %>
 
-        <!-- Título -->
-        <h1 class="border-bottom pb-2 mb-4">Minhas Questões</h1>
+                <!-- Título -->
+                <h1 class="border-bottom pb-2 mb-4">Minhas Questões</h1>
 
-        <!-- Filtro Avançado -->
-        <div class="filter-container">
-            <form method="GET" action="/professor/questoes" class="row g-3 align-items-end">
-                <div class="col-md-4">
-                    <label for="titulo" class="form-label">Buscar por título</label>
-                    <input type="text" id="titulo" name="titulo" placeholder="Filtrar por título"
-                           class="form-control" value="<%= typeof titulo !== 'undefined' ? titulo : '' %>">
+                <!-- Filtro Avançado -->
+                <div class="filter-container">
+                    <form id="filterForm" class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <label for="titulo" class="form-label">Buscar por título</label>
+                            <input type="text" id="titulo" placeholder="Filtrar por título" class="form-control">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="areaId" class="form-label">Área</label>
+                            <select id="areaId" class="form-select">
+                                <option value="">Todas as áreas</option>
+                                <% Areas.forEach(area=> { %>
+                                    <option value="<%= area.id_area %>">
+                                        <%= area.nome %>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="topicosSelecionados" class="form-label">Tópico</label>
+                            <select id="topicosSelecionados" class="form-select">
+                                <option value="">Todos os tópicos</option>
+                                <% topicos.forEach(topico=> { %>
+                                    <option value="<%= topico.id_topico %>">
+                                        <%= topico.nome %>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-search"></i> Filtrar
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                <div class="col-md-3">
-                    <label for="areaId" class="form-label">Área</label>
-                    <select id="areaId" name="areaId" class="form-select">
-                        <option value="">Todas as áreas</option>
-                        <% Areas.forEach(area => { %>
-                            <option value="<%= area.id_area %>" <%= (typeof areaId !== 'undefined' && areaId == area.id_area) ? 'selected' : '' %>>
-                                <%= area.nome %>
-                            </option>
-                        <% }); %>
-                    </select>
+
+                <!-- Tabela -->
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Título</th>
+                                    <th>Tipo</th>
+                                    <th>Questão</th>
+                                    <th>Tópicos</th>
+                                    <th width="15%">Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="questoesTableBody">
+                                <!-- Preenchido via JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    <label for="topicosSelecionados" class="form-label">Tópico</label>
-                    <select id="topicosSelecionados" name="topicosSelecionados" class="form-select">
-                        <option value="">Todos os tópicos</option>
-                        <% topicos.forEach(topico => { %>
-                            <option value="<%= topico.id_topico %>" <%= (typeof topicosSelecionados !== 'undefined' && topicosSelecionados == topico.id_topico) ? 'selected' : '' %>>
-                                <%= topico.nome %>
-                            </option>
-                        <% }); %>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-success w-100">
-                        <i class="bi bi-search"></i> Filtrar
-                    </button>
-                </div>
-            </form>
-        </div>
 
-        <!-- Tabela -->
-        <div class="table-container">
-            <div class="table-responsive">
-                <table class="table table-striped table-bordered align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Título</th>
-                            <th>Tipo</th>
-                            <th>Questão</th>
-                            <th>Tópicos</th>
-                            <th width="15%">Ação</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% questoes.forEach(questao => { %>
-                            <tr>
-                                <td><%= questao.titulo %></td>
-                                <td><%= questao.tipo %></td>
-                                <td>
-                                    <div class="questao-content" data-delta='<%= questao.pergunta %>'>
-                                        <!-- Renderizado via JS -->
-                                    </div>
-                                </td>
-                                <td><%= questao.Topico.map(t => t.nome).join(', ') %></td>
-                                <td>
-                                    <div class="d-flex gap-2">
-                                        <a href="/professor/editar_questao/<%= questao.id_questao %>"
-                                           class="btn btn-outline-primary btn-sm">
-                                            <i class="bi bi-pencil"></i> Editar
-                                        </a>
-                                        <button type="button" class="btn btn-outline-danger btn-sm"
-                                                onclick="confirmDelete(<%= questao.id_questao %>)">
-                                            <i class="bi bi-trash"></i> Excluir
-                                        </button>
-                                        <form id="deleteForm<%= questao.id_questao %>"
-                                              action="/professor/excluir-questao/<%= questao.id_questao %>?_method=DELETE"
-                                              method="POST" style="display: none;"></form>
-                                    </div>
-                                </td>
-                            </tr>
-                        <% }); %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Paginação Personalizada -->
-<nav class="d-flex align-items-center justify-content-center my-4" aria-label="Navegação">
-    <ul class="pagination pagination-custom mb-0">
-        <% if (page > 1) { %>
-            <li class="page-item">
-                <a class="page-link" href="?page=1">Primeira</a>
-            </li>
-
-        <% } else { %>
-            <li class="page-item disabled">
-                <span class="page-link">Primeira</span>
-            </li>
-
-        <% } %>
-
-        <% 
-            const start = Math.max(1, page - 2);
-            const end = Math.min(totalPages, page + 2);
-            for (let i = start; i <= end; i++) { 
-        %>
-            <li class="page-item <%= page === i ? 'active' : '' %>">
-                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-            </li>
-        <% } %>
-
-        <% if (page < totalPages) { %>
-
-            <li class="page-item">
-                <a class="page-link" href="?page=<%= totalPages %>">Última</a>
-            </li>
-        <% } else { %>
-
-            <li class="page-item disabled">
-                <span class="page-link">Última</span>
-            </li>
-        <% } %>
+<nav class="d-flex justify-content-center my-4">
+    <ul class="pagination" id="pagination">
+        <!-- Será preenchido pelo JavaScript -->
     </ul>
 </nav>
 
+<!-- Informações de resultados -->
+<div class="text-center text-muted mb-3">
+    <small id="resultsInfo">Carregando...</small>
+</div>
 
 
-        <!-- Botão Voltar -->
-        <div class="button-container">
-            <a href="/simulados" class="btn btn-voltar btn-lg">
-                <i class="bi bi-arrow-left"></i> Voltar ao Menu Simulados
-            </a>
-        </div>
+
+                <!-- Botão Voltar -->
+                <div class="button-container">
+                    <a href="/simulados" class="btn btn-voltar btn-lg">
+                        <i class="bi bi-arrow-left"></i> Voltar ao Menu Simulados
+                    </a>
+                </div>
     </div>
 
 
@@ -162,12 +109,18 @@
     <script src="/js/main.js"></script>
     <script src="/simulados/js/quillContentHtmlTable.js"></script>
     <script>
+const questoes = <%- JSON.stringify(questoes) %>;
+const areas = <%- JSON.stringify(Areas.map(a => ({ id: a.id_area, nome: a.nome }))) %>;
+const topicosMap = <%- JSON.stringify(topicos.reduce((acc, t) => { acc[t.id_topico] = t.nome; return acc; }, {})) %>;
+
+
         function confirmDelete(questaoId) {
             if (confirm("Tem certeza que deseja excluir esta questão? Esta ação não pode ser desfeita.")) {
                 document.getElementById(`deleteForm${questaoId}`).submit();
             }
         }
     </script>
+    <script src="/simulados/js/professor/minhasQuestoes.js"></script>
 </body>
 
 </html>

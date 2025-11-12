@@ -126,15 +126,16 @@
 
             <script>
 
-                window.questionType = <%- JSON.stringify(questao.tipo) %>
+                const questionType = <%- JSON.stringify(questao.tipo) %>
 
                     initializeEditQuestionEditors(
                                     <%- JSON.stringify(questao) %>,
                                     <%- JSON.stringify(Opcoes) %>
                             );
-                window.Topicos = <%- JSON.stringify(Topicos) %>;
 
-                window.meusTopicos = <%- JSON.stringify(questao.Topico) %>;
+                const Topicos = <%- JSON.stringify(topicos) %>;
+
+                const meusTopicos = <%- JSON.stringify(questao.Topico) %>;
 
 
 

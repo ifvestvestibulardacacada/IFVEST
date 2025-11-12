@@ -1,14 +1,16 @@
-    <script>
-        // script ejs nao funciona em arquivos .js
-        const ContentManager = (() => {
-            const questoes = <%- JSON.stringify(questoes) %>;
-            const id_simulado = <%- JSON.stringify(simulado.id_simulado) %>;
-            return {
-                getQuestoes: () => ([...questoes]), // Retorna uma cópia do objeto questoes
-                getIdSimulado: () => id_simulado,
-            };
-        })();
-        
-        window.ContentManager = ContentManager;
+<script>
+    // script ejs nao funciona em arquivos .js
+    const ContentManager = (() => {
+        const questoes = <%- JSON.stringify(questoes) %>;
+        const id_simulado = <%- typeof simulado !== 'undefined' && simulado !== null ? JSON.stringify(simulado.id_simulado) : '0' %>;
 
-    </script>
+        return {
+            getQuestoes: () => [...questoes], // cópia segura do array
+            getIdSimulado: () => id_simulado, // retorna null se não existir
+            // utilitário para checar existência
+        };
+    })();
+
+    window.ContentManager = ContentManager;
+
+</script>

@@ -87,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const filter = searchAssunto ? searchAssunto.value.toLowerCase() : '';
         const filteredAssuntos = listaAssuntos.filter(assunto =>
-            //procura pelo termo de pesquisa dentro do array de assuntos
             assunto.nome.toLowerCase().includes(filter)
         );
 
@@ -101,32 +100,24 @@ document.addEventListener('DOMContentLoaded', function () {
             if (item) item.style.display = '';
         });
 
-        //console.log('Assuntos visíveis:', Array.from(assuntoItems).filter(item => item.style.display !== 'none').map(item => item.getAttribute('href')));
+        
         noAssuntos.style.display = filteredAssuntos.length === 0 ? '' : 'none';
         renderPagination(assuntosPagination, filteredAssuntos.length, currentAssuntosPage, 'assuntos');
     }
 
-    // Filter and paginate materiais
+
     function updateMateriaisDisplay() {
         const filterNome = searchConteudo ? searchConteudo.value.toLowerCase() : '';
         const filterKeyword = searchKeyword ? searchKeyword.value.toLowerCase() : '';
-        console.log('filterKeyword:', filterKeyword); // Debug: Log selected keyword
+
         const filteredMateriais = listaMateriais.filter(conteudo => {
-            console.log('Conteudo para filtro:', JSON.stringify(conteudo)); // Debug: Log content being checked
             const name = conteudo.nome.toLowerCase();
             const keywords = conteudo.PalavraChave ? conteudo.PalavraChave.map(keyword => keyword.palavrachave.toLowerCase()).join(',') : '';
-            //console.log('Conteudo:', conteudo.id_conteudo, 'Keywords:', keywords); // Debug: Log keywords
             const matchesNome = name.includes(filterNome);
-
-            //console.log(JSON.stringify(keywords)); // Debug: Log keywords array
-
             const matchesKeyword = !filterKeyword || keywords.split(',').includes(filterKeyword);
-            //console.log('Conteudo:', conteudo.id_conteudo, 'Keywords:', keywords);
-            //console.log('filterKeyword', filterKeyword, 'matchesKeyword', matchesKeyword);
             return matchesNome && matchesKeyword;
         });
 
-        console.log('filteredMateriais:', filteredMateriais.map(c => c.id_conteudo)); // Debug: Log filtered IDs
         const paginatedMateriais = paginate(filteredMateriais, currentMateriaisPage, materiaisPerPage);
         const materialItems = materiaisContainer.querySelectorAll('.material-item');
         materialItems.forEach(item => item.style.display = 'none');
@@ -137,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (item) item.style.display = '';
         });
 
-        console.log('Materiais visíveis:', Array.from(materialItems).filter(item => item.style.display !== 'none').map(item => item.getAttribute('href')));
+        
         noMateriais.style.display = filteredMateriais.length === 0 ? '' : 'none';
         renderPagination(materiaisPagination, filteredMateriais.length, currentMateriaisPage, 'materiais');
     }
