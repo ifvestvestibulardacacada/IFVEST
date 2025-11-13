@@ -185,7 +185,7 @@
                 }
             });
 
-            //sessionStorage.setItem('removeQuestions_<%= simulado.id_simulado %>', JSON.stringify(selectedQuestions));
+            
             updateSelectedCount();
         });
 
@@ -198,7 +198,7 @@
                 } else {
                     selectedQuestions = selectedQuestions.filter(sid => sid !== id);
                 }
-                //sessionStorage.setItem('removeQuestions_<%= simulado.id_simulado %>', JSON.stringify(selectedQuestions));
+                
                 updateSelectedCount();
                 updateSelectAllState();
             }
@@ -223,7 +223,5 @@
             applyFilters();
             updateSelectedCount();
 
-            // window.addEventListener('beforeunload', () => {
-            //     sessionStorage.removeItem('removeQuestions_<%= simulado.id_simulado %>');
-            // });
+      
         });

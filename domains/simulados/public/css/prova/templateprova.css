@@ -8,17 +8,14 @@
             padding: 0;
         }
         .header {
-            display: none; /* Oculta cabeçalhos e barras de navegação desnecessários */
+            display: none; 
         }
  #navbar {
-            display: none; /* Oculta cabeçalhos e barras de navegação desnecessários */
+            display: none; 
         }
-        /* --- Container Principal --- */
+
  .page-container {
-            /* * Adicionamos !important para forçar que o container 
-             * tenha exatamente este tamanho, esta margem (para centralizar)
-             * e este preenchimento (padding).
-            */
+
             max-width: 1100px !important;
             margin: 20px auto !important;
             padding: 40px !important;
