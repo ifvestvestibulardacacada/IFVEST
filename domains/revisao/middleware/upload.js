@@ -3,6 +3,7 @@ const path = require('path');
 const Nayahath = require('../../../logs/ArcanaFlow')
 
 const REVISAO_UPLOADS_DIR = process.env.REVISAO_UPLOADS_DIR || '/home/ifvestjc/public_html/uploads/revisao';
+Nayahath.action('Revisão Upload', `${REVISAO_UPLOADS_DIR}`)
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {

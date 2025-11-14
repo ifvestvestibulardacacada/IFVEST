@@ -7,16 +7,16 @@
             <%# O <li> armazena o ID para o JavaScript %>
             <li data-id="<%= subject.id_assunto %>">
                 
-                <%# Adiciona um "toggle" (botão) se o item tiver filhos %>
-                <% if (subject.children && subject.children.length > 0) { %>
-                    <span class="toggle">►</span>
-                <% } else { %>
-                    <%# Placeholder para manter o alinhamento %>
-                    <span class="toggle-placeholder"></span>
-                <% } %>
+                <%# Checkbox à esquerda para sinalizar seleção %>
+                <input type="checkbox" class="subject-checkbox">
 
                 <%# O nome do assunto, que será clicável %>
                 <span class="subject-name"><%= subject.nome %></span>
+
+                <%# Botão de expandir/recolher à direita se houver filhos %>
+                <% if (subject.children && subject.children.length > 0) { %>
+                    <span class="toggle">+</span>
+                <% } %>
 
                 <%# *** A RECURSÃO ACONTECE AQUI *** %>
                 <%# Se houver filhos, inclua este mesmo arquivo passando os filhos %>
