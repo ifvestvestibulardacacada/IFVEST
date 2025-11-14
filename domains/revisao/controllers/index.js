@@ -9,6 +9,7 @@ const leitura = require('./leitura')
 const meusMateriais = require('./meusMateriais')
 const registrarMaterial = require('./registrarMaterial')
 const atualizarMaterial = require('./atualizarMaterial')
+const uploadHandler = require('./uploadController');
 
 module.exports = {
     buscarArea,
@@ -21,5 +22,6 @@ module.exports = {
     leitura,
     meusMateriais,
     registrarMaterial,
-    atualizarMaterial
+    atualizarMaterial,
+    uploadHandler
 }

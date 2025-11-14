@@ -31,7 +31,7 @@ function removeTag(tag) {
 
 const datalist = document.getElementById('palavrasChaveList');
 
-window.palavrasChave.forEach(palavra => {
+window.PalavrasChave.forEach(palavra => {
     const option = document.createElement('option');
     option.value = palavra;
     datalist.appendChild(option);

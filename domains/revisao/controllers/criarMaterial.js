@@ -1,5 +1,6 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
 const { Assunto, PalavraChave } = require('../../../models')
+const buildTree = require('../utils/buildTree')
 
 module.exports = async (req, res) => {
     /*
@@ -34,14 +35,14 @@ module.exports = async (req, res) => {
         })
         const palavrasChave = palavras.map(palavra => palavra.palavrachave); // Extrai o campo 'palavrachave' de cada objeto
 
-        res.render('criarMaterial', {
+        res.render('editor', {
             nomeUsuario,
             perfilUsuario: perfil,
             imagemPerfil,
-            // topicos,
-            // Areas,
-            Assuntos,
-            palavrasChave
+            Assuntos: buildTree(Assuntos),
+            palavrasChave,
+            Material: null,
+            MaterialExterno: []
         })
     } catch (error) {
         console.error(error)
