@@ -179,7 +179,11 @@ body *{
 @media only screen and (max-width:600px){
     .main-login{
         flex-direction: column;
-        padding-bottom: 150px; /* Aumentado para dar mais espaço */
+        /* padding-bottom: 150px; Aumentado para dar mais espaço */
+        height: 100vh;
+        overflow-y: auto;
+        justify-content: start;
+        padding: 3rem 0;
     }
     .left-login > h1{
         display: none;
@@ -208,8 +212,27 @@ body *{
     }
 
     .card-login{
-        width: 90%;
-        margin-bottom: 20px;
+        width: 100%;
+        margin-bottom: 0px;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .main-login{
+        background: transparent;
+    }
+
+    .main-login form{
+        width: 85%;
+    }
+
+    .textfield{
+        margin-bottom: 0;
+    }
+
+    .textfield > label{
+        margin-bottom: 0.3rem;
     }
 
     .infiniteLogo {
