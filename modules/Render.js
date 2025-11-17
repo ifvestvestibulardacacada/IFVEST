@@ -31,32 +31,7 @@ class Render {
     }
 
     static usuarios = {
-        editarUsuario: async (req, res) => {
-            try {
-                let errorMessage = req.session.errorMessage;
-
-
-                if (!req.session.userId) {
-                    return res.status(300).send("Você precisa estar logado para acessar esta página.");
-                }
-                const usuario = await Usuario.findByPk(req.session.userId);
-
-                if (!usuario) {
-                    return res.status(400).send("Erro ao buscar usuario");
-                }
-
-
-                if (errorMessage === null) {
-                    errorMessage = " ";
-                }
-
-                req.session.errorMessage = null;
-                res.render('usuario/editar_usuario', { usuario, errorMessage  });
-            } catch (err) {
-                console.error(err)
-                res.redirect('/login');
-            }
-        },
+        
         inicioLogado: async (req, res) => {
             res.locals.currentPage = "inicio"
 
