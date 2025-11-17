@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const controllers = require('./controllers')
 const Nayahath = require('../../logs/ArcanaFlow.js')
-
+const upload = require('../revisao/middleware/upload')
 const { 
     buscarArea, 
     buscarAssunto, 
@@ -14,6 +14,7 @@ const {
     meusMateriais,
     registrarMaterial,
     atualizarMaterial,
+    uploadHandler
 } = controllers
 
 
@@ -57,7 +58,7 @@ router.post('/buscar_material', buscarMaterial)
 router.post('/criar_material', registrarMaterial)
 router.patch('/editar_material/:id_conteudo', atualizarMaterial)
 // router.post('/remover_material/:id_conteudo', removerMaterial)
-
+router.post('/upload', upload.single('file'), uploadHandler.upload)
 // Consulta para pegar as palavras-chave // ! Em avaliação
 
 module.exports = router

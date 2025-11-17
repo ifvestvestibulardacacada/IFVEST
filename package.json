@@ -9,7 +9,7 @@
     "start": "node index.js",
     "db:create": "npx sequelize db:create && npx sequelize db:migrate && npx sequelize db:seed:all",
 
-    "deploy": "npm install && npx sequelize-cli db:migrate"
+    "deploy": "npm install && npm run build:editor && npx sequelize-cli db:migrate"
   },
   "author": "cristian",
   "license": "ISC",

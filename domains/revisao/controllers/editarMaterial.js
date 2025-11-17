@@ -1,7 +1,7 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
 const { Conteudo, Assunto, PalavraChave } = require('../../../models')
 const MarkdownSolver = require('../utils/MarkdownSolver');
-
+const buildTree = require('../utils/buildTree')
 module.exports = async (req, res) => {
 
     const id_conteudo = req.params.id_conteudo;
@@ -35,19 +35,23 @@ module.exports = async (req, res) => {
         // Convert to plain object
         const plainMaterial = Material.get({ plain: true });
 
-        const DELIMITER = '---REFERENCES---';
-
-        const parts = plainMaterial.conteudo_markdown.split(DELIMITER);
-        plainMaterial.conteudo_markdown = parts[0]?.trim() || '';
-        plainMaterial.referencias = parts[1]?.trim() || '';
-
+        // Transform PalavraChave to array of strings
         plainMaterial.PalavraChave = plainMaterial.PalavraChave.map(keyword => keyword.palavrachave); // Extract 'PalavraChave' field
 
         plainMaterial.assunto = assunto;
+        
+        const { markdown, references } = MarkdownSolver.breakMarkdown(plainMaterial.conteudo_markdown);
+        plainMaterial.conteudo_markdown =  markdown;
 
 
         // ! Temporário
-        res.render('editarMaterial', {  Assuntos, Material: plainMaterial, jsPath, cssPaths });
+        res.render('editor', {  
+  Assuntos: buildTree(Assuntos), 
+            Material: plainMaterial, 
+            MaterialExterno: references,
+            assunto,
+            jsPath, 
+            cssPaths });
 
     } catch (error) {
         console.error(error)

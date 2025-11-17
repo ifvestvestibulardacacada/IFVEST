@@ -89,14 +89,12 @@
                 editorContent = event.detail.content;
             });
 
-            window.addEventListener('referenceContentChange', (event) => {
-                referenceContent = event.detail.content;
-            });
+ 
 
             // Expõe métodos para acessar os conteúdos
             return {
                 getEditorContent: () => editorContent,
-                getReferenceContent: () => referenceContent,
+
                 getConteudoMarkdown: () => 'Digita aqui o material ...  ',
                 getReferencias: () => 'Digite aqui as referências ...',
             };

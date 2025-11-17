@@ -12,21 +12,44 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous"
     onload="renderMathInElement(document.body);"></script>
 <title><%=conteudo.nome%> - Módulo de Revisão - IFVest</title>
+
+<%- include('./modal_view_upload') %>
+
 <div class="container">
-    <%if (conteudo) {%>
+    <% if (conteudo) {%>
         <h1 class="text-center mt-5"><%=conteudo.nome%></h1>
         <h2 class="text-center mb-5 fs-5">Material de apoio de <%=conteudo.Assunto.nome%></h2>
-        <span><i class='bx  bx-chevron-left'></i><a href="/revisao/busca/<%=conteudo.Assunto.id_assunto%>">Voltar para <%=conteudo.Assunto.nome%></a></span>
+        <span><i class='bx  bx-chevron-left'></i><a href="/revisao/busca/<%=conteudo.Assunto.id_assunto%>">Voltar para <%=conteudo.Assunto.nome%></a> 
+            <% if (autor) {%><a href="/revisao/editar_material/<%=conteudo.id_conteudo%>" class="ml-auto btn btn-primary">Editar material</a> <%}%>
+        </span>
         <hr>
         <div class="markdown-area">
-            <div class="row d-flex justify-content-center">
+            <div class="row d-flex justify-content-center my-5">
                 <div class="col-lg-8">
                     <%-conteudo_markdown%>
                 </div>
             </div>
         </div>
     <%} else {%>
-        Ops, nao achei nada aqui :(
+        Ops, nao achei nada aqui 🙁
     <%}%>
 
 </div>
+
+<script>
+    var modal_link = ""
+    document.querySelectorAll('.container .markdown-area a').forEach((link => {
+        if(link.href.includes('/uploads/revisao/')){
+            // internal pdf link
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                openFileViewer(link.href, link.href.slice(17));
+                console.log("fala galera")
+            })
+        } else {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        }
+
+    }))
+</script>

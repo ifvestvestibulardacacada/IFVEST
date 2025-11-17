@@ -8,7 +8,8 @@ const home = require('./home');
 const leitura = require('./leitura')
 const meusMateriais = require('./meusMateriais')
 const registrarMaterial = require('./registrarMaterial')
-const atualizarMaterial = require('./atualizarMaterial')
+const atualizarMaterial = require('./atualizarMaterial');
+const uploadHandler = require('./uploadController');
 
 
 module.exports = {
@@ -22,5 +23,6 @@ module.exports = {
     leitura,
     meusMateriais,
     registrarMaterial,
-    atualizarMaterial
+    atualizarMaterial, 
+    uploadHandler
 }

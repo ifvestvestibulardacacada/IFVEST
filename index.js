@@ -20,7 +20,6 @@ Nayahath.setActive(false);
 app.use(expressLayouts);
 app.set('layout', path.join(__dirname, 'views/layouts/main'))
 app.use('/assets', express.static(path.join(__dirname, 'editor_markdown/dist/assets')));
-app.use('/assets', express.static(path.join(__dirname, 'editor_links/dist/assets')));
 //! Bootstrap
 app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')))
 
@@ -40,8 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-
+app.use('/uploads', express.static(process.env.UPLOADS_DIR || '/home/ifvestjc/public_html/uploads'));
 
 app.use(methodOverride('_method'));
 
