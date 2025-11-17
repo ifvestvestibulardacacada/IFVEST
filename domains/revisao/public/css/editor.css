@@ -4,3 +4,9 @@ span.tag{
     border-radius: 5px;
     background-color: #a3c0ff;
 }
+
+@media screen and (max-width: 768px) {
+    .form-group-palavra-chave .input-group > *{
+        border-radius: 5px;
+    }
+}
