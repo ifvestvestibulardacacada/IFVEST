@@ -1,20 +1,48 @@
 function initializeQuill(editorId, buttonId, placeholder) {
-
-  const quill = new Quill(editorId, {
+    console.log('QuillResize:', window.QuillResize);
+    const quill = new Quill(editorId, {
         placeholder: placeholder,
         theme: 'snow',
         modules: {
+            resize: {
+                embedTags: ["IMG", "VIDEO", "IFRAME"],
+                tools: [
+                    "left",
+                    "center",
+                    "right",
+                    "full",
+                    "edit",
+                    {
+                        text: "Alt",
+                        attrs: {
+                            title: "Set image alt",
+                            class: "btn-alt",
+                        },
+                        verify(activeEle) {
+                            return activeEle && activeEle.tagName === "IMG";
+                        },
+                        handler(evt, button, activeEle) {
+                            let alt = activeEle.alt || "";
+                            alt = window.prompt("Alt for image", alt);
+                            if (alt == null) return;
+                            activeEle.setAttribute("alt", alt);
+                        },
+                    },
+                ],
+            },
+
             toolbar: {
                 container: [
+                    [{ size: [] }],
                     ['bold', 'italic', 'underline', 'strike'],
                     ['link', 'image'],
-                    [{ 'resize-image': 'resize-image' }],
+
                     ['blockquote'],
                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
                     [{ 'script': 'sub' }, { 'script': 'super' }],
                     ['align', { 'align': 'center' }, { 'align': 'right' }, { 'align': 'justify' }],
                     ['formula'],
-                     // Custom button with unique ID
+                    // Custom button with unique ID
                 ],
                 handlers: {
                     'image': function () {
@@ -29,88 +57,36 @@ function initializeQuill(editorId, buttonId, placeholder) {
 
                         imageInput.click();
                     },
-                    'resize-image': function () {
-                        const range = quill.getSelection();
-                        if (!range) {
-                            alert('Por favor, selecione uma imagem no editor.');
-                            return;
+
+                },
+
+                keyboard: {
+                    bindings: {
+                        backspace: {
+                            key: 'backspace', // Use key code for reliability
+                            handler: function (range, context) {
+                                console.log('Backspace handler triggered', { range, context }); // Debug log
+                                if (range.length === 0) { // Cursor is at a single point
+                                    const [leaf, offset] = quill.getLeaf(range.index - 1);
+                                    console.log('Leaf:', leaf, 'Offset:', offset); // Debug leaf
+                                    if (leaf && leaf.blotName === 'formula') {
+                                        console.log('Deleting formula at index:', range.index - 1);
+                                        quill.deleteText(range.index - 1, 1, Quill.sources.USER);
+                                        return false; // Prevent default backspace behavior
+                                    }
+                                }
+                                return true; // Allow default behavior
+                            }
                         }
-
-                        const [leaf, offset] = quill.getLeaf(range.index);
-                        if (!leaf || !leaf.domNode || leaf.domNode.tagName !== 'IMG') {
-                            alert('Nenhuma imagem selecionada. Clique em uma imagem para redimensionar.');
-                            return;
-                        }
-
-                        const img = leaf.domNode;
-
-                        // Create container for size selection
-                        const selectContainer = document.createElement('div');
-                        selectContainer.className = 'select-container';
-                        // Criar o select com opções de tamanho
-                        const select = document.createElement('select');
-                        select.innerHTML = `
-                            <option value="muito_pequena">Muito Pequena (100x75)</option>
-                            <option value="pequena">Pequena (200x150)</option>
-                            <option value="média" selected>Média (400x300)</option>
-                            <option value="grande">Grande (600x450)</option>
-                            <option value="extra_grande">Extra Grande (800x600)</option>
-                        `;
-
-                        // Botões de confirmar e cancelar
-                        const confirmButton = document.createElement('button');
-                        confirmButton.textContent = 'Confirmar';
-                        confirmButton.className = 'confirm-button';
-
-                        const cancelButton = document.createElement('button');
-                        cancelButton.textContent = 'Cancelar';
-                        cancelButton.className = 'cancel-button';
-
-                        // Append elements to container
-                        selectContainer.appendChild(select);
-                        selectContainer.appendChild(confirmButton);
-                        selectContainer.appendChild(cancelButton);
-                        document.body.appendChild(selectContainer);
-
-                        // Position the container near the editor
-                        const editorRect = quill.container.getBoundingClientRect();
-                        selectContainer.style.top = `${editorRect.top + window.scrollY + editorRect.height}px`;
-                        selectContainer.style.left = `${editorRect.left + window.scrollX}px`;
-
-                        // Size map for image dimensions
-                        const sizeMap = {
-                            muito_pequena: { width: 100, height: 75 },
-                            pequena: { width: 200, height: 150 },
-                            média: { width: 400, height: 300 },
-                            grande: { width: 600, height: 450 },
-                            extra_grande: { width: 800, height: 600 }
-                        };
-
-                        // Handle confirm button click
-                        confirmButton.onclick = () => {
-                            const dimensions = sizeMap[select.value] || sizeMap['média'];
-                            quill.formatText(range.index, 1, {
-                                width: `${dimensions.width}px`,
-                                height: `${dimensions.height}px`
-                            });
-                            selectContainer.remove();
-                        };
-
-                        // Handle cancel button click
-                        cancelButton.onclick = () => {
-                            selectContainer.remove();
-                        };
                     }
-                }
-            }
+                },
+            },
         }
-    });
+
+
+        });
     // After initializing Quill
-const resizeButtons = document.querySelectorAll('.ql-resize-image');
-resizeButtons.forEach(button => {
-    button.innerHTML = '<img src="/img/resize.png" alt="Resize" style="width: 16px; height: 16px;">';
-    button.title = 'Resize Image'; // Add tooltip to all resize buttons
-});
+
     quill.getModule('toolbar').addHandler('formula', function () {
 
         const editorOpenBtn = document.getElementById(`${buttonId}`);
@@ -129,7 +105,7 @@ resizeButtons.forEach(button => {
         }
 
         if (editorOpenBtn) {
-           editorOpenBtn.click();
+            editorOpenBtn.click();
         }
     });
 
@@ -182,96 +158,26 @@ resizeButtons.forEach(button => {
 }
 
 function uploadImage(file, quillInstance) {
-    if (file) {
-        // Criar o contêiner para o select
-        const selectContainer = document.createElement('div');
-        selectContainer.className = 'select-container';
-        // Criar o select com opções de tamanho
-        const select = document.createElement('select');
-        select.innerHTML = `
-            <option value="muito_pequena">Muito Pequena (100x75)</option>
-            <option value="pequena">Pequena (200x150)</option>
-            <option value="média" selected>Média (400x300)</option>
-            <option value="grande">Grande (600x450)</option>
-            <option value="extra_grande">Extra Grande (800x600)</option>
-        `;
+    if (!file) return;
 
-        // Botões de confirmar e cancelar
-        const confirmButton = document.createElement('button');
-        confirmButton.textContent = 'Confirmar';
-        confirmButton.className = 'confirm-button';
+    // Create FormData for image upload
+    let formData = new FormData();
+    formData.append('image', file);
 
-        const cancelButton = document.createElement('button');
-        cancelButton.textContent = 'Cancelar';
-        cancelButton.className = 'cancel-button';
-
-        // Adicionar elementos ao contêiner
-        selectContainer.appendChild(select);
-        selectContainer.appendChild(confirmButton);
-        selectContainer.appendChild(cancelButton);
-        document.body.appendChild(selectContainer);
-
-        // Posicionar o select próximo ao editor
-        const editorRect = quillInstance.container.getBoundingClientRect();
-        selectContainer.style.top = `${editorRect.top + window.scrollY + editorRect.height}px`;
-        selectContainer.style.left = `${editorRect.left + window.scrollX}px`;
-
-        // Mapa de tamanhos
-        const sizeMap = {
-            muito_pequena: { width: 100, height: 75 },
-            pequena: { width: 200, height: 150 },
-            média: { width: 400, height: 300 },
-            grande: { width: 600, height: 450 },
-            extra_grande: { width: 800, height: 600 }
-        };
-
-        // Função para processar o upload
-        const processUpload = (dimensions) => {
-            let formData = new FormData();
-            formData.append('image', file);
-
-            fetch('/Uploads/editor/', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    const imageUrl = data;
-                    const range = quillInstance.getSelection();
-
-                    if (range) {
-                        quillInstance.insertEmbed(range.index, 'image', imageUrl);
-                        quillInstance.formatText(range.index, range.index + 1, {
-                            width: `${dimensions.width}px`,
-                            height: `${dimensions.height}px`
-                        });
-                    } else {
-                        quillInstance.insertEmbed(quillInstance.getLength(), 'image', imageUrl);
-                        quillInstance.formatText(quillInstance.getLength() - 1, 1, {
-                            width: `${dimensions.width}px`,
-                            height: `${dimensions.height}px`
-                        });
-                    }
-
-                    selectContainer.remove();
-                })
-                .catch(error => {
-                    alert('Erro no upload:', error.message);
-                    console.error('Erro no upload:', error);
-                    selectContainer.remove();
-                });
-        };
-
-        // Lidar com o clique no botão Confirmar
-        confirmButton.onclick = () => {
-            const dimensions = sizeMap[select.value] || sizeMap['média'];
-            processUpload(dimensions);
-        };
-
-        // Lidar com o clique no botão Cancelar
-        cancelButton.onclick = () => {
-            selectContainer.remove();
-        };
-    }
+    // Upload image to server
+    fetch('/Uploads/editor/', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Image URL:', data); // Debug: Log the image URL
+            const imageUrl = data;
+            const range = quillInstance.getSelection() || { index: quillInstance.getLength() };
+            quillInstance.insertEmbed(range.index, 'image', imageUrl);
+        })
+        .catch(error => {
+            console.error('Upload error:', error);
+            alert('Erro no upload: ' + error.message);
+        });
 }
-

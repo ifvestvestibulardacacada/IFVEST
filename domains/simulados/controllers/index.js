@@ -17,6 +17,7 @@ const editarQuestao = require('./editarQuestao');
 const minhasQuestoes = require('./minhasQuestoes');
 const registrarQuestao = require('./registrarQuestao');
 const removerQuestoes = require('./removerQuestoes');
+const getSimulado = require('./getSimulado');
 
 module.exports = {
     manutencao,
@@ -30,7 +31,7 @@ module.exports = {
     imprimirSimulado,
     meusSimulados,
     visualizarSimulado,
-
+    getSimulado,
     // Questões
     adicionarQuestoes,
     editarQuestao,

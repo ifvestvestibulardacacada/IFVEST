@@ -3,22 +3,21 @@ const newContentSection = document.getElementById('newContentSection');
 const tipoSelect = document.getElementById('tipo');
 const modoSelect = document.getElementById('modo');
 const questoesTable = document.getElementById('questoesTable');
-const questoesBody = document.getElementById('questoesBody');
+const questoesBody = document.getElementById('questoes-tbody');
 const selectAllCheckbox = document.getElementById('selectAll');
 const contador = document.getElementById('numero-questoes-selecionadas');
 const paginationContainer = document.getElementById('pagination');
 
 let currentPage = 1;
-const itemsPerPage = 10;
+const itemsPerPage = 5;
 let filteredQuestoes = [];
 
 // Initialize selected questions from sessionStorage
-let selectedQuestions = JSON.parse(sessionStorage.getItem('selectedQuestions') || '[]');
+let selectedQuestions = [];
 
 // Event listener para limpar selectedQuestions quando o tipo mudar
 tipoSelect.addEventListener('change', () => {
   console.log('Tipo selecionado mudou:', tipoSelect.value);
-  sessionStorage.removeItem('selectedQuestions');
   selectedQuestions = [];
   updateSelectedCount();
   applyFilters(); // Sempre atualiza
@@ -42,8 +41,9 @@ function applyFilters() {
   const tituloFiltro = document.getElementById('tituloFiltro').value.toLowerCase() || '';
 
   console.log('Filter inputs:', { tipo, tituloFiltro });
+  const questoes = window.ContentManager.getQuestoes();
 
-  filteredQuestoes = window.questoes.filter(questao => {
+  filteredQuestoes = questoes.filter(questao => {
     const rowTipo = (questao.tipo || '').toUpperCase();
     const normalizedTipo = tipo === 'Dissertativo' ? 'DISSERTATIVA' : tipo === 'Objetivo' ? 'OBJETIVA' : tipo;
     const rowTitulo = (questao.titulo || '').toLowerCase();
@@ -125,21 +125,52 @@ function renderTable() {
   renderPagination();
   updateSelectedCount();
 }
+function changePage(page) {
+  if (page < 1 || page > Math.ceil(filteredQuestoes.length / itemsPerPage)) return;
+  currentPage = page;
+  renderTable();
+}
 
 function renderPagination() {
   const pageCount = Math.ceil(filteredQuestoes.length / itemsPerPage);
-  paginationContainer.innerHTML = '';
+  const pagination = document.getElementById('pagination');
+  pagination.innerHTML = '';
 
+  if (pageCount <= 1) return;
+
+  // Botão Anterior
+  const prevItem = document.createElement('li');
+  prevItem.className = 'page-item';
+  if (currentPage === 1) prevItem.classList.add('disabled');
+  prevItem.innerHTML = `
+    <a class="page-link" href="#" aria-label="Anterior" onclick="changePage(${currentPage - 1}); return false;">
+      <span aria-hidden="true">&laquo;</span>
+    </a>
+  `;
+  pagination.appendChild(prevItem);
+
+  // Páginas
   for (let i = 1; i <= pageCount; i++) {
-    const button = document.createElement('button');
-    button.textContent = i;
-    button.disabled = i === currentPage;
-    button.onclick = () => {
-      currentPage = i;
-      renderTable();
-    };
-    paginationContainer.appendChild(button);
+    const pageItem = document.createElement('li');
+    pageItem.className = 'page-item';
+    if (i === currentPage) pageItem.classList.add('active');
+
+    pageItem.innerHTML = `
+      <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
+    `;
+    pagination.appendChild(pageItem);
   }
+
+  // Botão Próximo
+  const nextItem = document.createElement('li');
+  nextItem.className = 'page-item';
+  if (currentPage === pageCount) nextItem.classList.add('disabled');
+  nextItem.innerHTML = `
+    <a class="page-link" href="#" aria-label="Próximo" onclick="changePage(${currentPage + 1}); return false;">
+      <span aria-hidden="true">&raquo;</span>
+    </a>
+  `;
+  pagination.appendChild(nextItem);
 }
 
 function updateSelectedCount() {
@@ -164,7 +195,7 @@ selectAllCheckbox.addEventListener('change', () => {
     selectedQuestions = selectedQuestions.filter(id => !pageQuestionIds.includes(id));
   }
 
-  sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
+  //sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
   console.log('Updated selectedQuestions:', selectedQuestions);
   renderTable();
   updateSelectedCount();
@@ -180,7 +211,7 @@ questoesBody.addEventListener('change', (e) => {
     } else {
       selectedQuestions = selectedQuestions.filter(qid => qid !== id);
     }
-    sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
+    //sessionStorage.setItem('selectedQuestions', JSON.stringify(selectedQuestions));
     console.log('Updated selectedQuestions:', selectedQuestions);
     updateSelectedCount();
     selectAllCheckbox.checked = document.querySelectorAll('.questao-checkbox').length ===
@@ -189,14 +220,13 @@ questoesBody.addEventListener('change', (e) => {
 });
 
 async function saveSimulado() {
-  console.log('sessionStorage.selectedQuestions:', sessionStorage.getItem('selectedQuestions'));
-  console.log('modo value:', modoSelect.value);
+
 
   const formData = {
     titulo: document.getElementById('titulo').value,
     descricao: document.getElementById('descricao').value,
     tipo: document.getElementById('tipo').value,
-    modo: modoSelect.value || '1',
+
     selectedQuestionIds: selectedQuestions.filter(id => id) || []
   };
 
@@ -219,18 +249,29 @@ async function saveSimulado() {
   saveButton.textContent = 'Salvando...';
 
   try {
-   const response = await axios.post('/simulados/criar-simulado', formData, {
-      validateStatus: status => status >= 200 && status < 300, // Trata apenas 2xx como sucesso
+    const response = await axios.post('/simulados/criar-simulado', formData, {
+      validateStatus: status => status >= 200 && status < 300,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      }
     });
     console.log('Resposta recebida:', response);
     alert('Simulado salvo com sucesso!');
-    sessionStorage.removeItem('selectedQuestions');
+    //sessionStorage.removeItem('selectedQuestions');
     selectedQuestions = [];
     window.location.href = '/simulados/meus-simulados';
   } catch (error) {
     console.error('Erro capturado:', error, error.response);
-    const errorMessage = error.response?.data?.error || 'Erro ao salvar o simulado';
-    alert('Erro ao salvar o simulado: ' + errorMessage);
+    if (error.response?.status === 400 && error.response?.data?.details) {
+      const errorDetails = error.response.data.details;
+      // Format error messages for display
+      const errorMessages = errorDetails.map(err => `${err.path}: ${err.message}`).join('\n');
+      alert(`Erro ao criar material:\n${errorMessages}`);
+    } else {
+      // Fallback for other errors
+      const errorMessage = error.response?.data?.error || 'Tente novamente.';
+      alert(`Erro ao criar material: ${errorMessage}`);
+    }
   } finally {
     console.log('Executando finally');
     saveButton.disabled = false;
@@ -238,11 +279,16 @@ async function saveSimulado() {
   }
 }
 
+// /js/validations/validate.js
+
+// 1. Validação genérica de HTML e SQL
+
+
 // Limpa sessionStorage ao sair da página
-window.addEventListener('beforeunload', () => {
-  console.log('Leaving page, clearing sessionStorage');
-  sessionStorage.removeItem('selectedQuestions');
-});
+// window.addEventListener('beforeunload', () => {
+//   console.log('Leaving page, clearing sessionStorage');
+//   sessionStorage.removeItem('selectedQuestions');
+// });
 
 // Inicializa a página
 document.addEventListener('DOMContentLoaded', () => {

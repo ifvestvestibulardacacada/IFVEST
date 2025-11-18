@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     const deltaElements = document.querySelectorAll('[data-delta]');
-    const maxLength = 100; 
+    const maxLength = 40; 
     deltaElements.forEach(function (element) {
         const delta = JSON.parse(element.getAttribute('data-delta'));
         const tempDiv = document.createElement('div');

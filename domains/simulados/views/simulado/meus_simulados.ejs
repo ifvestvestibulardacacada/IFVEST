@@ -1,149 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--========== BOX ICONS ==========-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-
-    <!--========== CSS ==========-->
-    <%- include('../partials/quill_and_uikit') %>
-
-    <!-- Outros elementos do head -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-
-    <title>Meus simulados - IFVest</title>
+    <title>Meus Simulados - IFVest</title>
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/simulados/css/simulado/meus_simulados.css">
+        <link rel="stylesheet" href="/simulados/css/simulado/removerquestoes.css">
 </head>
-<link rel="stylesheet" href="/css/simulado/meusSimulados.css">
-
 
 <body>
-    
-        
-            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
-                <script>
-                    window.onload = function() {
-                        alert("<%= errorMessage %>");
-                    };
-                </script>
-            <% } %>
-            <h1 class="uk-heading-divider"><span>MEUS SIMULADOS</span></h1>
-            <form action="/simulados/meus-simulados" method="GET">
+    <div class="container col-lg-10 mx-auto my-4">
 
-                <input type="text" name="titulo" placeholder="Filtrar por título">
-                <button type="submit"><i class='bx bx-search'></i> Pesquisar</button>
+        <!-- Mensagem de erro -->
+        <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+            <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <div><%= errorMessage %></div>
+            </div>
+        <% } %>
+
+        <!-- Título -->
+        <h1 class="border-bottom pb-2 mb-4">Meus Simulados</h1>
+
+        <!-- Filtro -->
+        <div class="filter-container">
+            <form method="GET" action="/simulados/meus-simulados" class="row g-3 align-items-end">
+                <div class="col-md-10">
+                    <label for="titulo" class="form-label">Buscar por título</label>
+                    <input type="text" id="titulo" name="titulo" placeholder="Filtrar por título" 
+                           class="form-control" maxlength="100" value="<%= typeof titulo !== 'undefined' ? titulo : '' %>">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-search"></i> Pesquisar
+                    </button>
+                </div>
             </form>
+        </div>
 
+        <!-- Tabela -->
+        <div class="table-container">
             <div class="table-responsive">
-                <table class="uk-table uk-table-striped">
-                    <thead>
+                <table class="table table-striped table-bordered align-middle mb-0">
+                    <thead class="table-light">
                         <tr>
                             <th>Título</th>
-                      
                             <th>Tipo</th>
-                            <th>Ações</th>
+                            <th width="55%">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% simulados.forEach(simulado=> { %>
+                        <% simulados.forEach(simulado => { %>
                             <tr>
-                                <td uk-tooltip="title: <%= simulado.descricao %>; pos: top-left">
+                                <td data-bs-toggle="tooltip" data-bs-placement="top" title="<%= simulado.descricao %>">
                                     <%= simulado.titulo %>
                                 </td>
-                           
+                                <td><%= simulado.tipo %></td>
                                 <td>
-                                    <%= simulado.tipo %>
-                                </td>
-                                <td>
-                                    <div class="button-container">
-                                        <a href="/simulados/<%= simulado.id_simulado %>/fazer" class="button">
-                                            <div class="icon-button">
-                                                <i class="fas fa-play"></i> Fazer Simulado
-                                            </div>
+                                    <div class="d-flex gap-2 flex-wrap">
+                                        <a href="/simulados/<%= simulado.id_simulado %>/fazer"
+                                           class="btn btn-outline-success btn-sm">
+                                            <i class="bi bi-play"></i> Fazer
                                         </a>
-                                        <a href="/simulados/<%= simulado.id_simulado %>/editar" class="button">
-                                            <div class="icon-button">
-                                                <i class="fas fa-edit"></i> Editar
-                                            </div>
+                                        <a href="/simulados/<%= simulado.id_simulado %>/editar"
+                                           class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-pencil"></i> Editar
                                         </a>
-                                        <a href="/simulados/<%= simulado.id_simulado %>/imprimir" id="generate-pdf" class="button">
-                                            <div class="icon-button">
-                                                <i class="fas fa-print"></i> Gerar PDF
-                                            </div>
+                                        <a href="/simulados/<%= simulado.id_simulado %>/imprimir"
+                                           class="btn btn-outline-dark btn-sm generate-pdf"
+                                           data-simulado-id="<%= simulado.id_simulado %>">
+                                            <i class="bi bi-file-earmark-pdf"></i> PDF
                                         </a>
-                          
-                                        <a href="/simulados/<%= simulado.id_simulado %>/remover-questoes" class="button">
-                                            <div class="icon-button">
-                                                <i class="fas fa-minus"></i> Remover Questões
-                                            </div>
+                                        <a href="/simulados/<%= simulado.id_simulado %>/remover-questoes"
+                                           class="btn btn-outline-dark btn-sm">
+                                            <i class="bi bi-dash"></i> Remover
                                         </a>
-                                        <a href="/simulados/<%= simulado.id_simulado %>/adicionar-questoes" class="button">
-                                            <div class="icon-button">
-                                                <i class="fas fa-plus"></i> Adicionar Questões
-                                            </div>
+                                        <a href="/simulados/<%= simulado.id_simulado %>/adicionar-questoes"
+                                           class="btn btn-outline-dark btn-sm">
+                                            <i class="bi bi-plus"></i> Adicionar
                                         </a>
-                                        <a href="#" class="button delete-simulado" data-simulado-id="<%= simulado.id_simulado %>">
-                                            <div class="icon-button">
-                                                <i class="fa-solid fa-trash"></i> Excluir Simulado
-                                            </div>
+                                        <a href="#" class="btn btn-outline-danger btn-sm delete-simulado"
+                                           data-simulado-id="<%= simulado.id_simulado %>">
+                                            <i class="bi bi-trash"></i> Excluir
                                         </a>
-
+                                        <form id="deleteForm<%= simulado.id_simulado %>"
+                                              action="/simulados/<%= simulado.id_simulado %>?_method=DELETE"
+                                              method="POST" style="display: none;"></form>
                                     </div>
                                 </td>
-                                <div id="modal-imprimir" class="modal">
-                                    <div class="modal-content">
-                                        <!-- inclusão de um documento html dentro do outro -->
-                                        <iframe id="iframe-imprimir" src="" frameborder="0" width="100%" height="600"></iframe>
-                                    </div>
-                                </div>
                             </tr>
                         <% }); %>
                     </tbody>
                 </table>
-                <div id="modal-excluir" class="modal" style="display:none;">
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <form id="deleteAccountForm" action="" method="POST">
-                            <p>Você tem certeza que deseja excluir este simulado?</p>
-                            <div>
-                                <button type="submit" style="background-color: greenyellow">Confirmar</button>
-                                <button type="button" style="background-color: red" class="cancel-delete">Cancelar</button>
-                            </div>
-                        </form>
+            </div>
+        </div>
+
+        <!-- Paginação -->
+        <% if (totalPages > 1) { %>
+            <div id="pagination-container" class="pagination-custom">
+                <% if (currentPage > 1) { %>
+                    <a href="?page=1&titulo=<%= titulo || '' %>" class="btn btn-outline-secondary">Primeira</a>
+                    <a href="?page=<%= currentPage - 1 %>&titulo=<%= titulo || '' %>" class="btn btn-outline-secondary">Anterior</a>
+                <% } %>
+
+                <% 
+                    const startPage = Math.max(1, currentPage - 2);
+                    const endPage = Math.min(totalPages, currentPage + 2);
+                    for(let i = startPage; i <= endPage; i++) { 
+                %>
+                    <a href="?page=<%= i %>&titulo=<%= titulo || '' %>"
+                       class="btn <%= currentPage == i ? 'btn-primary' : 'btn-outline-secondary' %>">
+                        <%= i %>
+                    </a>
+                <% } %>
+
+                <% if (currentPage < totalPages) { %>
+                    <a href="?page=<%= currentPage + 1 %>&titulo=<%= titulo || '' %>" class="btn btn-outline-secondary">Próxima</a>
+                    <a href="?page=<%= totalPages %>&titulo=<%= titulo || '' %>" class="btn btn-outline-secondary">Última</a>
+                <% } %>
+            </div>
+        <% } %>
+
+        <!-- Botão Voltar -->
+        <div class="button-container">
+            <a href="/simulados" class="btn btn-voltar btn-lg">
+                <i class="bi bi-arrow-left"></i> Voltar ao Menu Simulados
+            </a>
+        </div>
+    </div>
+
+    <!-- Modal Excluir -->
+    <div class="modal fade" id="modal-excluir" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="deleteAccountForm" action="" method="POST">
+                    <div class="modal-body">
+                        <p>Você tem certeza que deseja excluir este simulado?</p>
                     </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">Confirmar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Visualizar PDF -->
+    <div class="modal fade" id="modal-imprimir" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Visualizar Simulado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <iframe id="iframe-imprimir" src="" frameborder="0" style="width: 100%; height: 70vh;"></iframe>
                 </div>
             </div>
+        </div>
+    </div>
 
 
-            <% if (totalPages> 1) { %>
-                <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
-                        <% if (currentPage> 1) { %>
-                            <li class="page-item"><a class="page-link" href="?page=<%= currentPage - 1 %>">Anterior</a>
-                            </li>
-                            <% } %>
-                                <% for(let i=1; i <=totalPages; i++) { %>
-                                    <li class="page-item <%= currentPage == i? 'active' : '' %>">
-                                        <a class="page-link" href="?page=<%= i %>">
-                                            <%= i %>
-                                        </a>
-                                    </li>
-                                    <% } %>
-                                        <% if (currentPage < totalPages) { %>
-                                            <li class="page-item"><a class="page-link"
-                                                    href="?page=<%= currentPage + 1 %>">Próximo</a></li>
-                                            <% } %>
-                    </ul>
-                </nav>
-                <% } %>
-        
-        <!--========== MAIN JS ==========-->
-        <script src="/js/main.js"></script>
-        <script src="/js/simulado/meus_simulados.js"></script>
-    
+
+    <script src="/js/main.js"></script>
+    <script src="/simulados/js/simulado/meus_simulados.js"></script>
 </body>
 
 </html>

@@ -17,10 +17,8 @@ module.exports = async (req, res) =>{
 
             res.locals.currentPage = "revisao"
             
-            const perfilUsuario = req.session.perfil;
-            const nomeUsuario = req.session.nomeUsuario;
-            const imagemPerfil = req.session.imagemPerfil;
+
 
             // ! Temporário
-            res.render('error', { nomeUsuario, perfilUsuario, imagemPerfil })
+            res.render('error', )
         }

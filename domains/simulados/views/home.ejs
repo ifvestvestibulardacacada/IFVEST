@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="/css/usuario/card.css">
 <link rel="stylesheet" href="/css/usuario/Botão.css">
+<link rel="stylesheet" href="/revisao/css/colorful-container.css">
 
 <main>
     <h1 class=" mt-5">Módulo de Simulados </h1>
@@ -7,72 +8,53 @@
 
 
     <h2 class="text-center">Simulados</h2>
-    <div class="ag-format-container">
-
-        <div class="ag-courses_box">
-
-            <div class="ag-courses_item">
-                <a href="/simulados/criar-simulado" class="ag-courses-item_link">
-                    <div class="ag-courses-item_bg"></div>
-                    <div class="ag-courses-item_title">
-                        Criar simulado
-                    </div>
-                </a>
-            </div>
-
-            <div class="ag-courses_item">
-                <a href="/simulados/meus-simulados" class="ag-courses-item_link">
-                    <div class="ag-courses-item_bg"></div>
-                    <div class="ag-courses-item_title">
-                        Meus simulados
-                    </div>
-                </a>
-            </div>
-
+    <br>
+    
+    <div class="colorful-container">
+            <a href="/simulados/criar-simulado" class="colorful-btn">
+                <div>
+                    Criar Simulado
+                </div>
+            </a>
+            
+            <a href="/simulados/meus-simulados" class="colorful-btn">
+                <div>
+                    Meus simulados
+                </div>
+            </a>
         </div>
-
-    </div>
+        <br>
+        <br>
+        <br>
+   
 
 
 
     <% if (perfilUsuario==="PROFESSOR" ) { %>
         <h2 class="text-center">Área do professor</h2>
-
-        <div class="ag-format-container">
-
-            <div class="ag-courses_box">
-
-                <div class="ag-courses_item">
-
-                    <a href="/simulados/questoes" class="ag-courses-item_link">
-                        <div class="ag-courses-item_bg"></div>
-                        <div class="ag-courses-item_title">
-                            Minhas questões
-                        </div>
-                    </a>
+        <br>
+      
+            <div class="colorful-container">
+            <a href="/simulados/questoes" class="colorful-btn">
+                <div>
+                    Minhas Questões
                 </div>
-
-                <div class="ag-courses_item">
-                    <a href="/simulados/registrar-questao/objetiva" class="ag-courses-item_link">
-                        <div class="ag-courses-item_bg"></div>
-                        <div class="ag-courses-item_title">
-                            Criar questão objetiva
-                        </div>
-                    </a>
+            </a>
+            
+            <a href="/simulados/registrar-questao/objetiva" class="colorful-btn">
+                <div>
+                    Criar Questão Objetiva
                 </div>
-
-                <div class="ag-courses_item">
-                    <a href="/simulados/registrar-questao/dissertativa" class="ag-courses-item_link">
-                        <div class="ag-courses-item_bg"></div>
-                        <div class="ag-courses-item_title">
-                            Criar questão dissertativa
-                        </div>
-                    </a>
+            </a>
+            <a href="/simulados/registrar-questao/dissertativa" class="colorful-btn">
+                <div>
+                    Criar Questão Dissertativa
                 </div>
-
-            </div>
-
+            </a>
         </div>
+        <br>
+
+
 
         <% } %>
 

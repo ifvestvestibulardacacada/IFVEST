@@ -9,83 +9,116 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="/css/global.css">
-    <link rel="stylesheet" href="/css/prova/googlef2.css">
-    <link rel="stylesheet" href="/css/prova/gabarito.css">
-    <%- include('../partials/quill_and_uikit') %>
+    <link rel="stylesheet" href="/simulados/css/prova/prova.css">
+    
+    <%- include('../partials/libs') %>
 
 
 </head>
-
 <body>
     
-        <main>
-            <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
-                <script>
-                    window.onload = function() {
-                        alert("<%= errorMessage %>");
-                    };
-                </script>
-            <% } %>
-            <form id="questionario" class="form" action="/simulados/responder-prova/<%= simulado.id_simulado %>"
-                method="POST">
-                <div class="title-div">
-                    <h1> <%= simulado.tipo %>
-                    </h1>
-                </div>
-
-                <% simulado.Questao.forEach(questao=> { %>
-                    <div class="name-div">
-                        <div class="titulo">
-                            <p>
-                                <%= questao.titulo %>
- 
-                            </p>
-                        </div>
-
-                        <div class="name" data-delta='<%= questao.pergunta %>'>
-                            <!-- O conteúdo será inserido via JavaScript -->
-                            <span class="required">*</span>
-                        </div>
-                        <% if (questao.tipo==="OBJETIVA" ) { %>
-                           
-                            <% 
-                            // Mapeia as letras para as opções
-                            const letras = ['A', 'B', 'C', 'D', 'E'];
-                            const opcoesOrdenadas = letras.map(letra => 
-                                questao.Opcao.find(opcao => opcao.alternativa.startsWith(letra))
-                            ).filter(opcao => opcao); // Filtra opções que não foram encontradas
-                            %>
-                            
-                            <% opcoesOrdenadas.forEach((opcao, index) => { %>
-                                <div class="opcao">
-                                    <label class="letra" for="opcao<%= opcao.id_opcao %>">
-                                        <%= opcao.alternativa %>
-                                    </label>
-                                    <input class="radio-input" type="radio" id="opcao<%= opcao.id_opcao %>"
-                                        name="questoes[<%= questao.id_questao %>]"
-                                        value="<%= questao.id_questao %>-<%= opcao.id_opcao %>">
-                                    
-                                    <div class="name" data-delta='<%= opcao.descricao %>' contenteditable="false">
-                                        <span class="required">*</span>
-                                    </div>
-                                </div>
-                            <% }) %>
-                                        <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
-                                            <textarea name="respostas[questao_<%= questao.id_questao %>]"
-                                                placeholder="Sua resposta" ></textarea>
-                                            <% } %>
+    <main class="container mt-5 pt-4"> <div class="row">
+            <div class="col-lg-10 col-xl-9 mx-auto"> <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+                    <div class="alert alert-danger" role="alert">
+                        <%= errorMessage %>
                     </div>
+                <% } %>
+                
+                <form id="questionario" method="POST" action="/simulados/responder-prova/<%= simulado.id_simulado %>">
+                    
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body py-4 bg-primary text-white text-center">
+                            <h1 class="h3 mb-0 fw-bold"> <%= simulado.tipo %></h1>
+                        </div>
+                    </div>
+
+                    <% simulado.Questao.forEach((questao, qIndex) => { %>
+                        
+                        <div class="card shadow-sm mb-4">
+                            
+                            <div class="card-header bg-light py-3 text-center">
+                                <h5 class="card-title mb-0 text-primary fw-bold">
+                                    Questao <%= qIndex + 1 %> (<%= questao.titulo %>)
+                                </h5>
+                            </div>
+
+                            <div class="card-body">
+                                <div class="enunciado-questao mb-3" data-delta='<%= questao.pergunta %>'>
+                                    <span class="required">*</span>
+                                </div>
+                                
+                                <input type="hidden" name="id_questao" value="<%= questao.id_questao %>">
+                                
+                                <% if (questao.tipo==="OBJETIVA" ) { %>
+                                    
+                                    <ul class="list-group list-group-flush mt-3">
+                                        <% 
+                                        // Mapeia as letras para as opções
+                                        const letras = ['A', 'B', 'C', 'D', 'E'];
+                                        const opcoesOrdenadas = letras.map(letra => 
+                                            questao.Opcao.find(opcao => opcao.alternativa.startsWith(letra))
+                                        ).filter(opcao => opcao); 
+                                        %>
+<% opcoesOrdenadas.forEach((opcao, index) => { %>
+        <li class="list-group-item list-group-item-action">
+            
+            <div class="d-flex align-items-center"> 
+                
+                <input class="form-check-input mt-0 me-3" 
+                       type="radio" 
+                       name="questoes[<%= questao.id_questao %>]"
+                       id="opcao-<%= opcao.id_opcao %>"
+                       value="<%= questao.id_questao %>-<%= opcao.id_opcao %>"
+                       required>
+
+                <label class="form-check-label w-100" for="opcao-<%= opcao.id_opcao %>">
+                    
+                    <div class="d-flex align-items-center"> 
+                        
+                        <span class="fw-bold me-2 text-nowrap">
+                            <%= opcao.alternativa %>)
+                        </span>
+                        
+                        <div class="opcao-texto w-100" data-delta='<%= opcao.descricao %>' contenteditable="false">
+                            </div>
+                    </div>
+
+                </label>
+            </div>
+        </li>
+    <% }) %>
+                                    </ul>
+                                    
+                                <% } else if (questao.tipo==="DISSERTATIVA" ) { %>
+                                    
+                                    <div class="form-group mt-3">
+                                        <textarea class="form-control"
+                                                  name="respostas[questao_<%= questao.id_questao %>]"
+                                                  rows="6"
+                                                  placeholder="Escreva sua resposta dissertativa aqui..." 
+                                                  required></textarea>
+                                    </div>
+                                    
+                                <% } %>
+                            </div>
+                        </div>
                     <% }) %>
 
-                        <div class="espaco">
-                            <button class="btn" type="submit">Enviar</button>
-                        </div>
-            </form>
-        </main>
+                    <div class="d-grid gap-2 mb-5">
+                        <button class="btn btn-lg btn-success fw-bold" type="submit">
+                            <i class="bi bi-send-fill me-2"></i> Enviar Simulado
+                        </button>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </main>
 
-        <!-- Adicione aqui os scripts JS necessários -->
-        <script src="/js/main.js"></script>
-        <script src="/js/prova/quillContentHTML.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/prova/quillContentHTML.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
-
 </html>

@@ -3,9 +3,7 @@ const { Simulado } = require('../../../models');
 
 module.exports = async (req, res) => {
             const simuladoId = req.params.id
-            const perfilUsuario = req.session.perfil;
-            const nomeUsuario = req.session.nomeUsuario;
-            const imagemPerfil = req.session.imagemPerfil;
+
             try {
                 const simulado = await Simulado.findOne({
                     where: { id_simulado: simuladoId },
@@ -21,7 +19,7 @@ module.exports = async (req, res) => {
                 }
                 req.session.errorMessage = null;
 
-                res.render('simulado/editar_simulado', { simulado, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('simulado/editar_simulado', { simulado, errorMessage,  });
             } catch (err) {
                 return res.status(500).json({ error: err.message });
             }

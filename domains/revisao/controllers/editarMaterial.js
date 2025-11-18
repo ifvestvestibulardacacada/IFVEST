@@ -1,7 +1,5 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
 const { Conteudo, Assunto, PalavraChave } = require('../../../models')
-const MarkdownSolver = require('../utils/MarkdownSolver')
-const buildTree = require('../utils/buildTree')
 
 module.exports = async (req, res) => {
 
@@ -11,11 +9,11 @@ module.exports = async (req, res) => {
 
     res.locals.currentPage = "revisao"
 
-    const perfilUsuario = req.session.perfil;
-    const nomeUsuario = req.session.nomeUsuario;
-    const imagemPerfil = req.session.imagemPerfil;
+   
     try {
         const Assuntos = await Assunto.findAll()
+
+        const { jsPath, cssPaths } = MarkdownSolver.getViteAssets();
 
         const Material = await Conteudo.findByPk(id_conteudo, {
             include: [
@@ -40,19 +38,10 @@ module.exports = async (req, res) => {
         plainMaterial.PalavraChave = plainMaterial.PalavraChave.map(keyword => keyword.palavrachave); // Extract 'PalavraChave' field
 
         plainMaterial.assunto = assunto;
-        
-        const { markdown, references } = MarkdownSolver.breakMarkdown(plainMaterial.conteudo_markdown);
-        plainMaterial.conteudo_markdown =  markdown;
+
 
         // ! Temporário
-        res.render('editor', { 
-            nomeUsuario, 
-            perfilUsuario, 
-            imagemPerfil, 
-            Assuntos: buildTree(Assuntos), 
-            Material: plainMaterial, 
-            MaterialExterno: references,
-            assunto });
+        res.render('editarMaterial', { nomeUsuario, perfilUsuario, imagemPerfil, Assuntos, Material: plainMaterial, assunto });
 
     } catch (error) {
         console.error(error)
