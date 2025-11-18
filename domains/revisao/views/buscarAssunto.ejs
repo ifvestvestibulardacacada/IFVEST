@@ -1,77 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
+<!--========== CSS ==========-->
+<link rel="stylesheet" href="/revisao/css/revisao-card.css" />
+<link rel="stylesheet" href="/revisao/css/assunto-containers.css" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  <%= assunto.nome %> | Busca por Assunto - Módulo de Revisão de Conteúdo -
+  IFVest
+</title>
 
-    <!--========== Bootstrap ==========-->
-    <!-- <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/bootstrap/js/bootstrap.bundle.min.js"></script> -->
-
-    <!--========== BOX ICONS ==========-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-
-    <!--========== CSS ==========-->
-    <link rel="stylesheet" href="/revisao/css/revisao-card.css">
-    <link rel="stylesheet" href="/revisao/css/colorful-container.css">
-    <link rel="stylesheet" href="/revisao/css/assunto-containers.css">
-    
-
-
-    <title><%= assunto.nome %> | Busca por Assunto - Módulo de Revisão de Conteúdo - IFVest</title>
-</head>
-
-<body>
-    <main>
-        <h1 class="text-center mt-4"><%= assunto.nome %></h1>
-        <h2 class="text-center fs-4 mb-4"><%= assunto.descricao %></h2>
-        <% if (!isRoot) {%>
-            <span><i class='bx  bx-chevron-left'></i><a href="/revisao/busca/<%=id_ascendente%>">Voltar para <% if (ascendente){ %><%= ascendente.nome %><%} else {%><%="Início"%><%}%></a></span>
-        <%}%>
-        <hr>
-        <div class="container">
-            
-            <div class="assunto-area">
-                <h2>Assuntos</h2>
-                <div class="colorful-container">
-                    <% listaAssuntos.forEach(assunto => { %>
-                        <a href="/revisao/busca/<%= assunto.id_assunto %>" class="colorful-btn">
-                            <div>
-                                <%= assunto.nome %>
-                            </div>
-                        </a>
-                    <%})%>
-                    <% if (listaAssuntos.length === 0){ %>
-                        <p>Nenhum assunto encontrado.</p>
-                    <% } %>
-                </div>
-            </div>
-            <hr>
-            <div class="material-area">
-                <h2>Materiais</h2>
-                <div class="colorful-container">
-                    <% listaMateriais.forEach(conteudo => { %>
-                        <a href="/revisao/leitura/<%= conteudo.id_conteudo %>" class="colorful-btn large">
-                            <div>
-                                <p>
-                                    <%= conteudo.nome %>
-                                </p>
-                                <p class="fs-5">
-                                    Por: <%= conteudo.Usuario.nome%>
-                                </p>
-                            </div>
-                        </a>
-                    <%})%>
-                    <% if (listaMateriais.length === 0){ %>
-                        <p>Nenhum material encontrado.</p>
-                    <% } %>
-                </div>
-            </div>
+<h1 class="text-center mt-4"><%= assunto.nome %></h1>
+<h2 class="text-center fs-4 mb-4"><%= assunto.descricao %></h2>
+<% if (!isRoot) {%>
+<span
+  ><i class="bx bx-chevron-left"></i
+  ><a href="/revisao/busca/<%=id_ascendente%>"
+    >Voltar para <% if (ascendente){ %><%= ascendente.nome %><%} else
+    {%><%="Início"%><%}%></a
+  ></span
+>
+<%}%>
+<hr />
+<div class="container">
+  <div class="assunto-area">
+    <h2>Assuntos</h2>
+    <div class="colorful-container">
+      <% listaAssuntos.forEach(assunto => { %>
+      <a href="/revisao/busca/<%= assunto.id_assunto %>" class="colorful-btn">
+        <div><%= assunto.nome %></div>
+      </a>
+      <%})%> <% if (listaAssuntos.length === 0){ %>
+      <p>Nenhum assunto encontrado.</p>
+      <% } %>
+    </div>
+  </div>
+  <hr />
+  <div class="material-area">
+    <h2>Materiais</h2>
+    <div class="colorful-container">
+      <% listaMateriais.forEach(conteudo => { %>
+      <a
+        href="/revisao/leitura/<%= conteudo.id_conteudo %>"
+        class="colorful-btn large"
+      >
+        <div>
+          <p><%= conteudo.nome %></p>
+          <p class="fs-5">Por: <%= conteudo.Usuario.nome%></p>
         </div>
-    </main>
+      </a>
+      <%})%> <% if (listaMateriais.length === 0){ %>
+      <p>Nenhum material encontrado.</p>
+      <% } %>
+    </div>
+  </div>
+</div>
 
-    <!--========== MAIN JS ==========-->
-    <script src="/js/main.js"></script>
-</body>
-</html>
