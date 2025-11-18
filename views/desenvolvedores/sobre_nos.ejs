@@ -1,19 +1,335 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/css/global.css">
-    <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/aatjs@0.0.4/dist/aat.min.js"></script>
-    <title>Time dos desenvolvedores - IFVest</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nossa Equipe - IFVest</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="/css/partials/bioTimeDesenvolvedor.css" />
 </head>
-<body style="background-color: rgb(243, 243, 243)">
+<body style="background: linear-gradient(135deg, #10b981 0%, #059669 100%)">
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>IFVest: Educação que Transforma</h1>
+      <p class="hero-subtitle">
+        Uma plataforma colaborativa desenvolvida por estudantes e professores do IFSP Jacareí, 
+        dedicada a democratizar o acesso à educação de qualidade para vestibulandos de todo o Brasil.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-number">10+</span>
+          <span class="stat-label">Desenvolvedores</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">3</span>
+          <span class="stat-label">Anos de Projeto</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">∞</span>
+          <span class="stat-label">Dedicação</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="main-content">
+    <div class="team-container">
+      
+      <!-- Founder Highlight -->
+      <div class="section-title">
+        <h2>A Visão por Trás do Projeto</h2>
+      </div>
+      
+      <div class="founder-section">
+        <img src="/img/desenvolvedores/Aline.png" alt="Aline de Lucas" class="founder-image">
+        <div class="founder-content">
+          <h3>Aline de Lucas</h3>
+          <p class="role">Idealizadora e Coordenadora do IFVest</p>
+          <p>
+            Professora no IFSP Jacareí e doutora em Geofísica Espacial pelo INPE, Aline criou o IFVest 
+            com a missão de tornar a preparação para vestibulares mais acessível e democrática.
+          </p>
     
-    
-    <%- include('../partials/time_desenvolvimento') %>
-</body>
-<script src="/js/main.js"></script>
+        </div>
+      </div>
+
+      <!-- Core Team -->
+      <div class="section-title" style="margin-top: 5rem;">
+        <h2>Nosso Time de Desenvolvimento</h2>
+        <p>Conheça as mentes brilhantes que tornam o IFVest possível</p>
+      </div>
+
+      <div class="team-grid">
+        
+        <!-- Rafael -->
+        <div class="team-card">
+          <div class="card-image-wrapper">
+            <img src="/img/desenvolvedores/Rafael.png" alt="Rafael" class="card-image">
+            <span class="card-badge">Fundador</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Rafael</h3>
+            <p class="card-role">Desenvolvedor Full Stack</p>
+            <p class="card-description">
+              Criou a primeira versão do IFVest do zero, estabelecendo a arquitetura base 
+               em PHP.
+            </p>
+            <div class="card-tags">
+              <span class="tag">PHP</span>
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">JS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cristhian -->
+        <div class="team-card">
+          <div class="card-image-wrapper">
+            <img src="/img/desenvolvedores/Cristian.png" alt="Cristhian" class="card-image">
+            <span class="card-badge">Arquiteto</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Cristhian</h3>
+            <p class="card-role">Desenvolvedor Full Stack</p>
+            <p class="card-description">
+              Liderou a recriação completa da plataforma, migrando de PHP para JavaScript 
+              e implementando novas funcionalidades.
+            </p>
+            <div class="card-tags">
+              <span class="tag">JavaScript</span>
+              <span class="tag">EJs</span>
+              <span class="tag">Node.js</span>
+             
+            </div>
+          </div>
+        </div>
+
+        <!-- Ruan Patrick -->
+        <div class="team-card">
+          <div class="card-image-wrapper">
+            <img src="/img/desenvolvedores/ruan.jpg" alt="Ruan Patrick" class="card-image">
+            <span class="card-badge">Modulo de Simulados Editor de Texto, Markdown e Equações</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Ruan Patrick</h3>
+            <p class="card-role">Desenvolvedor Full Stack</p>
+            <p class="card-description">
+              Desenvolveu os editores de texto e equações matemáticas, além de contribuir 
+              significativamente no sistema de simulados.
+            </p>
+            <div class="card-tags">
+              <span class="tag">Backend JS</span>
+              <span class="tag">Katex/LaTeX</span>
+              <span class="tag">Simulados</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guilherme -->
+        <div class="team-card">
+          <div class="card-image-wrapper">
+            <img src="/img/desenvolvedores/Guilherme_O_Souza.png" alt="Guilherme O. Souza" class="card-image">
+            <span class="card-badge">Modulo Simulados e IA</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Guilherme O. Souza</h3>
+            <p class="card-role">Desenvolvedor Full Stack</p>
+            <p class="card-description">
+              Implementou sistema de curadoria semiautomática usando API Gemini, e desenvolveu
+              funcionalidades no módulo de simulados.
+            </p>
+            <div class="card-tags">
+              <span class="tag">Gemini API</span>
+              <span class="tag">Machine Learning</span>
+              <span class="tag">Curadoria</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verissimo -->
+        <div class="team-card">
+          <div class="card-image-wrapper">
+            <img src="/img/desenvolvedores/verissimo.png" alt="Verissimo" class="card-image">
+            <span class="card-badge">Modulo de Revisao e Arquitetura</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Verissimo</h3>
+            <p class="card-role">Desenvolvedor Full Stacks</p>
+            <p class="card-description">
+              Responsável pela reestruturação da arquitetura do sistema em módulos e desenvolvimento 
+              do módulo de revisão.
+            </p>
+            <div class="card-tags">
+              <span class="tag">Arquitetura</span>
+              <span class="tag">Revisão</span>
+              <span class="tag">Otimização</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rafaela -->
+        <div class="team-card">
+          <div class="card-image-wrapper">
+            <img src="/img/desenvolvedores/Rafaela.png" alt="Rafaela Machado" class="card-image">
+            <span class="card-badge">QA e Acessibilidade</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Rafaela Machado</h3>
+            <p class="card-role">Tester</p>
+            <p class="card-description">
+              Garantiu a qualidade da plataforma através de testes com JMeter, Selenium e Jest. 
+              Também iniciou implementações de acessibilidade .
+            </p>
+            <div class="card-tags">
+              <span class="tag">JMeter</span>
+              <span class="tag">Selenium</span>
+              <span class="tag">Acessibilidade</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Laura -->
+        <div class="team-card">
+          <div class="card-image-wrapper">
+            <img src="/img/desenvolvedores/laura.png" alt="Laura" class="card-image">
+            <span class="card-badge">Testes</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name">Laura</h3>
+            <p class="card-role">Desenvolvedora de Testes</p>
+            <p class="card-description">
+              Garantiu a qualidade da plataforma através de testes com JMeter, Selenium, Jest, testes manuais e automáticos.
+            </p>
+            <div class="card-tags">
+              <span class="tag">Testes Automatizados</span>
+              <span class="tag">CI/CD</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sóstenes -->
+        <div class="team-card">
+          <div class="card-image-wrapper">
+            <img src="/img/desenvolvedores/sostenes.png" alt="Sóstenes" class="card-image">
+            <span class="card-badge">Orientador Técnico</span>
+          </div>
+          <div class="card-body">
+            <h3 class="card-name"> Sóstenes </h3>
+            <p class="card-role">Orientador de Desenvolvimento</p>
+            <p class="card-description">
+              Doutor em Computação Aplicada pelo INPE, é o especialista por trás da parte tecnológica do projeto. 
+              Responsável pela orientação técnica, escolha de tecnologias e arquitetura de software.
+            </p>
+            <div class="card-tags">
+              <span class="tag">Pesquisa Operacional</span>
+              <span class="tag">Otimização</span>
+              <span class="tag">Arquitetura</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Mentor Section -->
+      <div class="section-title" style="margin-top: 3rem;">
+        <h2>Orientação Técnica e Acadêmica</h2>
+      </div>
+
+      <!-- Sóstenes - Orientador Técnico -->
+      <div class="founder-section">
+        <img src="/img/desenvolvedores/sostenes.png" alt="Sóstenes Fernandes" class="founder-image">
+        <div class="founder-content">
+          <h3> Sóstenes </h3>
+          <p class="role">Orientador de Desenvolvimento e Especialista Tecnológico</p>
+          <p>
+            Doutor em Computação Aplicada pelo INPE (2010-2015) com especialização em otimização e pesquisa operacional. 
+            Atua como professor no IFSP desde 2015 e é o cérebro técnico por trás do IFVest.
+          </p>
+          <p>
+            Responsável pela orientação de desenvolvimento, escolha estratégica de tecnologias e definição da arquitetura 
+            de software.
+          </p>
+          <p>
+            <strong>Formação:</strong> Doutor e Mestre em Computação Aplicada (INPE), Bacharel em Ciência da Computação. 
+            Expertise em otimização, processos estocásticos, redes de sensores e modelagem Markoviana.
+          </p>
+        </div>
+      </div>
+
+      <div class="founder-section">
+        <img src="/img/desenvolvedores/Luciana.png" alt="Luciana Rebelo" class="founder-image">
+        <div class="founder-content">
+          <h3>Luciana Rebelo</h3>
+          <p class="role">Orientadora Inicial do Projeto</p>
+          <p>
+            Doutora pelo INPE e atualmente em pós-doutorado na Itália, Luciana forneceu 
+            orientação fundamental nos estágios iniciais do IFVest.
+          </p>
+          <p>
+            Sua experiência em pesquisa e metodologia científica ajudou a estabelecer 
+            bases sólidas para o desenvolvimento do projeto.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Timeline Section -->
+  <section class="timeline-section">
+    <div class="team-container">
+      <div class="section-title">
+        <h2>Nossa Jornada</h2>
+        <p>A evolução do IFVest ao longo do tempo</p>
+      </div>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <h4 style="color: #10b981; font-weight: 700; margin-bottom: 0.5rem;">Fase 1: Idealização</h4>
+            <p style="color: #718096;">A professora Aline de Lucas concebe o IFVest como uma solução para democratizar o acesso à educação.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <h4 style="color: #10b981; font-weight: 700; margin-bottom: 0.5rem;">Fase 2: Primeiro Protótipo</h4>
+            <p style="color: #718096;">Rafael desenvolve a primeira versão da plataforma usando PHP.</p>
+          </div>
+        </div>
+      
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <h4 style="color: #10b981; font-weight: 700; margin-bottom: 0.5rem;">Fase 3: Reconstrução Total</h4>
+            <p style="color: #718096;">Cristhian lidera a migração completa para JavaScript, implementando novas funcionalidades.</p>
+          </div>
+        </div>
+          <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <h4 style="color: #10b981; font-weight: 700; margin-bottom: 0.5rem;">Fase 4: Expansão do Time</h4>
+            <p style="color: #718096;">Novos desenvolvedores se juntam ao projeto, trazendo um módulo de revisão com IA, testes e o desenvolvimento do módulo de simulados e questões.</p>
+          </div>
+        </div>
+        
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <h4 style="color: #10b981; font-weight: 700; margin-bottom: 0.5rem;">Fase 5: Reestruturação</h4>
+            <p style="color: #718096;">Reestruturação em módulos de Aprendizado: Revisão, Simulados, Flashcards, Redação, IA ...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
 </html>

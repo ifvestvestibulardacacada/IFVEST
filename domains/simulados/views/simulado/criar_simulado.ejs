@@ -6,108 +6,145 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
   <link rel="stylesheet" href="/css/global.css">
-  <link rel="stylesheet" href="/css/simulado/criar_simulado.css">
-  <%- include('../partials/quill_and_uikit') %>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <title>Criar Simulado - IFVest</title>
+  <link rel="stylesheet" href="/simulados/css/simulado/criar_simulado.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <%- include('../partials/libs') %>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Criar Simulado - IFVest</title>
+
+
 </head>
 
 <body>
-  <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
-    <!-- Feedback de erro exibido ao carregar a página -->
+
+  <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
     <script>
-      window.onload = function() {
+      window.onload = function () {
         alert("<%= errorMessage %>");
       };
     </script>
-  <% } %>
+    <% } %>
+      <div class="form-container" id="formSection">
+        <h1>Criar Simulado</h1>
+        <form id="simuladoForm" action="/api/simulado" method="POST">
 
-  <!-- Adicionado <main> para conteúdo principal da página -->
-  <main>
-    
-    <section class="form-container" id="formSection">
-      <h1>Criar Simulado</h1>
 
-      <form id="simuladoForm" action="/api/simulado" method="POST">
-        <!-- Labels associados corretamente aos inputs com for/id -->
-        <label for="titulo">Título do Simulado:</label>
-        <input type="text" id="titulo" name="titulo" required maxlength="100">
+          <div class="form-group">
+            <div class="error-message" id="titulo-error"></div>
+            <label for="titulo">Título do Simulado:</label>
+            <input type="text" id="titulo" name="titulo" required maxlength="200">
+          </div>
 
-        <label for="descricao">Descrição:</label>
-        <textarea id="descricao" name="descricao" rows="5" required maxlength="1000"></textarea>
+          <div class="form-group">
 
-        <label for="tipo">Selecione o tipo:</label>
-        <select name="tipo" id="tipo" required>
-          <option value="Aleatorio" selected>Aleatória</option>
-          <option value="Dissertativo">Dissertativa</option>
-          <option value="Objetivo">Objetiva</option>
-        </select>
+            <div class="error-message" id="descricao-error"></div>
+            <label for="descricao">Descrição:</label>
+            <textarea id="descricao" name="descricao" rows="5" required maxlength="1000"></textarea>
 
-        <label for="modo">Selecione o Modo:</label>
-        <select name="modo" id="modo" required>
-          <option value="1">Normal</option>
-          <option value="2">Aleatório</option>
-        </select>
+          </div>
+          <div class="form-group">
+            <label for="tipo">Selecione o tipo:</label>
+            <select name="tipo" id="tipo" required>
+              <option value="Aleatorio" selected>Aleatoria</option>
+              <option value="Dissertativo">Dissertativa</option>
+              <option value="Objetivo">Objetiva</option>
+            </select>
+            <div class="error-message" id="tipo-error"></div>
+          </div>
 
-      
-        <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
-
-        <!-- Botão com aria-label para descrever sua função -->
-        <button type="button" onclick="goToNewContent()" aria-label="Ir para seção de adicionar questões">Adicionar Questões</button>
-      </form>
-    </section>
-
-    <!-- Seção para associar questões ao simulado -->
-    <section class="new-content" id="newContentSection">
-      <h1 class="uk-heading-divider">Associar Questões</h1>
-
-      <div class="filter-container">
-        <!-- Campo de filtro com aria-label para leitores de tela -->
-        <input type="text" name="tituloFiltro" id="tituloFiltro" placeholder="Filtrar por título" aria-label="Campo para filtrar questões por título">
-
-        <!-- Botão com aria-label para descrever sua ação -->
-        <button class="botaoFiltro" onclick="applyFilters()" aria-label="Aplicar filtro de título">Filtrar</button>
+          <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
+          <button type="button" id="addQuestionsButton" onclick="goToNewContent()">Adicionar Questões</button>
+        <div class="button-container">
+            <a href="/simulados" class="btn btn-voltar btn-lg">
+                <i class="bi bi-arrow-left"></i> Voltar ao Menu Simulados
+            </a>
+        </div>
+        </form>
       </div>
+<div class="new-content" id="newContentSection" style="display: none;">
+    <!-- Título -->
+    <h1 class="border-bottom pb-2 mb-4">Associar Questões</h1>
 
-      <!-- Adicionado aria-live para que leitores de tela anunciem mudanças no contador -->
-      <div id="contador-questoes-selecionadas" aria-live="polite">
+    <!-- Mensagem de erro -->
+    <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+        <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <div><%= errorMessage %></div>
+        </div>
+    <% } %>
+
+    <!-- Filtro -->
+<!-- Filtro -->
+<div class="filter-container mb-4">
+    <div class="row g-2 align-items-center">
+        <div class="col-md-10">
+            
+            <input type="text" id="tituloFiltro" class="form-control" placeholder="Filtrar por título">
+        </div>
+        <div class="col-md-2">
+         
+            <button type="button" class="btn btn-success  d-flex align-items-center justify-content-center" onclick="applyFilters()">
+                <i class="bi bi-search me-1"></i> Filtrar
+            </button>
+        </div>
+    </div>
+</div>
+
+    <!-- Contador -->
+    <div id="contador-questoes-selecionadas" class="contador-questoes mb-3">
         Questões Selecionadas: <span id="numero-questoes-selecionadas">0</span>
-      </div>
+    </div>
 
-      <div class="table-container">
-        <table class="uk-table uk-table-striped" id="questoesTable">
-          <thead>
-            <tr>
-              <!-- Adicionado scope="col" para cabeçalhos de tabela -->
-              <th scope="col"><input type="checkbox" id="selectAll" aria-label="Selecionar todas as questões"></th>
-              <th scope="col">Título</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Questão</th>
-              <th scope="col">Tópico</th>
-            </tr>
-          </thead>
-          <tbody id="questoesBody"></tbody>
-        </table>
-      </div>
+    <!-- Tabela -->
+                 <div class="table-container">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="5%">
+                                            <input type="checkbox" id="select-all" class="form-check-input">
+                                        </th>
+                                        <th>Título</th>
+                                        <th width="12%">Tipo</th>
+                                        <th width="45%">Questão</th>
+                                        <th width="15%">Tópico(s)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="questoes-tbody">
+                              
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-      <div class="pagination" id="pagination"></div>
 
-      <div class="button-container">
-        <!-- Botões com aria-label para descrever suas ações -->
-        <button type="button" class="voltar-btn" onclick="goBack()" aria-label="Voltar para o formulário">Voltar</button>
-        <button type="button" id="submitButton" class="salvar-btn" onclick="saveSimulado()" aria-label="Salvar simulado com questões selecionadas">Salvar</button>
-      </div>
-    </section>
-  </main>
+<nav aria-label="Paginação de questões" class="mt-3">
+    <ul class="pagination justify-content-center" id="pagination"></ul>
+</nav>
+     
+    <div class="button-container d-flex justify-content-center gap-3 mt-4">
+        <button type="button" class="btn btn-secondary btn-lg" onclick="goBack()">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </button>
+        <button type="button" id="submitButton" class="btn btn-success btn-lg" onclick="saveSimulado()">
+            <i class="bi bi-check-lg"></i> Salvar
+        </button>
+    </div>
+</div>
+  <%- include('../partials/ContentManager') %>
+      <script>
+   
 
-  
-  <script>
-    window.questoes = <%- JSON.stringify(questoes || []) %>;
-    console.log('Questoes:', window.questoes);
-  </script>
-  <script src="/js/simulado/criarSimulado.js"></script>
-  <script src="/js/main.js"></script>
-  <script src="/js/validations/validate.js"></script>
+      </script>
+      <script src="/simulados/js/simulado/criarSimulado.js"></script>
+      <script src="/simulados/js/simulado/validate_criar_simulados.js"></script>
+      <script src="/js/main.js"></script>
+      <script src="/simulados/js/validate.js"></script>
+
+
+
+
 </body>
 </html>
 

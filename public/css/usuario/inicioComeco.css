@@ -1,4 +1,4 @@
-body {
+/* body {
     background-color: #c9eee6;
     font: 400 15px Lato, sans-serif;
     line-height: 1.8;
@@ -222,4 +222,237 @@ footer .glyphicon {
   background-repeat: no-repeat;
   background-position: center;
 /* Ajuste conforme necessário */
+
+body {
+  background-color: #c9eee6;
+  font: 400 20px Lato, sans-serif;
+  line-height: 1.8;
+  color: #525252;
 }
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.bg-roxo-escuro {
+  background-color: #008368;
+  color: white;
+}
+h1 {
+  font-size: 3.5rem;     /* ~56px */
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 30px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+h4 {
+  font-size: 24px;
+  line-height: 1.7;
+  font-weight: 400;
+  margin-bottom: 30px;
+}
+p {
+  font-size: 1.1rem;     /* ~17.6px */
+}
+
+/* Links e botões */
+a, .btn {
+  font-size: 1rem;
+}
+
+.jumbotron {
+  background-color: #008368;
+  color: #fff;
+  padding: 100px 25px;
+  font-size: 1.25rem;
+  font-family: Montserrat, sans-serif;
+}
+.jumbotron h1 {
+  font-size: 3.8rem;
+  margin-bottom: 20px;
+}
+
+.jumbotron p {
+  font-size: 1.25rem;    /* ~20px */
+  font-style: italic;
+}
+
+.container-fluid {
+  padding: 60px 50px;
+}
+
+.bg-grey {
+  background-color: #f3f3f3;
+}
+
+.logo-small {
+  color: #008368;
+  font-size: 50px;
+}
+
+.logo {
+  color: #008368;
+  font-size: 200px;
+}
+
+.logo1 {
+  color: #cbe6e0;
+  font-size: 200px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  background: none;
+  color: #ee6c4d;
+}
+
+.carousel-indicators [data-bs-target] {
+  border-color: #ee6c4d;
+}
+
+.carousel-indicators .active {
+  background-color: #ee6c4d;
+}
+
+.item h4 {
+  font-size: 19px;
+  line-height: 1.375em;
+  font-weight: 400;
+  font-style: italic;
+  margin: 70px 0;
+}
+
+.item span {
+  font-style: normal;
+}
+
+.panel {
+  border: 1px solid #ee6c4d;
+  border-radius: 0;
+  transition: box-shadow 0.5s;
+}
+
+.panel:hover {
+  box-shadow: 5px 0px 40px rgba(0, 0, 0, 0.2);
+}
+
+.panel-footer .btn:hover {
+  border: 1px solid #ee6c4d;
+  background-color: #fff !important;
+  color: #ee6c4d;
+}
+
+.panel-heading {
+  color: #fff !important;
+  background-color: #ee6c4d !important;
+  padding: 25px;
+  border-radius: 0;
+}
+
+.panel-footer {
+  background-color: white !important;
+}
+
+.panel-footer h3 {
+  font-size: 32px;
+}
+
+.panel-footer h4 {
+  color: #aaa;
+  font-size: 14px;
+}
+
+.panel-footer .btn {
+  margin: 15px 0;
+  background-color: #ee6c4d;
+  color: #fff;
+}
+
+.navbar {
+  margin-bottom: 0;
+  background-color: #008368;
+  z-index: 9999;
+  border: 0;
+  font-size: 12px !important;
+  line-height: 1.42857143 !important;
+  letter-spacing: 4px;
+  border-radius: 0;
+  font-family: Montserrat, sans-serif;
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+  color: #fff !important;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+  color: #f4511e !important;
+  background-color: #fff !important;
+}
+
+.navbar-toggler {
+  border-color: transparent;
+}
+
+footer .bi {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #f4511e;
+}
+
+.slideanim {
+  visibility: hidden;
+}
+
+.slide {
+  animation-name: slide;
+  -webkit-animation-name: slide;
+  animation-duration: 1s;
+  -webkit-animation-duration: 1s;
+  visibility: visible;
+}
+
+@keyframes slide {
+  0% {
+    opacity: 0;
+    transform: translateY(70%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+@media (max-width: 768px) {
+  .col-sm-4 {
+    text-align: center;
+    margin: 25px 0;
+  }
+  .btn-lg {
+    width: 100%;
+    margin-bottom: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 150px;
+  }
+}
+
+.rodape {
+  background-image: url('caminho/para/sua/imagem.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+

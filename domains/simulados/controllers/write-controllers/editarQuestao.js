@@ -1,32 +1,25 @@
-const { Questao, Opcao, Topico, Area, QuestaoTopico } = require('../../../../models');
+const { Questao, Opcao, Topico, Area, QuestaoTopico , sequelize } = require('../../../../models');
 
 module.exports = async (req, res) => { // ! Antigo UpdateQuestaoController
-            const { id,
-                titulo,
-                pergunta,
-                correta,
-                respostasSelecionadas,
-                areaId,
-                topicosSelecionados
-            } = req.body;
-
-            let arrayRespostas;
-
+                  const { id, titulo, pergunta, correta, respostas, area, topicos } = req.body;
+            const transaction = await sequelize.transaction();
             const alternativas = ['A', 'B', 'C', 'D', 'E'];
-
             const MIN_OPCOES = 1;
             const MAX_OPCOES = 5;
-            console.log(topicosSelecionados)
 
             try {
-
-                if (!respostasSelecionadas) {
+                if (!id || isNaN(id)) {
+                    throw new Error('ID da questão é inválido ou não fornecido');
+                }
+                // Validate respostas early
+                if (!respostas) {
                     throw new Error("Respostas selecionadas não podem estar vazias");
                 }
 
+                let arrayRespostas;
                 try {
-                    arrayRespostas = JSON.parse(respostasSelecionadas);
-                    if (typeof arrayRespostas !== 'object' || arrayRespostas === null) {
+                    arrayRespostas = JSON.parse(respostas);
+                    if (!arrayRespostas || typeof arrayRespostas !== 'object') {
                         throw new Error("Formato de respostas inválido");
                     }
                 } catch (parseError) {
@@ -35,72 +28,94 @@ module.exports = async (req, res) => { // ! Antigo UpdateQuestaoController
 
                 const numOpcoes = Object.keys(arrayRespostas).length;
 
+                // Fetch only necessary data and reduce includes
                 const questao = await Questao.findByPk(id, {
-                    include: [{
-                        model: Opcao,
-                        as: 'Opcao'
-                    }
-                    ]
+                    include: [
+                        { model: Opcao, as: 'Opcao', attributes: ['id_opcao', 'alternativa'] },
+
+                    ],
+                    transaction, // Include transaction to lock rows early
                 });
-
-                if (numOpcoes < MIN_OPCOES || numOpcoes > MAX_OPCOES) {
-                    throw new Error(`Número de opções deve ser entre ${MIN_OPCOES} e ${MAX_OPCOES}`);
-                }
-
-
-                if ((questao.tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
-                    (questao.tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))) {
-                    throw new Error(`Número de opções INVÁLIDO`);
-                }
-
-
-                const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
-                    alternativa,
-                    descricao: arrayRespostas[`#opcao${alternativa}`].content,
-                    id: arrayRespostas[`#opcao${alternativa}`].id// Descrição padrão se não existir
-                }));
 
                 if (!questao) {
                     throw new Error('Questão não encontrada');
                 }
 
-                await atualizarRelacaoTopicos(id, topicosSelecionados, areaId);
-
-                await Questao.update({
-                    titulo: titulo,
-                    pergunta: pergunta,
-                }, {
-                    where: { id_questao: id }
-                });
-
-                if (!opcoes) {
-                    throw new Error("Opcoes selecionadas não pode ser vazia");
+                // Validate number of options
+                if (numOpcoes < MIN_OPCOES || numOpcoes > MAX_OPCOES) {
+                    throw new Error(
+                        questao.tipo === 'DISSERTATIVA'
+                            ? 'O campo de resposta não pode estar vazio'
+                            : 'Os campos de alternativas não podem estar vazios'
+                    );
                 }
 
-                for (let opcao of opcoes) {
-                    const updateData = {
-                        descricao: JSON.stringify(opcao.descricao),
-                        alternativa: opcao.alternativa,
-                    };
-                    if (correta) {
-                        updateData.correta = correta === opcao.alternativa;
-                    }
-                    await Opcao.update(updateData, {
-                        where: { id_opcao: opcao.id }
-                    });
+                if (
+                    (questao.tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
+                    (questao.tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))
+                ) {
+                    throw new Error('Número de opções INVÁLIDO');
                 }
 
-                res.redirect('/professor/questoes');
+                // Prepare options
+                const opcoes = questao.tipo === 'OBJETIVA'
+                    ? alternativas.slice(0, numOpcoes).map(alternativa => ({
+                        id: arrayRespostas[`#opcao${alternativa}`]?.id,
+                        alternativa,
+                        descricao: arrayRespostas[`#opcao${alternativa}`]?.content || '',
+                        correta: correta === alternativa,
+                    }))
+                    : [{
+                        id: arrayRespostas['#resposta']?.id,
+                        alternativa: '',
+                        descricao: arrayRespostas['#resposta']?.content || '',
+                        correta: true,
+                    }];
 
+                if (!opcoes.length) {
+                    throw new Error('Opções selecionadas não podem ser vazias');
+                }
+
+                // Filter valid topic IDs
+                const idTopicos = topicos.filter(item => !isNaN(item) && item !== '');
+
+                // Perform all updates in a single transaction
+                await Promise.all([
+                    // Update Questao
+
+                    Questao.update(
+                        { titulo, pergunta, id_area: area },
+                        { where: { id_questao: id }, transaction }
+                    ),
+                    // Update Topico associations
+                    questao.setTopico(idTopicos, { transaction }),
+                    // Bulk update Opcao records
+                    Opcao.bulkCreate(
+                        opcoes.map(opcao => ({
+                            id_opcao: opcao.id,
+                            id_questao: id,
+                            descricao: JSON.stringify(opcao.descricao),
+                            alternativa: opcao.alternativa || 'A',
+                            correta: opcao.correta,
+                        })),
+                        {
+                            updateOnDuplicate: ['descricao', 'alternativa', 'correta'],
+                            transaction,
+                        }
+                    ),
+                ]);
+
+                await transaction.commit();
+                return res.status(201).redirect('/professor/questoes');
             } catch (error) {
-                console.error(error);
+                console.error('Transaction error:', error);
+                await transaction.rollback();
                 req.session.errorMessage = error.message;
-                await new Promise((resolve, reject) => {
-                    req.session.save(err => {
-                        if (err) reject(err);
-                        else resolve();
-                    });
+                // Save session asynchronously but don't block response
+                req.session.save(error => {
+                    if (error) console.error('Session save error:', error);
                 });
-                return res.status(400).redirect(req.get("Referrer") || "/");
+                return res.status(400).redirect(req.get('Referrer') || '/');
             }
+
         }

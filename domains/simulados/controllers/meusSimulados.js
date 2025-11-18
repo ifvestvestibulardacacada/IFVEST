@@ -3,9 +3,7 @@ const { Simulado } = require('../../../models');
 
 module.exports = async (req, res) => {
             try {
-                const perfilUsuario = req.session.perfil;
-                const nomeUsuario = req.session.nomeUsuario;
-                const imagemPerfil = req.session.imagemPerfil;
+        
                 const { titulo } = req.query;
                 const idUsuario = req.session.userId;
                 const page = parseInt(req.query.page) || 1;
@@ -34,7 +32,7 @@ module.exports = async (req, res) => {
                 }
                 req.session.errorMessage = null;
 
-                res.render('simulado/meus_simulados', { simulados: simuladosPaginated, currentPage: page, totalPages, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('simulado/meus_simulados', { simulados: simuladosPaginated, currentPage: page, totalPages, errorMessage,  });
             } catch (error) {
                 console.error(error);
                 res.status(500).send('Ocorreu um erro ao recuperar os questionários.');

@@ -2,134 +2,166 @@
 <html lang="pt-br"> 
 
 <head>
-    <meta charset="UTF-8">
-    <title>Criar questão - IFVest</title>
+    <script src="https://cdn.jsdelivr.net/npm/zod@3.23.8/lib/index.umd.min.js"></script>
 
-    <link rel="stylesheet" href="/simulados/css/professor/editordropdown.css">
     <link rel="stylesheet" href="/simulados/css/professor/editor_equacao.css">
-    <link rel="stylesheet" href="/simulados/css/global.css">
-    <link rel="stylesheet" href="/simulados/css/professor/questao.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+   <link rel="stylesheet" href="/css/professor/questao.css">
+<link rel="stylesheet" href="/simulados/css/professor/editor.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
 
-    <!-- Partial que inclui bibliotecas como Quill e UIkit -->
-    <%- include('../partials/quill_and_uikit') %>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <%- include('../partials/libs') %>
+        <title>Criar questão - IFVest</title>
+
+
 </head>
 
 <body>
-    <!-- Overlay para carregamento ou modais -->
-    <div class="overlay" id="overlay"></div>
+    
 
-    <div class="container">
-        <!-- Spinner de carregamento com acessibilidade -->
-        <div id="loading-container"
-            style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
-            <div class="spinner" role="status" aria-label="Carregando"></div>
-            Carregando...
+        <main>
+            <h1 style="text-align: center;">Criar Questão</h1>
+
         </div>
+            <p style="display: none;"></p>
 
-        <!-- Título principal da página -->
-        <h1 class="title">Criar Questão</h1>
-        <hr class="uk-divider-icon">
+            <div class="form-container">
+               
 
-        <!-- Exibe mensagem de erro, se houver -->
-        <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
-            <script>
-                window.onload = function () {
-                    alert("<%= errorMessage %>");
-                };
-            </script>
-        <% } %>
-
-        <!-- Formulário principal para criação da questão -->
-        <form action="/simulados/registrar-questao/<%= tipo %>" method="POST">
-            <!-- Campo de título com rótulo associado -->
-            <div class="titulo">
-                <label for="titulo">Título:</label>
-                <input type="text" id="titulo" name="titulo" placeholder="Exemplo: Questão 32 (Enem 2022)" required maxlength="100">
-            </div>
-
-          
-            <%- include('../partials/editor_equacao') %>
-
-           
-            <% if (tipo === "objetiva") { %>
-                <%- include('../partials/resposta_objetiva') %>
-            <% } else { %>
-                <%- include('../partials/resposta_dissertativa') %>
-            <% } %>
-
-            <!-- Campos ocultos para armazenar dados internos, marcados como aria-hidden -->
-            <textarea id="pergunta" name="pergunta" rows="5" cols="50" aria-hidden="true" hidden></textarea>
-            <textarea id="respostasSelecionadas" name="respostasSelecionadas" rows="5" cols="50" aria-hidden="true" hidden></textarea>
-            <textarea id="respostas" name="respota" rows="5" cols="50" aria-hidden="true" hidden></textarea>
-
-            <!-- Seção de seleção de resposta correta e área temática -->
-            <div>
-                <br>
-                <div uk-grid>
-                    <% if (tipo === "objetiva") { %>
-                    
-                        <label for="correta">Selecione a opção correta:</label>
-                        <select name="correta" id="correta" required>
-                            <option value="">Selecione uma opção</option>
-                            <option value="A">Opção A</option>
-                            <option value="B">Opção B</option>
-                            <option value="C">Opção C</option>
-                            <option value="D">Opção D</option>
-                            <option value="E">Opção E</option>
-                        </select>
-                    <% } %>
-
-                    <!-- Campo de seleção de área -->
-                    <div>
-                        <h4>Área e Tópicos</h4>
-                        <label for="areaId">Selecione uma área:</label>
-                        <select name="areaId" id="areaId" required>
-                            <option value="">Selecione uma opção</option>
-                            <% Areas.forEach(area => { %>
-                                <option value="<%= area.id_area %>"><%= area.nome %></option>
-                            <% }); %>
-                        </select>
+                <form id="questaoForm" action="/professor/registrar-questao/<%= tipo %>" method="POST"> <!-- Título -->
+                                        <div class="button-container">
+            <a href="/simulados" class="btn btn-voltar btn-lg">
+                <i class="bi bi-arrow-left"></i> Voltar ao Menu Simulados
+            </a></div>
+                    <div class="form-group">
+                        <label for="titulo">Título da Questão</label>
+                        <input type="text" class="form-control" id="titulo"
+                            placeholder="Ex: Calculo Diferencial Enem 2023" required>
                     </div>
 
-                    <!-- Campo de busca com suporte a acessibilidade: label associada, região com aria-label e lista com role="listbox" -->
- -->
-                    <label for="search">Pesquisar tópico:</label>
-                    <div class="dropdown" id="topicosSearchContainer" role="region" aria-label="Busca de tópicos">
-                        <input type="text" id="search" placeholder="Pesquisar..." maxlength="100" tabindex="0">
-                        <ul id="dropdown-list" role="listbox" tabindex="0">
-                            <!-- Tópicos serão inseridos dinamicamente via JS -->
-                        </ul>
+
+                    <!-- Seletores de Área e Tópico -->
+                    <div class="d-flex gap-1">
+                        <div class="form-group col-md-6">
+                            <label for="selectArea">Área</label>
+                            <select id="selectArea" class="form-control" required>
+                                <option value="">Selecione uma opção
+                                </option>
+                                    <% Areas.forEach(area=> { %>
+                                            <option value="<%= area.id_area %>">
+                                                <%= area.nome %>
+                                            </option>
+                                            <% }); %>
+                            </select>
+                        </div>
+
+                        <!-- solução temporaria sera substituido por assunto-->
+                        <div class="form-group col-md-6">
+                            <label for="selectTopico">Tópico</label>
+                            <select id="selectTopico" class="form-control" multiple required>
+
+
+                            </select>
+                        </div>
+
+
+
                     </div>
 
-                    <!-- Link para criar novo tópico com prevenção de comportamento padrão -->
-                    <a href="#" onclick="event.preventDefault(); showCreateTopicModal();" id="create-topic-link" tabindex="0">
-                        Não encontrou o tópico que procura? Clique aqui para criar um novo tópico
-                    </a>
-                </div>
-            </div>
 
-            
-            <div class="button-container">
-                <button type="submit" class="botao-registro">Registrar</button>
+
+
+                  
+
+                    <%- include('../partials/editor_equacao') %>
+
+                        <% if ( tipo==="objetiva" ) { %>
+                            <div class="form-group ">
+                                <%- include('../partials/resposta_objetiva') %>
+                            </div>
+
+
+                            <div class="form-group ">
+                               
+                                <label for="opcaoId">Selecione a opção correta:</label>
+                                <select name="correta" id="correta" required>
+                                    <option value="">Selecione uma opção</option>
+                                    <option value="A">Opção A</option>
+                                    <option value="B">Opção B</option>
+                                    <option value="C">Opção C</option>
+                                    <option value="D">Opção D</option>
+                                    <option value="E">Opção E</option>
+                                </select>
+                            </div>
+                            <% }else{ %>
+                                <%- include('../partials/resposta_dissertativa') %>
+                                    <% } %>
+
+                                        
+                                    <!-- não esta 100% funcional falta atualizar os topicos da pagina-->
+                                        <div class="form-group">
+                                            <a href="#" onclick="showCreateTopicModal()" id="create-topic-link">Não
+                                                encontrou o tópico que procura? Clique aqui para criar um
+                                                novo tópico</a>
+                                        </div>
+
+                                        <button id="submitButton" type="button"
+                                            class="btn btn-primary w-100">Registrar</button>
+
+                </form>
             </div>
-        </form>
-        
-        <%- include('../partials/modal_topicos') %>
+        </main>
+
+
 
        
-        <script src="/simulados/js/professor/initializeQuill.js"></script>
-        <script src="/simulados/js/professor/editor.js"></script>
-        <script src="/simulados/js/main.js"></script>
-        <script src="/simulados/js/professor/dropdown.js"></script>
-        <script src="/simulados/js/professor/editorInputs.js"></script>
-        <script type="module" src="/simulados/js/index.js"></script>
-        <script src="/simulados/js/professor/criarQuestao.js"></script>
+        <%- include('../partials/modal_topicos') %>
 
-        <!-- Inicializar os editores com base no tipo da questão -->
-        <script>
-            initializeQuestionEditors(<%- JSON.stringify(tipo) %>);
-        </script>
-    </div>
+            <script src="/simulados/js/professor/initializeQuill.js"></script>
+            <script src="/simulados/js/professor/editor.js"></script>
+            <script src="/simulados/js/main.js"></script>
+            <script src="/simulados/js/professor/dropdown.js"></script>
+            <!-- <script src="/js/professor/editorInputs.js"></script> -->
+
+            <script type="module" src="/simulados/js/editor_equacao/index.js"></script>
+            <script src="/simulados/js/professor/criarQuestao.js"></script>
+
+
+            <script>
+                const questionType = <%- JSON.stringify(tipo) %>;
+                const Topicos = <%- JSON.stringify(topicos || []) %>;
+                initializeQuestionEditors(questionType);
+
+                const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+                const appendAlert = (message, type) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.innerHTML = [
+                        `<div class="alert alert-${type} alert-dismissible fade show" role="alert">`,
+                        `   <div>${message}</div>`,
+                        '    <button type="button" class="close" data-dismiss="alert" aria-label="Close">',
+                        '<span aria-hidden="true">&times;</span>',
+                        '</button>',
+                        '</div>'
+                    ].join('');
+
+                    alertPlaceholder.append(wrapper);
+                };
+
+
+            </script>
+
+
+
+
+
+
+
+
 </body>
 
 </html>

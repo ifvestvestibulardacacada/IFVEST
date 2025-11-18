@@ -1,0 +1,11 @@
+        .w-md-editor-toolbar button {
+          width: 28px !important;
+          height: 36px !important;
+          padding: 6px !important;
+        }
+
+        .w-md-editor-toolbar li>button>svg {
+          width: 16px !important;
+          height: 16px !important;
+        }
+

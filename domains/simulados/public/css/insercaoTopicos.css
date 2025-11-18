@@ -148,3 +148,22 @@ option:hover{
 .btn_submit:hover{
     background-color: green;
 }
+/* Garantir que botão de filtro tenha mesma altura do input */
+.filter-container .btn {
+  height: 48px !important;
+  font-size: 0.95rem;
+}
+
+/* Ajuste fino na tabela */
+.table-responsive {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Paginação responsiva */
+@media (max-width: 576px) {
+  .pagination .page-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
