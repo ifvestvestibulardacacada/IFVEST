@@ -26,5 +26,5 @@ module.exports = async (req, res) => {
 
             req.session.errorMessage = null;
 
-            res.render('simulado/criar_simulado', { topicos, Areas, questoes, errorMessage,l });
+            res.render('simulado/criar_simulado', { topicos, Areas, questoes, errorMessage });
         }
