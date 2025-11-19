@@ -15,13 +15,11 @@ module.exports = async (req, res) => {
 
     res.locals.currentPage = "revisao"
 
-    const { perfil, nomeUsuario, imagemPerfil} = req.session;
+    
 
     // ! Temporário
     // res.redirect('/revisao/busca')
     res.render('home', {
-        nomeUsuario,
-        perfilUsuario: perfil,
-        imagemPerfil
+
     })
 }

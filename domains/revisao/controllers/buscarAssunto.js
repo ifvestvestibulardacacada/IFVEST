@@ -4,7 +4,7 @@ const Nayahath = require('../../../logs/ArcanaFlow');
 module.exports = async (req, res) => {
     Nayahath.action('Revisão', 'Pediu buscar assunto')
 
-    const { nomeUsuario, perfil, imagemPerfil } = req.session;
+
     const { id_assunto } = req.params
     try{
 
@@ -60,9 +60,7 @@ module.exports = async (req, res) => {
         listaAssuntos,
         listaMateriais,
         listaDeTags,
-        nomeUsuario,
-        perfilUsuario: perfil,
-        imagemPerfil
+
     })
        } catch (error) {
         console.error('Error in buscarAssunto:', error);
