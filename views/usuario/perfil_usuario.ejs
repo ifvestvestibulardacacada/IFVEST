@@ -120,7 +120,18 @@
 <script src="/js/handlers/editarUsuarioHandler.js"></script>
   <script>
 
+   const Usuario = (() => {
+    const usuario = <%- JSON.stringify(usuario || {}) %>;
+    return {
+        getId: () => usuario.id_usuario,
+        getEmail: () => usuario.email,
+        getNome: () => usuario.nome,
+        getUsuario: () => usuario.usuario
+    };
+})();
 
+
+window.Usuario = Usuario;
     
     // Preview da imagem ao selecionar
     document.getElementById('image-input').addEventListener('change', function(e) {

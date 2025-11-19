@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (formEditar) {
     formEditar.addEventListener('submit', async function (e) {
       e.preventDefault();
-      const id = formEditar.dataset.id;
+      const id = Usuario.getId();
       const data = {
         usuario: formEditar.usuario.value.trim(),
         nome: formEditar.nome.value.trim(),
@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Verifica se houve alterações
       const alterado =
-        data.usuario !== usuario.usuario ||
-        data.nome !== usuario.nome ||
-        data.email !== usuario.email;
+        data.usuario !== Usuario.getUsuario() ||
+        data.nome !== Usuario.getNome() ||
+        data.email !== Usuario.getEmail();
 
       if (!alterado) {
         alert('Nenhuma alteração foi feita.');
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (formExcluir) {
     formExcluir.addEventListener('submit', async function (e) {
       e.preventDefault();
-      const id = formExcluir.dataset.id;
+      const id = Usuario.getId();
       const input = document.getElementById('confirmInput').value.trim();
 
       if (input !== 'DELETAR') {
