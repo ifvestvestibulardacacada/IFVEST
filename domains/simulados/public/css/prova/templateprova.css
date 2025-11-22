@@ -77,6 +77,8 @@
             margin: 0 !important;
             padding: 0 !important;
 
+            
+
             /* Regras de coluna originais */
             column-count: 2; 
             column-gap: 40px;  
@@ -173,6 +175,7 @@
                 border-bottom: 2px solid #000;
             }
             .content-area {
+                column-fill: auto;
                 column-count: 2;
                 column-gap: 30px;
                 column-rule: 1px solid #ccc;

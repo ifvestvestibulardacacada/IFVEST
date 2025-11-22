@@ -96,7 +96,7 @@
                 <form id="form-associar" action="/simulados/<%= simulado.id_simulado %>/adicionar-questoes"
                     method="POST">
                   
-  <%- include('../partials/contentTable') %>
+  <%- include('../partials/tablePagination') %>
 
                     <!-- Paginação -->
                   
@@ -120,6 +120,7 @@
     <script src="/simulados/js/simulado/associarpergunta.js"></script>
     <script src="/simulados/js/handlers/associarQuestaoHandler.js"></script>
     <script src="/simulados/js/validate.js"></script>
+      <script src="/simulados/js/simulado/AssociarRemoverTable.js"></script>
     <script>
         
     </script>
