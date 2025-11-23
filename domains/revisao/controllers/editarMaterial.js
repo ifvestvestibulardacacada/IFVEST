@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
 
 
         // ! Temporário
-        res.render('editarMaterial', { nomeUsuario, perfilUsuario, imagemPerfil, Assuntos, Material: plainMaterial, assunto });
+        res.render('editarMaterial', { Assuntos, Material: plainMaterial, assunto });
 
     } catch (error) {
         console.error(error)
