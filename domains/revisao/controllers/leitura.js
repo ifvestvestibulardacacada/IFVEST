@@ -2,7 +2,7 @@ const { Conteudo, Assunto, Usuario } = require('../../../models')
 const MarkdownSolver = require('../utils/MarkdownSolver')
 
 module.exports = async (req, res) => {
- 
+    const {perfil} = req.session
 
     const { id_conteudo } = req.params
 

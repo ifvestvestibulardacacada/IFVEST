@@ -244,7 +244,7 @@ async function saveSimulado() {
     return;
   }
 
-  const saveButton = document.querySelector('.salvar-btn');
+  const saveButton = document.querySelector('#submitButton');
   saveButton.disabled = true;
   saveButton.textContent = 'Salvando...';
 
