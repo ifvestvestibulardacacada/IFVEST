@@ -16,6 +16,7 @@ const {
     meusMateriais,
     registrarMaterial,
     atualizarMaterial,
+    removerMaterial,
     uploadHandler,
 } = controllers
 
@@ -67,6 +68,6 @@ router.post('/upload', upload.single('file'), uploadHandler.upload)
 
 
 // Consulta para pegar as palavras-chave // ! Em avaliação
-
+router.delete('/remover_material/:id_conteudo', removerMaterial)
 
 module.exports = router

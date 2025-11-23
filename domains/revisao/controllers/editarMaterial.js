@@ -1,6 +1,7 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
 const { Conteudo, Assunto, PalavraChave } = require('../../../models')
 const MarkdownSolver = require('../utils/MarkdownSolver');
+const buildTree = require('../utils/buildTree')
 
 module.exports = async (req, res) => {
 
@@ -10,19 +11,21 @@ module.exports = async (req, res) => {
 
     res.locals.currentPage = "revisao"
 
-   
+
+
+
+
     try {
         const Assuntos = await Assunto.findAll()
-
         const { jsPath, cssPaths } = MarkdownSolver.getViteAssets();
 
         const Material = await Conteudo.findByPk(id_conteudo, {
             include: [
-            {
-                model: PalavraChave,
-                as: 'PalavraChave',
-                through: { attributes: [] }
-            }]
+                {
+                    model: PalavraChave,
+                    as: 'PalavraChave',
+                    through: { attributes: [] }
+                }]
 
 
         });
@@ -40,9 +43,17 @@ module.exports = async (req, res) => {
 
         plainMaterial.assunto = assunto;
 
+        const { markdown, references } = MarkdownSolver.breakMarkdown(plainMaterial.conteudo_markdown);
+        plainMaterial.conteudo_markdown = markdown;
 
         // ! Temporário
-        res.render('editarMaterial', { Assuntos, Material: plainMaterial, assunto });
+        res.render('editor', {
+   jsPath, cssPaths,
+            Assuntos: buildTree(Assuntos),
+            Material: plainMaterial,
+            MaterialExterno: references,
+            assunto
+        });
 
     } catch (error) {
         console.error(error)
