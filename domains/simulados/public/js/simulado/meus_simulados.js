@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
             const simuladoId = this.getAttribute('data-simulado-id');
             const form = document.getElementById('deleteAccountForm');
-            form.action = `/simulados/${simuladoId}?_method=DELETE`;
+            form.action = `/simulados/${simuladoId}/excluir-simulado?_method=DELETE`;
             modalExcluir.show();
         });
     });

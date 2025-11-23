@@ -1,5 +1,6 @@
 const Nayahath = require('../../../logs/ArcanaFlow')
 const { Conteudo, Assunto, PalavraChave } = require('../../../models')
+const MarkdownSolver = require('../utils/MarkdownSolver');
 
 module.exports = async (req, res) => {
 
