@@ -10,7 +10,7 @@ const meusMateriais = require('./meusMateriais')
 const registrarMaterial = require('./registrarMaterial')
 const atualizarMaterial = require('./atualizarMaterial')
 const uploadHandler = require('./uploadController');
-
+const removerMaterial = require('./removerMaterial');
 module.exports = {
     buscarArea,
     buscarAssunto,
@@ -23,5 +23,6 @@ module.exports = {
     meusMateriais,
     registrarMaterial,
     atualizarMaterial,
+    removerMaterial,
     uploadHandler
 }
