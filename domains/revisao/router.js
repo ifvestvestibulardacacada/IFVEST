@@ -16,6 +16,7 @@ const {
     meusMateriais,
     registrarMaterial,
     atualizarMaterial,
+    removerMaterial,
     uploadHandler,
 } = controllers
 
@@ -45,6 +46,9 @@ router.get('/meus_materiais', meusMateriais)
 // router.get('/conteudo/:id_conteudo')
 
 // Criação e edição de material
+
+
+
 router.get('/criar_material', criarMaterial)
 router.get('/editar_material/:id_conteudo', editarMaterial)
 
@@ -64,6 +68,6 @@ router.post('/upload', upload.single('file'), uploadHandler.upload)
 
 
 // Consulta para pegar as palavras-chave // ! Em avaliação
-
+router.delete('/remover_material/:id_conteudo', removerMaterial)
 
 module.exports = router

@@ -5,7 +5,7 @@
 	gap: 0.5rem;
 }
 
-.colorful-btn{
+.colorful-container .colorful-btn{
 	width: 30%;
 	height: 120px;
 	float: left;
@@ -24,7 +24,7 @@
     font-size: 1.7rem;
 }
 
-.colorful-btn::before{
+.colorful-container .colorful-btn::before{
 	content: "";
 	background-color: #f9b234;
 	width: 70px;
@@ -41,12 +41,12 @@
 	
 }
 
-.colorful-btn.large{
+.colorful-container .colorful-btn.large{
 	width: 45%;
 	margin: 0;
 }
 
-.colorful-btn:hover::before{
+.colorful-container .colorful-btn:hover::before{
 	width: 250%;
 
 	/* transform: scale(2); */
@@ -57,31 +57,40 @@
 	transform: translate(50%, -50%)
 }
 
-.colorful-btn > div{
+.colorful-container .colorful-btn > div{
 	position: absolute;
 	z-index: 5;
 }
 
-.colorful-btn:nth-child(2n)::before{
+.colorful-container .colorful-btn:nth-child(2n)::before{
 	background-color: #3ecd5e;
 }
 
 
-.colorful-btn:nth-child(3n)::before{
+.colorful-container .colorful-btn:nth-child(3n)::before{
 	background-color: #e44002;
 }
 
 
-.colorful-btn:nth-child(4n)::before{
+.colorful-container .colorful-btn:nth-child(4n)::before{
 	background-color: #952aff;
 }
 
 
-.colorful-btn:nth-child(5n)::before{
+.colorful-container .colorful-btn:nth-child(5n)::before{
 	background-color: #cd3e94;
 }
 
 
-.colorful-btn:nth-child(6n)::before{
+.colorful-container .colorful-btn:nth-child(6n)::before{
 	background-color: #4c49ea;
+}
+
+@media screen and (max-width: 768px) {
+	.colorful-container{
+		padding: 0.5rem 0 3rem;
+	}
+	.colorful-container .colorful-btn, .colorful-container .colorful-btn.large{
+		width: 100%;
+	}
 }

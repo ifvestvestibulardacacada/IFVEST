@@ -14,6 +14,7 @@ const {
 
     // Questões
     adicionarQuestoes,
+    getSimulado,
     editarQuestao,
     minhasQuestoes,
     registrarQuestao,
@@ -41,6 +42,7 @@ router.get('/:simuladoId/remover-questoes', removerQuestoes);
 router.get('/:simuladoId/adicionar-questoes', adicionarQuestoes);
 router.get('/:simuladoId/fazer', fazerSimulado);
 router.get('/:simuladoId/gabarito', gabarito);
+router.get('/busca/:id', getSimulado);
 
 //create 
 router.post('/criar-simulado',validateRequest(simuladoSchemas.register), writeControllers.adicionarSimulado);
@@ -65,7 +67,7 @@ router.get('/editar_questao/:id', editarQuestao);
 
 router.post('/registrar-questao/:tipo', writeControllers.adicionarQuestao); // ! RegistrarQuestaoController
 
-router.patch('/editar_questao',validateRequest(questionSchemas.edit), writeControllers.editarQuestao); // ! UpdateQuestaoController
+router.post('/editar_questao', writeControllers.editarQuestao); // ! UpdateQuestaoController
 
 router.delete('/excluir-questao/:id', writeControllers.apagarQuestao); // ! DeleteQuestaoController
 

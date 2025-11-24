@@ -1,0 +1,289 @@
+* {
+    box-sizing: border-box;
+}
+
+.editor-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    position: absolute;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1000px;
+    max-height: 90%;
+    overflow-y: auto;
+}
+
+.symbols-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 800px;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid rgb(0, 0, 0);
+    border-radius: 7px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.193);
+    overflow-y: auto;
+}
+
+.symbol-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 5px;
+    background-color: rgb(234, 234, 234);
+    border-radius: 7px;
+    padding: 10px;
+    min-height: 50px;
+}
+
+.section-title {
+    font-size: 14px;
+    margin: 5px 0;
+    margin-bottom: 5px; /* Espaço entre o título e os ícones */
+    text-transform: capitalize;
+    color: #333;
+    width: 100%;
+    grid-column: 1 / -1; /* O título ocupa toda a linha */
+}
+
+.symbol-buttons {
+    display: contents; /* Faz os botões seguirem a grade da .symbol-section */
+}
+
+.symbol-section button {
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.symbol-section button img {
+    max-width: 100px;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+    vertical-align: middle;
+}
+
+.symbol-section button:hover,
+.symbol-section button img:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.item {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.equation-editor {
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid rgb(210, 210, 210);
+    border-radius: 7px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.193);
+}
+
+.editor-close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    font-size: 14pt;
+    margin: -15px -15px 10px 0px;
+}
+
+.editor-close-btn:hover {
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.equation-btn-box {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    margin: 5px;
+}
+
+.equation-btn-box button {
+    background-color: #e4e4e4;
+    border: 1px solid #e4e4e4;
+    border-radius: 5px;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    transition: 0.4s;
+    margin-bottom: 3px;
+}
+
+.equation-btn-box button:hover {
+    background-color: #cacaca;
+    cursor: pointer;
+}
+
+.equation-preview {
+    font-family: 'Asana-Math', sans-serif;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    border: none;
+    font-size: 30px;
+    outline: none;
+    padding: 20px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.generator-btn {
+    background-color: rgb(0, 110, 255);
+    color: rgb(255, 255, 255);
+    font-size: 11pt;
+    font-weight: 500;
+    width: 100%;
+    height: 35px;
+    border: none;
+    border-radius: 7px;
+    margin-top: 5px;
+    transition: 0.4s ease-in-out;
+}
+
+.generator-btn:hover {
+    background-color: rgb(69, 149, 254);
+    cursor: pointer;
+}
+
+.editor-container textarea {
+    font-family: 'Asana-Math', sans-serif;
+    height: 100px;
+    font-size: 15px;
+    resize: none;
+    width: 100%;
+    outline: none;
+    border-radius: 7px;
+    padding-left: 5px;
+    border: 1px solid rgb(180, 180, 180);
+    box-sizing: border-box;
+    padding: 10px 42px 20px 10px;
+}
+
+.editor-btn {
+    background-color: rgb(0, 110, 255);
+    color: rgb(255, 255, 255);
+    font-size: 11pt;
+    font-weight: 500;
+    width: 200px;
+    height: 35px;
+    border: none;
+    border-radius: 7px;
+    transition: 0.4s ease-in-out;
+    cursor: pointer;
+}
+
+.editor-btn:hover {
+    background-color: rgb(69, 149, 254);
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}
+
+.confirm-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.cancel-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.select-container {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+@media screen and (max-width: 768px) {
+    .editor-container {
+        width: 95%;
+    }
+    .symbols-container {
+        max-width: 100%;
+        gap: 5px;
+    }
+    .equation-editor {
+        max-width: 100%;
+    }
+    .symbol-section {
+        grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+        padding: 8px;
+    }
+    .equation-btn-box button {
+        width: 25px;
+        height: 25px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .editor-container {
+        width: 95%;
+        padding: 10px;
+    }
+    .symbols-container {
+        max-width: 100%;
+        padding: 5px;
+    }
+    .equation-editor {
+        max-width: 100%;
+        padding: 10px;
+    }
+    .equation-preview {
+        font-size: 24px;
+    }
+    .editor-btn {
+        width: 100%;
+    }
+    .equation-btn-box button {
+        width: 35px;
+        height: 35px;
+    }
+    .symbol-section {
+        grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+        padding: 5px;
+    }
+}
+.w-md-editor-toolbar button[data-name="fullscreen"] {
+  display: none !important;
+}

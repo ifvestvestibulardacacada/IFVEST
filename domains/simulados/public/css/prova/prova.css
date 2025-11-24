@@ -1,0 +1,47 @@
+/* /css/prova/prova-simulado.css */
+
+/* Aplica a fonte Poppins ao corpo e define um fundo suave */
+body {
+ 
+    font-family: 'Poppins', sans-serif; 
+}
+
+/* Garante que o texto do enunciado (populado por JS/Quill) tenha boa legibilidade */
+.enunciado-questao, .opcao-texto {
+    line-height: 1.7;
+    font-size: 1rem;
+    color: #333;
+}
+
+/* Evita margens desnecessárias dentro dos conteúdos de texto (ex: se usar <p>) */
+.enunciado-questao p:last-child,
+.opcao-texto p:last-child {
+    margin-bottom: 0;
+}
+
+/* Ajuste visual para o item de lista (opções) */
+.list-group-item-action {
+    transition: background-color 0.2s;
+}
+
+.list-group-item-action:hover {
+    background-color: #e9ecef; /* Um hover sutil */
+    cursor: pointer;
+}
+
+/* Estilo para a caixa de texto da dissertativa */
+.form-control {
+    border-radius: 0.5rem;
+    min-height: 150px;
+}
+
+/* Ajuste para que o texto da opção comece alinhado com a letra, e não empurrado */
+.opcao-texto {
+    /* É importante que o JS renderize o texto da opção sem divs desnecessárias aqui */
+}
+
+/* Classe required (se ainda estiver usando) */
+.required {
+    font-size: 13px;
+    color: red;
+}

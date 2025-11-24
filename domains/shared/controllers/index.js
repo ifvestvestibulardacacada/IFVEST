@@ -2,8 +2,8 @@ const { Area, Assunto, Topico } = require('../../../models');
 
 // Áreas
 async function listarAreas(req, res) {
-    const { perfil, nomeUsuario, imagemPerfil} = req.session;
-    const areas = await Area.findAll({ order: [['id_area','ASC']] });
+    const { perfil, nomeUsuario, imagemPerfil } = req.session;
+    const areas = await Area.findAll({ order: [['id_area', 'ASC']] });
     return res.render('areas/index', { areas, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
 }
 
@@ -28,8 +28,8 @@ async function excluirArea(req, res) {
 
 // Assuntos
 async function listarAssuntos(req, res) {
-    const { perfil, nomeUsuario, imagemPerfil} = req.session;
-    const assuntos = await Assunto.findAll({ order: [['id_assunto','ASC']] });
+    const { perfil, nomeUsuario, imagemPerfil } = req.session;
+    const assuntos = await Assunto.findAll({ order: [['id_assunto', 'ASC']] });
     return res.render('assuntos/index', { assuntos, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
 }
 
@@ -53,12 +53,12 @@ async function excluirAssunto(req, res) {
 }
 
 // Tópicos
- async function listarTopicos(req, res) {
-     const { perfil, nomeUsuario, imagemPerfil} = req.session;
-     const topicos = await Topico.findAll({ order: [['id_topico','ASC']] });
-     console.log(topicos)
-     return res.render('topicos/index', { topicos, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
- }
+async function listarTopicos(req, res) {
+    const { perfil, nomeUsuario, imagemPerfil } = req.session;
+    const topicos = await Topico.findAll({ order: [['id_topico', 'ASC']] });
+    console.log(topicos)
+    return res.render('topicos/index', { topicos, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
+}
 
 // JSON consultas
 async function consultarTopicos(req, res) {
@@ -71,7 +71,7 @@ async function consultarTopicos(req, res) {
         if (id_area) {
             where.id_area = id_area;
         }
-        
+
         const topics = await Topico.findAll({
             attributes: ['id_topico', 'nome'],
             where: where,
@@ -86,10 +86,29 @@ async function consultarTopicos(req, res) {
 }
 
 async function criarTopico(req, res) {
-    const { nome, id_area, id_usuario } = req.body;
-    await Topico.create({ nome, id_area, id_usuario });
-    return res.redirect('/shared/topicos');
+    const { nome, id_area } = req.body;
+    let id_usuario = req.body.id_usuario;
+    // Supondo que o ID do usuário esteja na sessão
+    if (!id_usuario) {
+        id_usuario = req.session.userId;
+    }
+
+    const topico = await Topico.create({ nome, id_area, id_usuario });
+
+    const referer = req.get('Referer') || req.get('Origin') || '';
+    const host = req.get('host');
+
+    const refererUrl = referer.replace(/^https?:\/\//, '').replace(host, '').split('?')[0];
+
+    if (refererUrl.includes('/professor/registrar-questao')) {
+        return res.status(201).json(topico);
+    }
+
+    return res.redirect('/shared/topicos')
+
 }
+
+
 
 async function editarTopico(req, res) {
     const { id_topico } = req.params;
@@ -116,8 +135,8 @@ module.exports = {
     listarTopicos,
     criarTopico,
     editarTopico,
-     excluirTopico,
-     consultarTopicos,
+    excluirTopico,
+    consultarTopicos,
 }
 
 

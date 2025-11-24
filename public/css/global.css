@@ -41,6 +41,10 @@
 *, ::before, ::after {
   box-sizing: border-box;
 }
+html{
+  min-height: 100vh;
+  background-color: var(--body-color);
+}
 
 body {
   margin: var(--header-height) 0 0 0;
@@ -49,6 +53,11 @@ body {
   font-size: var(--normal-font-size);
   background-color: var(--body-color);
   color: var(--text-color);
+  min-height: 100vh;
+}
+.main{
+  min-height: 100vh;
+   background-color: var(--body-color);
 }
 
 h3 {
@@ -62,6 +71,9 @@ a {
 img {
   max-width: 100%;
   height: auto;
+}
+.container{
+  background-color: var(--body-color);
 }
 
 /*========== HEADER ==========*/

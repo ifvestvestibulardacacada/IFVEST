@@ -8,26 +8,27 @@
             <h2>Criar Novo Tópico</h2>
             <button type="button" id="close-modal">Fechar</button>
         </div>
-        
+
         <div class="topic-group">
             <label for="areaIdTopico" class="label">Selecione uma área:</label>
-            <select name="areaIdTopico" id="areaIdTopico" class="select" >
+            <select name="areaIdTopico" id="areaIdTopico" class="select">
                 <option value="" disabled selected>Selecione uma opção</option>
-                <% Areas.forEach(area => { %>
+                <% Areas.forEach(area=> { %>
                     <option value="<%= area.id_area %>">
                         <%= area.nome %>
                     </option>
-                <% }) %>
+                    <% }) %>
             </select>
         </div>
         <div id="topico-container">
             <div class="flex-col-gap-2">
                 <label for="topico" class="label">Digite um novo Tópico:</label>
-                <input type="text" name="topico" id="topico" placeholder="Digite o tópico" class="topic-input"  disabled>
+                <input type="text" name="topico" id="topico" placeholder="Digite o tópico" class="topic-input" disabled>
             </div>
         </div>
         <div class="button-group">
-            <button type="button" class="topic-button" id="register-button" onclick="registerTopic()" disabled>Registrar</button>
+            <button type="button" class="topic-button" id="register-button" onclick="registerTopic()"
+                disabled>Registrar</button>
         </div>
     </div>
 </div>
@@ -36,16 +37,16 @@
     function showCreateTopicModal() {
         document.getElementById('modal-create-topic').style.display = 'block';
         let searchContainer = document.getElementById('topicosSearchContainer');
-        searchContainer.style.display = 'none';
-        let select = document.getElementById("areaId");
+
+        let select = document.getElementById("selectArea");
         select.selectedIndex = 0;
-         document.getElementById('areaIdTopico').setAttribute('required', '');
+        document.getElementById('areaIdTopico').setAttribute('required', '');
         document.getElementById('topico').setAttribute('required', '');
     }
 
     function closeCreateTopicModal() {
         document.getElementById('modal-create-topic').style.display = 'none';
-                document.getElementById('areaIdTopico').removeAttribute('required');
+        document.getElementById('areaIdTopico').removeAttribute('required');
         document.getElementById('topico').removeAttribute('required');
     }
 
@@ -55,10 +56,10 @@
     document.getElementById('close-modal').addEventListener('click', closeCreateTopicModal);
 
     // Listener para habilitar/desabilitar input e botão com base na seleção da área
-    document.getElementById('areaIdTopico').addEventListener('change', function() {
+    document.getElementById('areaIdTopico').addEventListener('change', function () {
         const topicInput = document.getElementById('topico');
         const registerButton = document.getElementById('register-button');
-        
+
         if (this.value !== '') {
             topicInput.disabled = false;
             registerButton.disabled = false;
@@ -70,32 +71,69 @@
     });
 
     async function registerTopic() {
-        const areaIdTopico = document.getElementById('areaIdTopico').value;
-        const topico = document.getElementById('topico').value;
+    const id_area = document.getElementById('areaIdTopico').value;
+    const nome = document.getElementById('topico').value.trim();
 
-
-        try {
-            const response = await fetch('/professor/registrar-topico', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ areaIdTopico, topico }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Erro na requisição: ' + response.statusText);
-            }
-
-            const result = await response.json();
-            alert('Tópico registrado com sucesso!');
-            closeCreateTopicModal();
-        } catch (error) {
-            console.error('Erro:', error);
-            alert('Ocorreu um erro ao registrar o tópico.');
-        }
+    if (!id_area || !nome) {
+        alert('Preencha área e nome do tópico.');
+        return;
     }
-</script>
-    
-    
 
+    try {
+        const response = await fetch('/shared/topicos', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id_area: parseInt(id_area), nome }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || 'Erro no servidor');
+        }
+
+        console.log('Resposta do servidor:', result); // DEBUG
+
+        // GARANTE que window.Topicos existe
+        if (!Array.isArray(window.Topicos)) {
+            window.Topicos = [];
+            console.warn('window.Topicos não era array. Criado agora.');
+        }
+
+        // Constrói o objeto do tópico (caso o backend não retorne tudo)
+        const novoTopico = {
+            id_topico: result.id_topico || result.id || Date.now(),
+            id_area: parseInt(id_area),
+            nome: nome
+        };
+
+        // ADICIONA ao array global
+        window.Topicos.push(novoTopico);
+        console.log('Tópico adicionado localmente:', novoTopico);
+        console.log('window.Topicos agora tem:', window.Topicos.length, 'itens');
+
+        alert('Tópico registrado com sucesso!');
+
+        // Fecha modal e limpa campo
+        closeCreateTopicModal();
+        document.getElementById('topico').value = '';
+
+        // RECARREGA dropdown da área atualmente selecionada
+        const selectArea = document.getElementById('selectArea');
+        const areaIdAtual = selectArea?.value;
+
+        if (areaIdAtual && parseInt(areaIdAtual) === parseInt(id_area)) {
+            console.log('Recarregando dropdown para área:', areaIdAtual);
+            await loadTopicDropdown(areaIdAtual);
+        } else {
+            console.log('Área do modal diferente da selecionada. Não recarrega dropdown.');
+        }
+
+    } catch (error) {
+        console.error('Erro ao registrar tópico:', error);
+        alert('Erro: ' + error.message);
+    }
+}
+</script>

@@ -300,15 +300,15 @@ const symbolButtons = [
         button: document.querySelector('#lessless-btn'),
         value: '\\ll '
     },
-    {
+{
         button: document.querySelector('#equivalence-class-btn'),
-        value: '\\ll '
+        value: '\\equiv '
     },
     {
         button: document.querySelector('#greater-greater-btn'),
-        value: '\\ll '
+        value: '\\gg '
     },
-        {
+    {
         button: document.querySelector('#brackets-matrix-btn'),
         value: '\\begin{bmatrix}a & b \\\\ c & d\\end{bmatrix} '
     },

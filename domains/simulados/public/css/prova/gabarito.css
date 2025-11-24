@@ -1,4 +1,4 @@
-textarea,
+/* textarea,
 .opcao-dissertativa,
 .resposta-do-usuario {
   max-width: 600px;
@@ -18,17 +18,17 @@ textarea,
   margin: 10px 0;
 }
 
-/* Ensure the dissertative option has a subtle background to differentiate */
+
 .opcao-dissertativa {
-  background-color: #f0f4ff; /* Light blue tint to distinguish from user response */
+  background-color: #f0f4ff; 
 }
 
-/* User's response has a slightly different background for clarity */
+
 .resposta-do-usuario {
-  background-color: #f9f9f9; /* Light gray to differentiate from the dissertative option */
+  background-color: #f9f9f9; 
 }
 
-/* Maintain the option styling for objective questions */
+
 .opcao {
   display: flex;
   align-items: center;
@@ -42,11 +42,11 @@ textarea,
 }
 
 .opcao-correta {
-  background-color: #d4edda; /* Green for correct */
+  background-color: #d4edda; 
 }
 
 .opcao-incorreta {
-  background-color: #f8d7da; /* Red for incorrect */
+  background-color: #f8d7da; 
 }
 
 .opcao-texto {
@@ -78,4 +78,55 @@ textarea,
   background-color: #f9f9f9;
   padding: 15px;
   border-radius: 6px;
+} */
+ /* /simulados/css/prova/gabarito.css (Atualizado) */
+
+/* --- Estilos do Placar --- */
+/* /simulados/css/prova/gabarito.css (Versão Bootstrap) */
+
+
+
+/* Garante que o texto renderizado pelo Quill (ou similar) se ajuste bem */
+/* /simulados/css/prova/gabarito.css (Versão Bootstrap com Poppins e Centralização) */
+
+/* Aplica a nova fonte ao corpo da página */
+body {
+
+    font-family: 'Poppins', sans-serif; /* AQUI USAMOS A NOVA FONTE */
+}
+
+/* Centraliza o Título Principal do Gabarito */
+.rounded-top {
+    text-align: center;
+}
+
+/* Centraliza os Títulos das Questões */
+.card-header {
+    text-align: center;
+}
+
+/* Garante que o texto renderizado pelo Quill (ou similar) se ajuste bem */
+.name, .opcao-texto {
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Remove qualquer preenchimento ou margem extra do parágrafo dentro do enunciado */
+.name p:last-child,
+.opcao-texto p:last-child {
+    margin-bottom: 0;
+}
+
+/* Ajuste fino nas cores de sucesso e perigo para o gabarito */
+.list-group-item.list-group-item-success {
+    border-left: 4px solid #198754 !important;
+}
+
+.list-group-item.list-group-item-danger {
+    border-left: 4px solid #dc3545 !important;
+}
+
+/* Ajuste para o texto da opção não ficar colado no radio */
+.opcao-texto {
+    margin-left: 5px;
 }

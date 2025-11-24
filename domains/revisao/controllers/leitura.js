@@ -2,7 +2,7 @@ const { Conteudo, Assunto, Usuario } = require('../../../models')
 const MarkdownSolver = require('../utils/MarkdownSolver')
 
 module.exports = async (req, res) => {
-    const { nomeUsuario, perfil, imagemPerfil } = req.session;
+    const {nomeUsuario, perfil} = req.session
 
     const { id_conteudo } = req.params
 
@@ -39,9 +39,7 @@ module.exports = async (req, res) => {
     res.render('leitura', {
         conteudo,
         conteudo_markdown,
-        nomeUsuario,
-        perfilUsuario: perfil,
-        imagemPerfil,
+
         autor: autor,
     })
 }
