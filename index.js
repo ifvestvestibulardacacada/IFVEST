@@ -30,6 +30,7 @@ const simuladosApp = require('./domains/simulados/index.js');
 const flashcardsApp = require('./domains/flashcards/index.js')
 const cors = require('cors')
 const sharedApp = require('./domains/shared/index.js');
+const ifQuizApp = require('./domains/IFQuiz/index.js');
 
 const app = express();
 
@@ -122,6 +123,7 @@ app.use("/uploads",  uploads)
 app.use("/simulados",  simuladosApp) 
 app.use("/revisao", revisaoApp)
 app.use('/shared', sharedApp)
+app.use("/quiz", ifQuizApp);
 app.use("/flashcards", flashcardsApp)
 app.use('/areas', areas)
 app.use('/topicos', topicos)

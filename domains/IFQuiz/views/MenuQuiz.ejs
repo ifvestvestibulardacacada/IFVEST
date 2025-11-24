@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz do ENEM</title>
+    <link rel="stylesheet" href="../quiz/css/tela.css">
+    <script src="../quiz/Js/script.js" defer></script>
+
+</head>
+
+<body>
+    <div class="TelaJogo">
+
+        <h1>IFVEST🧠</h1>
+        <div class="menuJogo">
+            <label for="select-materia">Matéria:</label>
+            <select name="materias" id="select-materia">
+                <option value="Matemática">Matemática</option>
+                <option value="Linguagens">Linguagens (Português, Inglês, etc.)</option>
+                <option value="Ciências Humanas">Ciências Humanas (História, Geografia, etc.)</option>
+                <option value="Ciências da Natureza">Ciências da Natureza (Física, Química, Biologia)</option>
+            </select>
+
+            <label for="input-numero">Número de Questões:</label>
+            <input type="number" id="input-numero" name="number" placeholder="Número de questões" value="5" min="1" max="40">
+
+             <!--
+                caso arrume alguma forma na classificação de dificuldade            
+             <label for="select-dificuldade">Dificuldade (informativo):</label>
+            <select name="dificuldade" id="select-dificuldade">
+                <option value="facil">Fácil</option>
+                <option value="medio" selected>Médio</option>
+                <option value="dificil">Difícil</option>
+            </select>-->
+
+            <button id="btn-iniciar">Iniciar IFquizz</button>
+            <a href="/quiz" class="BotaoQuiz">Voltar ao Menu</a>
+        </div>
+
+        <hr>
+        <div id="quiz-container">
+            <h2 id="quiz-titulo-questao">Questão:</h2>
+            <p id="quiz-pergunta">Clique em "Iniciar Jogo" para carregar uma pergunta.</p>
+
+            <h3>Opções:</h3>
+            <ul id="quiz-opcoes">
+            </ul>
+
+            <p id="quiz-resposta"></p>
+
+            <button id="btn-tentar-novamente" style="display: none;">Carregar Outra Pergunta</button>
+            <button id="btn-voltar-menu" style="display: none;">voltar para o menu</button>
+        </div>
+
+    </div>
+</body>
+
+</html>
