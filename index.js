@@ -3,7 +3,7 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const { secure_pass } = require('./middleware/sessionMidleware');
 const {sessionOptions} = require('./utils/sessionConfig');
-const { usuarios, inicio,  uploads, areas, topicos, dificuldades } = require('./routes');
+const { usuarios, inicio,  uploads, dificuldades } = require('./routes');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const revisaoApp = require('./domains/revisao/index.js');
@@ -63,8 +63,7 @@ app.use("/simulados",  simuladosApp)
 app.use("/revisao", revisaoApp)
 app.use('/shared', sharedApp)
 app.use("/flashcards", flashcardsApp)
-app.use('/areas', areas)
-app.use('/topicos', topicos)
+
 app.use('/dificuldades', dificuldades)
 app.use("/quiz", ifQuizApp);
 

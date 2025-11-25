@@ -1,96 +1,88 @@
-// carregar-filtros.js
+// carregar-filtros.js — VERSÃO NUCLEAR (FUNCIONA ATÉ NO INFERNO)
 
-async function carregarAreas() {
-  const res = await fetch('/areas');
-  const areas = await res.json();
-  const select = document.getElementById('area');
-  const selected = select?.dataset?.selected;
-  const isRequired = select?.hasAttribute('required');
-  // Start with a visible placeholder; mark it selected only when there's no preselected value
-  const placeholderSelected = selected ? '' : 'selected';
-  const placeholderText = isRequired ? 'Selecione a área' : 'Selecione a Área (opcional)';
-  select.innerHTML = `<option value="" ${placeholderSelected} disabled>${placeholderText}</option>`;
-  areas.forEach(a => {
-    const isSelected = selected && String(selected) === String(a.id_area);
-    select.innerHTML += `<option value="${a.id_area}" ${isSelected ? 'selected' : ''}>${a.nome}</option>`;
-  });
-}
+document.addEventListener('DOMContentLoaded', function () {
+  console.log('Iniciando carregamento dos filtros...');
 
-async function carregarTopicos(id_area) {
-  const res = await fetch(`/topicos/${id_area}`);
-  const topicos = await res.json();
-  const select = document.getElementById('topico');
-  const selected = select?.dataset?.selected;
-  const isRequired = select?.hasAttribute('required');
-  // Visible placeholder; select it only when there's no preselected tópico
-  const placeholderSelected = selected ? '' : 'selected';
-  const placeholderText = isRequired ? 'Selecione o tópico' : 'Selecione o Tópico (opcional)';
-  select.innerHTML = `<option value="" ${placeholderSelected} disabled>${placeholderText}</option>`;
-  // Populate topics returned by the server
-  topicos.forEach(t => {
-    const isSelected = selected && String(selected) === String(t.id_topico);
-    select.innerHTML += `<option value="${t.id_topico}" ${isSelected ? 'selected' : ''}>${t.nome}</option>`;
-  });
-
-  // If there is a selected topic id provided by server but it wasn't included in the returned list,
-  // add a fallback option so the select still shows the selected value (prevents disappearing selection).
-  if (selected) {
-    const found = topicos.some(t => String(t.id_topico) === String(selected));
-    if (!found) {
-      console.warn(`Selected tópico id ${selected} not present in /topicos/${id_area} response. Adding fallback option.`);
-      // Add a fallback option with a readable label
-      const fallbackLabel = `Tópico (ID: ${selected})`;
-      select.innerHTML += `<option value="${selected}" selected>${fallbackLabel}</option>`;
-    }
-  }
-}
-
-async function carregarDificuldades() {
-  const res = await fetch('/dificuldades');
-  const dificuldades = await res.json();
-  const select = document.getElementById('dificuldade');
-  const selected = select?.dataset?.selected;
-  const isRequired = select?.hasAttribute('required');
-  // Visible placeholder; select it only when there's no preselected dificuldade
-  const placeholderSelected = selected ? '' : 'selected';
-  const placeholderText = isRequired ? 'Selecione a dificuldade' : 'Selecione a Dificuldade (opcional)';
-  select.innerHTML = `<option value="" ${placeholderSelected} disabled>${placeholderText}</option>`;
-  dificuldades.forEach(d => {
-    const isSelected = selected && String(selected) === String(d.id_dificuldade);
-    select.innerHTML += `<option value="${d.id_dificuldade}" ${isSelected ? 'selected' : ''}>${d.nivel}</option>`;
-  });
-}
-
-if (document.getElementById('area')) {
-  document.getElementById('area').addEventListener('change', (e) => {
-    const id_area = e.target.value;
-    const topicoSelect = document.getElementById('topico');
-    // Reset the tópico select to a visible placeholder while loading
-    const isRequired = topicoSelect?.hasAttribute('required');
-    const placeholderText = isRequired ? 'Selecione o tópico' : 'Selecione o Tópico (opcional)';
-    topicoSelect.innerHTML = `<option value="" selected disabled>${placeholderText}</option>`;
-    // Clear any previously stored data-selected because the user actively changed area
-    if (topicoSelect) topicoSelect.dataset.selected = '';
-    if (id_area) carregarTopicos(id_area).catch(err => {
-      console.error('Erro ao carregar tópicos para a área', id_area, err);
-    });
-  });
-}
-
-window.onload = async () => {
   const areaSelect = document.getElementById('area');
   const topicoSelect = document.getElementById('topico');
   const dificuldadeSelect = document.getElementById('dificuldade');
 
-  if (areaSelect) {
-    await carregarAreas();
-    const selectedArea = areaSelect.dataset?.selected;
-    if (selectedArea) {
-      await carregarTopicos(selectedArea);
+  // Configuração global do Axios pra forçar JSON
+  axios.defaults.headers.common['Accept'] = 'application/json';
+  axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+  async function carregarAreas() {
+    try {
+      const response = await axios.get('/shared/api/areas', {
+        headers: {
+          'Accept': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+      const areas = response.data;
+      console.log('ÁREAS CARREGADAS:', areas);
+
+      const selected = areaSelect?.dataset?.selected || '';
+      areaSelect.innerHTML = `<option value="" selected disabled>Selecione a Área</option>`;
+      areas.forEach(a => {
+        const sel = String(a.id_area) === selected ? 'selected' : '';
+        areaSelect.innerHTML += `<option value="${a.id_area}" ${sel}>${a.nome}</option>`;
+      });
+    } catch (err) {
+      console.error('ERRO AO CARREGAR ÁREAS:', err.response?.status, err.response?.data || err.message);
+      areaSelect.innerHTML = `<option value="">Erro ao carregar áreas</option>`;
     }
   }
 
-  if (dificuldadeSelect) {
-    await carregarDificuldades();
+  async function carregarTopicos(id_area) {
+    try {
+      const response = await axios.get(`/shared/api/topicos/${id_area}`, {
+        headers: { 'Accept': 'application/json' }
+      });
+      const topicos = response.data;
+      console.log('TÓPICOS CARREGADOS:', topicos);
+
+      const selected = topicoSelect?.dataset?.selected || '';
+      topicoSelect.innerHTML = `<option value="" selected disabled>Selecione o Tópico</option>`;
+      topicos.forEach(t => {
+        const sel = String(t.id_topico) === selected ? 'selected' : '';
+        topicoSelect.innerHTML += `<option value="${t.id_topico}" ${sel}>${t.nome}</option>`;
+      });
+    } catch (err) {
+      console.error('ERRO TÓPICOS:', err);
+    }
   }
-};
+
+  async function carregarDificuldades() {
+    try {
+      const response = await axios.get('/dificuldades', {
+        headers: { 'Accept': 'application/json' }
+      });
+      const dificuldades = response.data;
+      console.log('DIFICULDADES:', dificuldades);
+
+      const selected = dificuldadeSelect?.dataset?.selected || '';
+      dificuldadeSelect.innerHTML = `<option value="" selected disabled>Selecione a Dificuldade</option>`;
+      dificuldades.forEach(d => {
+        const sel = String(d.id_dificuldade) === selected ? 'selected' : '';
+        dificuldadeSelect.innerHTML += `<option value="${d.id_dificuldade}" ${sel}>${d.nivel}</option>`;
+      });
+    } catch (err) {
+      console.error('ERRO DIFICULDADES:', err);
+    }
+  }
+
+  // EXECUTA
+  if (areaSelect) carregarAreas().then(() => {
+    const selected = areaSelect.dataset.selected;
+    if (selected) carregarTopicos(selected);
+  });
+
+  if (dificuldadeSelect) carregarDificuldades();
+
+  areaSelect?.addEventListener('change', e => {
+    const id = e.target.value;
+    topicoSelect.innerHTML = `<option value="" selected disabled>Carregando...</option>`;
+    if (id) carregarTopicos(id);
+  });
+});

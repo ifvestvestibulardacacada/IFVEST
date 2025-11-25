@@ -1,5 +1,5 @@
 
-const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta, Conteudo, TagConteudo, PalavraChave } = require('../models');
+const {  Usuario, Dificuldade } = require('../models');
 const { Op, where } = require('sequelize');
 
 const Nayahath = require('../logs/ArcanaFlow');
@@ -32,7 +32,7 @@ class Render {
     static dificuldades = {
         dificuldades: async (req, res) => {
             try {
-                const { Dificuldade } = require('../models');
+                
                 const dificuldades = await Dificuldade.findAll();
                 res.render('dificuldades/dificuldades', { dificuldades });
             } catch (error) {

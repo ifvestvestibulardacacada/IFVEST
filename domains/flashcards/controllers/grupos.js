@@ -20,10 +20,9 @@ module.exports = async (req, res) => {
     }
     if (id_dificuldade && id_dificuldade !== "") where.id_dificuldade = Number(id_dificuldade);
 
-    const nomeUsuario = req.session.nomeUsuario;
+   
     const perfilUsuario = req.session.perfil;
-    const imagemPerfil = req.session.imagemPerfil;
-    const id_usuario = req.session.userId;
+      const id_usuario = req.session.userId;
 
     // Carrega flashcards filtrados
     let flashcards = await Flashcard.findAll({
@@ -64,9 +63,7 @@ module.exports = async (req, res) => {
     delete req.session.errorMessage;
 
     res.render('grupos', {
-      nomeUsuario,
-      perfilUsuario,
-      imagemPerfil,
+
       id_usuario,
       groups,
       selectedGroup: req.query.grupo || null,

@@ -109,10 +109,7 @@ module.exports = async (req, res) => {
           
           res.render('professor', { 
               flashcards, 
-              nomeUsuario, 
-              perfilUsuario, 
-              imagemPerfil, 
-              id_usuario,
+                 id_usuario,
               successMessage,
               errorMessage
           });
@@ -125,10 +122,7 @@ module.exports = async (req, res) => {
 
               res.render('flashcards', { 
               flashcards,
-              nomeUsuario,
-              perfilUsuario,
-              imagemPerfil,
-              id_usuario,
+            id_usuario,
               groups,
               unseenFlashcards,
               displayFlashcards,

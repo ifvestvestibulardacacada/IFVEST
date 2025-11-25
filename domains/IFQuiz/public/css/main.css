@@ -1,0 +1,9 @@
+        .main { min-height: 100vh; }
+        .container { padding-top: 70px; }
+        .form-container {
+    margin: 20px auto;
+    padding: 25px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+}

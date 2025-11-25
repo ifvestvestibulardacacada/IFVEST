@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
+
 :root {
     --cor-enem-azul: #0072ce;
     --cor-enem-azul-escuro: #005aA9;
@@ -34,9 +35,7 @@ body {
     max-width: 700px;
     margin: 0 auto;
     background-color: var(--cor-container);
-    border-radius: 8px;
-    padding: 30px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+
 }
 
 h1 {
