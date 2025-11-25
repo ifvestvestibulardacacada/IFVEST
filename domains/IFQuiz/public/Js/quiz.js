@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const dados = {
                 nome: nome,
                 acertos: acertos,
-                total_questoes: totalQuestoes,
+                totalQuestoes: totalQuestoes,
                 porcentagem: parseFloat(porcentagem)
             };
 

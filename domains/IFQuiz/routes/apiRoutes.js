@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const db = require('../../../models');
-const Placar = db.Placars || db.Placar;
+const Placar = db.Placar || db.Placar;
 
 
 router.get('/placar', async (req, res) => {

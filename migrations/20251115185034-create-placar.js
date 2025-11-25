@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Placars', {
+    await queryInterface.createTable('Placar', {
       nome: {
         allowNull: false,
         autoIncrement: true,
@@ -12,8 +12,9 @@ module.exports = {
       acertos:{
         type: Sequelize.INTEGER
       },
-      total_questoes:{
-        type: Sequelize.INTEGER
+      totalQuestoes:{
+        type: Sequelize.INTEGER,
+        field: 'total_questoes'
       },
       porcentagem:{
         type: Sequelize.FLOAT
@@ -29,6 +30,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Placars');
+    await queryInterface.dropTable('Placar');
   }
 };
