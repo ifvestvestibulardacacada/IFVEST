@@ -41,33 +41,49 @@
             Revisando: Não vistos (aleatório)
           <% } %>
         </div>
-        <div id="flashcard-container">
-          <% 
-            // Prefer server-side displayFlashcards (group or mixed selection)
-            let unseen = unseenFlashcards || [];
-            let display = (typeof displayFlashcards !== 'undefined' && displayFlashcards && displayFlashcards.length > 0) ? displayFlashcards : unseen.slice(0, 10);
-          %>
-          <% if (display.length > 0) { %>
-            <% display.forEach((card, index) => { %>
-              <!-- Adiciona a classe 'active' apenas no primeiro card -->
-              <div class="flashcard <%= index === 0 ? 'active' : '' %>" data-index="<%= index %>" data-id-flashcard="<%= card.id_flashcards %>">
-                <div class="flashcard-inner">
-                  <div class="flashcard-front">
-                    <p class="pergunta"><%= card.pergunta %></p>
-                    <button class="ver-resposta">Ver resposta</button>
-                    <div class="interrogacao">?</div>
-                  </div>
-                  <div class="flashcard-back">
-                    <p class="resposta"><%= card.resposta %></p>
-                    <button class="ver-pergunta">Ver pergunta</button>
-                  </div>
-                </div>
-              </div>
-            <% }) %>
-          <% } else { %>
-            <p>Nenhum flashcard encontrado para o filtro selecionado.</p>
-          <% } %>
+<div id="flashcard-container">
+  <% 
+    let unseen = unseenFlashcards || [];
+    let display = displayFlashcards && displayFlashcards.length > 0 ? displayFlashcards : unseen.slice(0, 10);
+  %>
+
+  <% if (temAlgumFlashcard) { %>
+    <% if (display.length > 0) { %>
+      <% display.forEach((card, index) => { %>
+        <div class="flashcard <%= index === 0 ? 'active' : '' %>" 
+             data-index="<%= index %>" 
+             data-id-flashcard="<%= card.id_flashcards %>">
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <p class="pergunta"><%= card.pergunta %></p>
+              <button class="ver-resposta">Ver resposta</button>
+              <div class="interrogacao">?</div>
+            </div>
+            <div class="flashcard-back">
+              <p class="resposta"><%= card.resposta %></p>
+              <button class="ver-pergunta">Ver pergunta</button>
+            </div>
+          </div>
         </div>
+      <% }) %>
+    <% } else { %>
+      <div class="empty-state">
+        <i class="fas fa-search fa-3x"></i>
+        <h3>Nenhum flashcard encontrado com os filtros selecionados</h3>
+        <p>Tente remover alguns filtros ou <a href="/professor/registrar-flashcard">crie novos flashcards</a>.</p>
+      </div>
+    <% } %>
+  <% } else { %>
+    <div class="empty-state first-time">
+      <i class="fas fa-lightbulb fa-4x"></i>
+      <h2>Bem-vindo ao sistema de Flashcards!</h2>
+      <p>Ainda não existe nenhum flashcard no sistema.</p>
+      <a href="/professor/registrar-flashcard" class="simulado-btn">Criar o primeiro flashcard</a>
+      <br><br>
+      <small>Depois que o professor criar alguns, você poderá estudar aqui</small>
+    </div>
+  <% } %>
+</div>
         <!-- Controles de Navegação -->
         <% if (display && display.length > 0) { %>
           <div class="navigation-controls">

@@ -19,9 +19,9 @@ module.exports = async (req, res) => {
           }
       }
       if (id_dificuldade && id_dificuldade !== "") where.id_dificuldade = Number(id_dificuldade);
-      const nomeUsuario = req.session.nomeUsuario;
+
       const perfilUsuario = req.session.perfil;
-      const imagemPerfil = req.session.imagemPerfil;
+    
       const id_usuario = req.session.userId;
       let flashcards = await Flashcard.findAll({
           where,
@@ -133,6 +133,9 @@ module.exports = async (req, res) => {
               isGroupsPage: false, // Flag para identificar página de estudo
               successMessage,
               errorMessage,
+
+              temAlgumFlashcard: flashcards.length > 0,
+  temFlashcardNoFiltro: displayFlashcards.length > 0
           });
       }
   } catch (error) {
