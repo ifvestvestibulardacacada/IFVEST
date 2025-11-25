@@ -173,6 +173,7 @@
                 border-bottom: 2px solid #000;
             }
             .content-area {
+                column-fill: auto;
                 column-count: 2;
                 column-gap: 30px;
                 column-rule: 1px solid #ccc;
