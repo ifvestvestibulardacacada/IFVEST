@@ -1,5 +1,5 @@
 
-const { Area, Simulado, Topico, Questao, Opcao, Usuario, Resposta, Conteudo, TagConteudo, PalavraChave } = require('../models');
+const {  Usuario, Dificuldade } = require('../models');
 const { Op, where } = require('sequelize');
 
 const Nayahath = require('../logs/ArcanaFlow');
@@ -27,6 +27,17 @@ class Render {
             }
             req.session.errorMessage = null; // Limpa a mensagem de erro após exibi-la
             res.status(200).render('usuario/login', { errorMessage, layout: false  });
+        }
+    }
+    static dificuldades = {
+        dificuldades: async (req, res) => {
+            try {
+                
+                const dificuldades = await Dificuldade.findAll();
+                res.render('dificuldades/dificuldades', { dificuldades });
+            } catch (error) {
+                res.status(500).send('Erro ao buscar dificuldades.');
+            }
         }
     }
 

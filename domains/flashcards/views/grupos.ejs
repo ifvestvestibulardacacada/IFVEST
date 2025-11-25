@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IFVest - Revisão por Grupos</title>
+    <link rel="stylesheet" href="/flashcards/css/grupos.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body class="groups-page" data-id-usuario="<%= id_usuario %>">
+    <div class="container">
+      <%- include('./partials/flashMessages') %>
+      <%- include('./partials/flashcardFiltros') %>
+      <main class="flashcard-content no-groups">
+        <section class="flashcard-section">
+          <a href="/flashcards" class="back-button">
+            <i class="fas fa-arrow-left"></i> Voltar para Flashcards
+          </a>
+          <div class="queue-label">Selecione um grupo para revisar</div>
+          <%- include('./partials/flashcardGrupos') %>
+        </section>
+      </main>
+    </div>
+    <script src="/flashcards/js/flashMessages.js"></script>
+  </body>
+  </html>

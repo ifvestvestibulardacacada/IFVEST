@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IFVest - Flashcards</title>
+    <link rel="stylesheet" href="/flashcards/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body data-id-usuario="<%= id_usuario %>">
+  <div class="container">
+  <%- include('./partials/flashMessages') %>
+  <%- include('./partials/flashcardFiltros') %>
+    <main class="flashcard-content no-groups">
+      <!-- Página de estudo sem a coluna de grupos -->
+      <section class="flashcard-section">
+        <div class="actions-row">
+          <a class="group-review-btn" href="/flashcards/grupos?<%=
+            [
+              id_area ? `id_area=${id_area}` : null,
+              id_topico ? `id_topico=${id_topico}` : null,
+              id_dificuldade ? `id_dificuldade=${id_dificuldade}` : null
+            ].filter(Boolean).join('&')
+          %>">Revisar por grupos</a>
+        </div>
+        <div class="queue-label">
+          <% if (selectedGroup === '1') { %>
+            Revisando: Vistos hoje
+          <% } else if (selectedGroup === '3') { %>
+            Revisando: Vistos há 3 dias
+          <% } else if (selectedGroup === '7') { %>
+            Revisando: Vistos há 7 dias
+          <% } else if (selectedGroup === '15') { %>
+            Revisando: Vistos há 15 dias
+          <% } else if (selectedGroup === '15+') { %>
+            Revisando: Vistos há 15+ dias
+          <% } else { %>
+            Revisando: Não vistos (aleatório)
+          <% } %>
+        </div>
+<div id="flashcard-container">
+  <% 
+    let unseen = unseenFlashcards || [];
+    let display = displayFlashcards && displayFlashcards.length > 0 ? displayFlashcards : unseen.slice(0, 10);
+  %>
+
+  <% if (temAlgumFlashcard) { %>
+    <% if (display.length > 0) { %>
+      <% display.forEach((card, index) => { %>
+        <div class="flashcard <%= index === 0 ? 'active' : '' %>" 
+             data-index="<%= index %>" 
+             data-id-flashcard="<%= card.id_flashcards %>">
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <p class="pergunta"><%= card.pergunta %></p>
+              <button class="ver-resposta">Ver resposta</button>
+              <div class="interrogacao">?</div>
+            </div>
+            <div class="flashcard-back">
+              <p class="resposta"><%= card.resposta %></p>
+              <button class="ver-pergunta">Ver pergunta</button>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="empty-state">
+        <i class="fas fa-search fa-3x"></i>
+        <h3>Nenhum flashcard encontrado com os filtros selecionados</h3>
+        <p>Tente remover alguns filtros ou <a href="/professor/registrar-flashcard">crie novos flashcards</a>.</p>
+      </div>
+    <% } %>
+  <% } else { %>
+    <div class="empty-state first-time">
+      <i class="fas fa-lightbulb fa-4x"></i>
+      <h2>Bem-vindo ao sistema de Flashcards!</h2>
+      <p>Ainda não existe nenhum flashcard no sistema.</p>
+      <a href="/professor/registrar-flashcard" class="simulado-btn">Criar o primeiro flashcard</a>
+      <br><br>
+      <small>Depois que o professor criar alguns, você poderá estudar aqui</small>
+    </div>
+  <% } %>
+</div>
+        <!-- Controles de Navegação -->
+        <% if (display && display.length > 0) { %>
+          <div class="navigation-controls">
+            <button id="prev-btn" class="nav-btn"><i class="fas fa-chevron-left"></i> Anterior</button>
+            <span id="progress-indicator">1 / <%= display.length %></span>
+            <button id="next-btn" class="nav-btn">Próximo <i class="fas fa-chevron-right"></i></button>
+          </div>
+        <% } %>
+      </section>
+    </main>
+  </div>
+
+  <script src="/flashcards/js/flashMessages.js"></script>
+  <script src="/flashcards/js/navegaFlashcards.js"></script>
+
+  </body>
+</html>

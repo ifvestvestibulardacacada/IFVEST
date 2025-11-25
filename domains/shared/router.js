@@ -3,6 +3,7 @@ const controllers = require('./controllers')
 
 const {
     listarAreas,
+  listarAreasJSON,
     criarArea,
     editarArea,
     excluirArea,
@@ -24,7 +25,9 @@ const {
 const router = Router()
 
 // Áreas
+router.get('/api/areas', listarAreasJSON)
 router.get('/areas', listarAreas)
+
 router.post('/areas', criarArea)
 router.patch('/areas/:id_area', editarArea)
 router.delete('/areas/:id_area', excluirArea)

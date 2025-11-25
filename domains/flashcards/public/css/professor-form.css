@@ -1,0 +1,210 @@
+/* PROFESSOR-FORM.CSS
+   Styles specific to Criar / Editar flashcard pages.
+   This file is intentionally dedicated to the form pages so global professor.css can stay untouched.
+*/
+
+/* --- BASE (page-scoped) --- */
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.title {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+  font-family: 'Georgia', serif;
+}
+
+/* --- BUTTON --- */
+.criar-flashcard-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.08s ease;
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.15);
+}
+.criar-flashcard-btn:hover { background: #0056b3; transform: translateY(-1px); }
+.criar-flashcard-btn:active { transform: translateY(0); }
+
+/* --- FORM --- */
+.professor-flashcard .flashcard-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #fff;
+  border: 1px solid #e6e9ee;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.professor-flashcard .flashcard-form label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.25rem;
+}
+
+.professor-flashcard .flashcard-form textarea,
+.professor-flashcard .flashcard-form select {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.professor-flashcard .flashcard-form textarea { resize: vertical; min-height: 120px; }
+
+.professor-flashcard .flashcard-form textarea:focus,
+.professor-flashcard .flashcard-form select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0,123,255,0.08);
+}
+
+/* select chevron */
+.professor-flashcard .flashcard-form select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23495057' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  padding-right: 2.5rem;
+}
+
+/* --- RESPONSIVE GRID: desktop only --- */
+@media (min-width: 1024px) {
+  .professor-flashcard .flashcard-form {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    grid-auto-rows: min-content;
+    gap: 1rem 2rem;
+    padding: 2rem;
+  }
+
+  /* left column: groups explicitly marked .form-left */
+  .professor-flashcard .flashcard-form .form-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 0 0 55%; /* left column width */
+  }
+  .professor-flashcard .flashcard-form .form-left textarea { width: 100%; }
+  .professor-flashcard .flashcard-form .form-left:nth-of-type(1) textarea { min-height: 300px; }
+  .professor-flashcard .flashcard-form .form-left:nth-of-type(2) textarea { min-height: 220px; }
+
+  /* right column: controls block */
+  .professor-flashcard .flashcard-form .form-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 0 0 35%; /* right column width */
+  }
+  .professor-flashcard .flashcard-form .form-controls .form-group { margin-bottom: 0; }
+  .professor-flashcard .flashcard-form .form-controls select { width: 100%; }
+  .professor-flashcard .flashcard-form .form-controls .criar-flashcard-btn { justify-self: stretch; width: 100%; }
+  
+  /* ensure any helper text spans full width under the row */
+  .professor-flashcard .flashcard-form p,
+  .professor-flashcard .flashcard-form .full-width {
+    width: 100%;
+    order: 99;
+  }
+}
+@media (min-width: 1200px) {
+  .professor-flashcard .flashcard-form {
+    display: block;
+    padding: 2rem;
+  }
+
+  /* two-column row for question+answer */
+  .professor-flashcard .flashcard-form .qa-row {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .professor-flashcard .flashcard-form .qa-row .form-left { flex: 1 1 50%; }
+  .professor-flashcard .flashcard-form .qa-row .form-left textarea { width: 100%; }
+  .professor-flashcard .flashcard-form .qa-row .form-left:nth-of-type(1) textarea { min-height: 300px; }
+  .professor-flashcard .flashcard-form .qa-row .form-left:nth-of-type(2) textarea { min-height: 300px; }
+
+  /* controls centered below - desktop: lay out selectors horizontally */
+  .professor-flashcard .flashcard-form .form-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 90%;
+    max-width: 1100px;
+    margin: 1.5rem auto 0;
+  }
+  /* each select grows equally; allow a sensible min-width for small-desktop screens */
+  .professor-flashcard .flashcard-form .form-controls select {
+    flex: 1 1 0;
+    min-width: 160px;
+    max-width: none;
+  }
+  /* make the button slightly narrower */
+  .professor-flashcard .flashcard-form .form-controls .criar-flashcard-btn {
+    flex: 0 0 160px;
+  }
+}
+
+/* --- SMALLER BREAKPOINTS --- */
+@media (max-width: 1023px) {
+  .container { padding: 1rem; }
+  .professor-flashcard .flashcard-form { padding: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .professor-flashcard .flashcard-form textarea { min-height: 120px; }
+}
+
+/* --- FLASH MESSAGES (copied from professor.css) --- */
+.flash-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 320px;
+  max-width: 500px;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  z-index: 9999;
+  animation: slideInRight 0.4s ease-out, fadeOut 0.3s ease-in 4.7s forwards;
+}
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0 } to { transform: translateX(0); opacity: 1 } }
+@keyframes fadeOut { from { opacity: 1 } to { opacity: 0; transform: translateX(100%); } }
+
+.flash-content { display: flex; align-items: center; gap: 0.75rem; flex: 1; }
+.flash-message i { font-size: 1.5rem; flex-shrink: 0; }
+.flash-message span { font-size: 1rem; font-weight: 500; line-height: 1.4; }
+.flash-close { background: none; border: none; font-size: 1.5rem; line-height: 1; color: inherit; opacity: 0.6; cursor: pointer; padding: 0.25rem 0.5rem; transition: opacity 0.2s ease; flex-shrink: 0; }
+.flash-close:hover { opacity: 1; }
+.flash-success { border-left: 4px solid #28a745; color: #155724; background: #d4edda; }
+.flash-success i { color: #28a745; }
+.flash-error { border-left: 4px solid #dc3545; color: #721c24; background: #f8d7da; }
+.flash-error i { color: #dc3545; }
+
+@media (max-width: 600px) { .flash-message { top: 10px; right: 10px; left: 10px; min-width: auto; max-width: none; } }

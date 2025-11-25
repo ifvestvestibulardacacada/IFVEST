@@ -5,7 +5,7 @@ const express = require('express');
 const router = require('./router');
 const expressLayouts = require('express-ejs-layouts');
 
-const revisaoApp = createDomainApp({
+const flashcardsApp = createDomainApp({
     views: path.join(__dirname, 'views'),
     public: path.join(__dirname, 'public'),
     viewEngine: 'ejs',
@@ -16,8 +16,8 @@ const revisaoApp = createDomainApp({
     ],
 })
 
-revisaoApp.use('/', router);
-revisaoApp.use(expressLayouts);
-revisaoApp.set('layout', path.join(__dirname, '../../views/layouts/main'))
+flashcardsApp.use('/', router);
+flashcardsApp.use(expressLayouts);
+flashcardsApp.set('layout', path.join(__dirname, '../../views/layouts/main'))
 
-module.exports = revisaoApp;
+module.exports = flashcardsApp;

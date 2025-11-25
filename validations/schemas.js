@@ -198,6 +198,6 @@ module.exports = {
   simuladoSchemas,
   topicoSchemas,
   userSchemas,
-  contentSchemas
+  contentSchemas,
 };
 

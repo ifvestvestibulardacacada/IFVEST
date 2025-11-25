@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "Nicolas2015.nf",
-    "database": "ifvest",
+    "password": "residentevil6",
+    "database": "ifvest_mysql_assunto",
     "host": "localhost",
     "dialect": "mysql",
     "port": "3306"

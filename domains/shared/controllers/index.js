@@ -1,10 +1,19 @@
 const { Area, Assunto, Topico } = require('../../../models');
 
 // Áreas
-async function listarAreas(req, res) {
-    const { perfil, nomeUsuario, imagemPerfil } = req.session;
+async function listarAreasJSON(req, res) {
+    // FORÇA JSON SEMPRE, SÓ PRA TESTAR
     const areas = await Area.findAll({ order: [['id_area', 'ASC']] });
-    return res.render('areas/index', { areas, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
+    return res.json(areas);
+}
+async function listarAreas(req, res) {
+
+   
+        const areas = await Area.findAll({ order: [['id_area', 'ASC']] });
+
+ 
+
+    return res.render('areas/index', { areas });
 }
 
 async function criarArea(req, res) {
@@ -28,9 +37,9 @@ async function excluirArea(req, res) {
 
 // Assuntos
 async function listarAssuntos(req, res) {
-    const { perfil, nomeUsuario, imagemPerfil } = req.session;
+   
     const assuntos = await Assunto.findAll({ order: [['id_assunto', 'ASC']] });
-    return res.render('assuntos/index', { assuntos, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
+    return res.render('assuntos/index', { assuntos});
 }
 
 async function criarAssunto(req, res) {
@@ -54,11 +63,13 @@ async function excluirAssunto(req, res) {
 
 // Tópicos
 async function listarTopicos(req, res) {
-    const { perfil, nomeUsuario, imagemPerfil } = req.session;
+
     const topicos = await Topico.findAll({ order: [['id_topico', 'ASC']] });
     console.log(topicos)
-    return res.render('topicos/index', { topicos, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
+    return res.render('topicos/index', { topicos });
 }
+
+
 
 // JSON consultas
 async function consultarTopicos(req, res) {
@@ -78,10 +89,10 @@ async function consultarTopicos(req, res) {
             order: [['nome', 'ASC']]
         });
         console.log(topics)
-        res.status(200).json(topics);
+        return res.status(200).json(topics);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 }
 
@@ -125,6 +136,7 @@ async function excluirTopico(req, res) {
 
 module.exports = {
     listarAreas,
+    listarAreasJSON,
     criarArea,
     editarArea,
     excluirArea,
