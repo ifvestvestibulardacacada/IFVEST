@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const elementoTituloQuestao = document.getElementById('quiz-titulo-questao');
 
 
-    
+
     let totalQuestoes = 0;
     let questaoAtual = 0;
     let acertos = 0;
@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`[Range Dinâmico] Ano ${ano}: Linguagens `);
                 return { min: 91, max: 135 };
             }
-            if (materia === 'Ciências da Natureza'){
+            if (materia === 'Ciências da Natureza') {
                 console.log(`[Range Dinâmico] Ano ${ano}: Natureza`);
-                return {min: 46, max:90 };
+                return { min: 46, max: 90 };
             }
         }
 
@@ -46,9 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log(`[Range Dinâmico] Ano ${ano}: Natureza (Novo) 46-90`);
                 return { min: 46, max: 90 };
             }
-            if (materia === 'Ciências da Natureza'){
+            if (materia === 'Ciências da Natureza') {
                 console.log(`[Range Dinâmico] Ano ${ano}: Natureza`);
-                return {min: 91, max:135 };
+                return { min: 91, max: 135 };
             }
         }
         const rangeFixo = RANGES_DAS_MATERIAS[materia];
@@ -127,36 +127,36 @@ document.addEventListener('DOMContentLoaded', () => {
                     Seu aproveitamento: ${porcentagem}%
                 </p>
             `;
-            salvarPlacarNoBanco("jogador", acertos, totalQuestoes, porcentagem);
+            salvarPlacarNoBanco(acertos, totalQuestoes, porcentagem);
         }
 
     }
-    async function salvarPlacarNoBanco(nome, acertos, totalQuestoes, porcentagem) {
-        try {
-            const dados = {
-                nome: nome,
-                acertos: acertos,
-                totalQuestoes: totalQuestoes,
-                porcentagem: parseFloat(porcentagem)
-            };
+    async function salvarPlacarNoBanco(acertos, totalQuestoes, porcentagem) {
+    try {
+        const dados = {
+            acertos: acertos,
+            totalQuestoes: totalQuestoes,
+            porcentagem: parseFloat(porcentagem)
+        };
 
-            const response = await fetch('/quiz/api/placar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dados)
-            });
+        const response = await fetch('/quiz/api/placar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dados)
+        });
 
-            if (response.ok) {
-                console.log('Placar salvo com sucesso!');
-            } else {
-                console.error('Falha ao salvar placar.');
-            }
-        } catch (error) {
-            console.error('Erro de rede ao salvar placar:', error);
+        if (response.ok) {
+            const resultado = await response.json();
+            console.log('Placar salvo com sucesso! Usuário:', resultado.nome);
+        } else {
+            console.error('Falha ao salvar placar.');
         }
+    } catch (error) {
+        console.error('Erro de rede ao salvar placar:', error);
     }
+}
     async function carregarEExibirQuiz(materia) {
         console.log(`Iniciando busca pela questão ${questaoAtual}...`);
         if (botaoTentarNovamente) botaoTentarNovamente.style.display = 'none';

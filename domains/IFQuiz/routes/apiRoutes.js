@@ -7,12 +7,12 @@ router.get('/placar', async (req, res) => {
     if (!Placar) {
         return res.status(500).json({ error: "Erro interno: Model Placar não carregado." });
     }
-    
+
     try {
         const placares = await Placar.findAll({
             order: [
-                ['acertos', 'DESC'], 
-                ['porcentagem', 'DESC'] 
+                ['acertos', 'DESC'],
+                ['porcentagem', 'DESC']
             ],
             limit: 5
         });
@@ -25,10 +25,19 @@ router.get('/placar', async (req, res) => {
 
 router.post('/placar', async (req, res) => {
     try {
-        const { nome, acertos, totalQuestoes, porcentagem } = req.body;
+        let { nome, acertos, totalQuestoes, porcentagem } = req.body;
+        if (!nome) {
+            if (req.session && req.session.nomeUsuario) {
+                nome = req.session.nomeUsuario;
+                console.log('✅ Usuário logado identificado:', nome);
+            } else {
+                nome = 'Visitante';
+                console.log('⚠️ Usuário não logado. Salvando como Visitante.');
+            }
+        }
 
-        if (nome === undefined || acertos === undefined) {
-            return res.status(400).json({ error: 'Dados incompletos.' });
+        if (acertos === undefined) {
+            return res.status(400).json({ error: 'Dados de pontuação incompletos.' });
         }
 
         const novoPlacar = await Placar.create({
@@ -39,7 +48,7 @@ router.post('/placar', async (req, res) => {
         });
 
         console.log('Novo placar salvo:', novoPlacar.toJSON());
-        res.status(201).json(novoPlacar); 
+        res.status(201).json(novoPlacar);
 
     } catch (error) {
         console.error('Erro ao salvar placar:', error);
