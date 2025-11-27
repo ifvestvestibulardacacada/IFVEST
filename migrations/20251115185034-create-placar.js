@@ -12,9 +12,8 @@ module.exports = {
       acertos:{
         type: Sequelize.INTEGER
       },
-      totalQuestoes:{
+      total_questoes:{
         type: Sequelize.INTEGER,
-        field: 'total_questoes'
       },
       porcentagem:{
         type: Sequelize.FLOAT

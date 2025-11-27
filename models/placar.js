@@ -19,9 +19,8 @@ module.exports = (sequelize, DataTypes) => {
   Placar.init({
     nome: DataTypes.STRING,
     acertos: DataTypes.INTEGER,
-    totalQuestoes: {
+    total_questoes: {
       type: DataTypes.INTEGER,
-      field: 'total_questoes'
     },
     porcentagem: DataTypes.FLOAT,
   }, {
