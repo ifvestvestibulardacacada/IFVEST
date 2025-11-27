@@ -85,6 +85,7 @@ module.exports = async (req, res) => {
                         opcaoData.alternativa = opcao.alternativa;
                         opcaoData.correta = correta === opcao.alternativa;
                     } else {
+                        opcaoData.alternativa = 'A';
                         opcaoData.correta = true;
                     }
 
