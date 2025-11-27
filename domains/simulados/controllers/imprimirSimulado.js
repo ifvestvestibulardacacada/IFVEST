@@ -1,4 +1,8 @@
+const { parse } = require('path');
 const { Simulado, Questao, Opcao } = require('../../../models');
+const parseRichText = require('../../../utils/parseDelta');
+
+
 
 
 module.exports = async (req, res) => {
@@ -22,7 +26,7 @@ module.exports = async (req, res) => {
                     }],
                 });
 
-                res.render('prova/template_prova', { layoutSemContainer: true, simulado,  });
+                res.render('prova/template_prova', { layoutSemContainer: true, simulado, parseRichText  });
             } catch (error) {
                 console.error('Erro ao gerar PDF:', error);
                 res.status(500).send('Erro ao gerar o PDF');

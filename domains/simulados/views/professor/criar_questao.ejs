@@ -133,7 +133,7 @@
 
 
             <script>
-                const questionType = <%- JSON.stringify(tipo) %>;
+                window.questionType = <%- JSON.stringify(tipo) %>;
                 const Topicos = <%- JSON.stringify(topicos || []) %>;
                 initializeQuestionEditors(questionType);
 
