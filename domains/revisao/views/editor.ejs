@@ -109,6 +109,7 @@
         const ContentManager = (() => {
             let editorContent = '';
             const Material = <%- JSON.stringify(Material || {}) %>;
+            const PalavrasChave = <%- JSON.stringify(typeof palavrasChave !== 'undefined' ? palavrasChave : []) %>;
 
             const handleEditorChange = (event) => {
                 if (event?.detail?.content != null) {
@@ -130,11 +131,16 @@
         // Server-side data passed to client
         window.Assunto = <%- JSON.stringify(Assuntos || []) %>;
         window.PalavrasChave = <%- JSON.stringify(typeof palavrasChave !== 'undefined' ? palavrasChave : []) %>;
+        const assunto = <%- JSON.stringify(assunto || {}) %>;
+        const palavraChave =<%- JSON.stringify(Material.PalavraChave || {}) %>;
         window.Material = window.ContentManager.getMaterial();
         window.MaterialExterno = <%- JSON.stringify(typeof MaterialExterno !== 'undefined' ? MaterialExterno : []) %>;
 
         // MODE: if backend did not provide, infer from Material presence
         window.MODE = window.Material && window.Material.id_conteudo ? 'edit' : 'create';
+       
+           
+        
     </script>
 
     <script src="/revisao/js/editor_material.js"></script>

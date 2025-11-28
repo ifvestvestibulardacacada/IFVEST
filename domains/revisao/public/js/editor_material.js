@@ -6,9 +6,11 @@
   const addBtn = document.getElementById('addKeywordBtn');
 
   // Initialize tags from server-provided Material.PalavraChave (array of strings)
-  const tags = Array.isArray(window.Material && window.Material.PalavraChave) ? [...window.Material.PalavraChave] : [];
+  const tags = Array.isArray(palavraChave) ? [...palavraChave] : [];
+
   // expose for external handlers
   window.editorTags = tags;
+
 
   // populate datalist
   (window.PalavrasChave || []).forEach(p => {
