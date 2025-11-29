@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
 
   }
   Placar.init({
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true
+    },
     nome: DataTypes.STRING,
     acertos: DataTypes.INTEGER,
     total_questoes: {

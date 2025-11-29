@@ -3,19 +3,24 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Placar', {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+      },
       nome: {
         allowNull: false,
         autoIncrement: true,
-        primaryKey: true,
         type: Sequelize.INTEGER
       },
-      acertos:{
+      acertos: {
         type: Sequelize.INTEGER
       },
-      total_questoes:{
+      total_questoes: {
         type: Sequelize.INTEGER,
       },
-      porcentagem:{
+      porcentagem: {
         type: Sequelize.FLOAT
       },
       createdAt: {
