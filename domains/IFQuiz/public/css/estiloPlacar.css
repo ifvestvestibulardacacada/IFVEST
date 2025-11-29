@@ -56,7 +56,7 @@ p {
 }
 
 #lista-placares {
-    list-style-type: none; 
+    list-style-type: none;
     padding: 0;
     margin: 0;
 }
@@ -86,13 +86,14 @@ p {
 #lista-placares li:hover {
     background-color: #fff;
     transform: scale(1.01);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 #lista-placares li:nth-child(1) {
     background-color: var(--cor-ouro-fundo);
     border: 2px solid var(--cor-ouro-borda);
 }
+
 #lista-placares li:nth-child(1) .ranking {
     color: var(--cor-ouro-borda);
 }
@@ -101,6 +102,7 @@ p {
     background-color: var(--cor-prata-fundo);
     border: 2px solid var(--cor-prata-borda);
 }
+
 #lista-placares li:nth-child(2) .ranking {
     color: var(--cor-prata-borda);
 }
@@ -109,25 +111,34 @@ p {
     background-color: var(--cor-bronze-fundo);
     border: 2px solid var(--cor-bronze-borda);
 }
+
 #lista-placares li:nth-child(3) .ranking {
     color: var(--cor-bronze-borda);
 }
 
-#lista-placares li:nth-child(1) .ranking::before { content: '🥇 '; }
-#lista-placares li:nth-child(2) .ranking::before { content: '🥈 '; }
-#lista-placares li:nth-child(3) .ranking::before { content: '🥉 '; }
+#lista-placares li:nth-child(1) .ranking::before {
+    content: '🥇 ';
+}
+
+#lista-placares li:nth-child(2) .ranking::before {
+    content: '🥈 ';
+}
+
+#lista-placares li:nth-child(3) .ranking::before {
+    content: '🥉 ';
+}
 
 
 .ranking {
     font-size: 1.3em;
     font-weight: 700;
     color: var(--cor-enem-azul);
-    min-width: 60px; 
-    flex-shrink: 0; 
+    min-width: 60px;
+    flex-shrink: 0;
 }
 
 .infoPlacar {
-    flex-grow: 1; 
+    flex-grow: 1;
     margin: 0 15px;
     text-align: left;
 }
@@ -149,7 +160,7 @@ p {
     font-weight: 700;
     color: var(--cor-texto-principal);
     text-align: right;
-    flex-shrink: 0; 
+    flex-shrink: 0;
 }
 
 .botaoQuiz {
@@ -169,4 +180,119 @@ p {
 
 .botaoQuiz:hover {
     background-color: var(--cor-enem-azul-escuro);
+}
+
+.btn-link {
+    display: inline-block;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-link:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.btn-azul {
+    background-color: #0072ce;
+    color: #ffffff;
+}
+
+.btn-azul:hover {
+    background-color: #005aA9;
+    box-shadow: 0 6px 10px rgba(0, 114, 206, 0.3);
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: #0072ce;
+    border: 2px solid #0072ce;
+    box-shadow: none;
+}
+
+.btn-outline:hover {
+    background-color: #0072ce;
+    color: #ffffff;
+}
+
+.btn-cinza {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-cinza:hover {
+    background-color: #545b62;
+}
+
+@media (max-width: 480px) {
+    .btn-link {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+.btn-cinza {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-cinza:hover {
+    background-color: #545b62;
+}
+
+
+@media (max-width: 560px) {
+
+    .container {
+        padding: 15px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    #lista-placares li {
+        padding: 10px;
+        gap: 5x;
+        flex-wrap: wrap;
+    }
+
+    .ranking {
+        min-width: auto;
+        font-size: 1.1em;
+        margin-right: 0;
+    }
+
+    .infoPlacar {
+        margin: 0;
+        flex-grow: 1;
+        overflow: hidden;
+    }
+
+    .infoPlacar strong {
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .infoPlacar small {
+        font-size: 0.75rem;
+        display: block;
+        margin-top: 2px;
+    }
+
+    .pontuacao {
+        font-size: 0.9rem;
+        text-align: right;
+        min-width: 70px;
+
+    }
 }

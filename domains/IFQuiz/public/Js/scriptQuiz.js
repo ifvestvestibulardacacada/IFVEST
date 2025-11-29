@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             porcentagem: parseFloat(porcentagem)
         };
 
-        const response = await fetch('/quiz/api/placar', {
+        const response = await fetch('/quiz/api/Placar', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -21,6 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     acertos: DataTypes.INTEGER,
     total_questoes: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 10 // Isso garante que nunca dê erro, mesmo se esquecer de enviar
     },
     porcentagem: DataTypes.FLOAT,
   }, {

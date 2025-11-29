@@ -3,7 +3,7 @@ const db = require('../../../models');
 const Placar = db.Placar || db.Placar;
 
 
-router.get('/placar', async (req, res) => {
+router.get('/Placar', async (req, res) => {
     if (!Placar) {
         return res.status(500).json({ error: "Erro interno: Model Placar não carregado." });
     }
@@ -23,9 +23,9 @@ router.get('/placar', async (req, res) => {
     }
 });
 
-router.post('/placar', async (req, res) => {
+router.post('/Placar', async (req, res) => {
     try {
-        let { nome, acertos, totalQuestoes, porcentagem } = req.body;
+        let { nome, acertos, total_questoes, porcentagem } = req.body;
         if (!nome) {
             if (req.session && req.session.nomeUsuario) {
                 nome = req.session.nomeUsuario;
@@ -43,7 +43,7 @@ router.post('/placar', async (req, res) => {
         const novoPlacar = await Placar.create({
             nome,
             acertos,
-            totalQuestoes,
+            total_questoes,
             porcentagem
         });
 
