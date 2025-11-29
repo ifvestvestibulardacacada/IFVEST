@@ -6,9 +6,11 @@
   const addBtn = document.getElementById('addKeywordBtn');
 
   // Initialize tags from server-provided Material.PalavraChave (array of strings)
-  const tags = Array.isArray(window.Material && window.Material.PalavraChave) ? [...window.Material.PalavraChave] : [];
+  const tags = Array.isArray(palavraChave) ? [...palavraChave] : [];
+
   // expose for external handlers
   window.editorTags = tags;
+
 
   // populate datalist
   (window.PalavrasChave || []).forEach(p => {
@@ -68,34 +70,7 @@
   window.addKeyword = addKeyword;
 
   // Editor content handling via localStorage
-  try {
-    if (window.MODE === 'edit' && window.Material && window.Material.conteudo_markdown) {
-      localStorage.setItem('EditorContent', window.Material.conteudo_markdown);
-      console.log('EditorContent set from Material.conteudo_markdown');
-    } else {
-      localStorage.removeItem('EditorContent');
-      console.log('EditorContent removed for create mode');
-    }
-  } catch (e) {
-    console.warn('localStorage unavailable', e);
-  }
-
-  // Clear EditorContent on beforeunload to avoid leaking content when leaving
-  window.addEventListener('beforeunload', () => {
-    try {
-      localStorage.removeItem('EditorContent');
-    } catch (e) {}
-  });
-
-  // If clicking an external anchor, also remove EditorContent
-  document.addEventListener('click', (event) => {
-    try {
-      const target = event.target.closest('a');
-      if (target && target.href && !target.href.startsWith(window.location.href)) {
-        localStorage.removeItem('EditorContent');
-      }
-    } catch (e) {}
-  });
+  
 
   // initial render
   renderTags();

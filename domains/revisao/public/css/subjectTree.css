@@ -120,6 +120,7 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background-color: #218838;
+<<<<<<< HEAD
 }
 
 ul li.expanded ul {
@@ -140,4 +141,6 @@ ul li.expanded ul li.expanded ul li.expanded ul li.expanded ul {
 
 ul li.expanded ul li.expanded ul li.expanded ul li.expanded ul li.expanded ul {
     border-left: 3px solid #4c49ea
+=======
+>>>>>>> c2b1a297a7ca1627fac34e86664fee294b5ee6e8
 }

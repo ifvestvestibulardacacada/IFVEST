@@ -1,194 +1,260 @@
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Times New Roman', Times, serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
     margin: 0;
-    padding: 2rem;
-    background-color: #f5f5f5;
+    padding: 0;
 }
 
-main {
-    max-width: 900px;
-    margin: auto;
-    background: #fff;
-    padding: 2rem;
+.header, #navbar {
+    display: none;
+}
+
+.page-container {
+    max-width: 1100px !important;
+    margin: 20px auto !important;
+    padding: 40px !important;
+    background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    overflow-wrap: break-word;
-    word-wrap: break-word;
 }
 
-
-.title-div h1 {
-    font-size: 40px;
+/* --- Controles (Botões) --- */
+.controls {
     text-align: center;
-    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #eee;
 }
 
-/* Organização das questões em duas colunas */
-.questoes-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    /* Mantém duas colunas */
-    gap: 1.5rem;
-    /* Reduz o espaçamento entre as colunas */
+.controls button {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
 }
 
-
-/* Ajuste das margens para compactar */
-.name-div {
-    margin-bottom: 1rem;
-    /* Reduz o espaçamento inferior */
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #ccc;
+.controls button:hover {
+    background-color: #0056b3;
 }
 
+/* --- Cabeçalho do Simulado --- */
+.exam-header {
+    text-align: center;
+    border-bottom: 3px double #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
 
-/* Justificação do texto nas perguntas */
-.titulo p {
+.exam-header h1 {
+    font-family: 'Helvetica', Arial, sans-serif;
+    font-size: 2.5em;
+    margin: 0;
+}
+
+.exam-header p {
+    font-size: 1.1em;
+    font-style: italic;
+    margin: 5px 0;
+}
+
+/* --- O LAYOUT DE COLUNAS --- */
+.content-area {
+    margin: 0 !important;
+    padding: 0 !important;
+    column-count: 2;
+    column-gap: 40px;
+    column-rule: 1px solid #eee;
     text-align: justify;
 }
 
-
-.name {
-    font-size: 12px;
-    text-align: justify;
-    /* Justificar o texto */
-}
-
-/* Ajuste no layout das opções */
-.opcao {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.8rem;
-    /* Reduz espaço entre as opções */
-    text-align: justify;
-}
-
-.letra {
+/* --- Estilos das Questões --- */
+.section-title {
+    font-family: 'Helvetica', Arial, sans-serif;
+    font-size: 1.5em;
     font-weight: bold;
-    margin-right: 8px;
-    font-size: 12px;
-    /* Reduz o tamanho das letras das opções */
+    text-align: center;
+    background: #eee;
+    padding: 5px;
+    margin-top: 10px;
+    break-after: avoid-column;
 }
 
-.radio-input {
-    margin-right: 8px;
-    /* Reduz o espaço entre o rádio e o texto */
+.question {
+    margin-bottom: 25px;
 }
 
-
-.opcao-texto {
-    font-size: 12px;
-    color: #333;
-    text-align: justify;
+.question-text {
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-/* Ajuste no textarea */
-textarea {
-    width: 100%;
-    height: 100px;
-    /* Diminui a altura para caber mais conteúdo */
-    margin-top: 0.5rem;
-    padding: 8px;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: justify;
+.question-body {
+    font-weight: normal;
+    margin-top: 10px;
 }
 
-
-/* Ajuste nos botões */
-.button1,
-.button2 {
-    width: 50%;
-    padding: 8px;
-    /* Reduz o padding para compactar */
-    font-size: 1rem;
-    /* Reduz o tamanho do texto dos botões */
-    border-radius: 5px;
-    cursor: pointer;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    margin-top: 20px;
-}
-
-.button1:hover {
-    background-color: #45a049;
-}
-
-.button2:hover {
-    background-color: #ff0000;
-}
-
-/* Imagens ajustadas para o tamanho do contêiner */
-img {
+.question-body img {
     max-width: 100%;
-    /* Garante que a imagem não ultrapasse o limite */
     height: auto;
+    display: block;
+    margin: 10px 0;
+    border: 1px solid #ccc;
 }
 
-.button {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 8px 12px;
-    border-radius: 5px;
-    border: 1px solid black;
-    color: black;
-    cursor: pointer;
-
+.alternatives {
+    list-style-type: upper-alpha;
+    padding-left: 20px;
+    margin: 10px 0 0 0;
+    break-inside: avoid;
+    page-break-inside: avoid;
 }
 
-
-main,
-.questoes-container,
-.form {
-    display: block !important;
-    overflow: visible !important;
-    height: auto !important;
+.alternatives li {
+    margin-bottom: 8px;
 }
 
-/* Garante que o container do Quill não limite a altura */
-.ql-container,
-.ql-editor {
-    height: auto !important;
-    overflow: visible !important;
+/* --- NOVO: Estilos Específicos para Dissertativas (Linhas e Gabarito) --- */
+.essay-container {
+    margin-top: 10px;
+    width: 100%;
+    /* Garante que o bloco de linhas não quebre no meio da coluna */
+    break-inside: avoid; 
+    page-break-inside: avoid;
 }
 
-/* Mantém a regra principal para evitar quebra DENTRO da questão */
-.questao-wrapper {
-    /* Use o .name-div se não tiver criado o wrapper */
-    page-break-inside: avoid !important;
-    margin-top: 20px;
-    /* Adiciona um espaço para visualmente separar as questões */
+.essay-answer {
+    display: none; /* Oculto por padrão */
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f0f8ff;
+    border: 1px dashed #007bff;
+    color: #333;
+    font-size: 0.9em;
+    border-radius: 4px;
 }
 
-    /* ... seus outros estilos ... */
+.essay-answer strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #0056b3;
+}
 
-    /* Abordagem 1 (essencial) */
-    #questionario * {
-        box-sizing: border-box;
+.lines-paper {
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    margin-top: 5px;
+}
+
+.lines-paper .line {
+    height: 30px; /* Altura da pauta */
+    border-bottom: 1px solid #000;
+    width: 100%;
+}
+
+.lines-paper .line:last-child {
+    border-bottom: none;
+}
+
+/* --- Estilos do Gabarito (Toggable com JS) --- */
+
+/* Lógica para Objetivas */
+.alternatives li[data-answer="true"] {
+    transition: all 0.3s ease;
+}
+
+.show-answers .alternatives li[data-answer="true"] {
+    background-color: #c8e6c9;
+    font-weight: bold;
+    border-left: 3px solid #4CAF50;
+    padding-left: 5px;
+}
+
+/* NOVO: Lógica para Dissertativas (Mostrar ao clicar no botão) */
+.show-answers .essay-answer {
+    display: block;
+}
+
+/* --- CONFIGURAÇÕES DE IMPRESSÃO --- */
+/* --- CONFIGURAÇÕES DE IMPRESSÃO --- */
+@media print {
+    /* 1. Reseta HTML e BODY para garantir que não haja espaço extra */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: 100%;
+        width: 100%;
+        background-color: #fff;
+        font-family: 'Georgia', serif;
+        color: #000;
     }
 
-    /* Abordagem 2 (para conteúdo específico) */
-    #questionario img {
-        max-width: 100% !important; /* Garante que imagens nunca ultrapassem o container */
-        height: auto !important;
-    }
-
-    #questionario pre, #questionario code {
-        white-space: pre-wrap !important;       /* Permite a quebra de linha em blocos de código */
-        word-break: break-all !important;      /* Força a quebra de palavras/linhas muito longas */
-    }
-
-    #questionario table {
-        table-layout: fixed !important;        /* Impede que o conteúdo da tabela defina sua largura */
+    /* 2. Força o container a não ter margem NENHUMA */
+    .page-container {
         width: 100% !important;
+        max-width: 100% !important;
+        
+        /* O segredo está aqui: o !important para vencer o CSS da tela */
+        margin: 0 !important; 
+        padding: 0 !important;
+        
+        box-shadow: none; 
+        border: none;
+    }
+
+    /* 3. Garante que o cabeçalho "cole" no topo da folha */
+    .exam-header {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+        border-bottom: 2px solid #000;
+        break-inside: avoid; /* Evita que o cabeçalho quebre no meio */
+    }
+
+    .exam-header h1 {
+        margin-top: 0 !important; /* Remove margem padrão do H1 */
+    }
+
+    /* Esconde os controles */
+    .controls, .header, #navbar {
+        display: none !important; 
+    }
+
+    /* Configuração das Colunas */
+    .content-area {
+        column-fill: auto;
+        column-count: 2;
+        column-gap: 30px;
+        column-rule: 1px solid #ccc;
+        font-size: 11pt; 
+        margin-top: 10px !important; /* Pequeno espaço entre cabeçalho e questões */
+    }
+
+    /* Limpezas visuais (já feitas anteriormente) */
+    .alternatives li[data-answer="true"] {
+        background-color: transparent !important;
+        font-weight: normal !important;
+        border-left: none !important;
+        padding-left: 0 !important;
+    }
+
+    .essay-answer {
+        display: none !important;
+    }
+
+    .lines-paper .line {
+        border-bottom: 1px solid #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
     
-    #questionario p, #questionario div, #questionario li {
-        word-wrap: break-word !important; /* Quebra palavras muito longas que podem vazar */
+    .lines-paper {
+        border: 1px solid #999 !important;
     }
-
-    .pdf-page-break {
-        page-break-before: always !important;
-    }
+}

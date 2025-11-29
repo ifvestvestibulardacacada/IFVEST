@@ -2,10 +2,8 @@ const { Area, Topico, Questao, Opcao } = require('../../../models');
 
 
 module.exports = async (req, res) => {
-            const { id } = req.params;
-            const perfilUsuario = req.session.perfil;
-            const nomeUsuario = req.session.nomeUsuario;
-            const imagemPerfil = req.session.imagemPerfil;
+          const { id } = req.params;
+         
 
             try {
 
@@ -27,16 +25,12 @@ module.exports = async (req, res) => {
                         as: 'Topico'
                     }]
                 });
-                const Topicos = await Topico.findAll(
-                    {
-                        where: {
-                            id_area: questao.id_area
-                        }
-                    }
+                const topicos = await Topico.findAll(
+        
                 )
 
 
-                if (!questao || !Topicos || !Areas) {
+                if (!questao || !topicos || !Areas) {
                     return res.status(400).send('Dados não encontrados');
                 }
 
@@ -62,7 +56,7 @@ module.exports = async (req, res) => {
                 req.session.errorMessage = null;
 
                 // res.send(JSON.stringify(questao))
-                res.render('professor/editar_questao', { questao, Topicos, Areas, errorMessage, Opcoes, correta, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('professor/editar_questao', { questao, topicos,tipo: questao.tipo, Areas, errorMessage, Opcoes, correta, });
             } catch (error) {
                 console.error(error);
                 res.status(500).send('Erro ao buscar questão');

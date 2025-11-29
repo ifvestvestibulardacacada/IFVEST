@@ -3,9 +3,7 @@ const { Simulado, Questao, Opcao } = require('../../../models');
 
 module.exports = async (req, res) => {
             try {
-                const perfilUsuario = req.session.perfil;
-                const nomeUsuario = req.session.nomeUsuario;
-                const imagemPerfil = req.session.imagemPerfil;
+            
                 const simuladoId = req.params.simuladoId;
                 let errorMessage = req.session.errorMessage;
 
@@ -30,7 +28,7 @@ module.exports = async (req, res) => {
 
 
 
-                res.render('prova/prova', { simulado, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+                res.render('prova/prova', { simulado, errorMessage, });
                 //  res.send(simulado)
             } catch (error) {
                 console.error('Erro ao buscar perguntas da prova:', error);

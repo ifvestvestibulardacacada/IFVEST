@@ -1,9 +1,7 @@
 const { Area, Topico, Questao } = require('../../../models');
 
 module.exports = async (req, res) => {
-            const perfilUsuario = req.session.perfil;
-            const nomeUsuario = req.session.nomeUsuario;
-            const imagemPerfil = req.session.imagemPerfil;
+
             const topicos = await Topico.findAll();
             const Areas = await Area.findAll({
                 include: [{
@@ -28,5 +26,5 @@ module.exports = async (req, res) => {
 
             req.session.errorMessage = null;
 
-            res.render('simulado/criar_simulado', { topicos, Areas, questoes, errorMessage, nomeUsuario, perfilUsuario, imagemPerfil });
+            res.render('simulado/criar_simulado', { topicos, Areas, questoes, errorMessage });
         }

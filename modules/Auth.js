@@ -56,7 +56,7 @@ class Auth {
                     else resolve();
                 });
             });
-            return res.redirect(req.get("Referrer") || "/");
+            return res.redirect("/login");
         }
     }
 
@@ -115,9 +115,18 @@ class Auth {
         if (!nome || !usuario || !senha || !email || !perfil) {
             throw new Error("Dados Invalidos ou Incompletos")
         }
+        
         const senhaCriptografada = await bcrypt.hash(senha, 10);
 
         try {
+            const usuarioExistente = await Usuario.findOne({
+                where: { usuario: usuario }
+            })  
+
+            if (usuarioExistente) {
+                throw new Error("Nome de usuario ja existe, escolha outro")
+            }
+
             await Usuario.create({ nome, usuario, senha: senhaCriptografada, email, tipo_perfil: perfil });
 
             res.status(201).redirect('/login');

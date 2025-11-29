@@ -1,173 +1,203 @@
+
 <!DOCTYPE html>
-<html lang="pt-br"> <!--  Definido idioma da página para leitores de tela -->
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>IFVest - Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"> <!--  Responsividade garantida -->
-  
-  <!--  Fontes e estilos mantidos -->
-  <link rel="stylesheet" href="/css/libs/bootstrap.min.css">
+
+  <!-- Bootstrap 5.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-  <link rel="stylesheet" href="/css/usuario/inicioComeco.css">
 
-  <!--  Scripts mantidos -->
-  <script src="/js/libs/jquery.min.js"></script>
-  <script src="/js/libs/bootstrap.min.js"></script>
-  <script defer src="/js/home/inicio.js"></script>
+  <!-- Seu CSS -->
+  <link rel="stylesheet" href="/css/usuario/inicioComeco.css">
 </head>
 
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-  <!--  Adicionado <header> para estrutura semântica -->
-  <header>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" aria-label="Menu principal">
-      <div class="container">
-        <div class="navbar-header">
-          <!--  Adicionado aria-label ao botão para acessibilidade -->
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar" aria-label="Abrir menu de navegação">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#myPage">IFVest</a>
+  <script>
+
+</script>
+
+<body id="myPage" data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="60">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#myPage">IFVest</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#myNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#sobre">Sobre</a></li>
+          <li class="nav-item"><a class="nav-link" href="#informacoes">Informações</a></li>
+          <li class="nav-item"><a class="nav-link" href="#noticias">Notícias</a></li>
+          <li class="nav-item"><a class="nav-link" href="/login">Login/Cadastro</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Jumbotron -->
+  <div class="jumbotron text-center">
+    <h1>IFVest</h1>
+    <p>"Tudo o que um sonho precisa para ser realizado é alguém que acredite que ele possa ser realizado."<br>Roberto Shinyashiki</p>
+  </div>
+
+  <!-- Carousel -->
+  <div class="container-fluid text-center">
+    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></button>
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1"></button>
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2"></button>
+      </div>
+
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="/img/ifBaner.webp" class="center" alt="IFSP Banner" style="max-width: 420px; height: auto;">
         </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#sobre">Sobre</a></li>
-            <li><a href="#Informacoes">Informações</a></li>
-            <li class="active"><a href="#Noticias">Notícias</a></li>
-            <li><a href="/login">Login/Cadastro</a></li>
-          </ul>
+        <div class="carousel-item">
+          <img src="/img/ifBaner.webp" class="center" alt="IFSP Banner" style="max-width: 420px; height: auto;">
+        </div>
+        <div class="carousel-item">
+          <img src="/img/ifBaner.webp" class="center" alt="IFSP Banner" style="max-width: 420px; height: auto;">
         </div>
       </div>
-    </nav>
-  </header>
 
-  <!--  Adicionado <main> para delimitar conteúdo principal -->
-  <main>
-    <section class="jumbotron text-center">
-      <h1>IFVest</h1>
-      <p>
-        "Tudo o que um sonho precisa para ser realizado é alguém que acredite que ele possa ser realizado."
-        <br>– Roberto Shinyashiki
-      </p>
-    </section>
+      <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+      </button>
+    </div>
+  </div>
 
-    <!--  Adicionado aria-label para descrever o carrossel -->
-    <section class="container-fluid text-center" aria-label="Carrossel institucional">
-      <div id="myCarousel" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#myCarousel" data-slide-to="0"></li>
-          <li data-target="#myCarousel" data-slide-to="1" class="active"></li>
-          <li data-target="#myCarousel" data-slide-to="2"></li>
-        </ol>
-        <div class="carousel-inner">
-          <!--  Adicionado alt nas imagens do carrossel -->
-          <div class="item">
-            <img src="/img/ifBaner.webp" alt="Banner institucional IFSP" width="420" height="300">
-          </div>
-          <div class="item">
-            <img src="/img/ifBaner.webp" alt="Banner institucional IFSP" width="420" height="300">
-          </div>
-          <div class="item active">
-            <img src="/img/ifBaner.webp" alt="Banner institucional IFSP" width="420" height="300">
-          </div>
-        </div>
-        <!--  Mantido sr-only para acessibilidade nos controles -->
-        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-          <span class="sr-only">Anterior</span>
-        </a>
-        <a class="right carousel-control" href="#myCarousel" data-slide="next">
-          <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-          <span class="sr-only">Próximo</span>
-        </a>
+  <!-- Sobre -->
+  <section id="sobre" class="container-fluid bg-roxo-escuro py-5">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <h2>Sobre o IFVest</h2>
+        <h4>Plataforma gratuita de preparação para vestibulares</h4>
+        <p>Com o objetivo de auxiliar o aluno no processo de aprendizagem, seja como revisão ou ambiente de estudo com conteúdo de qualidade sobre os principais temas cobrados nos vestibulares.</p>
       </div>
-    </section>
-
-    <section id="sobre" class="container-fluid bg-roxo-escuro">
-      <div class="row">
-        <div class="col-sm-8">
-          <h2>Sobre o IFVest</h2>
-          <!--  Corrigido níveis de titulo: h3 em vez de h4 -->
-          <h3>Plataforma gratuita de preparação para vestibulares</h3>
-          <p>
-            O IFVest é uma plataforma que auxilia alunos no processo de aprendizagem, oferecendo conteúdo de qualidade para revisão e estudo dos principais temas cobrados nos vestibulares.
-          </p>
-        </div>
-        <div class="col-sm-4">
-          <!-- Adicionado aria-hidden para ícone decorativo -->
-          <span class="glyphicon glyphicon-book logo1 slideanim slide" aria-hidden="true"></span>
-        </div>
+      <div class="col-md-4 text-center">
+        <i class="bi bi-book logo1 slideanim"></i>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="Informacoes" class="container-fluid black">
-      <div class="row">
-        <div class="col-sm-4">
-          <span class="glyphicon glyphicon-globe logo slideanim slide" aria-hidden="true"></span>
-        </div>
-        <div class="col-sm-8">
-          <h2>Informações</h2>
-          <p><strong>A plataforma é paga?</strong> Não, ela é completamente gratuita.</p>
-          <!--  Corrigido link genérico "aqui" -->
-          <p><strong>Como faço para participar?</strong> Basta <a href="/cadastro">clicar aqui para se cadastrar</a> ou usar a opção "Cadastrar" no menu.</p>
-          <p><strong>Tenho dúvidas, o que faço?</strong> Nos mande um e-mail. Estamos à disposição para ajudar!</p>
-          
-          <!--  Adicionado label ao campo de e-mail -->
-          <form>
-            <label for="duvida-email">Escreva sua dúvida:</label>
-            <div class="input-group">
-              <input type="email" id="duvida-email" class="form-control" size="50" placeholder="Escreva sua dúvida aqui" required>
-              <div class="input-group-btn">
-                <button type="submit" class="btn btn-danger">Enviar</button>
-              </div>
-            </div>
-          </form>
-        </div>
+  <!-- Informações -->
+  <section id="informacoes" class="container-fluid py-5">
+    <div class="row align-items-center">
+      <div class="col-md-4 text-center">
+        <i class="bi bi-globe logo slideanim"></i>
       </div>
-    </section>
+      <div class="col-md-8">
+        <h2>Informações</h2>
+        <p><strong>A Plataforma é paga?</strong> Não, ela é completamente gratuita.</p>
+        <p><strong>Como faço para fazer parte?</strong> Clique <a href="/login">aqui</a> ou no menu "Login/Cadastro".</p>
+        <p><strong>Ainda tenho dúvidas?</strong> Envie um e-mail que te ajudaremos com prazer.</p>
+        <form class="mt-3">
+          <div class="input-group">
+            <input type="email" class="form-control" placeholder="Escreva sua dúvida aqui" required>
+            <button type="submit" class="btn btn-danger">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
 
-    <section id="Noticias" class="container-fluid text-center bg-grey black">
-      <h2>Notícias</h2>
-      <h3>Notícias mais recentes</h3>
-      <div class="row text-center slideanim slide">
-        <div class="col-sm-4">
-          <div class="thumbnail">
-            <!--  Adicionado alt na imagem -->
-            <img src="/img/MVP-4.jpg" alt="Ex-aluna do IFSP recebe título UiPath MVP" width="400" height="300">
-            <p><strong>Ex-aluna do IFSP é primeira mulher da América Latina a receber o título UiPath MVP</strong></p>
-            <p>Premiação reconhece os profissionais mais valiosos do mundo na área de RPA.</p>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="thumbnail">
-            <img src="/img/Consup_Destaque.png" alt=" Informações eleições Consup 2023" width="400" height="300">
-            <p><strong>Eleições Consup 2023: veja a lista de servidores aptos a votar</strong></p>
-            <p>Consulte o site da sua unidade para verificar os servidores aptos à votação.</p>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="thumbnail">
-            <img src="/img/if4.jpeg" alt="Estudantes do IFSP premiados na Febrace" width="400" height="300">
-            <p><strong>Estudantes do IFSP são premiados na Febrace</strong></p>
-            <p>Projeto de alunas do Câmpus Suzano conquistou o 1º lugar em Ciências da Saúde.</p>
+  <!-- Notícias -->
+<!-- NOTÍCIAS AUTOMÁTICAS DO CÂMPUS JACAREÍ -->
+<section id="noticias" class="container-fluid bg-grey py-5 text-center">
+  <h2>Notícias</h2>
+ <div id="fallback-noticias" class="row ">
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm border-0">
+        <img src="https://jcr.ifsp.edu.br/images/banners/banner_encceja_v2-01.png" class="card-img-top" alt="Informações: Certificado Encceja" style="height: 200px; object-fit: cover;">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Certificado Encceja</h5>
+
+          <div class="mt-auto">
+            <a href="https://ifsp.edu.br/component/content/article/17-ultimas-noticias/1014-encceja-novos-procedimentos-solicitar-a-emissao-do-certificado" target="_blank" class="btn btn-sm btn-outline-success">Ler mais</a>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm border-0">
+        <img src="https://jcr.ifsp.edu.br/images/Banner_Vivncia.png" class="card-img-top" alt="Produções Bibliográficas dos Servidores do IFSP Campus Jacareí" style="height: 200px; object-fit: cover;">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">Produções Bibliográficas dos Servidores do IFSP Campus Jacareí</h5>
+          <p class="card-text text-muted small">Acesse a plataforma de publicações</p>
+          <p class="card-text flex-grow-1">Confira as produções acadêmicas dos servidores.</p>
+          <div class="mt-auto">
+            <a href="https://jcr.ifsp.edu.br/index.php/publicacoes" target="_blank" class="btn btn-sm btn-outline-success">Ler mais</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm border-0">
+        <img src="https://jcr.ifsp.edu.br/images/chamadas/Breaking_News_1.png" class="card-img-top" alt="Notícias no WhatsApp - Divulgação de Projeto de Ensino" style="height: 200px; object-fit: cover;">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">WhatsApp</h5>
+          <p class="card-text text-muted small">Notícias no WhatsApp - Divulgação de Projeto de Ensino</p>
+          <p class="card-text flex-grow-1">Assim, convidamos vocês a acompanhar as notícias do campus nas redes sociais: WhatsApp, Telegram, X (antigo Twitter) e Discord.</p>
+          <div class="mt-auto">
+            <a href="https://linktr.ee/noticiasifspjcr" target="_blank" class="btn btn-sm btn-outline-success">Ler mais</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <section class="container-fluid bg-grey black">
-      <div class="row">
-        <div class="col-sm-8">
-          <h2>Vestibulares</h2>
-          <h3>Datas e informações</h3>
-          <p>
-            <strong>Inscrições:</strong><br>
-            02/08 - 08/09 - UNICAMP<br>
-            16/08 - 01/10 - USP<br><br>
-            <strong>Provas:</strong><br>
-            Data de prova - Instituição<br
+</section>
+  <!-- Vestibulares -->
+  <section id="vestibulares" class="container-fluid bg-grey py-5">
+    <div class="row align-items-center">
+      <div class="col-md-12
+      ">
+        <h2>Vestibulares</h2>
+    
+      
+        <div class="card h-100 shadow-sm border-0">
+            <img src="https://ifsp.edu.br/images/2025/ps2026/landing_page/id-ps2026.png" alt="Processo Seletivo 2026!! - INSCRIÇÕES PRORROGADAS" class="card-img-top"  style="height: 300px; object-fit: cover;">
+      
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title">Processo seletivo 2026</h5>
+          <p class="card-text text-muted small">O IFSP oferece 7.402 vagas no processo seletivo para ingresso</p>
+          <p class="card-text flex-grow-1">Para conferir todas as informações sobre o Processo Seletivo 2026 leia o Edital nº 211/2025  </p>          <div class="mt-auto">
+            <a href="https://www.ifsp.edu.br/ps2026" target="_blank" class="btn btn-sm btn-outline-success">Ler mais</a>
+          </div>
+        </div>
+   
+    </div>
+  </section>
 
+  <!-- Footer -->
+  <footer class="bg-roxo-escuro text-center text-white py-4">
+    <p class="mb-2">
+      Contatos:<br>
+      Email: ifsp@edu.com.br<br>
+      Telefone: (12) 2128-5200<br>
+      R. Antônio Fogaça de Almeida, 200 - Jardim América, Jacareí - SP
+    </p>
+    <div class="rodape py-3">
+      <a href="https://goinfinite.net/">
+        <img src="/img/infinite_logo.png" alt="Infinite Logo" style="width: 150px; height: auto;">
+      </a>
+    </div>
+  </footer>
 
-
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script defer src="/js/home/inicio.js"></script>
+</body>
+</html>

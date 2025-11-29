@@ -54,7 +54,16 @@
                         <i class='bx bx-book-heart nav__icon'></i>
                         <span class="nav__name">Simulado</span>
                     </a>
-                    
+
+                    <a href="/quiz" class="nav__link 
+                        <% if (currentPage==='quiz'){%>
+                        active
+                        <%}%>
+                        ">
+                        <i class='bx  bx-joystick-alt nav__icon'></i> 
+                        <span class="nav__name">IFQuiz</span>
+                    </a>
+
                     <a href="/revisao" class="nav__link 
                     <% if (currentPage==='revisao'){%>
                     active
@@ -62,7 +71,15 @@
                     ">
                     <i class='bx bx-library nav__icon'></i> 
                     <span class="nav__name">Revisão</span>
-                </a>
+                    </a>
+                     <a href="/flashcards" class="nav__link 
+                            <% if (currentPage==='flashcards'){%>
+                            active
+                            <%}%>
+                            ">
+                            <i class='bx bx-card nav__icon'></i>
+                            <span class="nav__name">Flashcards</span>
+                        </a>
                 
                 <% if (perfilUsuario==="PROFESSOR" ) { %>
                     <a href="/shared/assuntos/" class="nav__link 
@@ -70,10 +87,10 @@
                         active
                         <%}%>
                         ">
-                        <i class='bx bx-compass nav__icon'></i>
-                        <span class="nav__name">Editar categorias</span>
-                    </a>
-                    <% } %>
+                            <i class='bx bx-compass nav__icon'></i>
+                            <span class="nav__name">Editar categorias</span>
+                        </a>
+                        <% } %>
                 </div>
             </div>
         </div>

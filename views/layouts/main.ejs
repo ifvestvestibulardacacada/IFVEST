@@ -23,9 +23,13 @@
     <%- include('header') %>
     <%- include('sidebar') %>
     <main class="main">
+    <% if (typeof layoutSemContainer !== 'undefined' && layoutSemContainer) { %>
+        <%- body %>
+    <% } else { %>
         <div class="container">
-            <%- body %>
+          <%- body %>
         </div>
+    <% } %>
     </main>
     <%- include('footer') %>
     

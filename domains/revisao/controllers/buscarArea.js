@@ -1,4 +1,4 @@
-const {Area, Topico} = require('../../../models');
+const {Area} = require('../../../models');
 const Nayahath = require('../../../logs/ArcanaFlow');
 
 module.exports = async (req, res) =>{
@@ -17,13 +17,11 @@ module.exports = async (req, res) =>{
 
             res.locals.currentPage = "revisao"
             
-            const perfilUsuario = req.session.perfil;
-            const nomeUsuario = req.session.nomeUsuario;
-            const imagemPerfil = req.session.imagemPerfil;
+
 
             const listaAreas = await Area.findAll({
                 attributes: ['id_area', 'nome'],
                 order: [['nome', 'ASC']]
             })
-            res.render('buscarArea', { listaAreas, nomeUsuario, perfilUsuario, imagemPerfil })
+            res.render('buscarArea', { listaAreas,  })
         }

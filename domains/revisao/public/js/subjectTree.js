@@ -59,16 +59,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // ---- Inicialização: se estivermos em modo de edição, pré-selecionar o assunto ----
             (function initPreselection() {
                 try {
+                  
                     // Prioriza o valor do input oculto (pode ter sido preenchido por outro script), senão usa window.Material
                     const preId = (selectedIdInput && selectedIdInput.value) ||
-                                  (window.Material && (window.Material.id_assunto || (window.Material.assunto && window.Material.assunto.id_assunto)));
-
+                                  (assunto && (assunto.id_assunto || (assunto.assunto && assunto.assunto.id_assunto)));
+                    console.log('Pré-id detectado:', assunto.id_assunto);
                     if (!preId) return;
-
+ 
                     // localizar o <li> correspondente
                     const li = treeContainer.querySelector(`li[data-id="${preId}"]`);
                     if (!li) return;
-
+ 
                     // remover seleção anterior
                     const currentSelected = treeContainer.querySelector('li.selected');
                     if (currentSelected && currentSelected !== li) {

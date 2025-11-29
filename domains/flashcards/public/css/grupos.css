@@ -1,0 +1,412 @@
+/* ============================================
+   GRUPOS.CSS - Página de Revisão por Grupos
+   Usado em: grupos.ejs
+   ============================================ */
+
+.container {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* --- LAYOUT PRINCIPAL --- */
+.flashcard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  align-items: center;
+}
+
+.flashcard-content.no-groups {
+  align-items: center;
+}
+
+.flashcard-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1000px;
+  gap: 1rem;
+}
+
+/* --- LABEL DE CONTEXTO --- */
+.queue-label {
+  margin: 0.5rem 0 1rem 0;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-left: 4px solid #3b82f6;
+  border-radius: 6px;
+  color: #1f2937;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* --- BOTÃO DE VOLTAR --- */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  margin-bottom: 1.5rem;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+}
+
+.back-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.back-button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* --- OVERRIDE DE OVERFLOW PARA PÁGINA DE GRUPOS --- */
+body.groups-page {
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+/* --- LAYOUT DA PÁGINA DE GRUPOS --- */
+.groups-page .flashcard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+}
+
+.groups-page .flashcard-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: auto;
+  overflow: visible;
+  align-items: center;
+}
+
+/* --- ÁREA DOS GRUPOS --- */
+.groups-page .flashcard-groups {
+  position: static;
+  max-height: none;
+  overflow: visible;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.groups-page .group-heading {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* --- WRAPPER PARA CENTRALIZAÇÃO E SCROLL --- */
+.groups-page .group-scroller {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+}
+
+/* Scrollbar personalizada */
+.groups-page .group-scroller::-webkit-scrollbar {
+  height: 12px;
+}
+
+.groups-page .group-scroller::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.groups-page .group-scroller::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  background-clip: padding-box;
+}
+
+.groups-page .group-scroller::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 999px;
+}
+
+.groups-page .group-scroller {
+  scrollbar-color: #cbd5e1 #f1f5f9;
+  scrollbar-width: thin;
+}
+
+/* --- GRID DE GRUPOS (5 COLUNAS) --- */
+.groups-page .group-list {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(280px, 1fr));
+  gap: 1.25rem;
+  width: max-content;
+  min-width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0.5rem;
+  max-height: none;
+  overflow: visible;
+}
+
+/* --- CARTÃO DE GRUPO --- */
+.groups-page .group-block {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  min-height: 200px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.groups-page .group-block:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.groups-page .group-block.active {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* --- CABEÇALHO DO GRUPO --- */
+.groups-page .group-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.groups-page .group-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.groups-page .group-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 28px;
+  padding: 0 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #1e3a8a;
+  box-shadow: 0 1px 3px rgba(30, 58, 138, 0.15);
+}
+
+/* --- BOTÃO DE AÇÃO --- */
+.groups-page .group-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.25);
+}
+
+.groups-page .group-action:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(59, 130, 246, 0.35);
+}
+
+.groups-page .group-action:active {
+  transform: translateY(0);
+}
+
+.groups-page .group-action.disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+/* --- LISTA DE PRÉVIAS (CHIPS) --- */
+.groups-page .group-cards {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: none;
+  overflow: visible;
+  flex: 1;
+}
+
+.groups-page .group-cards li {
+  display: block;
+  margin: 0;
+}
+
+.groups-page .group-chip,
+.groups-page .group-more {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  transition: all 0.15s ease;
+  
+  /* Multi-line clamp */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+.groups-page .group-chip:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.groups-page .group-more {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+  font-weight: 600;
+  text-align: center;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+
+.groups-page .no-flashcard {
+  display: block;
+  padding: 1rem;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  font-style: italic;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 1536px) {
+  .groups-page .group-list {
+    grid-template-columns: repeat(5, minmax(260px, 1fr));
+  }
+}
+
+@media (max-width: 1280px) {
+  .groups-page .group-list {
+    grid-template-columns: repeat(4, minmax(260px, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .groups-page .group-list {
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+  }
+  
+  .groups-page .group-block {
+    padding: 1.25rem;
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .groups-page .group-list {
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  
+  .groups-page .group-heading {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .groups-page .group-block {
+    padding: 1rem;
+    min-height: 160px;
+  }
+  
+  .groups-page .group-title {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .groups-page .group-list {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+  
+  .groups-page .group-heading {
+    font-size: 1.125rem;
+  }
+  
+  .groups-page .group-block {
+    min-height: auto;
+  }
+  
+  .groups-page .group-chip,
+  .groups-page .group-more {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* --- ACESSIBILIDADE --- */
+.groups-page .group-action:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .groups-page .group-block {
+    transition: none;
+  }
+  
+  .groups-page .group-action {
+    transition: none;
+  }
+}

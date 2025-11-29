@@ -1,30 +1,44 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class TagConteudo extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.Conteudo, {
+        foreignKey: 'id_conteudo',
+        as: 'Conteudo'
+      });
+      this.belongsTo(models.PalavraChave, {
+        foreignKey: 'id_palavrachave',
+        as: 'PalavraChave'
+      });
     }
   }
+
   TagConteudo.init({
     id_tag_conteudo: {
-      type:DataTypes.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
       allowNull: false
     },
     id_conteudo: {
-      type:DataTypes.INTEGER,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Conteudo',
+        key: 'id_conteudo'
+      }
     },
-    id_palavrachave: DataTypes.INTEGER,
-        createdAt: {
+    id_palavrachave: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'PalavraChave',
+        key: 'id_palavrachave'
+      }
+    },
+    createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW
@@ -37,7 +51,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'TagConteudo',
-    tableName: 'TagConteudo'
+    tableName: 'TagConteudo',
+    timestamps: true
   });
+
   return TagConteudo;
 };

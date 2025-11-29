@@ -1,10 +1,19 @@
 const { Area, Assunto, Topico } = require('../../../models');
 
 // Áreas
+async function listarAreasJSON(req, res) {
+    // FORÇA JSON SEMPRE, SÓ PRA TESTAR
+    const areas = await Area.findAll({ order: [['id_area', 'ASC']] });
+    return res.json(areas);
+}
 async function listarAreas(req, res) {
-    const { perfil, nomeUsuario, imagemPerfil} = req.session;
-    const areas = await Area.findAll({ order: [['id_area','ASC']] });
-    return res.render('areas/index', { areas, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
+
+   
+        const areas = await Area.findAll({ order: [['id_area', 'ASC']] });
+
+ 
+
+    return res.render('areas/index', { areas });
 }
 
 async function criarArea(req, res) {
@@ -28,9 +37,9 @@ async function excluirArea(req, res) {
 
 // Assuntos
 async function listarAssuntos(req, res) {
-    const { perfil, nomeUsuario, imagemPerfil} = req.session;
-    const assuntos = await Assunto.findAll({ order: [['id_assunto','ASC']] });
-    return res.render('assuntos/index', { assuntos, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
+   
+    const assuntos = await Assunto.findAll({ order: [['id_assunto', 'ASC']] });
+    return res.render('assuntos/index', { assuntos});
 }
 
 async function criarAssunto(req, res) {
@@ -53,12 +62,14 @@ async function excluirAssunto(req, res) {
 }
 
 // Tópicos
- async function listarTopicos(req, res) {
-     const { perfil, nomeUsuario, imagemPerfil} = req.session;
-     const topicos = await Topico.findAll({ order: [['id_topico','ASC']] });
-     console.log(topicos)
-     return res.render('topicos/index', { topicos, nomeUsuario, perfilUsuario: perfil, imagemPerfil });
- }
+async function listarTopicos(req, res) {
+
+    const topicos = await Topico.findAll({ order: [['id_topico', 'ASC']] });
+    console.log(topicos)
+    return res.render('topicos/index', { topicos });
+}
+
+
 
 // JSON consultas
 async function consultarTopicos(req, res) {
@@ -71,25 +82,44 @@ async function consultarTopicos(req, res) {
         if (id_area) {
             where.id_area = id_area;
         }
-        
+
         const topics = await Topico.findAll({
             attributes: ['id_topico', 'nome'],
             where: where,
             order: [['nome', 'ASC']]
         });
         console.log(topics)
-        res.status(200).json(topics);
+        return res.status(200).json(topics);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: error.message });
     }
 }
 
 async function criarTopico(req, res) {
-    const { nome, id_area, id_usuario } = req.body;
-    await Topico.create({ nome, id_area, id_usuario });
-    return res.redirect('/shared/topicos');
+    const { nome, id_area } = req.body;
+    let id_usuario = req.body.id_usuario;
+    // Supondo que o ID do usuário esteja na sessão
+    if (!id_usuario) {
+        id_usuario = req.session.userId;
+    }
+
+    const topico = await Topico.create({ nome, id_area, id_usuario });
+
+    const referer = req.get('Referer') || req.get('Origin') || '';
+    const host = req.get('host');
+
+    const refererUrl = referer.replace(/^https?:\/\//, '').replace(host, '').split('?')[0];
+
+    if (refererUrl.includes('/professor/registrar-questao')) {
+        return res.status(201).json(topico);
+    }
+
+    return res.redirect('/shared/topicos')
+
 }
+
+
 
 async function editarTopico(req, res) {
     const { id_topico } = req.params;
@@ -106,6 +136,7 @@ async function excluirTopico(req, res) {
 
 module.exports = {
     listarAreas,
+    listarAreasJSON,
     criarArea,
     editarArea,
     excluirArea,
@@ -116,8 +147,8 @@ module.exports = {
     listarTopicos,
     criarTopico,
     editarTopico,
-     excluirTopico,
-     consultarTopicos,
+    excluirTopico,
+    consultarTopicos,
 }
 
 

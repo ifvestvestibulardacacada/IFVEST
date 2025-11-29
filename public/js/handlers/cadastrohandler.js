@@ -28,11 +28,11 @@ document.getElementById('btn-cadastro').addEventListener('click', async (e) => {
             const errorDetails = error.response.data.details;
             // Format error messages for display
             const errorMessages = errorDetails.map(err => `${err.path}: ${err.message}`).join('\n');
-            alert(`Erro ao criar material:\n${errorMessages}`);
+            alert(`Erro ao criar usuario:\n${errorMessages}`);
         } else {
             // Fallback for other errors
             const errorMessage = error.response?.data?.error || 'Tente novamente.';
-            alert(`Erro ao criar material: ${errorMessage}`);
+            alert(`Erro ao criar usuario: ${errorMessage}`);
         }
     }
 });

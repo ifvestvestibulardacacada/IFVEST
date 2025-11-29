@@ -1,41 +1,39 @@
-const { Questao, Opcao } = require('../../../../models');
+const { Questao, Opcao, sequelize } = require('../../../../models');
 
 
 module.exports = async (req, res) => {
-            const {
+         const {
                 titulo,
                 pergunta,
-                areaId,
+                area,
                 correta,
-                topicosSelecionados,
-                respostasSelecionadas
+                topicos,
+                respostas
             } = req.body;
 
-            const tipo = req.params.tipo.toUpperCase()
-
-            let arrayRespostas;
-
+            const tipo = req.params.tipo.toUpperCase();
+            const transaction = await sequelize.transaction();
+            const id_usuario = req.session.userId;
+            const alternativas = ['A', 'B', 'C', 'D', 'E'];
             const MIN_OPCOES = 1;
             const MAX_OPCOES = 5;
 
-            const id_usuario = req.session.userId;
-
-            const alternativas = ['A', 'B', 'C', 'D', 'E'];
-
             try {
-                if (pergunta === undefined || pergunta === null || pergunta.trim() === '' || pergunta === 'undefined') {
-                    throw new Error("Pergunta não pode ser vazio")
+                // Input validations
+                if (!pergunta?.trim()) {
+                    throw new Error("Pergunta não pode ser vazio");
                 }
-
-                if (!respostasSelecionadas) {
-                    throw new Error("Respostas não pode ser vazio")
+                if (!respostas) {
+                    throw new Error("Respostas não pode ser vazio");
                 }
-                if (!topicosSelecionados) {
+                if (!topicos) {
                     throw new Error("Selecione pelo menos um topico");
                 }
 
+                // Parse and validate respostas
+                let arrayRespostas;
                 try {
-                    arrayRespostas = JSON.parse(respostasSelecionadas);
+                    arrayRespostas = JSON.parse(respostas);
                     if (typeof arrayRespostas !== 'object' || arrayRespostas === null) {
                         throw new Error("Formato de respostas inválido");
                     }
@@ -45,60 +43,73 @@ module.exports = async (req, res) => {
 
                 const numOpcoes = Object.keys(arrayRespostas).length;
                 if (numOpcoes < MIN_OPCOES || numOpcoes > MAX_OPCOES) {
-                    throw new Error(`Número de opções deve ser entre ${MIN_OPCOES} e ${MAX_OPCOES}`);
+                    const mensagemDeErro = tipo === 'DISSERTATIVA'
+                        ? "O campo de resposta não pode estar vazio"
+                        : `Número de resposta deve ser entre 4 e ${MAX_OPCOES}`;
+                    throw new Error(mensagemDeErro);
                 }
-
-    
-          
 
                 if ((tipo === 'DISSERTATIVA' && numOpcoes !== 1) ||
                     (tipo === 'OBJETIVA' && (numOpcoes < 4 || numOpcoes > 5))) {
-                    throw new Error(`Número de opções INVÁLIDO`);
+                    throw new Error("Número de opções INVÁLIDO");
                 }
 
-                const opcoes = alternativas.slice(0, numOpcoes).map(alternativa => ({
-                    alternativa,
-                    descricao: arrayRespostas[`#opcao${alternativa}`]  // Descrição padrão se não existir
-                }));
+                // Prepare opcoes array
+                const opcoes = tipo === 'DISSERTATIVA'
+                    ? [{ descricao: arrayRespostas['#resposta'] }]
+                    : alternativas.slice(0, numOpcoes).map(alternativa => ({
+                        alternativa,
+                        descricao: arrayRespostas[`#opcao${alternativa}`]
+                    }));
 
-                if (!topicosSelecionados) {
-                    throw new Error("Selecione pelo menos um tópico")
-                }
-
+                // Create questao first (sequential because addTopico depends on it)
                 const createQuestao = await Questao.create({
                     pergunta,
                     titulo,
-                    id_area: areaId,
+                    id_area: area,
                     id_usuario,
-                    tipo // Usa o novo ID do vestibular
+                    tipo
+                }, { transaction });
+
+                // Add topicos after questao is created
+                await createQuestao.addTopico(topicos, { transaction });
+
+                // Create opcoes concurrently
+                const opcaoPromises = opcoes.map(opcao => {
+                    const opcaoData = {
+                        id_questao: createQuestao.id_questao,
+                        descricao: JSON.stringify(opcao.descricao)
+                    };
+
+                    if (tipo === 'OBJETIVA' && opcao.alternativa?.trim()) {
+                        opcaoData.alternativa = opcao.alternativa;
+                        opcaoData.correta = correta === opcao.alternativa;
+                    } else {
+                        opcaoData.alternativa = 'A';
+                        opcaoData.correta = true;
+                    }
+
+                    return Opcao.create(opcaoData, { transaction });
                 });
 
-                if (!topicosSelecionados) {
-                    throw new Error("Erro ao criar questao")
-                }
+                // Execute all opcao creations concurrently
+                await Promise.all(opcaoPromises);
 
-                await createQuestao.addTopico(topicosSelecionados)
+                await transaction.commit();
+                return res.status(201).redirect('/professor/questoes');
 
-                for (let opcao of opcoes) {
-                    let isTrue = correta === opcao.alternativa ? true : false;
-                    await Opcao.create({
-                        id_questao: createQuestao.id_questao,
-                        descricao: JSON.stringify(opcao.descricao),
-                        alternativa: opcao.alternativa,
-                        correta: isTrue
-                    })
-                }
-
-                res.status(201).redirect('/usuario/inicioLogado');
             } catch (error) {
                 console.error(error);
                 req.session.errorMessage = error.message;
+                await transaction.rollback();
+
                 await new Promise((resolve, reject) => {
                     req.session.save(err => {
                         if (err) reject(err);
                         else resolve();
                     });
                 });
+
                 return res.status(400).redirect(req.get("Referrer") || "/");
             }
         }

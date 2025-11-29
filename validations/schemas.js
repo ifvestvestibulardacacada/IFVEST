@@ -80,7 +80,7 @@ const patterns = {
     descricao: z.string()
       .min(10, "A descrição deve ter pelo menos 10 caracteres")
       .max(1000)
-      .regex(patterns.textPattern, "Formato da descrição inválido")
+     
       .refine(val => !patterns.sqlPattern.test(val), { message: "Formato da descrição inválido" }),
     tipo: z.enum(['Objetivo', 'Dissertativo', 'Aleatorio']),
     selectedQuestionIds: z
@@ -95,7 +95,7 @@ const patterns = {
     descricao: z.string()
       .min(10)
       .max(1000)
-      .regex(patterns.textPattern, "Formato da descrição inválido")
+     
       .refine(val => !patterns.sqlPattern.test(val), { message: "Formato da descrição inválido" }),
     tipo: z.enum(['OBJETIVO', 'DISSERTATIVO', 'ALEATORIO'])
   }),
@@ -198,6 +198,6 @@ module.exports = {
   simuladoSchemas,
   topicoSchemas,
   userSchemas,
-  contentSchemas
+  contentSchemas,
 };
 

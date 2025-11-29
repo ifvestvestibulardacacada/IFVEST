@@ -1,0 +1,46 @@
+<div class="form-group">
+    <div class="error-message" id="titulo-error"></div>
+    <label for="titulo">Título do Simulado:</label>
+    <input 
+        type="text" 
+        id="titulo" 
+        name="titulo" 
+        value="<%= (typeof simulado !== 'undefined' && simulado.titulo) || '' %>" 
+        required 
+        maxlength="200"
+        placeholder="Ex: Simulado ENEM 2025"
+        <%= typeof simulado === 'undefined' ? 'autofocus' : '' %>
+    >
+</div>
+
+<div class="form-group">
+    <div class="error-message" id="descricao-error"></div>
+    <label for="descricao">Descrição:</label>
+    <textarea 
+        id="descricao" 
+        name="descricao" 
+        rows="5" 
+        required 
+        maxlength="1000"
+        placeholder="Descreva o objetivo do simulado..."
+    ><%= (typeof simulado !== 'undefined' && simulado.descricao) || '' %></textarea>
+</div>
+
+<div class="form-group">
+    <label for="tipo">Selecione o tipo:</label>
+    <select name="tipo" id="tipo" required>
+        <option value="DISSERTATIVO" 
+            <%= (typeof simulado !== 'undefined' && simulado.tipo === 'DISSERTATIVO') ? 'selected' : '' %>>
+            Dissertativa
+        </option>
+        <option value="OBJETIVO" 
+            <%= (typeof simulado !== 'undefined' && simulado.tipo === 'OBJETIVO') ? 'selected' : '' %>>
+            Objetiva
+        </option>
+        <option value="ALEATORIO" 
+            <%= (typeof simulado !== 'undefined' && simulado.tipo === 'ALEATORIO') ? 'selected' : '' %>>
+            Aleatória
+        </option>
+    </select>
+    <div class="error-message" id="tipo-error"></div>
+</div>

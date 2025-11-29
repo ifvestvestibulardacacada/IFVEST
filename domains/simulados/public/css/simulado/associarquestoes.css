@@ -1,0 +1,94 @@
+        
+        .main { min-height: 100vh; }
+        .container { padding-top: 70px; }
+        .table-responsive, .pagination { margin-bottom: 0; }
+
+        .name {
+            max-height: 60px;
+            overflow: hidden;
+            position: relative;
+        }
+        .name::after {
+            content: "...";
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: white;
+            padding-left: 5px;
+        }
+        .required { color: red; }
+
+        .badge-area { margin-right: .5rem; }
+        #contador-questoes-selecionadas { font-weight: 600; margin-bottom: 1rem; }
+        .btn-associar { margin-top: 1rem; }
+         .container {
+            padding-top: 50px;
+        }
+        .filter-container {
+            background: var(--bs-gray-100);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--bs-gray-300);
+        }
+        .table-container {
+            background: white;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            margin-bottom: 2rem;
+        }
+        .button-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .btn-voltar {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        .btn-voltar:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+        .pagination-custom {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+        .pagination-custom button {
+            padding: 0.5rem 1rem;
+            border: 1px solid #dee2e6;
+            background: white;
+            color: #0d6efd;
+        }
+        .pagination-custom button.active,
+        .pagination-custom button:hover {
+            background: #0d6efd;
+            color: white;
+            border-color: #0d6efd;
+        }
+        .pagination-custom button:disabled {
+            background: #f8f9fa;
+            color: #6c757d;
+            cursor: not-allowed;
+        }
+        .contador-questoes {
+            background: var(--bs-primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+        .badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--bs-gray-100);
+            border-radius: 0.5rem;
+        }

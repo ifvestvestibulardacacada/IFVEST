@@ -33,7 +33,7 @@ jobs:
             npm install --production
 
             echo "Executando migrations"
-            npx sequelize-cli db:migrate env --production
+            npx sequelize-cli db:migrate --env production
 
             echo "Reiniciando no pm2"
             pm2 reload IFVest

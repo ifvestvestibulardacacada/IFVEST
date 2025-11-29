@@ -1,54 +1,41 @@
-     document.addEventListener('DOMContentLoaded', function () {
-                // Modal de impressão
-                const botoesImprimir = document.querySelectorAll('.button[id="generate-pdf"]');
-                const modalImprimir = document.getElementById('modal-imprimir');
+document.addEventListener('DOMContentLoaded', function () {
+    // Inicializa tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 
-                botoesImprimir.forEach(botao => {
-                    botao.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const simuladoId = this.href.split('/').filter(part => !isNaN(part)).pop();
-                        const iframe = document.getElementById('iframe-imprimir');
-                        iframe.src = `/simulados/${simuladoId}/imprimir`;
-                        modalImprimir.style.display = 'block';
-                    });
-                });
+    // MODAL DE IMPRESSÃO - FUNCIONANDO
+    const botoesPDF = document.querySelectorAll('.generate-pdf');
+    const modalImprimir = new bootstrap.Modal(document.getElementById('modal-imprimir'));
 
-                // Fechamento da modal de impressão
-                window.addEventListener('click', function (event) {
-                    if (event.target === modalImprimir) {
-                        modalImprimir.style.display = "none";
-                    }
-                });
+    botoesPDF.forEach(botao => {
+        botao.addEventListener('click', function (e) {
+            e.preventDefault();
+            const simuladoId = this.getAttribute('data-simulado-id');
+            const iframe = document.getElementById('iframe-imprimir');
+            iframe.src = `/simulados/${simuladoId}/imprimir`;
+            modalImprimir.show();
+        });
+    });
 
-                // Modal de exclusão
-                const modalExcluir = document.getElementById('modal-excluir');
-                const deleteForm = document.getElementById('deleteAccountForm');
-                const closeBtn = modalExcluir.querySelector('.close');
-                const cancelBtn = modalExcluir.querySelector('.cancel-delete');
+    // MODAL DE EXCLUSÃO - CORRIGIDO
+    const modalExcluir = new bootstrap.Modal(document.getElementById('modal-excluir'));
+    
+    document.querySelectorAll('.delete-simulado').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const simuladoId = this.getAttribute('data-simulado-id');
+            const form = document.getElementById('deleteAccountForm');
+            form.action = `/simulados/${simuladoId}/excluir-simulado?_method=DELETE`;
+            modalExcluir.show();
+        });
+    });
 
-                // Adicionar event listeners para os botões de exclusão
-                document.querySelectorAll('.delete-simulado').forEach(button => {
-                    button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const simuladoId = this.getAttribute('data-simulado-id');
-                        deleteForm.action = `/simulados/${simuladoId}/excluir-simulado?_method=DELETE`;
-                        modalExcluir.style.display = 'block';
-                    });
-                });
-
-                // Função para fechar o modal
-                function closeModal() {
-                    modalExcluir.style.display = 'none';
-                }
-
-                // Event listeners para fechar o modal
-                closeBtn.addEventListener('click', closeModal);
-                cancelBtn.addEventListener('click', closeModal);
-
-                // Fechar modal ao clicar fora dele
-                window.addEventListener('click', function(event) {
-                    if (event.target === modalExcluir) {
-                        closeModal();
-                    }
-                });
-            });
+    // Submit do formulário de delete
+    document.getElementById('deleteAccountForm').addEventListener('submit', function(e) {
+        if (!confirm('Tem certeza que deseja excluir este simulado?')) {
+            e.preventDefault();
+        }
+    });
+});

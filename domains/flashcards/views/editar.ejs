@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editar Flashcard</title>
+  <link rel="stylesheet" href="/flashcards/css/professor-form.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  </head>
+  <body>
+    <%- include('./partials/flashMessages') %>
+    <div class="container">
+      <main class="professor-flashcard">
+        <h2 class="title">Editar Flashcard</h2>
+        <form action="/flashcards/<%= flashcard.id_flashcards %>/editar" method="POST" class="flashcard-form">
+          <div class="qa-row">
+            <div class="form-group form-left">
+              <label>Pergunta</label>
+              <textarea name="pergunta" required rows="4"><%= flashcard.pergunta %></textarea>
+            </div>
+
+            <div class="form-group form-left">
+              <label>Resposta</label>
+              <textarea name="resposta" required rows="4"><%= flashcard.resposta %></textarea>
+            </div>
+          </div>
+
+          <div class="form-controls">
+            <div class="form-group">
+              <label>Área</label>
+              <select name="id_area" id="area" required data-selected="<%= flashcard.id_area %>"></select>
+            </div>
+
+            <div class="form-group">
+              <label>Tópico</label>
+              <select name="id_topico" id="topico" required data-selected="<%= flashcard.id_topico %>"></select>
+            </div>
+
+            <div class="form-group">
+              <label>Dificuldade</label>
+              <select name="id_dificuldade" id="dificuldade" required data-selected="<%= flashcard.id_dificuldade %>"></select>
+            </div>
+
+            <div class="form-group">
+              <button type="submit" class="criar-flashcard-btn">Salvar</button>
+            </div>
+          </div>
+        </form>
+      </main>
+    </div>
+    <script src="/flashcards/js/carregarFiltros.js"></script>
+    <script src="/flashcards/js/flashMessages.js"></script>
+  </body>
+</html>

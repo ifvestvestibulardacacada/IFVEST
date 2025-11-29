@@ -1,0 +1,13 @@
+<% if (cssPaths && cssPaths.length > 0) { %>
+  <% cssPaths.forEach(css => { %>
+    <link rel="stylesheet" crossorigin href="<%= css %>">
+  <% }); %>
+<% } %>
+
+
+
+<% if (jsPath && jsPath.length > 0) { %>
+  <% jsPath.forEach(js => { %>
+    <script type="module" crossorigin src="<%= js %>"></script>
+  <% }); %>
+<% } %>

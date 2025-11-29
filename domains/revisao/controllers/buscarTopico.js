@@ -17,11 +17,6 @@ module.exports = async (req, res) =>{
             Nayahath.action('Revisão', 'Pediu buscar topico')
 
             res.locals.currentPage = "revisao"
-            
-            const perfilUsuario = req.session.perfil;
-            const nomeUsuario = req.session.nomeUsuario;
-            const imagemPerfil = req.session.imagemPerfil;
-
             const { id_area } = req.params;
 
             const areaAtual = await Area.findByPk(id_area, {
@@ -35,5 +30,5 @@ module.exports = async (req, res) =>{
 
             const listaTopicos = areaAtual.Topico
 
-            res.render('buscarTopico', { area:areaAtual, listaTopicos, nomeUsuario, perfilUsuario, imagemPerfil })
+            res.render('buscarTopico', { area:areaAtual, listaTopicos })
         }
