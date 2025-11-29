@@ -131,11 +131,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
     }
-    async function salvarPlacarNoBanco(acertos, totalQuestoes, porcentagem) {
+    async function salvarPlacarNoBanco(acertos, total_questoes, porcentagem) {
     try {
         const dados = {
             acertos: acertos,
-            totalQuestoes: totalQuestoes,
+            total_questoes: total_questoes,
             porcentagem: parseFloat(porcentagem)
         };
 

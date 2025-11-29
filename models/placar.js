@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 
   }
   Placar.init({
-    id: {
+    id_placar: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       allowNull: false,
@@ -28,7 +28,6 @@ module.exports = (sequelize, DataTypes) => {
     total_questoes: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 10 // Isso garante que nunca dê erro, mesmo se esquecer de enviar
     },
     porcentagem: DataTypes.FLOAT,
   }, {
