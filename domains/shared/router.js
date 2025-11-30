@@ -48,4 +48,8 @@ router.delete('/topicos/:id_topico', excluirTopico)
 router.get('/api/topicos', consultarTopicos) // all
 router.get('/api/topicos/:id_area', consultarTopicos) // by area
 
+router.get('/politica_de_privacidade', (req, res) => {
+  res.render('politica_privacidade/politica_de_privacidade', { layout: false })
+})
+
 module.exports = router
