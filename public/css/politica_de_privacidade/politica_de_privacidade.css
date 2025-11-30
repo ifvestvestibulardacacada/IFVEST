@@ -1,0 +1,163 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f7f7;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+h1 {
+    font-size: 2.2rem;
+    color: #1e40af; /* Azul forte */
+    border-bottom: 3px solid #1e40af;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 1.6rem;
+    color: #1f2937;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 5px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+}
+
+h3 {
+    font-size: 1.3rem;
+    color: #1f2937;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+p {
+    margin-bottom: 15px;
+}
+
+.header-controls {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 30px; 
+    gap: 15px; 
+    flex-wrap: wrap; 
+}
+
+.data-atualizacao {
+    font-size: 0.9rem;
+    color: #6b7280;
+    margin-bottom: 0; 
+}
+
+.termos-chave {
+    padding: 20px;
+    background-color: #ebf8ff;
+    border: 1px solid #b2e2f6;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+.termos-chave h2 {
+    color: #0369a1;
+    border-bottom: none;
+    margin-top: 0;
+}
+
+.termos-chave .introducao-termos {
+    margin-left: 0; 
+    border-left: none; 
+    padding-left: 0;
+}
+
+.termo-definicao {
+    margin-left: 20px;
+    padding-left: 10px;
+    border-left: 3px solid #60a5fa; 
+}
+
+.lista-bases {
+    list-style: disc;
+    margin-left: 25px;
+    padding: 0;
+    margin-bottom: 15px;
+}
+.lista-bases li {
+    margin-bottom: 8px;
+}
+
+.policy-table-container {
+    overflow-x: auto; 
+    margin-bottom: 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+th, td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #f3f4f6;
+}
+th {
+    background-color: #f9fafb;
+    font-weight: bold;
+    color: #4b5563;
+    text-transform: uppercase;
+}
+tr:last-child td {
+    border-bottom: none;
+}
+
+.contato-email {
+    padding: 15px;
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    display: inline-block;
+}
+.contato-email a {
+    color: #1e40af;
+    text-decoration: none;
+    font-weight: bold;
+}
+.contato-email a:hover {
+    text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 40px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+    h1 {
+        font-size: 2.5rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+    }
+}
