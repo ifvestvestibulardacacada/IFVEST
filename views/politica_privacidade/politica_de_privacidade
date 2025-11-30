@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidade do Portal IFVest</title>
+    <link rel="stylesheet" href="/css/politica_de_privacidade.css">
+</head>
+<body>
+
+    <div class="container">
+        
+        <h1>Política de Privacidade do Portal IFVest</h1>
+
+        <div class="header-controls">
+            <p class="data-atualizacao">
+                Data da Última Atualização: <strong>12 de Novembro de 2025</strong>
+            </p>
+
+            <a 
+                href="politica_de_privacidade.pdf" 
+                download="Politica_de_Privacidade_IFVest.pdf"
+                target="_blank"
+                style="
+                    /* Estilos base para parecer um botão */
+                    background-color: #1e40af; /* Cor do h1 */
+                    color: white;
+                    padding: 8px 15px; /* Reduzido levemente para caber melhor */
+                    border: none;
+                    border-radius: 6px;
+                    font-size: 0.9rem; /* Reduzido levemente */
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    /* Propriedades específicas para links/blocos */
+                    text-decoration: none; 
+                    display: inline-block; 
+                    /* Adicionado para alinhamento vertical com o texto */
+                    line-height: 1.2;
+                "
+                onmouseover="this.style.backgroundColor='#1d4ed8'" 
+                onmouseout="this.style.backgroundColor='#1e40af'" 
+            >
+                Baixar em PDF
+            </a>
+            </div>
+        <section>
+            <h2>Quem Somos</h2>
+            <p>
+                O <strong>IFVest</strong> é uma plataforma que auxilia alunos no processo de aprendizagem, oferecendo conteúdo de qualidade para revisão e estudo dos principais temas cobrados nos vestibulares. Somos os controladores dos dados pessoais tratados no âmbito deste Portal.
+            </p>
+        </section>
+
+        <section class="termos-chave">
+            <h2>💡 Entendendo os Termos Chave</h2>
+            <p class="introducao-termos">
+                Para facilitar a compreensão dos nossos documentos e garantir a transparência do tratamento de dados, definimos os termos mais importantes com base na Lei Geral de Proteção de Dados (LGPD):
+            </p>
+
+            <h4>Dados Pessoais</h4>
+            <p class="termo-definicao">
+                Dados Pessoais são qualquer informação relacionada a uma pessoa natural que a torna identificada ou identificável. Em outras palavras, é toda informação que permite saber quem você é. Isso inclui seu nome completo, seu endereço de e-mail, seu número de telefone, seu CPF, ou até mesmo dados técnicos como seu endereço de IP e informações de geolocalização.
+            </p>
+
+            <h4>Dados Pessoais Sensíveis</h4>
+            <p class="termo-definicao">
+                Dados Pessoais Sensíveis são uma categoria especial de Dados Pessoais que exige um nível de proteção maior, pois seu tratamento indevido pode levar a situações de discriminação. A legislação brasileira define como sensíveis aqueles dados que revelem a origem racial ou étnica, a convicção religiosa, a opinião política, a filiação a sindicato, ou dados referentes à sua saúde ou vida sexual, além de dados genéticos ou biométricos. Nosso Portal não coleta Dados Sensíveis, a menos que seja estritamente necessário para um serviço específico e mediante seu consentimento explícito.
+            </p>
+
+            <h4>LGPD (Lei Geral de Proteção de Dados)</h4>
+            <p class="termo-definicao">
+                A sigla LGPD refere-se à Lei Geral de Proteção de Dados (Lei nº 13.709/2018), a principal norma brasileira que regula a maneira como dados pessoais são coletados, armazenados e utilizados por qualquer organização. Seu objetivo primordial é proteger os direitos fundamentais de liberdade e de privacidade, definindo regras claras sobre o tratamento de informações.
+            </p>
+        </section>
+
+        <section>
+            <h2>1. Introdução</h2>
+            <p>
+                A sua privacidade é prioridade para o IFVest. Esta Política de Privacidade descreve como coletamos, usamos, armazenamos, compartilhamos e protegemos as suas informações pessoais, em estrita conformidade com a LGPD. Ao utilizar o nosso Portal, você concorda com o tratamento de seus dados pessoais conforme estabelecido neste documento.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. Dados Pessoais Coletados e Finalidades</h2>
+            <p>
+                Coletamos diferentes tipos de dados pessoais para as finalidades específicas abaixo:
+            </p>
+            
+            <h3>2.1. Dados Fornecidos por Você</h3>
+            <p>
+                São os dados que você nos fornece ativamente ao se cadastrar, preencher formulários ou entrar em contato.
+            </p>
+
+            <div class="policy-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Categoria de Dados</th>
+                            <th>Finalidade do Tratamento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Identificação e Contato (Ex: Nome, E-mail)</td>
+                            <td>Gerenciar sua conta, autenticar acesso, responder a solicitações de suporte e enviar comunicações importantes.</td>
+                        </tr>
+                        <tr>
+                            <td>Dados de Cadastro (Ex: Nome de usuário, Senha criptografada)</td>
+                            <td>Permitir e manter o acesso seguro às áreas restritas e funcionalidades do Portal.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Bases Legais para o Tratamento dos seus Dados Pessoais</h2>
+            <p>
+                O tratamento dos seus Dados Pessoais é realizado sempre em conformidade com as bases legais previstas na LGPD. O Portal utiliza majoritariamente as seguintes:
+            </p>
+            <ul class="lista-bases">
+                <li>
+                    <strong>Execução de Contrato:</strong> Quando o tratamento é necessário para cumprir as obrigações (Ex: processar o seu login e manter sua conta ativa).
+                </li>
+                <li>
+                    <strong>Legítimo Interesse:</strong> Quando o tratamento é necessário para o desempenho de nossas atividades e para a melhoria dos serviços, desde que não violem seus direitos e liberdades fundamentais (Ex: análises estatísticas para otimizar o design do Portal).
+                </li>
+                <li>
+                    <strong>Consentimento:</strong> Quando você nos autoriza expressamente a tratar seus dados para finalidades específicas.
+                </li>
+                <li>
+                    <strong>Cumprimento de Obrigação Legal:</strong> Quando somos obrigados a tratar ou reter dados por força da lei (vide Seção 4).
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. Questões que Somos Obrigados a Usar suas Informações por Lei</h2>
+            <p>
+                Retemos e, em certos casos, tratamos seus Dados Pessoais, independentemente do seu consentimento, quando exigido por lei ou regulamentação:
+            </p>
+            <ul class="lista-bases">
+                <li>
+                    <strong>Cumprimento de Obrigações Legais e Regulatórias:</strong> Para atender a determinações de autoridades competentes (Ex: manter registros de acesso, conforme o Marco Civil da Internet).
+                </li>
+                <li>
+                    <strong>Defesa em Processo:</strong> Para exercer o direito de defesa em qualquer processo judicial, administrativo ou arbitral.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>5. Onde Armazenamos seus Dados Pessoais</h2>
+            <p>
+                Seus Dados Pessoais são armazenados em servidores seguros da <strong>Goinfinitenet</strong>, localizados em <strong>datacenter no Brasil</strong>, garantindo que as informações estejam sujeitas à legislação nacional de proteção de dados.
+            </p>
+            <p>
+                Adotamos medidas técnicas e organizacionais para proteger seus dados contra acessos não autorizados, destruição, perda ou alteração acidental.
+            </p>
+        </section>
+
+        <section>
+            <h2>6. Compartilhamento e Divulgação dos Dados Pessoais</h2>
+            <p>
+                O <strong>IFVest</strong> não compartilha seus dados pessoais com terceiros para fins de marketing. O compartilhamento ocorre estritamente nas seguintes situações:
+            </p>
+            <ul class="lista-bases">
+                <li>
+                    <strong>Parceiros e Fornecedores de Serviços:</strong> Com empresas que nos auxiliam na operação (hospedagem, análise de dados, etc.), desde que estes terceiros estejam contratualmente obrigados a proteger seus dados.
+                </li>
+                <li>
+                    <strong>Autoridades Legais:</strong> Para cumprir obrigações legais, conforme detalhado na Seção 4.
+                </li>
+                <li>
+                    <strong>Com a sua autorização:</strong> Em outras situações, mediante o seu consentimento expresso.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>7. Seus Direitos e Escolhas do Titular dos Dados Pessoais</h2>
+            <p>
+                Você, como titular dos dados, possui direitos garantidos pela LGPD que pode exercer a qualquer momento:
+            </p>
+
+            <div class="policy-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Direito</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Confirmação e Acesso</strong></td>
+                            <td>Receber a confirmação de que tratamos seus dados e solicitar acesso a eles.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Correção</strong></td>
+                            <td>Solicitar a correção de dados incompletos, inexatos ou desatualizados.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Anonimização, Bloqueio ou Eliminação</strong></td>
+                            <td>Solicitar o bloqueio ou a eliminação de dados desnecessários, excessivos ou tratados em desconformidade com a LGPD.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Revogação do Consentimento</strong></td>
+                            <td>Retirar seu consentimento para o tratamento de dados quando esta for a base legal.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Portabilidade</strong></td>
+                            <td>Receber seus dados em formato estruturado e transmitir a outro fornecedor de serviço.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Oposição</strong></td>
+                            <td>Opor-se a um tratamento que não esteja em conformidade com a LGPD.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3>Exercício de Seus Direitos (Usuário Final)</h3>
+            <p>
+                Você pode exercer qualquer um desses direitos entrando em contato conosco através do Canal de Atendimento indicado na Seção 10. Faremos o possível para atender sua solicitação prontamente.
+            </p>
+        </section>
+        
+        <section>
+            <h2>8. Exclusão de Conta e Dados Pessoais</h2>
+            <p>
+                Você pode solicitar a exclusão de sua conta e dos Dados Pessoais a qualquer momento, através do canal de contato da Seção 10.
+            </p>
+            <p>
+                <strong>Processo de Exclusão:</strong> Seus dados serão eliminados ou anonimizados, exceto aqueles que somos obrigados a reter por lei (Ex: logs de acesso, conforme a Seção 4), que serão mantidos pelo prazo legal e, posteriormente, descartados.
+            </p>
+        </section>
+
+        <section>
+            <h2>9. Alterações da Política</h2>
+            <p>
+                Reservamo-nos o direito de modificar esta Política de Privacidade a qualquer momento para adaptá-la às novas legislações, mudanças operacionais ou novas funcionalidades do Portal.
+            </p>
+            <ul class="lista-bases">
+                <li>
+                    Quando uma alteração for realizada, a Data da Última Atualização no topo do documento será atualizada.
+                </li>
+                <li> 
+                    Os usuários serão notificados sobre a mudança na política por meio de aviso na página principal do Portal. 
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>10. Canal de Atendimento para Dúvidas e Direitos</h2>
+            <p>
+                Em caso de dúvidas sobre esta Política de Privacidade ou para exercer qualquer um dos seus direitos como titular de dados (Seção 7), você pode entrar em contato diretamente com o nosso Responsável pelo Atendimento de Privacidade através do canal abaixo:
+            </p>
+            <div class="contato-email">
+                <strong>E-mail para Contato:</strong> ifvestvestibulardacacada@gmail.com
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>
