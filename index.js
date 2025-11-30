@@ -55,15 +55,15 @@ app.use(async (req, res, next) => {
 app.use(authLocals);
 
 app.use('/', inicio);
+app.use('/shared', sharedApp)
 app.use(secure_pass);
+
 app.use('/usuario', usuarios);
 app.use('/professor', simuladosApp);
 app.use("/uploads",  uploads) 
 app.use("/simulados",  simuladosApp) 
 app.use("/revisao", revisaoApp)
-app.use('/shared', sharedApp)
 app.use("/flashcards", flashcardsApp)
-
 app.use('/dificuldades', dificuldades)
 app.use("/quiz", ifQuizApp);
 
