@@ -2,79 +2,210 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remover Questões - IFVest</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Remover Questões - IFVest</title>
 
-    <%- include('../partials/libs') %>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-        <link rel="stylesheet" href="/simulados/css/simulado/removerquestoes.css">
+  <%- include('../partials/libs') %>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="/simulados/css/simulado/removerquestoes.css">
 </head>
 
 <body>
-    <div class="container col-lg-10 mx-auto my-4">
+  <main class="container col-lg-10 mx-auto my-4">
 
-        <!-- Mensagem de erro -->
-        <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
-            <div class="alert alert-danger d-flex align-items-center mb-4" role="alert">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                <div><%= errorMessage %></div>
-            </div>
-        <% } %>
+    <% if (typeof errorMessage !== 'undefined' && errorMessage.trim()) { %>
+      <div class="alert alert-danger d-flex align-items-center mb-4" role="alert" aria-live="assertive">
+        <i class="bi bi-exclamation-triangle-fill me-2" aria-hidden="true"></i>
+        <div><%= errorMessage %></div>
+      </div>
+    <% } %>
 
-        <!-- Título -->
-        <h1 class="border-bottom pb-2 mb-4">Remover Questões do Simulado</h1>
-        <p class="text-muted mb-4"><strong>Simulado:</strong> <%= simulado.titulo %></p>
+    <h1 class="border-bottom pb-2 mb-4">Remover Questões do Simulado</h1>
+    <p class="text-muted mb-4"><strong>Simulado:</strong> <%= simulado.titulo %></p>
 
-        <!-- Filtro -->
-        <div class="filter-container">
-            <form method="GET" action="/simulados/<%= simulado.id_simulado %>/remover-questoes" class="row g-3 align-items-end">
-                <div class="col-md-10">
-                    <label for="titulo" class="form-label">Buscar por título</label>
-                    <input type="text" id="titulo" name="titulo" placeholder="Filtrar por título" 
-                           class="form-control" value="<%= typeof titulo !== 'undefined' ? titulo : '' %>">
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-success w-100">
-                        <i class="bi bi-search"></i> Filtrar
-                    </button>
-                </div>
-            </form>
+    <!-- Filtro -->
+    <div class="filter-container">
+      <form method="GET" action="/simulados/<%= simulado.id_simulado %>/remover-questoes"
+            class="row g-3 align-items-end" aria-label="Formulário de filtros de questões">
+        <div class="col-md-10">
+          <label for="titulo" class="form-label">Buscar por título</label>
+          <input type="text" id="titulo" name="titulo" placeholder="Filtrar por título"
+                 class="form-control" value="<%= typeof titulo !== 'undefined' ? titulo : '' %>">
         </div>
-
-        <!-- Contador de selecionadas -->
-        <div id="contador-questoes-selecionadas" class="contador-questoes">
-            Questões Selecionadas: <span id="numero-questoes-selecionadas">0</span>
+        <div class="col-md-2">
+          <button type="submit" class="btn btn-success w-100" aria-label="Aplicar filtro por título">
+            <i class="bi bi-search" aria-hidden="true"></i> Filtrar
+          </button>
         </div>
-
-        <!-- Formulário principal -->
-        <form id="form-remover" action="/simulados/<%= simulado.id_simulado %>/remover-questoes?_method=DELETE" method="POST">
-       
-            <%- include('../partials/contentTable') %>
-              
-            <!-- Botões -->
-            <div class="button-container">
-                <a href="/simulados/meus-simulados" class="btn btn-voltar btn-lg">
-                    <i class="bi bi-arrow-left"></i> Voltar
-                </a>
-                <button type="submit" id="submitButton" class="btn btn-danger btn-lg"
-                        onclick="return confirm('Tem certeza que deseja remover as questões selecionadas?')">
-                    <i class="bi bi-trash"></i> Remover Questões Selecionadas
-                </button>
-            </div>
-        </form>
+      </form>
     </div>
 
-    <!-- Scripts -->
-    <script src="/js/main.js"></script>
-    <script src="/js/validations/validate.js"></script>
-        <script src="/simulados/js/handlers/associarQuestaoHandler.js"></script>
+    <!-- Contador -->
+    <div id="contador-questoes-selecionadas" class="contador-questoes" aria-live="polite">
+      Questões Selecionadas: <span id="numero-questoes-selecionadas">0</span>
+    </div>
 
-    <%- include('../partials/ContentManager.ejs') %>
+    <!-- Formulário principal -->
+    <form id="form-remover" action="/simulados/<%= simulado.id_simulado %>/remover-questoes?_method=DELETE" method="POST">
+      <input type="hidden" name="simuladoId" value="<%= simulado.id_simulado %>">
+      <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
 
-    <script src="/simulados/js/simulado/removerquestoes.js"></script>
+      <!-- Fieldset para agrupar checkboxes -->
+      <fieldset class="mb-4" aria-describedby="descricao-selecao-questoes">
+        <legend class="h6">Seleção de questões para remover do simulado</legend>
+        <p id="descricao-selecao-questoes" class="visually-hidden">
+          Use as caixas de seleção para escolher questões. O botão "Selecionar todas" marca apenas as da página atual.
+        </p>
+
+        <!-- Cabeçalho: selecionar todas -->
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <div class="form-check">
+            <input type="checkbox" id="select-all" class="form-check-input">
+            <label for="select-all" class="form-check-label">
+              <span class="visually-hidden">Selecionar todas as questões desta página</span>
+              Todas
+            </label>
+          </div>
+          <span class="text-muted small">
+            Selecionadas: <strong id="numero-questoes-selecionadas-header">0</strong>
+          </span>
+        </div>
+
+        <!-- Tabela de questões - CORREÇÃO DEFINITIVA DOS RÓTULOS -->
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered align-middle mb-0" aria-describedby="descricao-tabela">
+            <caption id="descricao-tabela" class="visually-hidden">
+              Lista de questões associadas ao simulado disponíveis para remoção
+            </caption>
+            <thead class="table-light">
+              <tr>
+                <th id="colSelecionar" scope="col" width="5%">Selecionar</th>
+                <th id="colTitulo" scope="col">Título</th>
+                <th id="colTipo" scope="col" width="12%">Tipo</th>
+                <th id="colQuestao" scope="col" width="45%">Questão</th>
+                <th id="colTopicos" scope="col" width="15%">Tópico(s)</th>
+              </tr>
+            </thead>
+            <tbody id="questoes-tbody">
+              <% if (typeof questoes !== 'undefined' && questoes.length > 0) { %>
+                <% questoes.forEach(questao => { %>
+                  <tr>
+                    <td headers="colSelecionar">
+                      <div class="form-check m-0 d-flex justify-content-center">
+                        <input type="checkbox" 
+                               id="questao-<%= questao.id_questao %>"
+                               class="form-check-input questao-checkbox" 
+                               name="questaoIds" 
+                               value="<%= questao.id_questao %>"
+                               aria-label="Selecionar questão <%= questao.titulo %> para remoção">
+                      </div>
+                    </td>
+                    <td headers="colTitulo">
+                      <label for="questao-<%= questao.id_questao %>" class="w-100 h-100 d-block" style="cursor: pointer; padding: 0.5rem 0;">
+                        <%= questao.titulo %>
+                      </label>
+                    </td>
+                    <td headers="colTipo"><%= questao.tipo %></td>
+                    <td headers="colQuestao">
+                      <div class="questao-preview">
+                        <%= questao.enunciado && questao.enunciado.length > 150 ? 
+                            questao.enunciado.substring(0, 150) + '...' : 
+                            questao.enunciado %>
+                      </div>
+                    </td>
+                    <td headers="colTopicos">
+                      <% if (questao.topicos && questao.topicos.length > 0) { %>
+                        <% 
+                          let topicosMostrados = 0;
+                          for (let i = 0; i < questao.topicos.length; i++) {
+                            if (topicosMostrados >= 2) break;
+                        %>
+                          <span class="badge bg-secondary me-1"><%= questao.topicos[i].nome %></span>
+                        <% 
+                            topicosMostrados++;
+                          } 
+                          if (questao.topicos.length > 2) { 
+                        %>
+                          <span class="badge bg-light text-dark">+<%= questao.topicos.length - 2 %> mais</span>
+                        <% } %>
+                      <% } else { %>
+                        <span class="text-muted">Sem tópicos</span>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr>
+                  <td colspan="5" class="text-center py-4">
+                    <div class="text-muted">
+                      <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                      Nenhuma questão encontrada para este simulado.
+                    </div>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Paginação -->
+        <% if (typeof totalPages !== 'undefined' && totalPages > 1) { %>
+          <nav id="pagination-container" class="pagination-custom mt-3" role="navigation" aria-label="Paginação de questões">
+            <% if (typeof currentPage !== 'undefined' && currentPage > 1) { %>
+              <a href="?page=1&titulo=<%= typeof titulo !== 'undefined' ? titulo : '' %>" 
+                 class="btn btn-outline-secondary" aria-label="Ir para primeira página">Primeira</a>
+              <a href="?page=<%= currentPage - 1 %>&titulo=<%= typeof titulo !== 'undefined' ? titulo : '' %>" 
+                 class="btn btn-outline-secondary" aria-label="Ir para página anterior">Anterior</a>
+            <% } %>
+
+            <% if (typeof currentPage !== 'undefined' && typeof totalPages !== 'undefined') { %>
+              <% 
+                const startPage = Math.max(1, currentPage - 2);
+                const endPage = Math.min(totalPages, currentPage + 2);
+                for(let i = startPage; i <= endPage; i++) { 
+              %>
+                <a href="?page=<%= i %>&titulo=<%= typeof titulo !== 'undefined' ? titulo : '' %>"
+                   class="btn <%= currentPage == i ? 'btn-primary' : 'btn-outline-secondary' %>"
+                   aria-label="Ir para página <%= i %>"
+                   <%= currentPage == i ? 'aria-current="page"' : '' %>>
+                  <%= i %>
+                </a>
+              <% } %>
+            <% } %>
+
+            <% if (typeof currentPage !== 'undefined' && typeof totalPages !== 'undefined' && currentPage < totalPages) { %>
+              <a href="?page=<%= currentPage + 1 %>&titulo=<%= typeof titulo !== 'undefined' ? titulo : '' %>" 
+                 class="btn btn-outline-secondary">Próxima</a>
+              <a href="?page=<%= totalPages %>&titulo=<%= typeof titulo !== 'undefined' ? titulo : '' %>" 
+                 class="btn btn-outline-secondary" aria-label="Ir para última página">Última</a>
+            <% } %>
+          </nav>
+        <% } %>
+      </fieldset>
+
+      <!-- Botões -->
+      <div class="button-container">
+        <a href="/simulados/meus-simulados" class="btn btn-voltar btn-lg" aria-label="Voltar para meus simulados">
+          <i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar
+        </a>
+        <button type="submit" id="submitButton" class="btn btn-danger btn-lg"
+                onclick="return confirm('Tem certeza que deseja remover as questões selecionadas?')"
+                aria-label="Remover questões selecionadas do simulado">
+          <i class="bi bi-trash" aria-hidden="true"></i> Remover Questões Selecionadas
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <!-- Scripts -->
+  <script src="/js/main.js"></script>
+  <%- include('../partials/ContentManager.ejs') %>
+  <script src="/js/validations/validate.js"></script>
+  <script src="/simulados/js/handlers/associarQuestaoHandler.js"></script>
+  <script src="/simulados/js/simulado/removerquestoes.js"></script>
 </body>
 </html>

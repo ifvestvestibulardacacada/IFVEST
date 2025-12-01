@@ -1,23 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="pt-BR">
 <head>
-    <title>Gabarito - IFVest</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <title>Gabarito - IFVest</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/simulados/css/global.css">
-    
-   
-    
     <link rel="stylesheet" href="/simulados/css/prova/gabarito.css">
     
     <%- include('../partials/libs') %>
 </head>
-
 <body>
-    
-    <main class="container mt-5 pt-4"> <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
+    <main class="container mt-5 pt-4">
+        <% if (typeof errorMessage !=='undefined' && errorMessage.trim()) { %>
             <script>
                 window.onload = function () {
                     alert("<%= errorMessage %>");
@@ -26,13 +23,14 @@
         <% } %>
         
         <div class="row">
-            <div class="col-lg-10 col-xl-9 mx-auto"> <div class="bg-white p-4 rounded-top shadow-sm border-bottom">
-                    <h1 class="h3 mb-0">Gabarito: Teste <%= simulado.tipo %></h1>
+            <div class="col-lg-10 col-xl-9 mx-auto">
+                <div class="bg-white p-4 rounded-top shadow-sm border-bottom">
+                    <h1 class="h3 mb-0">Gabarito: <%= simulado.titulo %></h1>
                 </div>
 
                 <% if (typeof totalAcertos !== 'undefined' && typeof totalQuestoes !== 'undefined') { %>
                     <div class="bg-light p-3 p-md-4 rounded-bottom shadow-sm mb-4">
-                        <h3 class="h5">Seu Desempenho</h3>
+                        <h2 class="h5">Seu Desempenho</h2>
                         <p class="fs-6 mb-2">
                             Você acertou <strong><%= totalAcertos %></strong> de
                             <strong><%= totalQuestoes %></strong> questões objetivas.
@@ -47,92 +45,144 @@
                     </div>
                 <% } %>
 
-
                 <% questoes.forEach((questao, qIndex) => { %>
-                    
                     <div class="card shadow-sm mb-4">
                         <div class="card-header bg-white py-3">
-                            <h5 class="card-title mb-0 text-primary">
-                                <%= questao.titulo %> </h5>
+                            <h2 class="card-title h5 mb-0 text-primary">
+                                Questão <%= qIndex + 1 %>: <%= questao.titulo %>
+                            </h2>
                         </div>
                         
                         <div class="card-body">
-                            <div class="name" data-delta='<%= questao.pergunta %>'>
-                                </div>
+                            <div class="questao-enunciado" data-delta='<%= questao.enunciado %>'></div>
 
                             <% if (questao.tipo === "OBJETIVA") { %>
                                 <% const respostaUsuario = respostasUsuario.find(r => r.id_questao === questao.id_questao); %>
                                 
-                                <ul class="list-group list-group-flush mt-3">
-                                    <% questao.Opcao.forEach((opcao, index) => { %>
-                                        
-                                        <% 
-                                          // Lógica para definir as classes do item
-                                          let itemClasses = 'list-group-item d-flex align-items-center';
-                                          const isCorreta = opcao.correta === true;
-                                          const isSelecionada = respostaUsuario && respostaUsuario.Opcao.id_opcao === opcao.id_opcao;
+                                <fieldset class="mt-3">
+                                    <legend class="h6 visually-hidden">Opções de resposta</legend>
+                                    <ul class="list-group list-group-flush">
+                                        <% questao.Opcao.forEach((opcao, index) => { %>
+                                            <% 
+                                                let itemClasses = 'list-group-item d-flex align-items-start';
+                                                const isCorreta = opcao.correta === true;
+                                                const isSelecionada = respostaUsuario && respostaUsuario.Opcao && respostaUsuario.Opcao.id_opcao === opcao.id_opcao;
+                                                const letraAlternativa = String.fromCharCode(65 + index);
 
-                                          if (isCorreta) {
-                                            // É a correta: verde
-                                            itemClasses += ' list-group-item-success';
-                                          } else if (isSelecionada && !isCorreta) {
-                                            // É a que o usuário marcou, e está errada: vermelha
-                                            itemClasses += ' list-group-item-danger';
-                                          } else {
-                                            // Opção neutra
-                                            itemClasses += ' list-group-item-light';
-                                          }
-                                        %>
+                                                if (isCorreta) {
+                                                    itemClasses += ' list-group-item-success';
+                                                } else if (isSelecionada && !isCorreta) {
+                                                    itemClasses += ' list-group-item-danger';
+                                                } else {
+                                                    itemClasses += ' list-group-item-light';
+                                                }
+                                            %>
 
-                                        <li class="<%= itemClasses %>">
-                                            <input class="form-check-input me-3" 
-                                                   type="radio" 
-                                                   name="radio-<%= qIndex %>" 
-                                                   id="opcao-<%= opcao.id_opcao %>"
-                                                   <% if (isSelecionada) { %>checked<% } %>
-                                                   disabled>
+                                            <li class="<%= itemClasses %>">
+                                                <div class="form-check mb-0 d-flex align-items-start w-100">
+                                                    <input class="form-check-input me-3 mt-1" 
+                                                           type="radio" 
+                                                           name="questao-<%= questao.id_questao %>" 
+                                                           id="questao-<%= questao.id_questao %>-opcao-<%= opcao.id_opcao %>"
+                                                           <% if (isSelecionada) { %>checked<% } %>
+                                                           disabled
+                                                           aria-describedby="desc-<%= questao.id_questao %>-<%= opcao.id_opcao %>">
 
-                                            <label class="fw-bold me-2" for="opcao-<%= opcao.id_opcao %>">
-                                                <%= opcao.alternativa %>)
-                                            </label>
-
-                                            <div class="opcao-texto" data-delta="<%= opcao.descricao %>">
+                                                    <label class="form-check-label w-100" 
+                                                           for="questao-<%= questao.id_questao %>-opcao-<%= opcao.id_opcao %>">
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <span class="fw-bold me-2"><%= letraAlternativa %>)</span>
+                                                            <div class="opcao-texto flex-grow-1" 
+                                                                 id="desc-<%= questao.id_questao %>-<%= opcao.id_opcao %>"
+                                                                 data-delta="<%= opcao.descricao %>">
+                                                            </div>
+                                                        </div>
+                                                    </label>
                                                 </div>
-                                        </li>
-                                    <% }); %>
-                                </ul>
+
+                                                <% if (isCorreta) { %>
+                                                    <i class="bi bi-check-circle-fill text-success ms-2 mt-1" aria-hidden="true"></i>
+                                                    <span class="visually-hidden">Resposta correta</span>
+                                                <% } else if (isSelecionada && !isCorreta) { %>
+                                                    <i class="bi bi-x-circle-fill text-danger ms-2 mt-1" aria-hidden="true"></i>
+                                                    <span class="visually-hidden">Resposta incorreta selecionada</span>
+                                                <% } %>
+                                            </li>
+                                        <% }); %>
+                                    </ul>
+                                </fieldset>
+
+                                <!-- Feedback da questão -->
+                                <div class="mt-3 p-3 rounded <% if (respostaUsuario && respostaUsuario.Opcao && respostaUsuario.Opcao.correta) { %>bg-success text-white<% } else { %>bg-danger text-white<% } %>">
+                                    <% if (respostaUsuario && respostaUsuario.Opcao) { %>
+                                        <% if (respostaUsuario.Opcao.correta) { %>
+                                            <i class="bi bi-check-circle-fill me-2" aria-hidden="true"></i>
+                                            <strong>Você acertou esta questão!</strong>
+                                        <% } else { %>
+                                            <i class="bi bi-x-circle-fill me-2" aria-hidden="true"></i>
+                                            <strong>Você errou esta questão.</strong> A resposta correta era a alternativa 
+                                            <% questao.Opcao.forEach((opcao, index) => { %>
+                                                <% if (opcao.correta) { %>
+                                                    <strong><%= String.fromCharCode(65 + index) %></strong>
+                                                <% } %>
+                                            <% }); %>
+                                        <% } %>
+                                    <% } else { %>
+                                        <i class="bi bi-dash-circle me-2" aria-hidden="true"></i>
+                                        <strong>Você não respondeu esta questão.</strong> A resposta correta era a alternativa 
+                                        <% questao.Opcao.forEach((opcao, index) => { %>
+                                            <% if (opcao.correta) { %>
+                                                <strong><%= String.fromCharCode(65 + index) %></strong>
+                                            <% } %>
+                                        <% }); %>
+                                    <% } %>
+                                </div>
 
                             <% } else { %>
-                                
-                                <div class="card bg-primary-subtle text-primary-emphasis border-primary mt-3">
-                                    <div class="card-header fw-bold">
-                                        <i class="bi bi-check-circle-fill"></i> Resposta Oficial
+                                <!-- Questão Dissertativa -->
+                                <div class="card bg-primary bg-opacity-10 border-primary mt-3">
+                                    <div class="card-header fw-bold bg-primary bg-opacity-25">
+                                        <i class="bi bi-check-circle-fill text-primary me-2" aria-hidden="true"></i> 
+                                        Resposta Oficial
                                     </div>
                                     <div class="card-body">
-                                        <% questao.Opcao.forEach(opcao => { %>
-                                            <div class="opcao-texto" data-delta='<%= opcao.descricao %>'>
-                                                 </div>
+                                        <% questao.Opcao.forEach((opcao, index) => { %>
+                                            <div class="opcao-texto" data-delta='<%= opcao.descricao %>'></div>
                                         <% }) %>
                                     </div>
                                 </div>
 
                                 <% const respostaDissertativa = respostasDissertativas.find(r => r.id_questao === questao.id_questao); %>
                                 <% if (respostaDissertativa) { %>
-                                    <div class="card bg-light-subtle mt-3">
-                                        <div class="card-header fw-bold">
-                                            <i class="bi bi-person-fill"></i> Sua Resposta
+                                    <div class="card bg-light border mt-3">
+                                        <div class="card-header fw-bold bg-light">
+                                            <i class="bi bi-person-fill text-secondary me-2" aria-hidden="true"></i> 
+                                            Sua Resposta
                                         </div>
                                         <div class="card-body">
-                                            <p class="card-text"><%= respostaDissertativa.resposta %></p>
+                                            <div class="resposta-usuario" data-delta='<%= respostaDissertativa.resposta %>'></div>
+                                        </div>
+                                    </div>
+                                <% } else { %>
+                                    <div class="card bg-warning bg-opacity-10 border-warning mt-3">
+                                        <div class="card-body text-center">
+                                            <i class="bi bi-exclamation-triangle text-warning me-2" aria-hidden="true"></i>
+                                            <span class="text-muted">Você não respondeu esta questão dissertativa.</span>
                                         </div>
                                     </div>
                                 <% } %>
-                                
                             <% } %>
                         </div>
                     </div>
                 <% }) %>
 
+                <!-- Botão Voltar -->
+                <div class="text-center mt-4 mb-5">
+                    <a href="/simulados/meus-simulados" class="btn btn-primary btn-lg">
+                        <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>
+                        Voltar para Meus Simulados
+                    </a>
+                </div>
             </div>
         </div>
     </main>
@@ -141,7 +191,5 @@
     <script src="/js/prova/gabarito.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
 </body>
-</html>
 </html>
