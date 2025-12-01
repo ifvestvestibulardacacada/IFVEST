@@ -54,9 +54,9 @@
           </div>
 
           <input type="hidden" name="selectedQuestionIds" id="selectedQuestionIds">
-          <button type="button" id="addQuestionsButton" onclick="goToNewContent()">Adicionar Questões</button>
+          <button type="button" id="addQuestionsButton" onclick="goToNewContent()" aria-label="Adicionar questões ao simulado">Adicionar Questões</button>
         <div class="button-container">
-            <a href="/simulados" class="btn btn-voltar btn-lg">
+            <a href="/simulados" class="btn btn-voltar btn-lg" aria-label="Voltar ao Menu Simulados">
                 <i class="bi bi-arrow-left"></i> Voltar ao Menu Simulados
             </a>
         </div>
@@ -80,11 +80,11 @@
     <div class="row g-2 align-items-center">
         <div class="col-md-10">
             
-            <input type="text" id="tituloFiltro" class="form-control" placeholder="Filtrar por título">
+            <input type="text" id="tituloFiltro" class="form-control" placeholder="Filtrar por título" aria-label="Filtrar por título">
         </div>
         <div class="col-md-2">
          
-            <button type="button" class="btn btn-success  d-flex align-items-center justify-content-center" onclick="applyFilters()">
+            <button type="button" class="btn btn-success  d-flex align-items-center justify-content-center" onclick="applyFilters()" aria-label="Aplicar filtros de busca">
                 <i class="bi bi-search me-1"></i> Filtrar
             </button>
         </div>
@@ -102,13 +102,22 @@
                             <table class="table table-striped table-bordered align-middle mb-0">
                                 <thead class="table-light">
                                     <tr>
-                                        <th width="5%">
+                                        <th scope="col" width="5%">
+
+                                                        <div class="form-check">
+       <input type="checkbox" id="selectAll" class="form-check-input">
+                            <label for="selectAll" class="form-check-label">
+                                <span class="visually-hidden">Selecionar todas as questões</span>
+                                Todas
+                            </label>
+                        </div>
+
                                             <input type="checkbox" id="selectAll" class="form-check-input">
                                         </th>
-                                        <th>Título</th>
-                                        <th width="12%">Tipo</th>
-                                        <th width="45%">Questão</th>
-                                        <th width="15%">Tópico(s)</th>
+                    <th scope="col">Título</th>
+                    <th scope="col" width="12%">Tipo</th>
+                    <th scope="col" width="45%">Questão</th>
+                    <th scope="col" width="15%">Tópico(s)</th>
                                     </tr>
                                 </thead>
                                 <tbody id="questoes-tbody">
@@ -124,10 +133,10 @@
 </nav>
      
     <div class="button-container d-flex justify-content-center gap-3 mt-4">
-        <button type="button" class="btn btn-secondary btn-lg" onclick="goBack()">
+        <button type="button" class="btn btn-secondary btn-lg" onclick="goBack()" aria-label="Voltar ao formulário anterior">
             <i class="bi bi-arrow-left"></i> Voltar
         </button>
-        <button type="button" id="submitButton" class="btn btn-success btn-lg" onclick="saveSimulado()">
+        <button type="button" id="submitButton" class="btn btn-success btn-lg" onclick="saveSimulado()" aria-label="Salvar o simulado">
             <i class="bi bi-check-lg"></i> Salvar
         </button>
     </div>

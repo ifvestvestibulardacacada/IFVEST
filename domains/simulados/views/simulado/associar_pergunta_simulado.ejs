@@ -53,11 +53,11 @@
                         <div class="col-md-4">
                             <label for="titulo" class="form-label">Buscar por título</label>
                             <input type="text" id="titulo" name="titulo" placeholder="Filtrar por título"
-                                class="form-control" value="<%= typeof titulo !== 'undefined' ? titulo : '' %>">
+                                class="form-control" value="<%= typeof titulo !== 'undefined' ? titulo : '' %>" aria-label="Filtrar por título">
                         </div>
                         <div class="col-md-3">
                             <label for="areaId" class="form-label">Área</label>
-                            <select id="areaId" name="areaId" class="form-select">
+                            <select id="areaId" name="areaId" class="form-select" aria-label="Selecionar área">
                                 <option value="">Todas as áreas</option>
                                 <% Areas.forEach(area=> { %>
                                     <option value="<%= area.id_area %>" <%=(typeof areaId !=='undefined' &&
@@ -68,8 +68,8 @@
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="topicosSelecionados" class="form-label">Tópico</label>
-                            <select id="topicosSelecionados" name="topicosSelecionados" class="form-select">
+                            <label for="topicosSelecionados" class="form-label" >Tópico</label>
+                            <select id="topicosSelecionados" name="topicosSelecionados" class="form-select" aria-label="Selecionar tópico">
                                 <option value="">Todos os tópicos</option>
                                 <% topicos.forEach(topico=> { %>
                                     <option value="<%= topico.id_topico %>" <%=(typeof topicosSelecionados
@@ -80,7 +80,7 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <button type="submit" class="btn btn-success w-100">
+                            <button type="submit" class="btn btn-success w-100" aria-label="Aplicar filtros de busca">
                                 <i class="bi bi-search"></i> Filtrar
                             </button>
                         </div>
@@ -104,11 +104,11 @@
 
                     <!-- Botões -->
                     <div class="button-container">
-                        <a href="/simulados/meus-simulados" class="btn btn-voltar btn-lg">
+                        <a href="/simulados/meus-simulados" class="btn btn-voltar btn-lg" aria-label="Voltar ao menu de simulados">
                             <i class="bi bi-arrow-left"></i> Voltar
                         </a>
                         <button type="submit" id="submitButton" class="btn btn-success btn-lg"
-                            onclick="return confirm('Deseja associar as questões selecionadas ao simulado?')">
+                            onclick="return confirm('Deseja associar as questões selecionadas ao simulado?')" aria-label="Associar as questões selecionadas ao simulado">
                             <i class="bi bi-link-45deg"></i> Associar Questões Selecionadas
                         </button>
                     </div>
@@ -120,9 +120,7 @@
     <script src="/simulados/js/simulado/associarpergunta.js"></script>
     <script src="/simulados/js/handlers/associarQuestaoHandler.js"></script>
     <script src="/simulados/js/validate.js"></script>
-    <script>
-        
-    </script>
+ 
     <%- include('../partials/ContentManager') %>
 
     

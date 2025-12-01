@@ -81,12 +81,37 @@ function renderTable() {
     const pergunta = questao.pergunta || '';
     const isChecked = selectedQuestions.includes(String(questao.id_questao)) ? 'checked' : '';
     row.innerHTML = `
-      <td><input type="checkbox" class="questao-checkbox" name="questoesSelecionadas" value="${questao.id_questao || ''}" ${isChecked}></td>
-      <td>${questao.titulo || 'Sem título'}</td>
-      <td>${questao.tipo || 'Desconhecido'}</td>
-      <td><div class="name" data-delta='${encodeURIComponent(pergunta)}'></div></td>
-      <td>${questao.Topico && questao.Topico.length > 0 ? questao.Topico.map(topico => topico.nome || 'Sem nome').join(', ') : 'Sem tópico'}</td>
+    <td class="text-center align-middle">
+    <div class="form-check">
+        <input 
+            class="form-check-input questao-checkbox"
+            type="checkbox"
+            name="questoesSelecionadas"
+            value="${questao.id_questao || ''}"
+            id="questao-${questao.id_questao}"
+            ${isChecked ? 'checked' : ''}>
+            
+        <label 
+            class="form-check-label visually-hidden" 
+            for="questao-${questao.id_questao}">
+            Selecionar questão: ${questao.titulo}
+        </label>
+    </div>
+</td>
+
+      <td  aria-label="Título completo: ${questao.titulo || 'Sem título'}")}"
+      >${questao.titulo || 'Sem título'}</td>
+      <td aria-label="Tipo da questão: ${questao.tipo}"
+      >${questao.tipo || 'Desconhecido'}</td>
+      <td><div class="name" data-delta='${encodeURIComponent(pergunta)}' aria-label="Conteúdo da questão"
+      ></div></td>
+      <td aria-label="Tópicos: ${questao.Topico.map(t => t.nome).join(', ')}"
+      >${questao.Topico && questao.Topico.length > 0 ? questao.Topico.map(topico => topico.nome || 'Sem nome').join(', ') : 'Sem tópico'}</td>
     `;
+
+   
+
+               
     questoesBody.appendChild(row);
   });
 

@@ -40,7 +40,7 @@
                         <div class="error-message" id="titulo-error"></div>
                         <label for="titulo">Título do Simulado:</label>
                         <input type="text" id="titulo" value="<%= simulado.titulo %>" name="titulo" required
-                            maxlength="200">
+                            maxlength="200" aria-label="Título do simulado">
                     </div>
 
                     <div class="form-group">
@@ -48,12 +48,12 @@
                         <div class="error-message" id="descricao-error"></div>
                         <label for="descricao">Descrição:</label>
                         <textarea id="descricao" name="descricao" rows="5" required
-                            maxlength="1000"><%= simulado.descricao %></textarea>
+                            maxlength="1000" aria-label="Descrição do simulado"><%= simulado.descricao %></textarea>
 
                     </div>
                     <div class="form-group">
                         <label for="tipo">Selecione o tipo:</label>
-                        <select name="tipo" id="tipo" required>
+                        <select name="tipo" id="tipo" required aria-label="Tipo do simulado">
                             <option value="DISSERTATIVO" <%=simulado.tipo==='DISSERTATIVO' ? 'selected' : '' %>
                                 >Dissertativa</option>
                             <option value="OBJETIVO" <%=simulado.tipo==='OBJETIVO' ? 'selected' : '' %>>Objetiva

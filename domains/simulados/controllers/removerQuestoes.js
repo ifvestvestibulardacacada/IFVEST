@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Simulado, Questao } = require('../../../models');
+const { Simulado, Questao, Topico } = require('../../../models');
 
 
 module.exports = async (req, res) => {
@@ -14,7 +14,8 @@ module.exports = async (req, res) => {
                         {
                             model: Questao,
                             as: 'Questao', through: { attributes: [] }
-                        }
+                        },
+                                   
                     ]
                 });
 
@@ -26,12 +27,12 @@ module.exports = async (req, res) => {
 
                 const todasQuestoes = await Questao.findAll({
                     where: { id_questao: { [Op.in]: questaoIds } },
-                    include: [{
-                        model: Simulado,
-                        as: 'Simulado',
-                        where: { id_simulado: simuladoId },
-                        through: { attributes: [] }
-                    }],
+                    include: [
+                           {
+                model: Topico,
+                as: 'Topico',
+                through: { attributes: [] },
+            }],
          
                 });
 
@@ -47,7 +48,12 @@ module.exports = async (req, res) => {
                         as: 'Simulado',
                         where: { id_simulado: simuladoId },
                         through: { attributes: [] }
-                    }]
+                    }
+                ,            {
+                model: Topico,
+                as: 'Topico',
+                through: { attributes: [] },
+            }]
                 });
 
 

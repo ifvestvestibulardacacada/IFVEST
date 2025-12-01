@@ -37,13 +37,13 @@
                         <div class="card shadow-sm mb-4">
                             
                             <div class="card-header bg-light py-3 text-center">
-                                <h5 class="card-title mb-0 text-primary fw-bold">
+                                <h5 class="card-title mb-0 text-primary fw-bold" aria-label="Título da questão <%= qIndex + 1 %>">
                                     Questao <%= qIndex + 1 %> (<%= questao.titulo %>)
                                 </h5>
                             </div>
 
                             <div class="card-body">
-                                <div class="enunciado-questao mb-3" data-delta='<%= questao.pergunta %>'>
+                                <div class="enunciado-questao mb-3" data-delta='<%= questao.pergunta %>' contenteditable="false" aria-label="Enunciado da questão <%= qIndex + 1 %>">
                                     <span class="required">*</span>
                                 </div>
                                 
@@ -69,7 +69,8 @@
                        name="questoes[<%= questao.id_questao %>]"
                        id="opcao-<%= opcao.id_opcao %>"
                        value="<%= questao.id_questao %>-<%= opcao.id_opcao %>"
-                       required>
+                       required
+                       aria-label="Selecionar opção <%= opcao.alternativa %> para a questão <%= qIndex + 1 %>">
 
                 <label class="form-check-label w-100" for="opcao-<%= opcao.id_opcao %>">
                     
@@ -79,7 +80,7 @@
                             <%= opcao.alternativa %>)
                         </span>
                         
-                        <div class="opcao-texto w-100" data-delta='<%= opcao.descricao %>' contenteditable="false">
+                        <div class="opcao-texto w-100" data-delta='<%= opcao.descricao %>' contenteditable="false" aria-label="Descrição da opção <%= opcao.alternativa %>">
                             </div>
                     </div>
 
@@ -96,7 +97,8 @@
                                                   name="respostas[questao_<%= questao.id_questao %>]"
                                                   rows="6"
                                                   placeholder="Escreva sua resposta dissertativa aqui..." 
-                                                  required></textarea>
+                                                  required
+                                                  aria-label="Resposta dissertativa para a questão <%= qIndex + 1 %>"></textarea>
                                     </div>
                                     
                                 <% } %>
@@ -105,7 +107,7 @@
                     <% }) %>
 
                     <div class="d-grid gap-2 mb-5">
-                        <button class="btn btn-lg btn-success fw-bold" type="submit">
+                        <button class="btn btn-lg btn-success fw-bold" type="submit" aria-label="Enviar respostas da prova">
                             <i class="bi bi-send-fill me-2"></i> Enviar Simulado
                         </button>
                     </div>
