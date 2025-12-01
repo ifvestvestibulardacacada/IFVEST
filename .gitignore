@@ -4,3 +4,6 @@ insertData.js
 uploads 
 cypress
 cypress.config.js
+
+config/config.json
+
