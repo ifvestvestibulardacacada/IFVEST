@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
                 }
                 req.session.errorMessage = null;
 
-                res.render('simulado/meus_simulados', { simulados: simuladosPaginated, currentPage: page, totalPages, errorMessage,  });
+                res.render('simulado/meus_simulados', { simulados: simuladosPaginated, currentPage: page, totalPages, errorMessage, titulo: titulo || ""  });
             } catch (error) {
                 console.error(error);
                 res.status(500).send('Ocorreu um erro ao recuperar os questionários.');
