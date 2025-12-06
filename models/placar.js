@@ -10,21 +10,31 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-     // Placar.belongsTo(models.Usuario, {
-       // foreignKey: 'id_usuario' // A coluna que faz essa ligação
-     // });
+      // Placar.belongsTo(models.Usuario, {
+      // foreignKey: 'id_usuario' // A coluna que faz essa ligação
+      // });
     }
 
   }
   Placar.init({
+    id_placar: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      allowNull: false,
+      primaryKey: true
+    },
     nome: DataTypes.STRING,
     acertos: DataTypes.INTEGER,
-    totalQuestoes: DataTypes.INTEGER,
+    total_questoes: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+       defaultValue: 10
+    },
     porcentagem: DataTypes.FLOAT,
   }, {
     sequelize,
     modelName: 'Placar',
-    tableName: 'Placars',
+    tableName: 'Placar',
   });
   return Placar;
-};
+}; 

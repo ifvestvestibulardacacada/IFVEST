@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <strong>${placar.nome || 'Jogador Anônimo'}</strong>
                         <small>Em: ${dataJogo}</small>
                     </div>
-                    <span class="pontuacao">${placar.acertos} / ${placar.totalQuestoes} (${placar.porcentagem}%)</span>
+                    <span class="pontuacao">${placar.acertos} / ${placar.total_questoes} (${placar.porcentagem}%)</span>
                 `;
 
                 listaPlacares.appendChild(itemLista);
